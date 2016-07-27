@@ -1,0 +1,18 @@
+<resources>
+  <string name="app_name">Leku</string>
+  <string name="title_activity_location_picker">Location Picker</string>
+  <string name="no_location_data_provided"/>
+  <string name="service_not_available"/>
+  <string name="invalid_lat_long_used"/>
+  <string name="no_address_found"/>
+  <string name="address_found"/>
+  <string name="no_geocoder_available"/>
+  <string name="load_location_error">Something went wrong. Please try again.</string>
+  <string name="no_search_results">There are no results for your search</string>
+  <string name="network_resource">network</string>
+  <string name="unknown_location">unknown location</string>
+  <string name="voice_search_promp">Search by voice…</string>
+  <string name="voice_search_extra_language">en-EN</string>
+  <string name="toolbar_action_voice_title">Voice</string>
+  <string name="search_hint">Search</string>
+</resources>

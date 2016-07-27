@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/map_search_toolbar"
+    android:layout_height="?attr/actionBarSize"
+    android:layout_width="match_parent"
+    android:layout_marginTop="@dimen/gap"
+    android:layout_marginLeft="@dimen/gap"
+    android:layout_marginRight="@dimen/gap"
+    android:elevation="2dp"
+    android:textAppearance="@color/abc_primary_text_material_dark"
+    android:background="@drawable/toolbar_custom_background"
+    app:theme="@style/ThemeOverlay.AppCompat.Light"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    >
+
+  <LinearLayout
+      android:id="@+id/leku_search_touch_zone"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
+      android:orientation="horizontal"
+      >
+
+    <EditText
+        android:id="@+id/leku_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:imeOptions="actionSearch"
+        android:background="@color/search_background"
+        android:hint="@string/search_hint"
+        android:layout_weight="1"
+        />
+
+    <ImageView
+        android:id="@+id/leku_clear_search_image"
+        android:layout_width="24dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/places_ic_clear"
+        android:tint="@color/strong_grey"
+        android:contentDescription="@string/search_hint"
+        android:layout_weight="0"
+        android:visibility="invisible"
+        />
+  </LinearLayout>
+</android.support.v7.widget.Toolbar>
