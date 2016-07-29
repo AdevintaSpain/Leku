@@ -10,6 +10,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.v7.widget.SearchView;
 import android.view.View;
 import com.schibstedspain.leku.LocationPickerActivity;
+import com.schibstedspain.leku.R;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
