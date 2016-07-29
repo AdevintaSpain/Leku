@@ -1,6 +1,20 @@
 language: android
+
+branches:
+  only:
+    - master
+    - /^v\d+\.\d+\.\d+$/
+
 jdk:
 - oraclejdk8
+
+env:
+  global:
+    - TERM=dumb
+    - secure: ""
+    - secure: ""
+
+
 android:
   components:
   - platform-tools
@@ -12,4 +26,12 @@ android:
   - extra-google-m2repository
   - extra-android-m2repository
   - addon-google_apis-google-23
-script: ./gradlew assemble
+
+script: ./gradlew build
+
+deploy:
+  - provider: script
+    script: scripts/bintrayUpload.sh
+    skip_cleanup: true
+    on:
+      tags: true
