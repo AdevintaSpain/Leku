@@ -6,7 +6,7 @@ Leku
 
 *A Location Picker for Android*
 
-[![Build Status]()]()
+![leku-v1](https://img.shields.io/badge/leku-v1.0.0-green.svg)
 
 Location picker component for Android. It returns a latitude,longitude and an address based on the location picked in the LocationPickerActivity provided.
 
@@ -65,7 +65,7 @@ Include the dependency:
 
 ```groovy
 dependencies {
-    compile 'com.schibsted.android:leku:1.0.0'
+    compile 'com.schibstedspain.android:leku:1.0.0'
 }
 ```
 
@@ -99,7 +99,7 @@ To use the LocationPickerActivity first you need to add these lines to your Andr
 
 ```xml
 <activity
-    android:name="com.schibsted.leku.LocationPickerActivity"
+    android:name="com.schibstedspain.leku.LocationPickerActivity"
     android:label="@string/title_activity_location_picker"
     android:theme="@style/Theme.AppCompat.Light.NoActionBar"
     android:windowSoftInputMode="adjustPan"

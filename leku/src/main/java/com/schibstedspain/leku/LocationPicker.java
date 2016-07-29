@@ -1,6 +1,6 @@
-package com.schibsted.leku;
+package com.schibstedspain.leku;
 
-import com.schibsted.leku.tracker.LocationPickerTracker;
+import com.schibstedspain.leku.tracker.LocationPickerTracker;
 
 public class LocationPicker {
 

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.schibsted.leku"
+          package="com.schibstedspain.leku"
     >
 
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -13,7 +13,7 @@
 
   <!-- YOU NEED TO INCLUDE THIS CODE IN YOUR APP
     <activity
-        android:name="com.schibsted.leku.LocationPickerActivity"
+        android:name="com.schibstedspain.leku.LocationPickerActivity"
         android:label="@string/title_activity_location_picker"
         android:windowSoftInputMode="adjustPan"
         android:parentActivityName=".MainActivity">
