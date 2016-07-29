@@ -1,4 +1,4 @@
-package com.schibsted.leku.permissions;
+package com.schibstedspain.leku.permissions;
 
 import android.Manifest;
 import android.app.Activity;

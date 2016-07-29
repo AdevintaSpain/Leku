@@ -8,10 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-import com.schibsted.leku.LocationPicker;
-import com.schibsted.leku.LocationPickerActivity;
-import com.schibsted.leku.tracker.LocationPickerTracker;
-import com.schibsted.leku.tracker.TrackEvents;
+import com.schibstedspain.leku.LocationPicker;
+import com.schibstedspain.leku.LocationPickerActivity;
+import com.schibstedspain.leku.tracker.LocationPickerTracker;
+import com.schibstedspain.leku.tracker.TrackEvents;
 
 public class MainActivity extends AppCompatActivity {
 

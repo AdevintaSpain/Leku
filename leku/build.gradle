@@ -14,7 +14,7 @@ repositories {
 apply plugin: 'com.android.library'
 apply plugin: 'me.tatarka.retrolambda'
 
-group = 'com.schibsted.android'
+group = 'com.schibstedspain.android'
 version = '1.0.0'
 
 android {

@@ -1,4 +1,4 @@
-package com.schibsted.leku.geocoder;
+package com.schibstedspain.leku.geocoder;
 
 import android.location.Address;
 import com.google.android.gms.maps.model.LatLng;

@@ -1,4 +1,4 @@
-package com.schibsted.leku.tracker;
+package com.schibstedspain.leku.tracker;
 
 public enum TrackEvents {
   didLoadLocationPicker("Location Picker"),

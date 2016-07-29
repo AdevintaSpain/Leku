@@ -1,4 +1,4 @@
-package com.schibsted.leku.geocoder;
+package com.schibstedspain.leku.geocoder;
 
 import com.google.android.gms.maps.model.LatLng;
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;

@@ -11,7 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/map"
-            tools:context=".LocationPickerActivity"
+            tools:context="com.schibstedspain.leku.LocationPickerActivity"
             android:name="com.google.android.gms.maps.SupportMapFragment"
       />
 

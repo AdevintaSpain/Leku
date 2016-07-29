@@ -1,4 +1,4 @@
-package com.schibsted.leku;
+package com.schibstedspain.leku;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -43,11 +43,11 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.schibsted.leku.geocoder.GeocoderInteractor;
-import com.schibsted.leku.geocoder.GeocoderPresenter;
-import com.schibsted.leku.geocoder.GeocoderViewInterface;
-import com.schibsted.leku.permissions.PermissionUtils;
-import com.schibsted.leku.tracker.TrackEvents;
+import com.schibstedspain.leku.geocoder.GeocoderInteractor;
+import com.schibstedspain.leku.geocoder.GeocoderPresenter;
+import com.schibstedspain.leku.geocoder.GeocoderViewInterface;
+import com.schibstedspain.leku.permissions.PermissionUtils;
+import com.schibstedspain.leku.tracker.TrackEvents;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
