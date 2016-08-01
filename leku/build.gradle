@@ -1,16 +1,3 @@
-buildscript {
-  repositories {
-    mavenCentral()
-    jcenter()
-  }
-  dependencies {
-    classpath 'me.tatarka:gradle-retrolambda:3.2.3'
-  }
-}
-repositories {
-  jcenter()
-}
-
 apply plugin: 'com.android.library'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.novoda.bintray-release'
