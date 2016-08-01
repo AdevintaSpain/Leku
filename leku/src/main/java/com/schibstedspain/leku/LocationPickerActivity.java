@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -51,7 +52,6 @@ import com.schibstedspain.leku.tracker.TrackEvents;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Logger;
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
 
 public class LocationPickerActivity extends AppCompatActivity
@@ -329,7 +329,7 @@ public class LocationPickerActivity extends AppCompatActivity
       try {
         connectionResult.startResolutionForResult(this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
       } catch (IntentSender.SendIntentException e) {
-        logError(e.getMessage());
+        Log.d(LocationPickerActivity.class.getName(), e.getMessage());
       }
     }
   }
@@ -577,7 +577,7 @@ public class LocationPickerActivity extends AppCompatActivity
       try {
         startActivityForResult(intent, REQUEST_PLACE_PICKER);
       } catch (ActivityNotFoundException e) {
-        logError(e.getMessage());
+        Log.d(LocationPickerActivity.class.getName(), e.getMessage());
       }
     }
   }
@@ -807,10 +807,5 @@ public class LocationPickerActivity extends AppCompatActivity
       InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
       imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
-  }
-
-  private void logError(String message) {
-    Logger log = Logger.getLogger(LocationPickerActivity.class.getName());
-    log.fine(message);
   }
 }

@@ -8,10 +8,10 @@ import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.View;
 import com.schibstedspain.leku.LocationPickerActivity;
 import com.schibstedspain.leku.R;
-import java.util.logging.Logger;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
@@ -160,8 +160,7 @@ public class LocationPickerActivityShould {
     try {
       Thread.sleep(300);
     } catch (InterruptedException e) {
-      Logger log = Logger.getLogger(LocationPickerActivityShould.class.getName());
-      log.fine(e.getMessage());
+      Log.d(LocationPickerActivityShould.class.getName(), e.getMessage());
     }
   }
 

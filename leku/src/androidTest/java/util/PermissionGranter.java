@@ -8,7 +8,7 @@ import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.support.v4.content.ContextCompat;
-import java.util.logging.Logger;
+import android.util.Log;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 
@@ -62,7 +62,6 @@ public class PermissionGranter {
   }
 
   private void logNoPermissionDialogError() {
-    Logger log = Logger.getLogger(PermissionGranter.class.getName());
-    log.fine("There is no permissions dialog to interact with");
+    Log.d(PermissionGranter.class.getName(), "There is no permissions dialog to interact with");
   }
 }
