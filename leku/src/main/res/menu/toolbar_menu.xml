@@ -7,7 +7,6 @@
       android:id="@+id/action_voice"
       android:icon="@drawable/ic_mic"
       android:title="@string/toolbar_action_voice_title"
-      android:showAsAction="ifRoom"
       app:showAsAction="ifRoom"
       />
 </menu>

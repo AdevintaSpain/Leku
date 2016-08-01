@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="title_activity_location_picker">Location Picker</string>
+  <string name="no_geocoder_available">Servicio no disponible</string>
   <string name="load_location_error">Algo ha ido mal. Por favor inténtelo de nuevo.</string>
   <string name="no_search_results">No hay resultados para su búsqueda</string>
   <string name="network_resource">network</string>
