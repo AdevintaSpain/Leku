@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -94,7 +95,6 @@ public class LocationPickerActivity extends AppCompatActivity
   private final List<Address> locationList = new ArrayList<>();
   private List<String> locationNameList = new ArrayList<>();
   private boolean hasWiderZoom = false;
-  private boolean firstTime = true;
   private Bundle bundle = new Bundle();
   private Address selectedAddress;
   private boolean isLocationInformedFromBundle = false;
@@ -147,7 +147,6 @@ public class LocationPickerActivity extends AppCompatActivity
       }
     });
     locationNameList = new ArrayList<>();
-    firstTime = true;
   }
 
   private void setUpResultsList() {
@@ -313,7 +312,7 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   @Override
-  public void onConnected(Bundle bundle) {
+  public void onConnected(Bundle savedBundle) {
     if (currentLocation == null) {
       geocoderPresenter.getLastKnownLocation();
     }
@@ -330,7 +329,7 @@ public class LocationPickerActivity extends AppCompatActivity
       try {
         connectionResult.startResolutionForResult(this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
       } catch (IntentSender.SendIntentException e) {
-        e.printStackTrace();
+        Log.d(LocationPickerActivity.class.getName(), e.getMessage());
       }
     }
   }
@@ -415,7 +414,6 @@ public class LocationPickerActivity extends AppCompatActivity
         adapter.notifyDataSetChanged();
       }
     }
-    firstTime = false;
   }
 
   @Override
@@ -451,7 +449,6 @@ public class LocationPickerActivity extends AppCompatActivity
     progressBar.setVisibility(View.GONE);
     changeListResultVisibility(View.GONE);
     Toast.makeText(this, R.string.load_location_error, Toast.LENGTH_LONG).show();
-    firstTime = false;
   }
 
   @Override
@@ -462,7 +459,6 @@ public class LocationPickerActivity extends AppCompatActivity
   @Override
   public void showLastLocation(Location location) {
     currentLocation = location;
-    firstTime = false;
   }
 
   @Override
@@ -475,7 +471,6 @@ public class LocationPickerActivity extends AppCompatActivity
       setUpMapIfNeeded();
     }
     setUpDefaultMapLocation();
-    firstTime = false;
   }
 
   @Override
@@ -488,7 +483,6 @@ public class LocationPickerActivity extends AppCompatActivity
         setLocationEmpty();
       }
     }
-    firstTime = false;
   }
 
   public void setLocationEmpty() {
@@ -506,7 +500,6 @@ public class LocationPickerActivity extends AppCompatActivity
   @Override
   public void showGetLocationInfoError() {
     setLocationEmpty();
-    firstTime = false;
   }
 
   private void showLocationInfoLayout() {
@@ -549,8 +542,8 @@ public class LocationPickerActivity extends AppCompatActivity
     }
   }
 
-  private void setLayoutVisibilityFromBundle(Bundle bundle) {
-    String options = bundle.getString(LAYOUTS_TO_HIDE);
+  private void setLayoutVisibilityFromBundle(Bundle transitionBundle) {
+    String options = transitionBundle.getString(LAYOUTS_TO_HIDE);
     if (options != null && options.contains(OPTIONS_HIDE_STREET)) {
       isStreetVisible = false;
     }
@@ -562,12 +555,12 @@ public class LocationPickerActivity extends AppCompatActivity
     }
   }
 
-  private void setLocationFromBundle(Bundle bundle) {
+  private void setLocationFromBundle(Bundle transitionBundle) {
     if (currentLocation == null) {
       currentLocation = new Location(getString(R.string.network_resource));
     }
-    currentLocation.setLatitude(bundle.getDouble(LATITUDE));
-    currentLocation.setLongitude(bundle.getDouble(LONGITUDE));
+    currentLocation.setLatitude(transitionBundle.getDouble(LATITUDE));
+    currentLocation.setLongitude(transitionBundle.getDouble(LONGITUDE));
     setCurrentPositionLocation();
     isLocationInformedFromBundle = true;
   }
@@ -584,7 +577,7 @@ public class LocationPickerActivity extends AppCompatActivity
       try {
         startActivityForResult(intent, REQUEST_PLACE_PICKER);
       } catch (ActivityNotFoundException e) {
-        e.printStackTrace();
+        Log.d(LocationPickerActivity.class.getName(), e.getMessage());
       }
     }
   }
@@ -811,7 +804,7 @@ public class LocationPickerActivity extends AppCompatActivity
   private void closeKeyboard() {
     View view = this.getCurrentFocus();
     if (view != null) {
-      InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+      InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
       imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
   }

@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.novoda.bintray-release'
+apply from: '../quality.gradle'
 
 group = 'com.schibstedspain.android'
 version = '1.0.0'
@@ -22,11 +23,6 @@ android {
       shrinkResources true
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
-  }
-  lintOptions {
-    disable 'InvalidPackage'
-    textReport true
-    abortOnError true
   }
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_1_8
