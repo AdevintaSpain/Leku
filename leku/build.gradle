@@ -13,6 +13,7 @@ repositories {
 
 apply plugin: 'com.android.library'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.novoda.bintray-release'
 
 group = 'com.schibstedspain.android'
 version = '1.0.0'
@@ -70,4 +71,13 @@ dependencies {
   androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
   androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.1'
   androidTestCompile 'org.mockito:mockito-core:1.10.19'
+}
+
+publish {
+  userOrg = 'schibstedspain'
+  groupId = 'com.schibstedspain.android'
+  artifactId = 'leku'
+  publishVersion = "$version"
+  desc = 'Location picker component for Android. It returns a latitude,longitude and an address based on the location picked in the LocationPickerActivity provided.'
+  website = 'https://github.com/SchibstedSpain/leku'
 }
