@@ -21,21 +21,4 @@ allprojects {
   repositories {
     jcenter()
   }
-
-  apply plugin: 'checkstyle'
-
-  checkstyle {
-    toolVersion = "6.15"
-    configFile = rootProject.file('config/checkstyle/checkstyle/checkstyle.xml')
-  }
-
-  task checkstyle(type: Checkstyle) {
-    configFile file('${project.rootDir}/config/checkstyle/checkstyle/checkstyle.xml')
-    configProperties.checkstyleSuppressionsPath =
-        file("${project.rootDir}/config/checkstyle/checkstyle-suppressions.xml").absolutePath
-    source 'src'
-    include '**/*.java'
-    exclude '**/gen/**'
-    classpath = files()
-  }
 }
