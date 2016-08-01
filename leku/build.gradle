@@ -20,7 +20,7 @@ version = '1.0.0'
 
 android {
   compileSdkVersion 23
-  buildToolsVersion '23.0.1'
+  buildToolsVersion '23.0.3'
 
   defaultConfig {
     minSdkVersion 15
@@ -39,7 +39,7 @@ android {
   lintOptions {
     disable 'InvalidPackage'
     textReport true
-    abortOnError false
+    abortOnError true
   }
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_1_8
