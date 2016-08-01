@@ -11,6 +11,7 @@ import android.support.v7.widget.SearchView;
 import android.view.View;
 import com.schibstedspain.leku.LocationPickerActivity;
 import com.schibstedspain.leku.R;
+import java.util.logging.Logger;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
@@ -158,8 +159,9 @@ public class LocationPickerActivityShould {
   private void wait300millis() {
     try {
       Thread.sleep(300);
-    } catch (Exception e) {
-      e.printStackTrace();
+    } catch (InterruptedException e) {
+      Logger log = Logger.getLogger(LocationPickerActivityShould.class.getName());
+      log.fine(e.getMessage());
     }
   }
 

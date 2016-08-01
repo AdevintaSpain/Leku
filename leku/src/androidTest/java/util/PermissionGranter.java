@@ -8,6 +8,7 @@ import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.support.v4.content.ContextCompat;
+import java.util.logging.Logger;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 
@@ -28,7 +29,7 @@ public class PermissionGranter {
         }
       }
     } catch (UiObjectNotFoundException e) {
-      System.out.println("There is no permissions dialog to interact with");
+      logNoPermissionDialogError();
     }
   }
 
@@ -43,7 +44,7 @@ public class PermissionGranter {
         }
       }
     } catch (UiObjectNotFoundException e) {
-      System.out.println("There is no permissions dialog to interact with");
+      logNoPermissionDialogError();
     }
   }
 
@@ -58,5 +59,10 @@ public class PermissionGranter {
     } catch (InterruptedException e) {
       throw new RuntimeException("Cannot execute Thread.sleep()");
     }
+  }
+
+  private void logNoPermissionDialogError() {
+    Logger log = Logger.getLogger(PermissionGranter.class.getName());
+    log.fine("There is no permissions dialog to interact with");
   }
 }

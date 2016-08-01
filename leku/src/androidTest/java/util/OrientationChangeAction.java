@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.view.View;
+import java.util.logging.Logger;
 import org.hamcrest.Matcher;
 
 import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
@@ -31,6 +32,8 @@ public class OrientationChangeAction implements ViewAction {
     try {
       Thread.sleep(500);
     } catch (InterruptedException e) {
+      Logger log = Logger.getLogger(OrientationChangeAction.class.getName());
+      log.fine(e.getMessage());
     }
     uiController.loopMainThreadUntilIdle();
     final Activity activity = (Activity) view.getContext();
