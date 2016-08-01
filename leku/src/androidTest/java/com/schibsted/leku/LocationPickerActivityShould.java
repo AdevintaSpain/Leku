@@ -8,6 +8,7 @@ import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.View;
 import com.schibstedspain.leku.LocationPickerActivity;
 import com.schibstedspain.leku.R;
@@ -158,8 +159,8 @@ public class LocationPickerActivityShould {
   private void wait300millis() {
     try {
       Thread.sleep(300);
-    } catch (Exception e) {
-      e.printStackTrace();
+    } catch (InterruptedException e) {
+      Log.d(LocationPickerActivityShould.class.getName(), e.getMessage());
     }
   }
 
