@@ -15,7 +15,7 @@ public class PermissionUtils {
   }
 
   public static void requestPermission(Activity activity, String permission, int requestCode) {
-    ActivityCompat.requestPermissions(activity, new String[] { permission }, requestCode);
+    ActivityCompat.requestPermissions(activity, new String[] {permission}, requestCode);
   }
 
   public static boolean shouldRequestLocationStoragePermission(Context context) {
