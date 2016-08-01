@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Leku by SchibstedSpain</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Leku</h1>
+      <h2 class="project-tagline">Map location picker component for Android.</h2>
+      <a href="https://github.com/SchibstedSpain/Leku" class="btn">View on GitHub</a>
+      <a href="https://github.com/SchibstedSpain/Leku/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/SchibstedSpain/Leku/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="leku-the-map-location-component-for-android" class="anchor" href="#leku-the-map-location-component-for-android" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Leku, the map location component for Android</h1>
+
+<p>"<em>Location and maps-based apps offer a compelling experience on mobile devices</em>". That's how <a href="https://developer.android.com/guide/topics/location/index.html?hl=es#location">Android Location documentation</a> starts, and that's true but Location is not always an easy due. You need to add layers, inputs for search, show results, control possible issues, add touch events, etc.</p>
+
+<p>For our application, <a href="https://play.google.com/store/apps/details?id=com.anuntis.segundamano">Vibbo</a>, we thought that would be interesting to have an easy way to select a location for our searches. But not only searches could need it, also Ad insertion could benefit from it in different ways. And not only our app, also a lot of apps could benefit. So we decided to create a new component for android, test it in our app and bring it to the world.
+<a href="https://github.com/SchibstedSpain/Leku"><em>Leku</em></a> is the result of this process, a component with all you need to get locations and all the information related to in an easy way.</p>
+
+<p>What are the features of <a href="https://github.com/SchibstedSpain/Leku"><em>Leku</em></a>? You might ask. Here are some, and a small visual example:</p>
+
+<p><img src="../media/screenshot.gif" height="328px" align="left">
+<img align="left" width="0" height="328px" hspace="20"></p>
+
+<ul>
+<li>Search by Voice</li>
+<li>Search by Text</li>
+<li>Get your position by GPS or network</li>
+<li>Pick locations using "touch" gestures on the map</li>
+<li>Customization (Adapt to your Theme and you can customize some layouts)</li>
+<li>Events Tracking, to know exactly what are doing your users.</li>
+<li>Multi-language support (English and Spanish supported by default)
+<br><br><br>
+</li>
+</ul>
+
+<p><strong>Cool! Isn't it?</strong></p>
+
+<p>But you not only would benefit from all this... We also removed all the hassle of controlling errors, permissions, and the lifecycle of the component. So we made it easy to add it in your application and forget those things, is a plug&amp;play component.</p>
+
+<h4>
+<a id="how-i-add-it-into-my-application" class="anchor" href="#how-i-add-it-into-my-application" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How I add it into my application?</h4>
+
+<p>Include the dependency:</p>
+
+<div class="highlight highlight-source-groovy"><pre>dependencies {
+    compile <span class="pl-s"><span class="pl-pds">'</span>com.schibsted.android:leku:1.0.0<span class="pl-pds">'</span></span>
+}</pre></div>
+
+<p>Add the permissions needed in your manifest:</p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">uses-permission</span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.permission.INTERNET<span class="pl-pds">"</span></span> /&gt;
+&lt;<span class="pl-ent">uses-permission</span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.permission.ACCESS_NETWORK_STATE<span class="pl-pds">"</span></span>/&gt;
+&lt;<span class="pl-ent">uses-permission</span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.permission.WRITE_EXTERNAL_STORAGE<span class="pl-pds">"</span></span>/&gt;
+&lt;<span class="pl-ent">uses-permission</span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.permission.ACCESS_FINE_LOCATION<span class="pl-pds">"</span></span> /&gt;
+&lt;<span class="pl-ent">uses-permission</span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.permission.ACCESS_COARSE_LOCATION<span class="pl-pds">"</span></span> /&gt;</pre></div>
+
+<p>Add the locationPickerActivity into your manifest too:</p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">activity</span>
+    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>com.schibsted.maplocationpicker.LocationPickerActivity<span class="pl-pds">"</span></span>
+    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">label</span>=<span class="pl-s"><span class="pl-pds">"</span>@string/title_activity_location_picker<span class="pl-pds">"</span></span>
+    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">theme</span>=<span class="pl-s"><span class="pl-pds">"</span>@style/Theme.AppCompat.Light.NoActionBar<span class="pl-pds">"</span></span>
+    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">launchMode</span>=<span class="pl-s"><span class="pl-pds">"</span>singleTop<span class="pl-pds">"</span></span>
+    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">windowSoftInputMode</span>=<span class="pl-s"><span class="pl-pds">"</span>adjustPan<span class="pl-pds">"</span></span>
+    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">parentActivityName</span>=<span class="pl-s"><span class="pl-pds">"</span>.MainActivity<span class="pl-pds">"</span></span>&gt;
+    &lt;<span class="pl-ent">intent-filter</span>&gt;
+        &lt;<span class="pl-ent">action</span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.intent.action.SEARCH<span class="pl-pds">"</span></span> /&gt;
+    &lt;/<span class="pl-ent">intent-filter</span>&gt;
+    &lt;<span class="pl-ent">meta-data</span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.app.searchable<span class="pl-pds">"</span></span>
+        <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">resource</span>=<span class="pl-s"><span class="pl-pds">"</span>@xml/searchable<span class="pl-pds">"</span></span> /&gt;
+    &lt;<span class="pl-ent">meta-data</span>
+        <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.support.PARENT_ACTIVITY<span class="pl-pds">"</span></span>
+        <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>.MainActivity<span class="pl-pds">"</span></span> /&gt;
+&lt;/<span class="pl-ent">activity</span>&gt;</pre></div>
+
+<p>Then you have setup the call to start this activity wherever you like, always as startActivityForResult:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">Intent</span> i <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">Intent</span>(<span class="pl-v">this</span>, <span class="pl-smi">LocationPickerActivity</span><span class="pl-k">.</span>class);
+startActivityForResult(i, <span class="pl-c1">1</span>);</pre></div>
+
+<p>And add the response code from that activity:</p>
+
+<div class="highlight highlight-source-java"><pre>
+@<span class="pl-smi">Override</span>
+<span class="pl-k">protected</span> <span class="pl-k">void</span> onActivityResult(<span class="pl-k">int</span> requestCode, <span class="pl-k">int</span> resultCode, <span class="pl-smi">Intent</span> data) {
+
+    <span class="pl-k">if</span> (requestCode <span class="pl-k">==</span> <span class="pl-c1">1</span>) {
+        <span class="pl-k">if</span>(resultCode <span class="pl-k">==</span> <span class="pl-c1">RESULT_OK</span>){
+            <span class="pl-k">double</span> latitude <span class="pl-k">=</span> data<span class="pl-k">.</span>getDoubleExtra(<span class="pl-smi">LocationPickerActivity</span><span class="pl-c1"><span class="pl-k">.</span>LATITUDE</span>, <span class="pl-c1">0</span>);
+            <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-s"><span class="pl-pds">"</span>LATITUDE****<span class="pl-pds">"</span></span>, <span class="pl-smi">String</span><span class="pl-k">.</span>valueOf(latitude));
+            <span class="pl-k">double</span> longitude <span class="pl-k">=</span> data<span class="pl-k">.</span>getDoubleExtra(<span class="pl-smi">LocationPickerActivity</span><span class="pl-c1"><span class="pl-k">.</span>LONGITUDE</span>, <span class="pl-c1">0</span>);
+            <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-s"><span class="pl-pds">"</span>LONGITUDE****<span class="pl-pds">"</span></span>, <span class="pl-smi">String</span><span class="pl-k">.</span>valueOf(longitude));
+            <span class="pl-smi">String</span> address <span class="pl-k">=</span> data<span class="pl-k">.</span>getStringExtra(<span class="pl-smi">LocationPickerActivity</span><span class="pl-c1"><span class="pl-k">.</span>LOCATION_ADDRESS</span>);
+            <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-s"><span class="pl-pds">"</span>ADDRESS****<span class="pl-pds">"</span></span>, <span class="pl-smi">String</span><span class="pl-k">.</span>valueOf(address));
+            <span class="pl-smi">String</span> postalcode <span class="pl-k">=</span> data<span class="pl-k">.</span>getStringExtra(<span class="pl-smi">LocationPickerActivity</span><span class="pl-c1"><span class="pl-k">.</span>ZIPCODE</span>);
+            <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-s"><span class="pl-pds">"</span>POSTALCODE****<span class="pl-pds">"</span></span>, <span class="pl-smi">String</span><span class="pl-k">.</span>valueOf(postalcode));
+            <span class="pl-smi">Bundle</span> bundle <span class="pl-k">=</span> data<span class="pl-k">.</span>getBundleExtra(<span class="pl-smi">LocationPickerActivity</span><span class="pl-c1"><span class="pl-k">.</span>TRANSITION_BUNDLE</span>);
+            <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-s"><span class="pl-pds">"</span>BUNDLE TEXT****<span class="pl-pds">"</span></span>, bundle<span class="pl-k">.</span>getString(<span class="pl-s"><span class="pl-pds">"</span>test<span class="pl-pds">"</span></span>));
+            <span class="pl-smi">Address</span> fullAddress <span class="pl-k">=</span> data<span class="pl-k">.</span>getParcelableExtra(<span class="pl-smi">LocationPickerActivity</span><span class="pl-c1"><span class="pl-k">.</span>ADDRESS</span>);
+            <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-s"><span class="pl-pds">"</span>FULL ADDRESS****<span class="pl-pds">"</span></span>, fullAddress<span class="pl-k">.</span>toString());
+        }
+        <span class="pl-k">if</span> (resultCode <span class="pl-k">==</span> <span class="pl-c1">RESULT_CANCELED</span>) {
+            <span class="pl-c">//Write your code if there's no result</span>
+        }
+    }
+}</pre></div>
+
+<p>That's all folks! Quick and Easy!</p>
+
+<p>If you want more information on how to customize this component and know more about it, check out the <a href="https://github.com/SchibstedSpain/Leku"><em>official repository</em></a>. Enjoy!</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/SchibstedSpain/Leku">Leku</a> is maintained by <a href="https://github.com/SchibstedSpain">SchibstedSpain</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
