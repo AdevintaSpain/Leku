@@ -93,6 +93,9 @@ The following two permissions are not required to use Google Maps Android API v2
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 ```
 
+**Note**: It supports runtime permissions for *Android 6 (Marshmallow)*. You don't need to do anything, it will ask for permissions if needed.
+
+
 ### Usage
 
 To use the LocationPickerActivity first you need to add these lines to your AndroidManifest file:
