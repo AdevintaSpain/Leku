@@ -40,26 +40,23 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-    if (requestCode == 1) {
-      if (resultCode == RESULT_OK) {
-        double latitude = data.getDoubleExtra(LocationPickerActivity.LATITUDE, 0);
-        Log.d("LATITUDE****", String.valueOf(latitude));
-        double longitude = data.getDoubleExtra(LocationPickerActivity.LONGITUDE, 0);
-        Log.d("LONGITUDE****", String.valueOf(longitude));
-        String address = data.getStringExtra(LocationPickerActivity.LOCATION_ADDRESS);
-        Log.d("ADDRESS****", String.valueOf(address));
-        String postalcode = data.getStringExtra(LocationPickerActivity.ZIPCODE);
-        Log.d("POSTALCODE****", String.valueOf(postalcode));
-        Bundle bundle = data.getBundleExtra(LocationPickerActivity.TRANSITION_BUNDLE);
-        Log.d("BUNDLE TEXT****", bundle.getString("test"));
-        Address fullAddress = data.getParcelableExtra(LocationPickerActivity.ADDRESS);
-        Log.d("FULL ADDRESS****", fullAddress.toString());
-      }
-      //if (resultCode == RESULT_CANCELED) {
-      //Write your code if there's no result
-      //}
+    if (requestCode == 1 && resultCode == RESULT_OK) {
+      double latitude = data.getDoubleExtra(LocationPickerActivity.LATITUDE, 0);
+      Log.d("LATITUDE****", String.valueOf(latitude));
+      double longitude = data.getDoubleExtra(LocationPickerActivity.LONGITUDE, 0);
+      Log.d("LONGITUDE****", String.valueOf(longitude));
+      String address = data.getStringExtra(LocationPickerActivity.LOCATION_ADDRESS);
+      Log.d("ADDRESS****", String.valueOf(address));
+      String postalcode = data.getStringExtra(LocationPickerActivity.ZIPCODE);
+      Log.d("POSTALCODE****", String.valueOf(postalcode));
+      Bundle bundle = data.getBundleExtra(LocationPickerActivity.TRANSITION_BUNDLE);
+      Log.d("BUNDLE TEXT****", bundle.getString("test"));
+      Address fullAddress = data.getParcelableExtra(LocationPickerActivity.ADDRESS);
+      Log.d("FULL ADDRESS****", fullAddress.toString());
     }
+    //if (resultCode == RESULT_CANCELED) {
+    //Write your code if there's no result
+    //}
   }
 
   private void initializeLocationPickerTracker() {
