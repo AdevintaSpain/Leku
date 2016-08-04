@@ -38,7 +38,7 @@
         android:id="@+id/leku_clear_search_image"
         android:layout_width="24dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/places_ic_clear"
+        android:src="@android:drawable/ic_delete"
         android:tint="@color/strong_grey"
         android:contentDescription="@string/search_hint"
         android:layout_weight="0"
