@@ -2,6 +2,8 @@ apply plugin: 'pmd'
 apply plugin: 'findbugs'
 apply plugin: 'checkstyle'
 
+def isTravis = "true".equals(System.getenv("TRAVIS"))
+
 pmd {
   ruleSetFiles = files("${project.rootDir}/config/pmd/pmd-ruleset.xml")
 }
@@ -13,12 +15,13 @@ findbugs {
 
 checkstyle {
   toolVersion = "6.16"
+  showViolations isTravis
 }
 
 android.lintOptions {
   abortOnError true
   lintConfig file("${project.rootDir}/config/lint/lint.xml")
-  textReport "true".equals(System.getenv("TRAVIS"))
+  textReport isTravis
   textOutput 'stdout'
 
 }
@@ -28,12 +31,12 @@ task pmd (type: Pmd) {
   group 'verification'
 
   source = fileTree('src/main/java')
-  consoleOutput = true
+  consoleOutput = isTravis
   ignoreFailures = false
 
   reports {
     xml.enabled = false
-    html.enabled = true
+    html.enabled = !isTravis
   }
 }
 
