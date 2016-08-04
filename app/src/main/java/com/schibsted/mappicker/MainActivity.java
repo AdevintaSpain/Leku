@@ -56,9 +56,9 @@ public class MainActivity extends AppCompatActivity {
         Address fullAddress = data.getParcelableExtra(LocationPickerActivity.ADDRESS);
         Log.d("FULL ADDRESS****", fullAddress.toString());
       }
-      if (resultCode == RESULT_CANCELED) {
-        //Write your code if there's no result
-      }
+      //if (resultCode == RESULT_CANCELED) {
+      //Write your code if there's no result
+      //}
     }
   }
 
