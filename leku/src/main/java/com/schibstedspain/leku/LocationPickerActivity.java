@@ -229,10 +229,7 @@ public class LocationPickerActivity extends AppCompatActivity
 
   private void setUpMapIfNeeded() {
     if (map == null) {
-      map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-      if (map != null) {
-        setDefaultMapSettings();
-      }
+      ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
     }
   }
 
@@ -308,7 +305,11 @@ public class LocationPickerActivity extends AppCompatActivity
 
   @Override
   public void onMapReady(GoogleMap googleMap) {
-    setDefaultMapSettings();
+    if (map == null) {
+      map = googleMap;
+      setDefaultMapSettings();
+      setCurrentPositionLocation();
+    }
   }
 
   @Override
@@ -740,12 +741,14 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void setDefaultMapSettings() {
-    map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-    map.setOnMapLongClickListener(this);
-    map.setOnMapClickListener(this);
-    map.getUiSettings().setCompassEnabled(false);
-    map.getUiSettings().setMyLocationButtonEnabled(true);
-    map.getUiSettings().setMapToolbarEnabled(false);
+    if (map != null) {
+      map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+      map.setOnMapLongClickListener(this);
+      map.setOnMapClickListener(this);
+      map.getUiSettings().setCompassEnabled(false);
+      map.getUiSettings().setMyLocationButtonEnabled(true);
+      map.getUiSettings().setMapToolbarEnabled(false);
+    }
   }
 
   private void setUpDefaultMapLocation() {

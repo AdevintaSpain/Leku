@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           package="com.schibsted.mappicker"
     >
 
@@ -12,10 +13,12 @@
   <application
       android:name=".SampleApplication"
       android:allowBackup="true"
+      android:fullBackupContent="true"
       android:icon="@mipmap/ic_launcher"
       android:label="@string/app_name"
       android:theme="@style/AppTheme"
       android:supportsRtl="false"
+      tools:ignore="GoogleAppIndexingWarning"
       >
 
     <meta-data
@@ -43,7 +46,6 @@
         android:name="com.schibstedspain.leku.LocationPickerActivity"
         android:label="@string/title_activity_location_picker"
         android:windowSoftInputMode="adjustPan"
-        android:parentActivityName=".MainActivity"
         android:theme="@style/AppTheme.Map"
         >
       <intent-filter>
