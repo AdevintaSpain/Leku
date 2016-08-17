@@ -45,7 +45,7 @@ dependencies {
   compile "com.google.android.gms:play-services-maps:$playServicesVersion"
   compile "com.google.android.gms:play-services-location:$playServicesVersion"
 
-  compile "pl.charmas.android:android-reactive-location:0.8@aar"
+  compile 'com.schibstedspain.android:android-reactive-location:0.10.1'
   compile "io.reactivex:rxandroid:1.1.0"
 
   androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
