@@ -63,11 +63,23 @@ Support Library = 24.1.1
 
 ### Download
 
-Include the dependency:
+Include the **SchibstedSpain** bintray repository in your top `build.gradle`:
+
+```groovy
+allprijects {
+    ...
+    maven {
+      url "http://dl.bintray.com/schibstedspain/maven"
+    }
+}
+```
+> This is a temporary patch until to use [SchibstedSpain/Android-ReactiveLocation](https://github.com/SchibstedSpain/Android-ReactiveLocation) version of the [mcharmas/Android-ReactiveLocation](http://github.com/mcharmas/Android-ReactiveLocation) is patched with latest google play support
+
+Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    compile 'com.schibstedspain.android:leku:2.0.0'
+    compile 'com.schibstedspain.android:leku:2.0.1'
 }
 ```
 
