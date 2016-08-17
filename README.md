@@ -73,7 +73,7 @@ allprojects {
     }
 }
 ```
-> This is a temporary patch until to use [SchibstedSpain/Android-ReactiveLocation](https://github.com/SchibstedSpain/Android-ReactiveLocation) version of the [mcharmas/Android-ReactiveLocation](http://github.com/mcharmas/Android-ReactiveLocation) is patched with latest google play support
+> This is a temporary patch to use [SchibstedSpain/Android-ReactiveLocation](https://github.com/SchibstedSpain/Android-ReactiveLocation) until [mcharmas/Android-ReactiveLocation](http://github.com/mcharmas/Android-ReactiveLocation) is patched with latest google play support
 
 Include the dependency in your app `build.gradle`:
 
