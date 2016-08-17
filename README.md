@@ -66,7 +66,7 @@ Support Library = 24.1.1
 Include the **SchibstedSpain** bintray repository in your top `build.gradle`:
 
 ```groovy
-allprijects {
+allprojects {
     ...
     maven {
       url "http://dl.bintray.com/schibstedspain/maven"
