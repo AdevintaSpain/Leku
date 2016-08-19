@@ -63,7 +63,7 @@ Support Library = 24.1.1
 
 ### Download
 
-Include the **jcenter** bintray repository in your top `build.gradle`:
+Include the **jcenter** repository in your top `build.gradle`:
 > Enabled by default on AndroidStudio projects
 ```groovy
 allprojects {
