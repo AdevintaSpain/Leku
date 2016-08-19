@@ -63,17 +63,13 @@ Support Library = 24.1.1
 
 ### Download
 
-Include the **SchibstedSpain** bintray repository in your top `build.gradle`:
-
+Include the **jcenter** bintray repository in your top `build.gradle`:
+> Enabled by default on AndroidStudio projects
 ```groovy
 allprojects {
-    ...
-    maven {
-      url "http://dl.bintray.com/schibstedspain/maven"
-    }
+    jcenter()
 }
 ```
-> This is a temporary patch to use [SchibstedSpain/Android-ReactiveLocation](https://github.com/SchibstedSpain/Android-ReactiveLocation) until [mcharmas/Android-ReactiveLocation](http://github.com/mcharmas/Android-ReactiveLocation) is patched with latest google play support
 
 Include the dependency in your app `build.gradle`:
 
