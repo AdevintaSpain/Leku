@@ -63,11 +63,19 @@ Support Library = 24.1.1
 
 ### Download
 
-Include the dependency:
+Include the **jcenter** repository in your top `build.gradle`:
+> Enabled by default on AndroidStudio projects
+```groovy
+allprojects {
+    jcenter()
+}
+```
+
+Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    compile 'com.schibstedspain.android:leku:2.0.0'
+    compile 'com.schibstedspain.android:leku:2.0.1'
 }
 ```
 
