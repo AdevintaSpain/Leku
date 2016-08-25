@@ -13,6 +13,10 @@ public class PermissionUtils {
     return ContextCompat.checkSelfPermission(context, permission)
         == PackageManager.PERMISSION_DENIED;
   }
+  public static boolean isLocationPermissionGranted(Context context) {
+    return ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+        == PackageManager.PERMISSION_GRANTED;
+  }
 
   public static void requestPermission(Activity activity, String permission, int requestCode) {
     ActivityCompat.requestPermissions(activity, new String[] {permission}, requestCode);
@@ -25,15 +29,5 @@ public class PermissionUtils {
 
   public static void requestLocationPermission(Activity activity) {
     requestPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION, 0);
-  }
-
-  public static boolean arePermissionGranted(int[] grantResults) {
-    for (int i = 0; i < grantResults.length; i++) {
-      boolean permissionGranted = grantResults[i] == PackageManager.PERMISSION_GRANTED;
-      if (!permissionGranted) {
-        return false;
-      }
-    }
-    return true;
   }
 }

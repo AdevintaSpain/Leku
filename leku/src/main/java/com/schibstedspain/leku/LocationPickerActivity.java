@@ -257,7 +257,7 @@ public class LocationPickerActivity extends AppCompatActivity
   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-    if (PermissionUtils.arePermissionGranted(grantResults)) {
+    if (PermissionUtils.isLocationPermissionGranted(getApplicationContext())) {
       geocoderPresenter.getLastKnownLocation();
     }
   }
