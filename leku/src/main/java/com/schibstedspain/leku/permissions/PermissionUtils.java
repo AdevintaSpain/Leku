@@ -26,4 +26,14 @@ public class PermissionUtils {
   public static void requestLocationPermission(Activity activity) {
     requestPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION, 0);
   }
+
+  public static boolean arePermissionGranted(int[] grantResults) {
+    for (int i = 0; i < grantResults.length; i++) {
+      boolean permissionGranted = grantResults[i] == PackageManager.PERMISSION_GRANTED;
+      if (!permissionGranted) {
+        return false;
+      }
+    }
+    return true;
+  }
 }

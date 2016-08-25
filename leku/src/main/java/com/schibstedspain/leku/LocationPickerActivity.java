@@ -254,6 +254,15 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   @Override
+  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+    if (PermissionUtils.arePermissionGranted(grantResults)) {
+      geocoderPresenter.getLastKnownLocation();
+    }
+  }
+
+  @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     switch (requestCode) {
       case REQUEST_PLACE_PICKER:
@@ -263,7 +272,6 @@ public class LocationPickerActivity extends AppCompatActivity
           retrieveLocationFrom(matches.get(0));
         }
         break;
-
       default:
         break;
     }
