@@ -32,13 +32,14 @@
         android:background="@color/search_background"
         android:hint="@string/search_hint"
         android:layout_weight="1"
+        android:layout_gravity="center_vertical"
         />
 
     <ImageView
         android:id="@+id/leku_clear_search_image"
         android:layout_width="24dp"
         android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_delete"
+        android:src="@drawable/ic_clean"
         android:tint="@color/strong_grey"
         android:contentDescription="@string/search_hint"
         android:layout_weight="0"
