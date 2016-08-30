@@ -4,7 +4,7 @@ apply plugin: 'com.novoda.bintray-release'
 apply from: '../quality.gradle'
 
 group = 'com.schibstedspain.android'
-version = '2.0.1'
+version = '2.1.0'
 
 android {
   compileSdkVersion 24
@@ -60,7 +60,7 @@ publish {
   userOrg = 'schibstedspain'
   groupId = 'com.schibstedspain.android'
   artifactId = 'leku'
-  publishVersion = '2.0.1'
+  publishVersion = '2.1.0'
   desc = 'Location picker component for Android. It returns a latitude,longitude and an address based on the location picked in the LocationPickerActivity provided.'
   website = 'https://github.com/SchibstedSpain/leku'
 }

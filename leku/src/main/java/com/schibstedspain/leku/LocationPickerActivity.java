@@ -91,6 +91,7 @@ public class LocationPickerActivity extends AppCompatActivity
   private ProgressBar progressBar;
   private ListView listResult;
   private ImageView clearSearchButton;
+  private MenuItem searchOption;
 
   private final List<Address> locationList = new ArrayList<>();
   private List<String> locationNameList = new ArrayList<>();
@@ -193,8 +194,10 @@ public class LocationPickerActivity extends AppCompatActivity
           adapter.notifyDataSetChanged();
           showLocationInfoLayout();
           clearSearchButton.setVisibility(View.INVISIBLE);
+          searchOption.setIcon(R.drawable.ic_mic);
         } else {
           clearSearchButton.setVisibility(View.VISIBLE);
+          searchOption.setIcon(R.drawable.ic_search);
         }
       }
 
@@ -237,6 +240,7 @@ public class LocationPickerActivity extends AppCompatActivity
   public boolean onCreateOptionsMenu(Menu menu) {
     MenuInflater inflater = getMenuInflater();
     inflater.inflate(R.menu.toolbar_menu, menu);
+    searchOption = menu.findItem(R.id.action_voice);
     return true;
   }
 
@@ -247,7 +251,12 @@ public class LocationPickerActivity extends AppCompatActivity
       returnCurrentPosition();
       return true;
     } else if (id == R.id.action_voice) {
-      startVoiceRecognitionActivity();
+      if (searchView.getText().toString().isEmpty()) {
+        startVoiceRecognitionActivity();
+      } else {
+        retrieveLocationFrom(searchView.getText().toString());
+        closeKeyboard();
+      }
       return true;
     }
     return super.onOptionsItemSelected(item);
