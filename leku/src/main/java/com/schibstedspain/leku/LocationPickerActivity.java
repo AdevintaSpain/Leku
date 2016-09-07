@@ -8,6 +8,7 @@ import android.content.IntentSender;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
@@ -76,6 +77,7 @@ public class LocationPickerActivity extends AppCompatActivity
   private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
   private static final int DEFAULT_ZOOM = 16;
   private static final int WIDER_ZOOM = 6;
+
 
   private GoogleMap map;
   private GoogleApiClient googleApiClient;
@@ -209,8 +211,7 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void setUpFloatingButtons() {
-    FloatingActionButton btnMyLocation =
-        (FloatingActionButton) findViewById(R.id.btnFloatingAction);
+    FloatingActionButton btnMyLocation = (FloatingActionButton) findViewById(R.id.btnFloatingAction);
     btnMyLocation.setOnClickListener(v -> {
       geocoderPresenter.getLastKnownLocation();
       setTracking(TrackEvents.didLocalizeMe);
@@ -314,9 +315,17 @@ public class LocationPickerActivity extends AppCompatActivity
     if (isLocationInformedFromBundle) {
       setResult(RESULT_CANCELED);
       setTracking(TrackEvents.CANCEL);
-      finish();
+      endActivity();
     } else {
       returnCurrentPosition();
+    }
+  }
+
+  protected void endActivity() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      finishAfterTransition();
+    } else {
+      finish();
     }
   }
 
@@ -712,7 +721,7 @@ public class LocationPickerActivity extends AppCompatActivity
       setResult(RESULT_CANCELED);
       setTracking(TrackEvents.CANCEL);
     }
-    finish();
+    endActivity();
   }
 
   private String getLocationAddress() {

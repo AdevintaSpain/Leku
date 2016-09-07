@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="TRANSITION_NAME_LEKU_SEARCH_VIEW">leku_searchView</string>
+  <string name="TRANSITION_NAME_LEKU_STREET">leku_street</string>
+  <string name="TRANSITION_NAME_LEKU_CITY">leku_city</string>
+  <string name="TRANSITION_NAME_LEKU_ZIP_CODE">leku_zipCode</string>
+  <string name="TRANSITION_NAME_LEKU_LOCATION_INFO_LAYOUT">leku_locationInfoLayout</string>
+  <string name="TRANSITION_NAME_LEKU_PROGRESS_BAR">leku_progressBar</string>
+  <string name="TRANSITION_NAME_LEKU_LIST_RESULT">leku_listResult</string>
+  <string name="TRANSITION_NAME_LEKU_CLEAR_SEARCH_BUTTON">leku_clearSearchButton</string>
+  <string name="TRANSITION_NAME_LEKU_MY_LOCATION_FAB">leku_btnMyLocation</string>
+  <string name="TRANSITION_NAME_LEKU_ACCEPT_LOCATION_FAB">leku_btnAcceptLocation</string>
+</resources>

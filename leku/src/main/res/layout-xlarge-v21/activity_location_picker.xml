@@ -23,6 +23,7 @@
       android:layout_marginTop="80dp"
       android:layout_marginLeft="8dp"
       android:visibility="gone"
+      android:transitionName="@string/TRANSITION_NAME_LEKU_PROGRESS_BAR"
       />
 
   <ListView
@@ -39,6 +40,7 @@
       android:minWidth="296dp"
       android:background="@drawable/toolbar_custom_background"
       tools:visibility="visible"
+      android:transitionName="@string/TRANSITION_NAME_LEKU_LIST_RESULT"
       />
 
   <LinearLayout
@@ -64,6 +66,7 @@
         app:rippleColor="@color/soft_grey"
         app:elevation="2dp"
         tools:background="@color/white"
+        android:transitionName="@string/TRANSITION_NAME_LEKU_MY_LOCATION_FAB"
         />
 
     <FrameLayout
@@ -74,6 +77,7 @@
         android:id="@+id/location_info"
         android:visibility="gone"
         tools:visibility="visible"
+        android:transitionName="@string/TRANSITION_NAME_LEKU_LOCATION_INFO_LAYOUT"
         >
 
       <LinearLayout
@@ -102,6 +106,7 @@
               android:textSize="18sp"
               android:textColor="@color/strong_grey"
               tools:text="Calle Mallorca, 150"
+              android:transitionName="@string/TRANSITION_NAME_LEKU_STREET"
               />
 
           <TextView
@@ -112,6 +117,7 @@
               android:textSize="14sp"
               android:textColor="@color/mid_grey"
               tools:text="Barcelona"
+              android:transitionName="@string/TRANSITION_NAME_LEKU_CITY"
               />
 
           <TextView
@@ -123,6 +129,7 @@
               android:textSize="14sp"
               android:textColor="@color/mid_grey"
               tools:text="08032"
+              android:transitionName="@string/TRANSITION_NAME_LEKU_ZIP_CODE"
               />
         </LinearLayout>
 
@@ -142,6 +149,7 @@
             app:rippleColor="@color/lime_dark"
             app:elevation="2dp"
             tools:background="@color/lime"
+            android:transitionName="@string/TRANSITION_NAME_LEKU_ACCEPT_LOCATION_FAB"
             />
 
       </LinearLayout>

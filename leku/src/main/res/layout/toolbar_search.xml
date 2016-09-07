@@ -13,6 +13,7 @@
     android:background="@drawable/toolbar_custom_background"
     app:theme="@style/ThemeOverlay.AppCompat.Light"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    android:transitionName="@string/TRANSITION_NAME_LEKU_SEARCH_VIEW"
     >
 
   <LinearLayout

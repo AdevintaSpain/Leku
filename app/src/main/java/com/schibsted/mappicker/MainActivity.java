@@ -2,8 +2,11 @@ package com.schibsted.mappicker;
 
 import android.content.Intent;
 import android.location.Address;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -15,14 +18,15 @@ import com.schibstedspain.leku.tracker.TrackEvents;
 
 public class MainActivity extends AppCompatActivity {
 
+  private View mapButton;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    StrictMode.setThreadPolicy(
-        new StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().build());
+    StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().build());
     StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build());
     setContentView(R.layout.activity_main);
-    View mapButton = findViewById(R.id.map_button);
+    mapButton = findViewById(R.id.map_button);
     mapButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
@@ -32,10 +36,24 @@ public class MainActivity extends AppCompatActivity {
         //intent.putExtra(LocationPickerActivity.LAYOUTS_TO_HIDE, "street|city"); //this is optional if you want to hide some info
         //intent.putExtra(LocationPickerActivity.SEARCH_ZONE, "es_ES"); //this is optional if an specific search location
         intent.putExtra("test", "this is a test");
-        startActivityForResult(intent, 1);
+        launchIntent(intent);
       }
     });
     initializeLocationPickerTracker();
+
+    ViewCompat.setTransitionName(mapButton, getString(R.string.TRANSITION_NAME_LEKU_SEARCH_VIEW));
+  }
+
+  private void launchIntent(Intent intent) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      Bundle bundle =
+          ActivityOptionsCompat.makeSceneTransitionAnimation(this, mapButton, getString(R.string.TRANSITION_NAME_LEKU_SEARCH_VIEW))
+              .toBundle();
+
+      startActivityForResult(intent, 1, bundle);
+    } else {
+      startActivityForResult(intent, 1);
+    }
   }
 
   @Override
