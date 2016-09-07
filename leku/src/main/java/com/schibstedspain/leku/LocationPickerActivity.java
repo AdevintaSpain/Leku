@@ -8,6 +8,7 @@ import android.content.IntentSender;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
@@ -314,9 +315,17 @@ public class LocationPickerActivity extends AppCompatActivity
     if (isLocationInformedFromBundle) {
       setResult(RESULT_CANCELED);
       setTracking(TrackEvents.CANCEL);
-      finish();
+      endActivity();
     } else {
       returnCurrentPosition();
+    }
+  }
+
+  protected void endActivity() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      finishAfterTransition();
+    } else {
+      finish();
     }
   }
 
@@ -712,7 +721,7 @@ public class LocationPickerActivity extends AppCompatActivity
       setResult(RESULT_CANCELED);
       setTracking(TrackEvents.CANCEL);
     }
-    finish();
+    endActivity();
   }
 
   private String getLocationAddress() {
