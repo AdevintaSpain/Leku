@@ -77,6 +77,7 @@ public class LocationPickerActivity extends AppCompatActivity
   private static final int DEFAULT_ZOOM = 16;
   private static final int WIDER_ZOOM = 6;
 
+
   private GoogleMap map;
   private GoogleApiClient googleApiClient;
   private Location currentLocation;
@@ -209,8 +210,7 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void setUpFloatingButtons() {
-    FloatingActionButton btnMyLocation =
-        (FloatingActionButton) findViewById(R.id.btnFloatingAction);
+    FloatingActionButton btnMyLocation = (FloatingActionButton) findViewById(R.id.btnFloatingAction);
     btnMyLocation.setOnClickListener(v -> {
       geocoderPresenter.getLastKnownLocation();
       setTracking(TrackEvents.didLocalizeMe);
