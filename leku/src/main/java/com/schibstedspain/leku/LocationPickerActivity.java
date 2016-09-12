@@ -193,11 +193,19 @@ public class LocationPickerActivity extends AppCompatActivity
           adapter.clear();
           adapter.notifyDataSetChanged();
           showLocationInfoLayout();
-          clearSearchButton.setVisibility(View.INVISIBLE);
-          searchOption.setIcon(R.drawable.ic_mic);
+          if (clearSearchButton != null) {
+            clearSearchButton.setVisibility(View.INVISIBLE);
+          }
+          if (searchOption != null) {
+            searchOption.setIcon(R.drawable.ic_mic);
+          }
         } else {
-          clearSearchButton.setVisibility(View.VISIBLE);
-          searchOption.setIcon(R.drawable.ic_search);
+          if (clearSearchButton != null) {
+            clearSearchButton.setVisibility(View.VISIBLE);
+          }
+          if (searchOption != null) {
+            searchOption.setIcon(R.drawable.ic_search);
+          }
         }
       }
 
