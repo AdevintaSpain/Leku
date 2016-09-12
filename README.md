@@ -75,7 +75,7 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    compile 'com.schibstedspain.android:leku:2.1.0'
+    compile 'com.schibstedspain.android:leku:2.1.1'
 }
 ```
 
