@@ -75,7 +75,7 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    compile 'com.schibstedspain.android:leku:2.1.1'
+    compile 'com.schibstedspain.android:leku:2.2.0'
 }
 ```
 
@@ -245,6 +245,14 @@ By default the search will be restricted to a zone determined by your default lo
 
 ```java
 intent.putExtra(LocationPickerActivity.SEARCH_ZONE, "es_ES");
+```
+
+##### Force return location on back pressed
+
+If you want to force that when the user clicks on back button it returns the location you can use this parameter (note: is only enabled if you don't provide a location):
+
+```java
+intent.putExtra(LocationPickerActivity.BACK_PRESSED_RETURN_OK, true);
 ```
 
 #### Tracking
