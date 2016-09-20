@@ -31,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(LocationPickerActivity.LONGITUDE, 2.1743558);
         //intent.putExtra(LocationPickerActivity.LAYOUTS_TO_HIDE, "street|city"); // this is optional if you want to hide some info
         //intent.putExtra(LocationPickerActivity.SEARCH_ZONE, "es_ES"); // this is optional if an specific search location
-        //intent.putExtra(LocationPickerActivity.BACK_PRESSED_RETURN_OK, true); // this is optional if you want to return RESULT_OK if you don't set the latitude/longitude and click back button
+        //intent.putExtra(LocationPickerActivity.BACK_PRESSED_RETURN_OK, true);
+          // this is optional if you want to return RESULT_OK if you don't set the latitude/longitude and click back button
         intent.putExtra("test", "this is a test");
         startActivityForResult(intent, 1);
       }
