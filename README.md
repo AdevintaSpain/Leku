@@ -247,6 +247,14 @@ By default the search will be restricted to a zone determined by your default lo
 intent.putExtra(LocationPickerActivity.SEARCH_ZONE, "es_ES");
 ```
 
+##### Force return location on back pressed
+
+If you want to force that when the user clicks on back button it returns the location you can use this parameter (note: is only enabled if you don't provide a location):
+
+```java
+intent.putExtra(LocationPickerActivity.BACK_PRESSED_RETURN_OK, true);
+```
+
 #### Tracking
 
 Optionally, you can set a tracking events listener. Implement LocationPickerTracker interface, and set it in your Application class as follows:

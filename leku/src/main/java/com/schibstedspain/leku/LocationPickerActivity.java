@@ -67,6 +67,7 @@ public class LocationPickerActivity extends AppCompatActivity
   public static final String TRANSITION_BUNDLE = "transition_bundle";
   public static final String LAYOUTS_TO_HIDE = "layouts_to_hide";
   public static final String SEARCH_ZONE = "search_zone";
+  public static final String BACK_PRESSED_RETURN_OK = "back_pressed_return_ok";
   private static final String LOCATION_KEY = "location_key";
   private static final String LAST_LOCATION_QUERY = "last_location_query";
   private static final String OPTIONS_HIDE_STREET = "street";
@@ -102,6 +103,7 @@ public class LocationPickerActivity extends AppCompatActivity
   private boolean isStreetVisible = true;
   private boolean isCityVisible = true;
   private boolean isZipCodeVisible = true;
+  private boolean shouldReturnOkOnBackPressed = false;
   private String searchZone;
 
   @Override
@@ -319,7 +321,7 @@ public class LocationPickerActivity extends AppCompatActivity
 
   @Override
   public void onBackPressed() {
-    if (isLocationInformedFromBundle) {
+    if (!shouldReturnOkOnBackPressed || isLocationInformedFromBundle) {
       setResult(RESULT_CANCELED);
       setTracking(TrackEvents.CANCEL);
       finish();
@@ -552,6 +554,9 @@ public class LocationPickerActivity extends AppCompatActivity
     if (savedInstanceState.keySet().contains(SEARCH_ZONE)) {
       searchZone = savedInstanceState.getString(SEARCH_ZONE);
     }
+    if (savedInstanceState.keySet().contains(BACK_PRESSED_RETURN_OK)) {
+      shouldReturnOkOnBackPressed = savedInstanceState.getBoolean(BACK_PRESSED_RETURN_OK);
+    }
   }
 
   private void getTransitionBundleParams(Bundle transitionBundle) {
@@ -565,6 +570,9 @@ public class LocationPickerActivity extends AppCompatActivity
     }
     if (transitionBundle.keySet().contains(SEARCH_ZONE)) {
       searchZone = transitionBundle.getString(SEARCH_ZONE);
+    }
+    if (transitionBundle.keySet().contains(BACK_PRESSED_RETURN_OK)) {
+      shouldReturnOkOnBackPressed = transitionBundle.getBoolean(BACK_PRESSED_RETURN_OK);
     }
   }
 

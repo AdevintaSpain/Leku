@@ -29,8 +29,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), LocationPickerActivity.class);
         intent.putExtra(LocationPickerActivity.LATITUDE, 41.4036299);
         intent.putExtra(LocationPickerActivity.LONGITUDE, 2.1743558);
-        //intent.putExtra(LocationPickerActivity.LAYOUTS_TO_HIDE, "street|city"); //this is optional if you want to hide some info
-        //intent.putExtra(LocationPickerActivity.SEARCH_ZONE, "es_ES"); //this is optional if an specific search location
+        //intent.putExtra(LocationPickerActivity.LAYOUTS_TO_HIDE, "street|city"); // this is optional if you want to hide some info
+        //intent.putExtra(LocationPickerActivity.SEARCH_ZONE, "es_ES"); // this is optional if an specific search location
+        //intent.putExtra(LocationPickerActivity.BACK_PRESSED_RETURN_OK, true); // this is optional if you want to return RESULT_OK if you don't set the latitude/longitude and click back button
         intent.putExtra("test", "this is a test");
         startActivityForResult(intent, 1);
       }
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
   @Override
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     if (requestCode == 1 && resultCode == RESULT_OK) {
+      Log.d("RESULT****", "OK");
       double latitude = data.getDoubleExtra(LocationPickerActivity.LATITUDE, 0);
       Log.d("LATITUDE****", String.valueOf(latitude));
       double longitude = data.getDoubleExtra(LocationPickerActivity.LONGITUDE, 0);
@@ -54,9 +56,9 @@ public class MainActivity extends AppCompatActivity {
       Address fullAddress = data.getParcelableExtra(LocationPickerActivity.ADDRESS);
       Log.d("FULL ADDRESS****", fullAddress.toString());
     }
-    //if (resultCode == RESULT_CANCELED) {
-    //Write your code if there's no result
-    //}
+    if (resultCode == RESULT_CANCELED) {
+      Log.d("RESULT****", "CANCELLED");
+    }
   }
 
   private void initializeLocationPickerTracker() {
