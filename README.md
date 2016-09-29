@@ -109,6 +109,8 @@ The following two permissions are not required to use Google Maps Android API v2
 <uses-feature android:name="android.hardware.location.gps" android:required="false"  />
 ```
 
+You must also explicitly declare that your app uses the android.hardware.location.network or android.hardware.location.gps hardware features if your app targets Android 5.0 (API level 21) or higher and uses the ACCESS_COARSE_LOCATION or ACCESS_FINE_LOCATION permission in order to receive location updates from the network or a GPS, respectively.
+
 **Note**: It supports runtime permissions for *Android 6 (Marshmallow)*. You don't need to do anything, it will ask for permissions if needed.
 
 
