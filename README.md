@@ -104,6 +104,8 @@ The following two permissions are not required to use Google Maps Android API v2
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.hardware.location.network" />
+<uses-permission android:name="android.hardware.location.gps" />
 ```
 
 **Note**: It supports runtime permissions for *Android 6 (Marshmallow)*. You don't need to do anything, it will ask for permissions if needed.
