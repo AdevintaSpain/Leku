@@ -377,9 +377,9 @@ The following is a list of some of the public apps using Leku and are published 
 
 Want to add your app? Found an app that no longer works or no longer uses Leku? Please submit a pull request on GitHub to update this page!
 
-| <a href="https://play.google.com/store/apps/details?id=com.anuntis.segundamano"><img src="media/vibbo_logo.png" align="left" width="68px" height="68px"/></a>
-|---
-| [vibbo](https://play.google.com/store/apps/details?id=com.anuntis.segundamano)
+| <a href="https://play.google.com/store/apps/details?id=com.anuntis.segundamano"><img src="media/vibbo_logo.png" align="left" width="68px" height="68px"/></a> | <a href="https://play.google.com/store/apps/details?id=com.scmspain.worksi"><img src="media/worksi_logo.png" align="left" width="68px" height="68px"/></a>
+|---|---
+| [vibbo](https://play.google.com/store/apps/details?id=com.anuntis.segundamano) | [Worksi](https://play.google.com/store/apps/details?id=com.scmspain.worksi)
 
 
 Contribute
