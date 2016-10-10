@@ -75,7 +75,7 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    compile 'com.schibstedspain.android:leku:2.1.0'
+    compile 'com.schibstedspain.android:leku:2.2.0'
 }
 ```
 
@@ -104,7 +104,12 @@ The following two permissions are not required to use Google Maps Android API v2
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+<uses-feature android:name="android.hardware.location.network" android:required="false" />
+<uses-feature android:name="android.hardware.location.gps" android:required="false"  />
 ```
+
+You must also explicitly declare that your app uses the android.hardware.location.network or android.hardware.location.gps hardware features if your app targets Android 5.0 (API level 21) or higher and uses the ACCESS_COARSE_LOCATION or ACCESS_FINE_LOCATION permission in order to receive location updates from the network or a GPS, respectively.
 
 **Note**: It supports runtime permissions for *Android 6 (Marshmallow)*. You don't need to do anything, it will ask for permissions if needed.
 
@@ -247,6 +252,14 @@ By default the search will be restricted to a zone determined by your default lo
 intent.putExtra(LocationPickerActivity.SEARCH_ZONE, "es_ES");
 ```
 
+##### Force return location on back pressed
+
+If you want to force that when the user clicks on back button it returns the location you can use this parameter (note: is only enabled if you don't provide a location):
+
+```java
+intent.putExtra(LocationPickerActivity.BACK_PRESSED_RETURN_OK, true);
+```
+
 #### Tracking
 
 Optionally, you can set a tracking events listener. Implement LocationPickerTracker interface, and set it in your Application class as follows:
@@ -364,9 +377,9 @@ The following is a list of some of the public apps using Leku and are published 
 
 Want to add your app? Found an app that no longer works or no longer uses Leku? Please submit a pull request on GitHub to update this page!
 
-| <a href="https://play.google.com/store/apps/details?id=com.anuntis.segundamano"><img src="media/vibbo_logo.png" align="left" width="68px" height="68px"/></a>
-|---
-| [vibbo](https://play.google.com/store/apps/details?id=com.anuntis.segundamano)
+| <a href="https://play.google.com/store/apps/details?id=com.anuntis.segundamano"><img src="media/vibbo_logo.png" align="left" width="68px" height="68px"/></a> | <a href="https://play.google.com/store/apps/details?id=com.scmspain.worksi"><img src="media/worksi_logo.png" align="left" width="68px" height="68px"/></a>
+|---|---
+| [vibbo](https://play.google.com/store/apps/details?id=com.anuntis.segundamano) | [Worksi](https://play.google.com/store/apps/details?id=com.scmspain.worksi)
 
 
 Contribute
