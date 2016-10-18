@@ -23,7 +23,6 @@ public class GeocoderInteractor implements GeocoderInteractorInterface {
         subscriber.onNext(geocoder.getFromLocationName(query, MAX_RESULTS));
         subscriber.onCompleted();
       } catch (IOException e) {
-        e.printStackTrace();
         subscriber.onError(e);
       }
     });
@@ -38,7 +37,6 @@ public class GeocoderInteractor implements GeocoderInteractorInterface {
             lowerLeft.longitude, upperRight.latitude, upperRight.longitude));
         subscriber.onCompleted();
       } catch (IOException e) {
-        e.printStackTrace();
         subscriber.onError(e);
       }
     });
@@ -51,7 +49,6 @@ public class GeocoderInteractor implements GeocoderInteractorInterface {
         subscriber.onNext(geocoder.getFromLocation(latitude, longitude, MAX_RESULTS));
         subscriber.onCompleted();
       } catch (IOException e) {
-        e.printStackTrace();
         subscriber.onError(e);
       }
     });

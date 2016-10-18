@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -66,6 +67,7 @@ public class LocationPickerActivity extends AppCompatActivity
   public static final String TRANSITION_BUNDLE = "transition_bundle";
   public static final String LAYOUTS_TO_HIDE = "layouts_to_hide";
   public static final String SEARCH_ZONE = "search_zone";
+  public static final String BACK_PRESSED_RETURN_OK = "back_pressed_return_ok";
   private static final String LOCATION_KEY = "location_key";
   private static final String LAST_LOCATION_QUERY = "last_location_query";
   private static final String OPTIONS_HIDE_STREET = "street";
@@ -90,17 +92,18 @@ public class LocationPickerActivity extends AppCompatActivity
   private ProgressBar progressBar;
   private ListView listResult;
   private ImageView clearSearchButton;
+  private MenuItem searchOption;
 
   private final List<Address> locationList = new ArrayList<>();
   private List<String> locationNameList = new ArrayList<>();
   private boolean hasWiderZoom = false;
-  private boolean firstTime = true;
   private Bundle bundle = new Bundle();
   private Address selectedAddress;
   private boolean isLocationInformedFromBundle = false;
   private boolean isStreetVisible = true;
   private boolean isCityVisible = true;
   private boolean isZipCodeVisible = true;
+  private boolean shouldReturnOkOnBackPressed = false;
   private String searchZone;
 
   @Override
@@ -147,7 +150,6 @@ public class LocationPickerActivity extends AppCompatActivity
       }
     });
     locationNameList = new ArrayList<>();
-    firstTime = true;
   }
 
   private void setUpResultsList() {
@@ -193,9 +195,19 @@ public class LocationPickerActivity extends AppCompatActivity
           adapter.clear();
           adapter.notifyDataSetChanged();
           showLocationInfoLayout();
-          clearSearchButton.setVisibility(View.INVISIBLE);
+          if (clearSearchButton != null) {
+            clearSearchButton.setVisibility(View.INVISIBLE);
+          }
+          if (searchOption != null) {
+            searchOption.setIcon(R.drawable.ic_mic);
+          }
         } else {
-          clearSearchButton.setVisibility(View.VISIBLE);
+          if (clearSearchButton != null) {
+            clearSearchButton.setVisibility(View.VISIBLE);
+          }
+          if (searchOption != null) {
+            searchOption.setIcon(R.drawable.ic_search);
+          }
         }
       }
 
@@ -230,10 +242,7 @@ public class LocationPickerActivity extends AppCompatActivity
 
   private void setUpMapIfNeeded() {
     if (map == null) {
-      map = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-      if (map != null) {
-        setDefaultMapSettings();
-      }
+      ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMapAsync(this);
     }
   }
 
@@ -241,6 +250,7 @@ public class LocationPickerActivity extends AppCompatActivity
   public boolean onCreateOptionsMenu(Menu menu) {
     MenuInflater inflater = getMenuInflater();
     inflater.inflate(R.menu.toolbar_menu, menu);
+    searchOption = menu.findItem(R.id.action_voice);
     return true;
   }
 
@@ -251,10 +261,24 @@ public class LocationPickerActivity extends AppCompatActivity
       returnCurrentPosition();
       return true;
     } else if (id == R.id.action_voice) {
-      startVoiceRecognitionActivity();
+      if (searchView.getText().toString().isEmpty()) {
+        startVoiceRecognitionActivity();
+      } else {
+        retrieveLocationFrom(searchView.getText().toString());
+        closeKeyboard();
+      }
       return true;
     }
     return super.onOptionsItemSelected(item);
+  }
+
+  @Override
+  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+    if (PermissionUtils.isLocationPermissionGranted(getApplicationContext())) {
+      geocoderPresenter.getLastKnownLocation();
+    }
   }
 
   @Override
@@ -267,7 +291,6 @@ public class LocationPickerActivity extends AppCompatActivity
           retrieveLocationFrom(matches.get(0));
         }
         break;
-
       default:
         break;
     }
@@ -298,7 +321,7 @@ public class LocationPickerActivity extends AppCompatActivity
 
   @Override
   public void onBackPressed() {
-    if (isLocationInformedFromBundle) {
+    if (!shouldReturnOkOnBackPressed || isLocationInformedFromBundle) {
       setResult(RESULT_CANCELED);
       setTracking(TrackEvents.CANCEL);
       finish();
@@ -309,11 +332,15 @@ public class LocationPickerActivity extends AppCompatActivity
 
   @Override
   public void onMapReady(GoogleMap googleMap) {
-    setDefaultMapSettings();
+    if (map == null) {
+      map = googleMap;
+      setDefaultMapSettings();
+      setCurrentPositionLocation();
+    }
   }
 
   @Override
-  public void onConnected(Bundle bundle) {
+  public void onConnected(Bundle savedBundle) {
     if (currentLocation == null) {
       geocoderPresenter.getLastKnownLocation();
     }
@@ -330,7 +357,7 @@ public class LocationPickerActivity extends AppCompatActivity
       try {
         connectionResult.startResolutionForResult(this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
       } catch (IntentSender.SendIntentException e) {
-        e.printStackTrace();
+        Log.d(LocationPickerActivity.class.getName(), e.getMessage());
       }
     }
   }
@@ -415,7 +442,6 @@ public class LocationPickerActivity extends AppCompatActivity
         adapter.notifyDataSetChanged();
       }
     }
-    firstTime = false;
   }
 
   @Override
@@ -451,7 +477,6 @@ public class LocationPickerActivity extends AppCompatActivity
     progressBar.setVisibility(View.GONE);
     changeListResultVisibility(View.GONE);
     Toast.makeText(this, R.string.load_location_error, Toast.LENGTH_LONG).show();
-    firstTime = false;
   }
 
   @Override
@@ -462,7 +487,6 @@ public class LocationPickerActivity extends AppCompatActivity
   @Override
   public void showLastLocation(Location location) {
     currentLocation = location;
-    firstTime = false;
   }
 
   @Override
@@ -475,7 +499,6 @@ public class LocationPickerActivity extends AppCompatActivity
       setUpMapIfNeeded();
     }
     setUpDefaultMapLocation();
-    firstTime = false;
   }
 
   @Override
@@ -488,7 +511,6 @@ public class LocationPickerActivity extends AppCompatActivity
         setLocationEmpty();
       }
     }
-    firstTime = false;
   }
 
   public void setLocationEmpty() {
@@ -506,7 +528,6 @@ public class LocationPickerActivity extends AppCompatActivity
   @Override
   public void showGetLocationInfoError() {
     setLocationEmpty();
-    firstTime = false;
   }
 
   private void showLocationInfoLayout() {
@@ -533,6 +554,9 @@ public class LocationPickerActivity extends AppCompatActivity
     if (savedInstanceState.keySet().contains(SEARCH_ZONE)) {
       searchZone = savedInstanceState.getString(SEARCH_ZONE);
     }
+    if (savedInstanceState.keySet().contains(BACK_PRESSED_RETURN_OK)) {
+      shouldReturnOkOnBackPressed = savedInstanceState.getBoolean(BACK_PRESSED_RETURN_OK);
+    }
   }
 
   private void getTransitionBundleParams(Bundle transitionBundle) {
@@ -547,10 +571,13 @@ public class LocationPickerActivity extends AppCompatActivity
     if (transitionBundle.keySet().contains(SEARCH_ZONE)) {
       searchZone = transitionBundle.getString(SEARCH_ZONE);
     }
+    if (transitionBundle.keySet().contains(BACK_PRESSED_RETURN_OK)) {
+      shouldReturnOkOnBackPressed = transitionBundle.getBoolean(BACK_PRESSED_RETURN_OK);
+    }
   }
 
-  private void setLayoutVisibilityFromBundle(Bundle bundle) {
-    String options = bundle.getString(LAYOUTS_TO_HIDE);
+  private void setLayoutVisibilityFromBundle(Bundle transitionBundle) {
+    String options = transitionBundle.getString(LAYOUTS_TO_HIDE);
     if (options != null && options.contains(OPTIONS_HIDE_STREET)) {
       isStreetVisible = false;
     }
@@ -562,12 +589,12 @@ public class LocationPickerActivity extends AppCompatActivity
     }
   }
 
-  private void setLocationFromBundle(Bundle bundle) {
+  private void setLocationFromBundle(Bundle transitionBundle) {
     if (currentLocation == null) {
       currentLocation = new Location(getString(R.string.network_resource));
     }
-    currentLocation.setLatitude(bundle.getDouble(LATITUDE));
-    currentLocation.setLongitude(bundle.getDouble(LONGITUDE));
+    currentLocation.setLatitude(transitionBundle.getDouble(LATITUDE));
+    currentLocation.setLongitude(transitionBundle.getDouble(LONGITUDE));
     setCurrentPositionLocation();
     isLocationInformedFromBundle = true;
   }
@@ -584,7 +611,7 @@ public class LocationPickerActivity extends AppCompatActivity
       try {
         startActivityForResult(intent, REQUEST_PLACE_PICKER);
       } catch (ActivityNotFoundException e) {
-        e.printStackTrace();
+        Log.d(LocationPickerActivity.class.getName(), e.getMessage());
       }
     }
   }
@@ -747,12 +774,14 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void setDefaultMapSettings() {
-    map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-    map.setOnMapLongClickListener(this);
-    map.setOnMapClickListener(this);
-    map.getUiSettings().setCompassEnabled(false);
-    map.getUiSettings().setMyLocationButtonEnabled(true);
-    map.getUiSettings().setMapToolbarEnabled(false);
+    if (map != null) {
+      map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+      map.setOnMapLongClickListener(this);
+      map.setOnMapClickListener(this);
+      map.getUiSettings().setCompassEnabled(false);
+      map.getUiSettings().setMyLocationButtonEnabled(true);
+      map.getUiSettings().setMapToolbarEnabled(false);
+    }
   }
 
   private void setUpDefaultMapLocation() {
@@ -811,7 +840,7 @@ public class LocationPickerActivity extends AppCompatActivity
   private void closeKeyboard() {
     View view = this.getCurrentFocus();
     if (view != null) {
-      InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+      InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
       imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
   }

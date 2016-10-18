@@ -13,9 +13,13 @@ public class PermissionUtils {
     return ContextCompat.checkSelfPermission(context, permission)
         == PackageManager.PERMISSION_DENIED;
   }
+  public static boolean isLocationPermissionGranted(Context context) {
+    return ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
+        == PackageManager.PERMISSION_GRANTED;
+  }
 
   public static void requestPermission(Activity activity, String permission, int requestCode) {
-    ActivityCompat.requestPermissions(activity, new String[] { permission }, requestCode);
+    ActivityCompat.requestPermissions(activity, new String[] {permission}, requestCode);
   }
 
   public static boolean shouldRequestLocationStoragePermission(Context context) {

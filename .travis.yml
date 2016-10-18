@@ -16,18 +16,26 @@ env:
     - secure: "XcGPMdYdcDCrWZNWJKZDmmUX2BKkpaInTWF/OqInDHSAP8Qib/xw69YZvHGBUP9GBQ+C+9OzrCT0Kmg+d0SyS+uz8W6Yc9FzgDLs07lVyCGDpQKaTpcyct2nmh8+3iZiMYnlSYjgpZqwXKOC1cvrVcX8jA/NtwXhVVJHsaVKP0mV8Hw0hibxNTU+V+vl1rICePcLNe8WZnIe/ESn1cuFb/o2aUjENmIVD74hJIgjRph+YeZXerKbnjHU5IvNoSHnp25exUoH3COUwPabpt142EXKXOIqHs5OiqmlrnjuFrSe7/WKVgjKpAN/daVhKut0JlAMviU05Naj/sv/J+Zsqa6RkW4va/GP+qlmkSjgz7qJLp8OZfknxim1VhaOCdgoWi6fHSN5LeVXu4COjUg5G3hyfVSBRIydVOj68KulUBSvnxmC5NszdUaprivENy8FGkxqImZM2GeqlqlYtPis7GZQsmXjyva9IDWVaNy7XEl5w4fpW3Y5XEX0ITOUwcUmQ7D41CelYlg5gFXRdUn/5Xyl5obb58GkxJ5TNAp84cjqAubjpB0lVuhqK7izrRYq7bQLwY2M5VZSuDxX9liJK0SztjAs63MYeuZz/fgKDn7rqRKCUzM9kA1hOAcXyx1KpBKL9cVFIltswSgDyBTYl6OqpygVjHiNOLdEPuO3kSs="
     - secure: "biJ1oYHr0J7wMouHbUbJ95zBDs63WzdmRwMjY3vydZGPn6brKsQNCvI+/bIjGqg7U03u06WRRQmuPO9bTjNbKj3H3pLn68nubAqz8YTNJvXdGZNowp8SoaTKeVBqVZXNTpcYmK3EBgAukSFGztC76TIg5+U7pO+X3Rc/ds/QMV3cJkgflcVndnwrCbN05szszUMD3n4s5MHtQ+KHyWwQXs3hl/i7wD6Yq8qUITmn1gHqzc6SxebiNo/kAF19+yQp2L6n0+JKPYlUSe88z1W8JEyNM1j4ohUM5OV7UtgYpJ9OqWIPBluV64ky5RMZBKA1mVxo3rLJ0SGTvZKAmQTiznnxKOxorfsQbRFt3DI8Bt1PoGcZsfTMVoE2vv7ycbCxaLQEZjf+DP44nFRDvdlwLuQlYTauYWDXsyQaeg7m0KfDhXJKH4cn2lSjDOMbR1Ym7xPMkoilAf7LhDG4PQ/RzM0L/ic97VZqnLAZAw+Sf62BDjHhoHANsjDqBNI/1LpVQ1QGII4wjU9J7b7ktmyc3+fjcqIKCpWchEZ3V+F1gjIem1UbLJekkbiFnrtMdOn8HiCwulglnxejrt6PBXvXr6hA5qy6tYDMbLI+j/RP/4Z0MvQ8Irt9xM3tupd0dSnqzTwUtTVYB4jFpcANaL3KxfTktxu478urIrf1d57okVU="
 
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
 
 android:
   components:
-  - platform-tools
   - tools
-  - build-tools-23.0.3
-  - android-23
+  - tools
+  - platform-tools
+  - build-tools-24.0.1
+  - android-24
   - extra
   - extra-google-google_play_services
   - extra-google-m2repository
   - extra-android-m2repository
-  - addon-google_apis-google-23
+  - addon-google_apis-google-24
   - sys-img-armeabi-v7a-android-21
 
 # Emulator Management: Create, Start and Wait

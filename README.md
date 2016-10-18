@@ -6,9 +6,9 @@ Leku
 
 *A Location Picker for Android*
 
-![leku-v1](https://img.shields.io/badge/leku-v1.0.0-green.svg)
+[![Build Status](https://travis-ci.org/SchibstedSpain/Leku.svg?branch=master)](https://travis-ci.org/SchibstedSpain/Leku) [ ![Bintray](https://api.bintray.com/packages/schibstedspain/maven/leku/images/download.svg) ](https://bintray.com/schibstedspain/maven/leku/_latestVersion)
 
-Location picker component for Android. It returns a latitude,longitude and an address based on the location picked in the LocationPickerActivity provided.
+Location picker component for Android. It returns a latitude, longitude and an address based on the location picked in the LocationPickerActivity provided.
 
 <br/>
 <p align="center">
@@ -58,16 +58,29 @@ Location picker component for Android. It returns a latitude,longitude and an ad
 ### Prerequisites
 
 minSdkVersion >= 15
+Google Play Services = 9.4.0
+Support Library = 24.1.1
 
 ### Download
 
-Include the dependency:
+Include the **jcenter** repository in your top `build.gradle`:
+> Enabled by default on AndroidStudio projects
+```groovy
+allprojects {
+    jcenter()
+}
+```
+
+Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    compile 'com.schibstedspain.android:leku:1.0.0'
+    compile 'com.schibstedspain.android:leku:2.2.0'
 }
 ```
+
+**IMPORTANT**: If you want support for Google Play Services version '8.4.0', and support library version '23.1.1' use version '1.0.0'. Beware that **version '1.0.0' is going not be maintained**.
+
 
 ### Permissions
 
@@ -91,7 +104,15 @@ The following two permissions are not required to use Google Maps Android API v2
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+<uses-feature android:name="android.hardware.location.network" android:required="false" />
+<uses-feature android:name="android.hardware.location.gps" android:required="false"  />
 ```
+
+You must also explicitly declare that your app uses the android.hardware.location.network or android.hardware.location.gps hardware features if your app targets Android 5.0 (API level 21) or higher and uses the ACCESS_COARSE_LOCATION or ACCESS_FINE_LOCATION permission in order to receive location updates from the network or a GPS, respectively.
+
+**Note**: It supports runtime permissions for *Android 6 (Marshmallow)*. You don't need to do anything, it will ask for permissions if needed.
+
 
 ### Usage
 
@@ -231,6 +252,14 @@ By default the search will be restricted to a zone determined by your default lo
 intent.putExtra(LocationPickerActivity.SEARCH_ZONE, "es_ES");
 ```
 
+##### Force return location on back pressed
+
+If you want to force that when the user clicks on back button it returns the location you can use this parameter (note: is only enabled if you don't provide a location):
+
+```java
+intent.putExtra(LocationPickerActivity.BACK_PRESSED_RETURN_OK, true);
+```
+
 #### Tracking
 
 Optionally, you can set a tracking events listener. Implement LocationPickerTracker interface, and set it in your Application class as follows:
@@ -336,9 +365,9 @@ Who made this
 
 #### Contributors
 
-<a href="https://github.com/DiegoMillanR"><img src="https://avatars0.githubusercontent.com/u/9133635?v=3&s=460" alt="Diego Millán" align="left" height="80" width="80" /></a> | <a href="https://github.com/gerardpedrenyscmspain"><img src="https://avatars0.githubusercontent.com/u/9216185?v=3&s=460" alt="Gerard Pedreny" align="left" height="80" width="80" /></a> | <a href="https://github.com/marcserrascmspain"><img src="https://avatars1.githubusercontent.com/u/8959720?v=3&s=460" alt="Marc Serra" align="left" height="80" width="80" /></a> | <a href="https://github.com/sergiocastilloscmspain"><img src="https://avatars2.githubusercontent.com/u/8904364?v=3&s=460" alt="Sergio Castillo" align="left" height="80" width="80" /></a> | <a href="https://github.com/alorma"><img src="https://avatars3.githubusercontent.com/u/887462?v=3&s=460" alt="Bernat Borras" align="left" height="80" width="80" /></a>
----|---|---|---|---|
-[Diego Millán](https://github.com/DiegoMillanR) | [Gerard Pedreny](https://github.com/gerardpedrenyscmspain) | [Marc Serra](https://github.com/marcserrascmspain) | [Sergio Castillo](https://github.com/sergiocastilloscmspain) | [Bernat Borras](https://github.com/alorma)
+<a href="https://github.com/DiegoMillanR"><img src="https://avatars0.githubusercontent.com/u/9133635?v=3&s=460" alt="Diego Millán" align="left" height="80" width="80" /></a> | <a href="https://github.com/gerardpedrenyscmspain"><img src="https://avatars0.githubusercontent.com/u/9216185?v=3&s=460" alt="Gerard Pedreny" align="left" height="80" width="80" /></a> | <a href="https://github.com/marcserrascmspain"><img src="https://avatars1.githubusercontent.com/u/8959720?v=3&s=460" alt="Marc Serra" align="left" height="80" width="80" /></a> | <a href="https://github.com/sergiocastilloscmspain"><img src="https://avatars2.githubusercontent.com/u/8904364?v=3&s=460" alt="Sergio Castillo" align="left" height="80" width="80" /></a> | <a href="https://github.com/alorma"><img src="https://avatars3.githubusercontent.com/u/887462?v=3&s=460" alt="Bernat Borras" align="left" height="80" width="80" /></a> | <a href="https://github.com/CristianGM"><img src="https://avatars2.githubusercontent.com/u/6890500?v=3&s=460" alt="Cristian García" align="left" height="80" width="80" /></a>
+---|---|---|---|---|---|
+[Diego Millán](https://github.com/DiegoMillanR) | [Gerard Pedreny](https://github.com/gerardpedrenyscmspain) | [Marc Serra](https://github.com/marcserrascmspain) | [Sergio Castillo](https://github.com/sergiocastilloscmspain) | [Bernat Borras](https://github.com/alorma) | [Cristian García](https://github.com/CristianGM)
 
 
 Apps using Leku
@@ -348,9 +377,9 @@ The following is a list of some of the public apps using Leku and are published 
 
 Want to add your app? Found an app that no longer works or no longer uses Leku? Please submit a pull request on GitHub to update this page!
 
-| <a href="https://play.google.com/store/apps/details?id=com.anuntis.segundamano"><img src="media/vibbo_logo.png" align="left" width="68px" height="68px"/></a>
-|---
-| [vibbo](https://play.google.com/store/apps/details?id=com.anuntis.segundamano)
+| <a href="https://play.google.com/store/apps/details?id=com.anuntis.segundamano"><img src="media/vibbo_logo.png" align="left" width="68px" height="68px"/></a> | <a href="https://play.google.com/store/apps/details?id=com.scmspain.worksi"><img src="media/worksi_logo.png" align="left" width="68px" height="68px"/></a>
+|---|---
+| [vibbo](https://play.google.com/store/apps/details?id=com.anuntis.segundamano) | [Worksi](https://play.google.com/store/apps/details?id=com.scmspain.worksi)
 
 
 Contribute

@@ -18,7 +18,7 @@ public class LocationPicker {
 
   public static LocationPickerTracker getTracker() {
     if (tracker == null) {
-      tracker = EMPTY_TRACKER;
+      reset();
     }
     return tracker;
   }
