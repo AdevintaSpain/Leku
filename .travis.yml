@@ -36,12 +36,12 @@ android:
   - extra-google-m2repository
   - extra-android-m2repository
   - addon-google_apis-google-24
-  - sys-img-armeabi-v7a-android-21
+  - sys-img-armeabi-v7a-google_apis-21
 
 # Emulator Management: Create, Start and Wait
 before_script:
   - android list targets
-  - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
+  - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a --tag google_apis
   - emulator -avd test -no-skin -no-audio -no-window &
 
 script:
