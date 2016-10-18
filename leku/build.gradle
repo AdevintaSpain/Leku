@@ -30,8 +30,7 @@ android {
     targetCompatibility JavaVersion.VERSION_1_8
   }
   dexOptions {
-    isTravis = "true".equals(System.getenv("TRAVIS"))
-    preDexLibraries !isTravis
+    preDexLibraries !"true".equals(System.getenv("TRAVIS"))
   }
 }
 
