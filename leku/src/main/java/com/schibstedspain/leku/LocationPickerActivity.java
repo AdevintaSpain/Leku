@@ -258,7 +258,6 @@ public class LocationPickerActivity extends AppCompatActivity
   public boolean onOptionsItemSelected(MenuItem item) {
     int id = item.getItemId();
     if (id == android.R.id.home) {
-      //returnCurrentPosition();
       onBackPressed();
       return true;
     } else if (id == R.id.action_voice) {
