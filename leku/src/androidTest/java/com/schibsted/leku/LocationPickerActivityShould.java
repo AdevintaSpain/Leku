@@ -1,5 +1,6 @@
 package com.schibsted.leku;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -7,6 +8,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.util.Log;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import com.schibstedspain.leku.LocationPickerActivity;
 import com.schibstedspain.leku.R;
@@ -35,6 +37,14 @@ public class LocationPickerActivityShould {
   @Before
   public void setup() {
     permissionGranter = new PermissionGranter();
+  }
+
+  private void unlockScreen(ActivityTestRule<LocationPickerActivity> activityRule) {
+    final Activity activity = activityRule.getActivity();
+    activity.runOnUiThread(
+        () -> activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
+            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON));
   }
 
   @Test
@@ -139,6 +149,8 @@ public class LocationPickerActivityShould {
     intent.putExtra(LocationPickerActivity.SEARCH_ZONE, "es_ES");
     intent.putExtra("test", "this is a test");
     activityRule.launchActivity(intent);
+
+    unlockScreen(activityRule);
   }
 
   private void launchActivityWithoutLocation() {
