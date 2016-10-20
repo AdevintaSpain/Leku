@@ -52,11 +52,11 @@ dependencies {
   compile 'com.schibstedspain.android:android-reactive-location:0.10.1'
   compile "io.reactivex:rxandroid:1.1.0"
 
-  androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
-  androidTestCompile 'com.android.support.test:runner:0.4.1'
-  androidTestCompile 'com.android.support.test:rules:0.4.1'
+  androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+  androidTestCompile 'com.android.support.test:runner:0.5'
+  androidTestCompile 'com.android.support.test:rules:0.5'
   androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
-  androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.1'
+  androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
   androidTestCompile 'org.mockito:mockito-core:1.10.19'
 }
 
