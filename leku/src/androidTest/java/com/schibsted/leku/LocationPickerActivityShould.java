@@ -4,7 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.support.test.InstrumentationRegistry;
+import android.os.Build;
+import android.provider.Settings;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.util.Log;
@@ -18,6 +19,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import util.PermissionGranter;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
@@ -37,6 +40,11 @@ public class LocationPickerActivityShould {
   @Before
   public void setup() {
     permissionGranter = new PermissionGranter();
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      getInstrumentation().getUiAutomation().executeShellCommand(
+          "pm grant " + getTargetContext().getPackageName()
+              + " android.permission.WRITE_SECURE_SETTINGS");
+    }
   }
 
   private void unlockScreen(ActivityTestRule<LocationPickerActivity> activityRule) {
@@ -45,6 +53,13 @@ public class LocationPickerActivityShould {
         () -> activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
             WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
             WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON));
+  }
+
+  private void dissableAnimationsOnTravis() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      Settings.Global.putFloat(activityRule.getActivity().getContentResolver(),
+          Settings.Global.ANIMATOR_DURATION_SCALE, 0f);
+    }
   }
 
   @Test
@@ -80,6 +95,7 @@ public class LocationPickerActivityShould {
     onView(withId(R.id.leku_search))
         .check(matches(hasImeAction(EditorInfo.IME_ACTION_SEARCH)))
         .perform(pressImeActionButton());
+    wait300millis();
     wait300millis();
 
     onView(withId(R.id.resultlist)).check(matches(isDisplayed()));
@@ -141,7 +157,7 @@ public class LocationPickerActivityShould {
   }
 
   private void launchActivity() {
-    Context targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+    Context targetContext = getInstrumentation().getTargetContext();
     Intent intent = new Intent(targetContext, LocationPickerActivity.class);
     intent.putExtra(LocationPickerActivity.LATITUDE, 41.4036299);
     intent.putExtra(LocationPickerActivity.LONGITUDE, 2.1743558);
@@ -151,12 +167,16 @@ public class LocationPickerActivityShould {
     activityRule.launchActivity(intent);
 
     unlockScreen(activityRule);
+    dissableAnimationsOnTravis();
   }
 
   private void launchActivityWithoutLocation() {
-    Context targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+    Context targetContext = getInstrumentation().getTargetContext();
     Intent intent = new Intent(targetContext, LocationPickerActivity.class);
     activityRule.launchActivity(intent);
+
+    unlockScreen(activityRule);
+    dissableAnimationsOnTravis();
   }
 
   private void launchActivityWithPermissionsGranted() {

@@ -30,4 +30,6 @@
                  android:resource="@xml/searchable" />
     </activity>
   </application>
+
+  <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"/>
 </manifest>
