@@ -47,12 +47,12 @@ public class LocationPickerActivityShould {
     }
   }
 
-  private void unlockScreen(ActivityTestRule<LocationPickerActivity> activityRule) {
+  private void unlockScreen() {
     final Activity activity = activityRule.getActivity();
     activity.runOnUiThread(
-        () -> activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
-            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON));
+        () -> activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+            | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+            | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON));
   }
 
   private void dissableAnimationsOnTravis() {
@@ -166,7 +166,7 @@ public class LocationPickerActivityShould {
     intent.putExtra("test", "this is a test");
     activityRule.launchActivity(intent);
 
-    unlockScreen(activityRule);
+    unlockScreen();
     dissableAnimationsOnTravis();
   }
 
@@ -175,7 +175,7 @@ public class LocationPickerActivityShould {
     Intent intent = new Intent(targetContext, LocationPickerActivity.class);
     activityRule.launchActivity(intent);
 
-    unlockScreen(activityRule);
+    unlockScreen();
     dissableAnimationsOnTravis();
   }
 
