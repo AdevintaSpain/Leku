@@ -60,6 +60,7 @@
         android:layout_marginBottom="16dp"
         android:src="@drawable/ic_gps_lime"
         app:fabSize="normal"
+        android:tint="?colorPrimary"
         app:backgroundTint="@color/white"
         app:rippleColor="@color/soft_grey"
         app:elevation="2dp"
@@ -141,10 +142,10 @@
             android:layout_gravity="top|end"
             android:src="@drawable/ic_check_light"
             app:fabSize="normal"
-            app:backgroundTint="@color/lime"
-            app:rippleColor="@color/lime_dark"
+            app:backgroundTint="?colorPrimary"
+            app:rippleColor="?colorPrimaryDark"
             app:elevation="2dp"
-            tools:background="@color/lime"
+            tools:background="?colorPrimary"
             />
 
       </LinearLayout>
