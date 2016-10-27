@@ -52,6 +52,7 @@ Location picker component for Android. It returns a latitude, longitude and an a
 * Customization (Theme and layout)
 * Events Tracking
 * Multi-language support (English and Spanish supported by default)
+* RTL (Right-To-Left) layout support
 <br><br><br>
 
 
@@ -75,7 +76,7 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    compile 'com.schibstedspain.android:leku:2.3.0'
+    compile 'com.schibstedspain.android:leku:2.3.1'
 }
 ```
 
