@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">Leku Demo</string>
+  <string name="app_name" translatable="false">Leku Demo</string>
   <string name="google_maps_key"></string>
-  <string name="launch_map_picker">LAUNCH MAP LOCATION PICKER ACTIVITY</string>
+  <string name="launch_map_picker" translatable="false">LAUNCH MAP LOCATION PICKER ACTIVITY</string>
 </resources>
