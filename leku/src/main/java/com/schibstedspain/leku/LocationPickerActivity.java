@@ -843,26 +843,26 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void setPois() {
-      if (poisList != null && !poisList.isEmpty()) {
-        lekuPoisMarkersMap = new HashMap<>();
-        for (LekuPoi lekuPoi : poisList) {
-          Location location = lekuPoi.getLocation();
-          if (location != null && lekuPoi.getTitle() != null) {
-            Marker marker = addPoiMarker(location.getLatitude(), location.getLongitude(), lekuPoi.getTitle(), lekuPoi.getAddress());
-            lekuPoisMarkersMap.put(marker.getId(), lekuPoi);
-          }
+    if (poisList != null && !poisList.isEmpty()) {
+      lekuPoisMarkersMap = new HashMap<>();
+      for (LekuPoi lekuPoi : poisList) {
+        Location location = lekuPoi.getLocation();
+        if (location != null && lekuPoi.getTitle() != null) {
+          Marker marker = addPoiMarker(location.getLatitude(), location.getLongitude(), lekuPoi.getTitle(), lekuPoi.getAddress());
+          lekuPoisMarkersMap.put(marker.getId(), lekuPoi);
         }
-
-        map.setOnMarkerClickListener(marker -> {
-          LekuPoi lekuPoi = lekuPoisMarkersMap.get(marker.getId());
-          if (lekuPoi != null) {
-            setLocationInfo(lekuPoi);
-            centerToPoi(lekuPoi);
-            setTracking(TrackEvents.simpleDidLocalizeByLekuPoi);
-          }
-          return true;
-        });
       }
+
+      map.setOnMarkerClickListener(marker -> {
+        LekuPoi lekuPoi = lekuPoisMarkersMap.get(marker.getId());
+        if (lekuPoi != null) {
+          setLocationInfo(lekuPoi);
+          centerToPoi(lekuPoi);
+          setTracking(TrackEvents.simpleDidLocalizeByLekuPoi);
+        }
+        return true;
+      });
+    }
   }
 
   private void centerToPoi(LekuPoi lekuPoi) {
