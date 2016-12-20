@@ -40,6 +40,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -50,8 +51,10 @@ import com.schibstedspain.leku.geocoder.GeocoderViewInterface;
 import com.schibstedspain.leku.permissions.PermissionUtils;
 import com.schibstedspain.leku.tracker.TrackEvents;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
 
 public class LocationPickerActivity extends AppCompatActivity
@@ -68,6 +71,7 @@ public class LocationPickerActivity extends AppCompatActivity
   public static final String LAYOUTS_TO_HIDE = "layouts_to_hide";
   public static final String SEARCH_ZONE = "search_zone";
   public static final String BACK_PRESSED_RETURN_OK = "back_pressed_return_ok";
+  public static final String POIS_LIST = "pois_list";
   private static final String LOCATION_KEY = "location_key";
   private static final String LAST_LOCATION_QUERY = "last_location_query";
   private static final String OPTIONS_HIDE_STREET = "street";
@@ -81,6 +85,7 @@ public class LocationPickerActivity extends AppCompatActivity
   private GoogleMap map;
   private GoogleApiClient googleApiClient;
   private Location currentLocation;
+  private LekuPoi currentLekuPoi;
   private GeocoderPresenter geocoderPresenter;
 
   private ArrayAdapter<String> adapter;
@@ -105,6 +110,9 @@ public class LocationPickerActivity extends AppCompatActivity
   private boolean isZipCodeVisible = true;
   private boolean shouldReturnOkOnBackPressed = false;
   private String searchZone;
+  private List<LekuPoi> poisList;
+  private Map<String, LekuPoi> lekuPoisMarkersMap;
+  private Marker currentMarker;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -219,8 +227,7 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void setUpFloatingButtons() {
-    FloatingActionButton btnMyLocation =
-        (FloatingActionButton) findViewById(R.id.btnFloatingAction);
+    FloatingActionButton btnMyLocation = (FloatingActionButton) findViewById(R.id.btnFloatingAction);
     btnMyLocation.setOnClickListener(v -> {
       geocoderPresenter.getLastKnownLocation();
       setTracking(TrackEvents.didLocalizeMe);
@@ -336,6 +343,7 @@ public class LocationPickerActivity extends AppCompatActivity
       map = googleMap;
       setDefaultMapSettings();
       setCurrentPositionLocation();
+      setPois();
     }
   }
 
@@ -378,6 +386,9 @@ public class LocationPickerActivity extends AppCompatActivity
     if (bundle.containsKey(TRANSITION_BUNDLE)) {
       savedInstanceState.putBundle(TRANSITION_BUNDLE, bundle.getBundle(TRANSITION_BUNDLE));
     }
+    if (poisList != null) {
+      savedInstanceState.putParcelableArrayList(POIS_LIST, new ArrayList<>(poisList));
+    }
     super.onSaveInstanceState(savedInstanceState);
   }
 
@@ -395,16 +406,21 @@ public class LocationPickerActivity extends AppCompatActivity
     if (savedInstanceState.containsKey(TRANSITION_BUNDLE)) {
       bundle.putBundle(TRANSITION_BUNDLE, savedInstanceState.getBundle(TRANSITION_BUNDLE));
     }
+    if (savedInstanceState.containsKey(POIS_LIST)) {
+      poisList = savedInstanceState.getParcelableArrayList(POIS_LIST);
+    }
   }
 
   @Override
   public void onMapLongClick(LatLng latLng) {
+    currentLekuPoi = null;
     setNewPosition(latLng);
     setTracking(TrackEvents.didLocalizeByPoi);
   }
 
   @Override
   public void onMapClick(LatLng latLng) {
+    currentLekuPoi = null;
     setNewPosition(latLng);
     setTracking(TrackEvents.simpleDidLocalizeByPoi);
   }
@@ -554,8 +570,8 @@ public class LocationPickerActivity extends AppCompatActivity
     if (savedInstanceState.keySet().contains(SEARCH_ZONE)) {
       searchZone = savedInstanceState.getString(SEARCH_ZONE);
     }
-    if (savedInstanceState.keySet().contains(BACK_PRESSED_RETURN_OK)) {
-      shouldReturnOkOnBackPressed = savedInstanceState.getBoolean(BACK_PRESSED_RETURN_OK);
+    if (savedInstanceState.keySet().contains(POIS_LIST)) {
+      poisList = savedInstanceState.getParcelableArrayList(POIS_LIST);
     }
   }
 
@@ -573,6 +589,9 @@ public class LocationPickerActivity extends AppCompatActivity
     }
     if (transitionBundle.keySet().contains(BACK_PRESSED_RETURN_OK)) {
       shouldReturnOkOnBackPressed = transitionBundle.getBoolean(BACK_PRESSED_RETURN_OK);
+    }
+    if (transitionBundle.keySet().contains(POIS_LIST)) {
+      poisList = transitionBundle.getParcelableArrayList(POIS_LIST);
     }
   }
 
@@ -635,20 +654,30 @@ public class LocationPickerActivity extends AppCompatActivity
     changeLocationInfoLayoutVisibility(View.VISIBLE);
   }
 
+  private void setLocationInfo(LekuPoi poi) {
+    this.currentLekuPoi = poi;
+    street.setText(poi.getTitle());
+    city.setText(poi.getAddress());
+    zipCode.setText(null);
+    changeLocationInfoLayoutVisibility(View.VISIBLE);
+  }
+
   private boolean isStreetEqualsCity(Address address) {
     return address.getAddressLine(0).equals(address.getLocality());
   }
 
   private void setNewMapMarker(double latitude, double longitude) {
     if (map != null) {
-      map.clear();
+      if (currentMarker != null) {
+        currentMarker.remove();
+      }
       CameraPosition cameraPosition =
           new CameraPosition.Builder().target(new LatLng(latitude, longitude))
               .zoom(getDefaultZoom())
               .build();
       hasWiderZoom = false;
       map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-      addMarker(latitude, longitude);
+      currentMarker = addMarker(latitude, longitude);
       map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
         @Override
         public void onMarkerDragStart(Marker marker) {
@@ -664,6 +693,7 @@ public class LocationPickerActivity extends AppCompatActivity
           if (currentLocation == null) {
             currentLocation = new Location(getString(R.string.network_resource));
           }
+          currentLekuPoi = null;
           currentLocation.setLongitude(marker.getPosition().longitude);
           currentLocation.setLatitude(marker.getPosition().latitude);
           setCurrentPositionLocation();
@@ -710,7 +740,17 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void returnCurrentPosition() {
-    if (currentLocation != null) {
+    if (currentLekuPoi != null) {
+      Intent returnIntent = new Intent();
+      returnIntent.putExtra(LATITUDE, currentLekuPoi.getLocation().getLatitude());
+      returnIntent.putExtra(LONGITUDE, currentLekuPoi.getLocation().getLongitude());
+      if (street != null && city != null) {
+        returnIntent.putExtra(LOCATION_ADDRESS, getLocationAddress());
+      }
+      //returnIntent.putExtra(TRANSITION_BUNDLE, bundle.getBundle(TRANSITION_BUNDLE));
+      setResult(RESULT_OK, returnIntent);
+      setTracking(TrackEvents.RESULT_OK);
+    } else if (currentLocation != null) {
       Intent returnIntent = new Intent();
       returnIntent.putExtra(LATITUDE, currentLocation.getLatitude());
       returnIntent.putExtra(LONGITUDE, currentLocation.getLongitude());
@@ -802,6 +842,39 @@ public class LocationPickerActivity extends AppCompatActivity
     }
   }
 
+  private void setPois() {
+      if (poisList != null && !poisList.isEmpty()) {
+        lekuPoisMarkersMap = new HashMap<>();
+        for (LekuPoi lekuPoi : poisList) {
+          Location location = lekuPoi.getLocation();
+          if (location != null && lekuPoi.getTitle() != null) {
+            Marker marker = addPoiMarker(location.getLatitude(), location.getLongitude(), lekuPoi.getTitle(), lekuPoi.getAddress());
+            lekuPoisMarkersMap.put(marker.getId(), lekuPoi);
+          }
+        }
+
+        map.setOnMarkerClickListener(marker -> {
+          LekuPoi lekuPoi = lekuPoisMarkersMap.get(marker.getId());
+          if (lekuPoi != null) {
+            setLocationInfo(lekuPoi);
+            centerToPoi(lekuPoi);
+            setTracking(TrackEvents.simpleDidLocalizeByLekuPoi);
+          }
+          return true;
+        });
+      }
+  }
+
+  private void centerToPoi(LekuPoi lekuPoi) {
+    if (map != null) {
+      Location location = lekuPoi.getLocation();
+      CameraPosition cameraPosition = new CameraPosition.Builder()
+          .target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(getDefaultZoom()).build();
+      hasWiderZoom = false;
+      map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    }
+  }
+
   private synchronized void buildGoogleApiClient() {
     googleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this)
         .addOnConnectionFailedListener(this)
@@ -810,8 +883,15 @@ public class LocationPickerActivity extends AppCompatActivity
     googleApiClient.connect();
   }
 
-  private void addMarker(double latitude, double longitude) {
-    map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).draggable(true));
+  private Marker addMarker(double latitude, double longitude) {
+    return map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).draggable(true));
+  }
+
+  private Marker addPoiMarker(double latitude, double longitude, String title, String address) {
+    return map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude))
+        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+        .title(title)
+        .snippet(address));
   }
 
   private void setNewLocation(Address address) {

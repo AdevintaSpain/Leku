@@ -6,6 +6,7 @@ public enum TrackEvents {
   didLocalizeMe("Click on localize me"),
   didLocalizeByPoi("Long click on map"),
   simpleDidLocalizeByPoi("Click on map"),
+  simpleDidLocalizeByLekuPoi("Click on POI"),
   RESULT_OK("Return location"),
   CANCEL("Return without location");
 
