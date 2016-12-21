@@ -7,12 +7,12 @@ group = 'com.schibstedspain.android'
 version = '2.3.1'
 
 android {
-  compileSdkVersion 24
-  buildToolsVersion '24.0.3'
+  compileSdkVersion 25
+  buildToolsVersion '25.0.1'
 
   defaultConfig {
     minSdkVersion 15
-    targetSdkVersion 24
+    targetSdkVersion 25
     versionCode 1
     versionName "1.0"
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -41,20 +41,24 @@ retrolambda {
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
 
-  def supportVersion = '24.1.1'
+  def supportVersion = '25.1.0'
   compile "com.android.support:appcompat-v7:$supportVersion"
   compile "com.android.support:design:$supportVersion"
 
-  def playServicesVersion = '9.4.0'
+  def playServicesVersion = '10.0.1'
   compile "com.google.android.gms:play-services-maps:$playServicesVersion"
   compile "com.google.android.gms:play-services-location:$playServicesVersion"
 
-  compile 'com.schibstedspain.android:android-reactive-location:0.10.1'
-  compile "io.reactivex:rxandroid:1.1.0"
+  compile ('com.schibstedspain.android:android-reactive-location:0.10.1') {
+    exclude group: 'com.google.android.gms'
+  }
 
-  androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
-  androidTestCompile 'com.android.support.test:runner:0.4.1'
-  androidTestCompile 'com.android.support.test:rules:0.4.1'
+  compile "io.reactivex:rxandroid:1.2.1"
+  compile 'io.reactivex:rxjava:1.2.4'
+
+  androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+  androidTestCompile 'com.android.support.test:runner:0.5'
+  androidTestCompile 'com.android.support.test:rules:0.5'
   androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
   androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.1'
   androidTestCompile 'org.mockito:mockito-core:1.10.19'
