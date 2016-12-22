@@ -16,6 +16,7 @@ import com.schibstedspain.leku.tracker.LocationPickerTracker;
 import com.schibstedspain.leku.tracker.TrackEvents;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -64,13 +65,13 @@ public class MainActivity extends AppCompatActivity {
     Location locationPoi1 = new Location("leku");
     locationPoi1.setLatitude(41.4036339);
     locationPoi1.setLongitude(2.1721618);
-    LekuPoi poi1 = new LekuPoi("Los bellota", locationPoi1);
+    LekuPoi poi1 = new LekuPoi(UUID.randomUUID().toString(), "Los bellota", locationPoi1);
     pois.add(poi1);
 
     Location locationPoi2 = new Location("leku");
     locationPoi2.setLatitude(41.4023265);
     locationPoi2.setLongitude(2.1741417);
-    LekuPoi poi2 = new LekuPoi("Starbucks", locationPoi2);
+    LekuPoi poi2 = new LekuPoi(UUID.randomUUID().toString(), "Starbucks", locationPoi2);
     poi2.setAddress("Plaça de la Sagrada Família, 19, 08013 Barcelona");
     pois.add(poi2);
 
@@ -101,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
         Log.d("LONGITUDE****", String.valueOf(longitude));
         String address = data.getStringExtra(LocationPickerActivity.LOCATION_ADDRESS);
         Log.d("ADDRESS****", String.valueOf(address));
+        LekuPoi lekuPoi = data.getParcelableExtra(LocationPickerActivity.LEKU_POI);
+        Log.d("LekuPoi****", String.valueOf(lekuPoi));
       }
     }
     if (resultCode == RESULT_CANCELED) {

@@ -72,6 +72,7 @@ public class LocationPickerActivity extends AppCompatActivity
   public static final String SEARCH_ZONE = "search_zone";
   public static final String BACK_PRESSED_RETURN_OK = "back_pressed_return_ok";
   public static final String POIS_LIST = "pois_list";
+  public static final String LEKU_POI = "leku_poi";
   private static final String LOCATION_KEY = "location_key";
   private static final String LAST_LOCATION_QUERY = "last_location_query";
   private static final String OPTIONS_HIDE_STREET = "street";
@@ -747,7 +748,8 @@ public class LocationPickerActivity extends AppCompatActivity
       if (street != null && city != null) {
         returnIntent.putExtra(LOCATION_ADDRESS, getLocationAddress());
       }
-      //returnIntent.putExtra(TRANSITION_BUNDLE, bundle.getBundle(TRANSITION_BUNDLE));
+      returnIntent.putExtra(TRANSITION_BUNDLE, bundle.getBundle(TRANSITION_BUNDLE));
+      returnIntent.putExtra(LEKU_POI, currentLekuPoi);
       setResult(RESULT_OK, returnIntent);
       setTracking(TrackEvents.RESULT_OK);
     } else if (currentLocation != null) {

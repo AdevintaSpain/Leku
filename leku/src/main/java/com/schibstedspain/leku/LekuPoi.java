@@ -5,15 +5,24 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class LekuPoi implements Parcelable {
+  private String id;
   private Location location;
   private String title;
   private String address;
 
-  public LekuPoi(String title, Location location) {
+  public LekuPoi(String id, String title, Location location) {
+    this.id = id;
     this.location = location;
     this.title = title;
   }
 
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
   public Location getLocation() {
     return location;
   }
@@ -45,12 +54,14 @@ public class LekuPoi implements Parcelable {
 
   @Override
   public void writeToParcel(Parcel dest, int flags) {
+    dest.writeString(this.id);
     dest.writeParcelable(this.location, flags);
     dest.writeString(this.title);
     dest.writeString(this.address);
   }
 
   protected LekuPoi(Parcel in) {
+    this.id = in.readString();
     this.location = in.readParcelable(Location.class.getClassLoader());
     this.title = in.readString();
     this.address = in.readString();
@@ -67,4 +78,9 @@ public class LekuPoi implements Parcelable {
       return new LekuPoi[size];
     }
   };
+
+  @Override
+  public String toString() {
+    return "LekuPoi{" + "id='" + id + '\'' + ", location=" + location + ", title='" + title + '\'' + ", address='" + address + '\'' + '}';
+  }
 }
