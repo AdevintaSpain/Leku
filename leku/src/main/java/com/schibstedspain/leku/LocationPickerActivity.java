@@ -707,9 +707,9 @@ public class LocationPickerActivity extends AppCompatActivity
 
   private void retrieveLocationFrom(String query, int debounceTime) {
     if (searchZone != null && !searchZone.isEmpty()) {
-      retrieveLocationFromZone(query, searchZone, debounceTime);
+      retrieveDebouncedLocationFromZone(query, searchZone, debounceTime);
     } else {
-      retrieveLocationFromDefaultZone(query, debounceTime);
+      retrieveDebouncedLocationFromDefaultZone(query, debounceTime);
     }
   }
 
@@ -732,7 +732,7 @@ public class LocationPickerActivity extends AppCompatActivity
     }
   }
 
-  private void retrieveLocationFromDefaultZone(String query, int debounceTime) {
+  private void retrieveDebouncedLocationFromDefaultZone(String query, int debounceTime) {
     if (CountryLocaleRect.getDefaultLowerLeft() != null) {
       geocoderPresenter.getDebouncedFromLocationName(query, CountryLocaleRect.getDefaultLowerLeft(),
           CountryLocaleRect.getDefaultUpperRight(), debounceTime);
@@ -741,7 +741,7 @@ public class LocationPickerActivity extends AppCompatActivity
     }
   }
 
-  private void retrieveLocationFromZone(String query, String zoneKey, int debounceTime) {
+  private void retrieveDebouncedLocationFromZone(String query, String zoneKey, int debounceTime) {
     Locale locale = new Locale(zoneKey);
     if (CountryLocaleRect.getLowerLeftFromZone(locale) != null) {
       geocoderPresenter.getDebouncedFromLocationName(query, CountryLocaleRect.getLowerLeftFromZone(locale),
