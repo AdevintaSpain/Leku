@@ -294,6 +294,12 @@ Returns a ***List`<`Address`>`*** for the text introduced.
 * ***getFromLocationName(String query, LatLng lowerLeft, LatLng upperRight):***
 Returns a ***List`<`Address`>`*** for the text and the Rectangle introduced.
 
+* ***getDebouncedFromLocationName(String query, int debounceTime):***
+Returns a ***List`<`Address`>`*** for the text introduced. Useful if you want to implement your own search view with auto-complete.
+
+* ***getDebouncedFromLocationName(String query, LatLng lowerLeft, LatLng upperRight, int debounceTime):***
+Returns a ***List`<`Address`>`*** for the text and the Rectangle introduced. Useful if you want to implement your own search view with auto-complete.
+
 * ***getInfoFromLocation(double latitude, double longitude):***
 Returns a ***List`<`Address`>`*** based on a latitude and a longitude.
 

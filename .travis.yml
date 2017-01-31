@@ -29,7 +29,7 @@ android:
   - tools
   - tools
   - platform-tools
-  - build-tools-25.0.1
+  - build-tools-25.0.2
   - android-25
   - extra
   - extra-google-google_play_services

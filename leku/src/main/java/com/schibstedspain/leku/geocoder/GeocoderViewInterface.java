@@ -7,7 +7,9 @@ import java.util.List;
 public interface GeocoderViewInterface {
   void willLoadLocation();
 
-  void showLocations(List<Address> adresses);
+  void showLocations(List<Address> addresses);
+
+  void showDebouncedLocations(List<Address> addresses);
 
   void didLoadLocation();
 
@@ -33,7 +35,12 @@ public interface GeocoderViewInterface {
     }
 
     @Override
-    public void showLocations(List<Address> adresses) {
+    public void showLocations(List<Address> addresses) {
+
+    }
+
+    @Override
+    public void showDebouncedLocations(List<Address> addresses) {
 
     }
 
