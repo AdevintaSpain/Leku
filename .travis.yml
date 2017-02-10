@@ -41,7 +41,7 @@ android:
 # Emulator Management: Create, Start and Wait
 before_script:
   - android list targets
-  - echo no | android create avd --force -n test -t android-25 --tag google_apis
+  - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a --tag google_apis
   - emulator -avd test -no-skin -no-audio -no-window &
 
 script:
