@@ -82,6 +82,7 @@ public class LocationPickerActivity extends AppCompatActivity
   private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
   private static final int DEFAULT_ZOOM = 16;
   private static final int WIDER_ZOOM = 6;
+  private static final int MIN_CHARACTERS = 2;
 
   private GoogleMap map;
   private GoogleApiClient googleApiClient;
@@ -199,7 +200,7 @@ public class LocationPickerActivity extends AppCompatActivity
       }
 
       @Override
-      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+      public void onTextChanged(CharSequence charSequence, int start, int count, int after) {
         if ("".equals(charSequence.toString())) {
           adapter.clear();
           adapter.notifyDataSetChanged();
@@ -211,6 +212,9 @@ public class LocationPickerActivity extends AppCompatActivity
             searchOption.setIcon(R.drawable.ic_mic);
           }
         } else {
+          if (charSequence.length() > MIN_CHARACTERS && after > count) {
+            retrieveLocationFrom(charSequence.toString(), 400);
+          }
           if (clearSearchButton != null) {
             clearSearchButton.setVisibility(View.VISIBLE);
           }
@@ -456,6 +460,17 @@ public class LocationPickerActivity extends AppCompatActivity
         if (addresses.size() == 1) {
           setNewLocation(addresses.get(0));
         }
+        adapter.notifyDataSetChanged();
+      }
+    }
+  }
+
+  @Override
+  public void showDebouncedLocations(List<Address> addresses) {
+    if (addresses != null) {
+      fillLocationList(addresses);
+      if (!addresses.isEmpty()) {
+        updateLocationNameList(addresses);
         adapter.notifyDataSetChanged();
       }
     }
@@ -721,6 +736,14 @@ public class LocationPickerActivity extends AppCompatActivity
     }
   }
 
+  private void retrieveLocationFrom(String query, int debounceTime) {
+    if (searchZone != null && !searchZone.isEmpty()) {
+      retrieveDebouncedLocationFromZone(query, searchZone, debounceTime);
+    } else {
+      retrieveDebouncedLocationFromDefaultZone(query, debounceTime);
+    }
+  }
+
   private void retrieveLocationFromDefaultZone(String query) {
     if (CountryLocaleRect.getDefaultLowerLeft() != null) {
       geocoderPresenter.getFromLocationName(query, CountryLocaleRect.getDefaultLowerLeft(),
@@ -737,6 +760,25 @@ public class LocationPickerActivity extends AppCompatActivity
           CountryLocaleRect.getUpperRightFromZone(locale));
     } else {
       geocoderPresenter.getFromLocationName(query);
+    }
+  }
+
+  private void retrieveDebouncedLocationFromDefaultZone(String query, int debounceTime) {
+    if (CountryLocaleRect.getDefaultLowerLeft() != null) {
+      geocoderPresenter.getDebouncedFromLocationName(query, CountryLocaleRect.getDefaultLowerLeft(),
+          CountryLocaleRect.getDefaultUpperRight(), debounceTime);
+    } else {
+      geocoderPresenter.getDebouncedFromLocationName(query, debounceTime);
+    }
+  }
+
+  private void retrieveDebouncedLocationFromZone(String query, String zoneKey, int debounceTime) {
+    Locale locale = new Locale(zoneKey);
+    if (CountryLocaleRect.getLowerLeftFromZone(locale) != null) {
+      geocoderPresenter.getDebouncedFromLocationName(query, CountryLocaleRect.getLowerLeftFromZone(locale),
+          CountryLocaleRect.getUpperRightFromZone(locale), debounceTime);
+    } else {
+      geocoderPresenter.getDebouncedFromLocationName(query, debounceTime);
     }
   }
 
