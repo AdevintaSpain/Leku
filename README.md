@@ -52,14 +52,15 @@ Location picker component for Android. It returns a latitude, longitude and an a
 * Customization (Theme and layout)
 * Events Tracking
 * Multi-language support (English and Spanish supported by default)
+* RTL (Right-To-Left) layout support
 <br><br><br>
 
 
 ### Prerequisites
 
 minSdkVersion >= 15
-Google Play Services = 9.4.0
-Support Library = 24.1.1
+Google Play Services = 10.0.1
+Support Library = 25.1.1
 
 ### Download
 
@@ -75,11 +76,11 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    compile 'com.schibstedspain.android:leku:2.2.0'
+    compile 'com.schibstedspain.android:leku:3.0.0'
 }
 ```
 
-**IMPORTANT**: If you want support for Google Play Services version '8.4.0', and support library version '23.1.1' use version '1.0.0'. Beware that **version '1.0.0' is going not be maintained**.
+**IMPORTANT**: If you want support for Google Play Services version '8.4.0', and support library version '23.1.1' use version '1.0.0'. Beware that **version '1.0.0' is going not be maintained**. Also, if you want to use a version below 10.0.1 for Play Services you can use the version '2.3.1'.
 
 
 ### Permissions
@@ -292,6 +293,12 @@ Returns a ***List`<`Address`>`*** for the text introduced.
 
 * ***getFromLocationName(String query, LatLng lowerLeft, LatLng upperRight):***
 Returns a ***List`<`Address`>`*** for the text and the Rectangle introduced.
+
+* ***getDebouncedFromLocationName(String query, int debounceTime):***
+Returns a ***List`<`Address`>`*** for the text introduced. Useful if you want to implement your own search view with auto-complete.
+
+* ***getDebouncedFromLocationName(String query, LatLng lowerLeft, LatLng upperRight, int debounceTime):***
+Returns a ***List`<`Address`>`*** for the text and the Rectangle introduced. Useful if you want to implement your own search view with auto-complete.
 
 * ***getInfoFromLocation(double latitude, double longitude):***
 Returns a ***List`<`Address`>`*** based on a latitude and a longitude.

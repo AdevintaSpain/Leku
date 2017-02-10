@@ -38,7 +38,7 @@
       android:elevation="2dp"
       android:minWidth="296dp"
       android:background="@drawable/toolbar_custom_background"
-      tools:visibility="visible"
+      tools:visibility="gone"
       />
 
   <LinearLayout
@@ -60,6 +60,7 @@
         android:layout_marginBottom="8dp"
         android:src="@drawable/ic_gps_lime"
         app:fabSize="normal"
+        android:tint="?colorPrimary"
         app:backgroundTint="@color/white"
         app:rippleColor="@color/soft_grey"
         app:elevation="2dp"
@@ -80,16 +81,18 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_gravity="bottom|end"
-          android:paddingStart="16dp"
-          android:paddingLeft="16dp"
           android:background="@drawable/adress_custom_background"
           android:orientation="horizontal"
           >
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingStart="16dp"
+            android:paddingRight="16dp"
+            android:paddingEnd="16dp"
             android:layout_weight="1"
             >
 
@@ -131,15 +134,15 @@
             android:layout_marginTop="16dp"
             android:layout_marginRight="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_gravity="top|end"
             android:src="@drawable/ic_check_light"
             app:fabSize="normal"
-            app:backgroundTint="@color/lime"
-            app:rippleColor="@color/lime_dark"
+            app:backgroundTint="?colorPrimary"
+            app:rippleColor="?colorPrimaryDark"
             app:elevation="2dp"
-            tools:background="@color/lime"
+            tools:background="?colorPrimary"
             />
 
       </LinearLayout>
