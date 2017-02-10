@@ -39,17 +39,17 @@ android:
   - sys-img-armeabi-v7a-google_apis-25
 
 # Emulator Management: Create, Start and Wait
-#before_script:
-#  - android list targets
-#  - echo no | android create avd --force -n test -t android-25 --abi armeabi-v7a --tag google_apis
-#  - emulator -avd test -no-skin -no-audio -no-window &
+before_script:
+  - android list targets
+  - echo no | android create avd --force -n test -t android-25 --abi armeabi-v7a --tag google_apis
+  - emulator -avd test -no-skin -no-audio -no-window &
 
 script:
-  - ./gradlew build --continue
-#  - android-wait-for-emulator
-#  - adb shell input keyevent 82 &
-#  - ./gradlew connectedCheck --continue --stacktrace
-#- travis_wait ./gradlew connectedCheck --continue --stacktrace
+  - ./gradlew build --continue --stacktrace
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
+  - ./gradlew connectedCheck --continue --stacktrace
+  - travis_wait ./gradlew connectedCheck --continue --stacktrace
 
 deploy:
   - provider: script
