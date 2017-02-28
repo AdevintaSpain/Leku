@@ -115,6 +115,7 @@ public class LocationPickerActivity extends AppCompatActivity
   private List<LekuPoi> poisList;
   private Map<String, LekuPoi> lekuPoisMarkersMap;
   private Marker currentMarker;
+  private TextWatcher textWatcher;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -193,7 +194,12 @@ public class LocationPickerActivity extends AppCompatActivity
       }
       return handled;
     });
-    searchView.addTextChangedListener(new TextWatcher() {
+    textWatcher = getSearchTextWatcher();
+    searchView.addTextChangedListener(textWatcher);
+  }
+
+  private TextWatcher getSearchTextWatcher() {
+    return new TextWatcher() {
       @Override
       public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -228,7 +234,7 @@ public class LocationPickerActivity extends AppCompatActivity
       public void afterTextChanged(Editable editable) {
 
       }
-    });
+    };
   }
 
   private void setUpFloatingButtons() {
@@ -329,6 +335,17 @@ public class LocationPickerActivity extends AppCompatActivity
   protected void onResume() {
     super.onResume();
     setUpMapIfNeeded();
+  }
+
+  @Override
+  protected void onDestroy() {
+    if (searchView != null && textWatcher != null) {
+      searchView.removeTextChangedListener(textWatcher);
+    }
+    if (googleApiClient != null) {
+      googleApiClient.unregisterConnectionCallbacks(this);
+    }
+    super.onDestroy();
   }
 
   @Override
