@@ -10,7 +10,7 @@ import rx.Observable;
 public class GeocoderInteractor implements GeocoderInteractorInterface {
 
   private final Geocoder geocoder;
-  final static int MAX_RESULTS = 5;
+  private final static int MAX_RESULTS = 5;
 
   public GeocoderInteractor(Geocoder geocoder) {
     this.geocoder = geocoder;
