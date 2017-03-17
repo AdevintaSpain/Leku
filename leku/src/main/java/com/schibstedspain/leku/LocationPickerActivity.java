@@ -57,6 +57,9 @@ import java.util.Locale;
 import java.util.Map;
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
 
+import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL;
+import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE;
+
 public class LocationPickerActivity extends AppCompatActivity
     implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMapLongClickListener,
@@ -245,6 +248,12 @@ public class LocationPickerActivity extends AppCompatActivity
     });
     FloatingActionButton btnAcceptLocation = (FloatingActionButton) findViewById(R.id.btnAccept);
     btnAcceptLocation.setOnClickListener(v -> returnCurrentPosition());
+
+    FloatingActionButton btnSatellite = (FloatingActionButton) findViewById(R.id.btnSatellite);
+    btnSatellite.setOnClickListener(view -> {
+      map.setMapType(map.getMapType() == MAP_TYPE_SATELLITE ? MAP_TYPE_NORMAL : MAP_TYPE_SATELLITE);
+      btnSatellite.setImageResource(map.getMapType() == MAP_TYPE_SATELLITE ? R.drawable.ic_satellite_off : R.drawable.ic_satellite_on);
+    });
   }
 
   private void updateValuesFromBundle(Bundle savedInstanceState) {
@@ -876,7 +885,7 @@ public class LocationPickerActivity extends AppCompatActivity
 
   private void setDefaultMapSettings() {
     if (map != null) {
-      map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+      map.setMapType(MAP_TYPE_NORMAL);
       map.setOnMapLongClickListener(this);
       map.setOnMapClickListener(this);
       map.getUiSettings().setCompassEnabled(false);
