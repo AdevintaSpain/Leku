@@ -252,15 +252,11 @@ public class LocationPickerActivity extends AppCompatActivity
     btnAcceptLocation.setOnClickListener(v -> returnCurrentPosition());
 
     FloatingActionButton btnSatellite = (FloatingActionButton) findViewById(R.id.btnSatellite);
-    if(enableSataliteView) {
-      btnSatellite.setOnClickListener(view -> {
-        map.setMapType(map.getMapType() == MAP_TYPE_SATELLITE ? MAP_TYPE_NORMAL : MAP_TYPE_SATELLITE);
-        btnSatellite.setImageResource(map.getMapType() == MAP_TYPE_SATELLITE ? R.drawable.ic_satellite_off : R.drawable.ic_satellite_on);
-      });
-    }
-    else{
-      btnSatellite.setVisibility(View.GONE);
-    }
+    btnSatellite.setOnClickListener(view -> {
+      map.setMapType(map.getMapType() == MAP_TYPE_SATELLITE ? MAP_TYPE_NORMAL : MAP_TYPE_SATELLITE);
+      btnSatellite.setImageResource(map.getMapType() == MAP_TYPE_SATELLITE ? R.drawable.ic_satellite_off : R.drawable.ic_satellite_on);
+    });
+    btnSatellite.setVisibility(enableSataliteView ? View.VISIBLE : View.GONE);
   }
 
   private void updateValuesFromBundle(Bundle savedInstanceState) {
@@ -640,7 +636,7 @@ public class LocationPickerActivity extends AppCompatActivity
       shouldReturnOkOnBackPressed = transitionBundle.getBoolean(BACK_PRESSED_RETURN_OK);
     }
     if (transitionBundle.keySet().contains(ENABLE_SATALITE_VIEW)) {
-        enableSataliteView = transitionBundle.getBoolean(BACK_PRESSED_RETURN_OK);
+        enableSataliteView = transitionBundle.getBoolean(ENABLE_SATALITE_VIEW);
     }
     if (transitionBundle.keySet().contains(POIS_LIST)) {
       poisList = transitionBundle.getParcelableArrayList(POIS_LIST);
