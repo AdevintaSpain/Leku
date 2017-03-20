@@ -423,7 +423,7 @@ public class LocationPickerActivity extends AppCompatActivity
     if (poisList != null) {
       savedInstanceState.putParcelableArrayList(POIS_LIST, new ArrayList<>(poisList));
     }
-    savedInstanceState.putBoolean(ENABLE_SATELLITE_VIEW, true);
+    savedInstanceState.putBoolean(ENABLE_SATELLITE_VIEW, enableSatelliteView);
     super.onSaveInstanceState(savedInstanceState);
   }
 
