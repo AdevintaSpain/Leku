@@ -261,12 +261,12 @@ If you want to force that when the user clicks on back button it returns the loc
 intent.putExtra(LocationPickerActivity.BACK_PRESSED_RETURN_OK, true);
 ```
 
-##### Enable/Disable the Satalite view
+##### Enable/Disable the Satellite view
 
-If you want to disable the satalite view button you can use this parameter (note: the satalite view is enabled by default):
+If you want to disable the satellite view button you can use this parameter (note: the satellite view is enabled by default):
 
 ```java
-intent.putExtra(LocationPickerActivity.ENABLE_SATALITE_VIEW, false);
+intent.putExtra(LocationPickerActivity.ENABLE_SATELLITE_VIEW, false);
 ```
 
 #### Tracking
