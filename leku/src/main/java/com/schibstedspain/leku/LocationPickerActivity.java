@@ -423,6 +423,7 @@ public class LocationPickerActivity extends AppCompatActivity
     if (poisList != null) {
       savedInstanceState.putParcelableArrayList(POIS_LIST, new ArrayList<>(poisList));
     }
+    savedInstanceState.putBoolean(enableSatelliteView, true);
     super.onSaveInstanceState(savedInstanceState);
   }
 
@@ -442,6 +443,9 @@ public class LocationPickerActivity extends AppCompatActivity
     }
     if (savedInstanceState.containsKey(POIS_LIST)) {
       poisList = savedInstanceState.getParcelableArrayList(POIS_LIST);
+    }
+    if (savedInstanceState.containsKey(ENABLE_SATELLITE_VIEW)) {
+      enableSatelliteView = savedInstanceState.getBoolean(ENABLE_SATELLITE_VIEW);
     }
   }
 
@@ -617,6 +621,9 @@ public class LocationPickerActivity extends AppCompatActivity
     }
     if (savedInstanceState.keySet().contains(POIS_LIST)) {
       poisList = savedInstanceState.getParcelableArrayList(POIS_LIST);
+    }
+    if (savedInstanceState.keySet().contains(ENABLE_SATELLITE_VIEW)) {
+      enableSatelliteView = savedInstanceState.getBoolean(ENABLE_SATELLITE_VIEW);
     }
   }
 
