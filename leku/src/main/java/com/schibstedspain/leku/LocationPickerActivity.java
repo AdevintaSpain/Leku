@@ -74,7 +74,7 @@ public class LocationPickerActivity extends AppCompatActivity
   public static final String LAYOUTS_TO_HIDE = "layouts_to_hide";
   public static final String SEARCH_ZONE = "search_zone";
   public static final String BACK_PRESSED_RETURN_OK = "back_pressed_return_ok";
-  public static final String ENABLE_SATALITE_VIEW = "enable_satalite_view";
+  public static final String ENABLE_SATELLITE_VIEW = "enable_satellite_view";
   public static final String POIS_LIST = "pois_list";
   public static final String LEKU_POI = "leku_poi";
   private static final String LOCATION_KEY = "location_key";
@@ -115,7 +115,7 @@ public class LocationPickerActivity extends AppCompatActivity
   private boolean isCityVisible = true;
   private boolean isZipCodeVisible = true;
   private boolean shouldReturnOkOnBackPressed = false;
-  private boolean enableSataliteView = true;
+  private boolean enableSatelliteView = true;
   private String searchZone;
   private List<LekuPoi> poisList;
   private Map<String, LekuPoi> lekuPoisMarkersMap;
@@ -256,7 +256,7 @@ public class LocationPickerActivity extends AppCompatActivity
       map.setMapType(map.getMapType() == MAP_TYPE_SATELLITE ? MAP_TYPE_NORMAL : MAP_TYPE_SATELLITE);
       btnSatellite.setImageResource(map.getMapType() == MAP_TYPE_SATELLITE ? R.drawable.ic_satellite_off : R.drawable.ic_satellite_on);
     });
-    btnSatellite.setVisibility(enableSataliteView ? View.VISIBLE : View.GONE);
+    btnSatellite.setVisibility(enableSatelliteView ? View.VISIBLE : View.GONE);
   }
 
   private void updateValuesFromBundle(Bundle savedInstanceState) {
@@ -635,8 +635,8 @@ public class LocationPickerActivity extends AppCompatActivity
     if (transitionBundle.keySet().contains(BACK_PRESSED_RETURN_OK)) {
       shouldReturnOkOnBackPressed = transitionBundle.getBoolean(BACK_PRESSED_RETURN_OK);
     }
-    if (transitionBundle.keySet().contains(ENABLE_SATALITE_VIEW)) {
-      enableSataliteView = transitionBundle.getBoolean(ENABLE_SATALITE_VIEW);
+    if (transitionBundle.keySet().contains(ENABLE_SATELLITE_VIEW)) {
+      enableSatelliteView = transitionBundle.getBoolean(ENABLE_SATELLITE_VIEW);
     }
     if (transitionBundle.keySet().contains(POIS_LIST)) {
       poisList = transitionBundle.getParcelableArrayList(POIS_LIST);
