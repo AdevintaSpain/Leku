@@ -261,6 +261,14 @@ If you want to force that when the user clicks on back button it returns the loc
 intent.putExtra(LocationPickerActivity.BACK_PRESSED_RETURN_OK, true);
 ```
 
+##### Enable/Disable the Satellite view
+
+If you want to disable the satellite view button you can use this parameter (note: the satellite view is enabled by default):
+
+```java
+intent.putExtra(LocationPickerActivity.ENABLE_SATELLITE_VIEW, false);
+```
+
 #### Tracking
 
 Optionally, you can set a tracking events listener. Implement LocationPickerTracker interface, and set it in your Application class as follows:
@@ -384,9 +392,9 @@ The following is a list of some of the public apps using Leku and are published 
 
 Want to add your app? Found an app that no longer works or no longer uses Leku? Please submit a pull request on GitHub to update this page!
 
-| <a href="https://play.google.com/store/apps/details?id=com.anuntis.segundamano"><img src="media/vibbo_logo.png" align="left" width="68px" height="68px"/></a> | <a href="https://play.google.com/store/apps/details?id=com.scmspain.worksi"><img src="media/worksi_logo.png" align="left" width="68px" height="68px"/></a>
-|---|---
-| [vibbo](https://play.google.com/store/apps/details?id=com.anuntis.segundamano) | [Worksi](https://play.google.com/store/apps/details?id=com.scmspain.worksi)
+| <a href="https://play.google.com/store/apps/details?id=com.anuntis.segundamano"><img src="media/vibbo_logo.png" align="left" width="68px" height="68px"/></a> | <a href="https://play.google.com/store/apps/details?id=com.scmspain.worksi"><img src="media/worksi_logo.png" align="left" width="68px" height="68px"/></a> | <a href="https://play.google.com/store/apps/details?id=nl.hnogames.domoticz"><img src="media/domoticz_logo.png" align="left" width="68px" height="68px"/></a>
+|---|---|---
+| [vibbo](https://play.google.com/store/apps/details?id=com.anuntis.segundamano) | [Worksi](https://play.google.com/store/apps/details?id=com.scmspain.worksi) | [Domoticz](https://play.google.com/store/apps/details?id=nl.hnogames.domoticz)
 
 
 Contribute
