@@ -636,7 +636,7 @@ public class LocationPickerActivity extends AppCompatActivity
       shouldReturnOkOnBackPressed = transitionBundle.getBoolean(BACK_PRESSED_RETURN_OK);
     }
     if (transitionBundle.keySet().contains(ENABLE_SATALITE_VIEW)) {
-        enableSataliteView = transitionBundle.getBoolean(ENABLE_SATALITE_VIEW);
+      enableSataliteView = transitionBundle.getBoolean(ENABLE_SATALITE_VIEW);
     }
     if (transitionBundle.keySet().contains(POIS_LIST)) {
       poisList = transitionBundle.getParcelableArrayList(POIS_LIST);
