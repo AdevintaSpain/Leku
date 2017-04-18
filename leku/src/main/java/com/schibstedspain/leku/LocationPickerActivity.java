@@ -1007,4 +1007,87 @@ public class LocationPickerActivity extends AppCompatActivity
       imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
   }
+
+  public static class Builder {
+    private Double latitude;
+    private Double longitude;
+    private String searchZone;
+    private String layoutsToHide = "";
+    private boolean enableSatelliteView = true;
+    private boolean shouldReturnOkOnBackPressed = false;
+    private List<LekuPoi> lekuPois;
+
+    public Builder() {
+    }
+
+    public Builder withLatitude(double latitude) {
+      this.latitude = latitude;
+      return this;
+    }
+
+    public Builder withLongitude(double longitude) {
+      this.longitude = longitude;
+      return this;
+    }
+
+    public Builder withSearchZone(String searchZone) {
+      this.searchZone = searchZone;
+      return this;
+    }
+
+    public Builder withSatelliteViewHidden() {
+      this.enableSatelliteView = false;
+      return this;
+    }
+
+    public Builder shouldReturnOkOnBackPressed() {
+      this.shouldReturnOkOnBackPressed = true;
+      return this;
+    }
+
+    public Builder withStreetHidden() {
+      this.layoutsToHide = String.format("%s|%s", layoutsToHide, OPTIONS_HIDE_STREET);
+      return this;
+    }
+
+    public Builder withCityHidden() {
+      this.layoutsToHide = String.format("%s|%s", layoutsToHide, OPTIONS_HIDE_CITY);
+      return this;
+    }
+
+    public Builder withZipCodeHidden() {
+      this.layoutsToHide = String.format("%s|%s", layoutsToHide, OPTIONS_HIDE_ZIPCODE);
+      return this;
+    }
+
+    public Builder withLekuPois(List<LekuPoi> pois) {
+      this.lekuPois = pois;
+      return this;
+    }
+
+    public Intent build(Context context) {
+      Intent intent = new Intent(context, LocationPickerActivity.class);
+
+      if (latitude != null) {
+        intent.putExtra(LATITUDE, latitude);
+      }
+      if (longitude != null) {
+        intent.putExtra(LONGITUDE, longitude);
+      }
+      if (searchZone != null) {
+        intent.putExtra(SEARCH_ZONE, searchZone);
+      }
+      if (!layoutsToHide.isEmpty()) {
+        intent.putExtra(LAYOUTS_TO_HIDE, layoutsToHide);
+      }
+      intent.putExtra(BACK_PRESSED_RETURN_OK, shouldReturnOkOnBackPressed);
+      intent.putExtra(ENABLE_SATELLITE_VIEW, enableSatelliteView);
+
+      if (lekuPois != null && !lekuPois.isEmpty()) {
+        intent.putExtra(POIS_LIST, new ArrayList<>(lekuPois));
+      }
+
+      return intent;
+    }
+  }
 }
