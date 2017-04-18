@@ -91,7 +91,7 @@ You must add the following permissions in order to use the Google Maps Android A
 
 * **android.permission.ACCESS_NETWORK_STATE**   Allows the API to check the connection status in order to determine whether data can be downloaded.
 
-The following two permissions are not required to use Google Maps Android API v2, but are recommended.
+The following permissions are not required to use Google Maps Android API v2, but are recommended.
 
 * **android.permission.ACCESS_COARSE_LOCATION**   Allows the API to use WiFi or mobile cell data (or both) to determine the device's location. The API returns the location with an accuracy approximately equivalent to a city block.
 
