@@ -35,8 +35,7 @@ public class MainActivity extends AppCompatActivity {
       @Override
       public void onClick(View view) {
         Intent locationPickerIntent = new LocationPickerActivity.Builder()
-            .withLatitude(41.4036299)
-            .withLongitude(2.1743558)
+            .withLocation(41.4036299, 2.1743558)
             .withSearchZone("es_ES")
             //.shouldReturnOkOnBackPressed()
             //.withStreetHidden()
@@ -57,8 +56,7 @@ public class MainActivity extends AppCompatActivity {
       @Override
       public void onClick(View view) {
         Intent locationPickerIntent = new LocationPickerActivity.Builder()
-            .withLatitude(41.4036299)
-            .withLongitude(2.1743558)
+            .withLocation(41.4036299, 2.1743558)
             .withLekuPois(getLekuPois())
             .build(getApplicationContext());
 

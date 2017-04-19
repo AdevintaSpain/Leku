@@ -1020,12 +1020,8 @@ public class LocationPickerActivity extends AppCompatActivity
     public Builder() {
     }
 
-    public Builder withLatitude(double latitude) {
+    public Builder withLocation(double latitude, double longitude) {
       this.locationLatitude = latitude;
-      return this;
-    }
-
-    public Builder withLongitude(double longitude) {
       this.locationLongitude = longitude;
       return this;
     }
