@@ -65,8 +65,8 @@ public class LocationPickerActivity extends AppCompatActivity
     GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMapLongClickListener,
     GeocoderViewInterface, GoogleMap.OnMapClickListener {
 
-  public static final String LATITUDE = "latitude";
-  public static final String LONGITUDE = "longitude";
+  public static final String LATITUDE = "locationLatitude";
+  public static final String LONGITUDE = "locationLongitude";
   public static final String ZIPCODE = "zipcode";
   public static final String ADDRESS = "address";
   public static final String LOCATION_ADDRESS = "location_address";
@@ -1009,9 +1009,9 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   public static class Builder {
-    private Double latitude;
-    private Double longitude;
-    private String searchZone;
+    private Double locationLatitude;
+    private Double locationLongitude;
+    private String locationSearchZone;
     private String layoutsToHide = "";
     private boolean enableSatelliteView = true;
     private boolean shouldReturnOkOnBackPressed = false;
@@ -1021,17 +1021,17 @@ public class LocationPickerActivity extends AppCompatActivity
     }
 
     public Builder withLatitude(double latitude) {
-      this.latitude = latitude;
+      this.locationLatitude = latitude;
       return this;
     }
 
     public Builder withLongitude(double longitude) {
-      this.longitude = longitude;
+      this.locationLongitude = longitude;
       return this;
     }
 
     public Builder withSearchZone(String searchZone) {
-      this.searchZone = searchZone;
+      this.locationSearchZone = searchZone;
       return this;
     }
 
@@ -1068,14 +1068,14 @@ public class LocationPickerActivity extends AppCompatActivity
     public Intent build(Context context) {
       Intent intent = new Intent(context, LocationPickerActivity.class);
 
-      if (latitude != null) {
-        intent.putExtra(LATITUDE, latitude);
+      if (locationLatitude != null) {
+        intent.putExtra(LATITUDE, locationLatitude);
       }
-      if (longitude != null) {
-        intent.putExtra(LONGITUDE, longitude);
+      if (locationLongitude != null) {
+        intent.putExtra(LONGITUDE, locationLongitude);
       }
-      if (searchZone != null) {
-        intent.putExtra(SEARCH_ZONE, searchZone);
+      if (locationSearchZone != null) {
+        intent.putExtra(SEARCH_ZONE, locationSearchZone);
       }
       if (!layoutsToHide.isEmpty()) {
         intent.putExtra(LAYOUTS_TO_HIDE, layoutsToHide);
