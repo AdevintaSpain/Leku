@@ -1056,7 +1056,7 @@ public class LocationPickerActivity extends AppCompatActivity
       return this;
     }
 
-    public Builder withLekuPois(List<LekuPoi> pois) {
+    public Builder withPois(List<LekuPoi> pois) {
       this.lekuPois = pois;
       return this;
     }

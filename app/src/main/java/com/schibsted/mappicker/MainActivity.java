@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
       public void onClick(View view) {
         Intent locationPickerIntent = new LocationPickerActivity.Builder()
             .withLocation(41.4036299, 2.1743558)
-            .withLekuPois(getLekuPois())
+            .withPois(getLekuPois())
             .build(getApplicationContext());
 
         startActivityForResult(locationPickerIntent, MAP_POIS_BUTTON_REQUEST_CODE);
