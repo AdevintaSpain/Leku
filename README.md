@@ -270,6 +270,14 @@ If you want to disable the satellite view button you can use this parameter (not
 intent.putExtra(LocationPickerActivity.ENABLE_SATELLITE_VIEW, false);
 ```
 
+##### Enable/Disable requesting location permissions
+
+If you want to disable asking for location permissions (and prevent any location requests)
+
+```java
+intent.putExtra(LocationPickerActivity.ENABLE_LOCATION_PERMISSION_REQUEST, false);
+```
+
 #### Tracking
 
 Optionally, you can set a tracking events listener. Implement LocationPickerTracker interface, and set it in your Application class as follows:
