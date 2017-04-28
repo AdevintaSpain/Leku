@@ -131,10 +131,10 @@ public class LocationPickerActivity extends AppCompatActivity
     setUpMainVariables();
     setUpResultsList();
     setUpToolBar();
+    updateValuesFromBundle(savedInstanceState);
     checkLocationPermission();
     setUpSearchView();
     setUpMapIfNeeded();
-    updateValuesFromBundle(savedInstanceState);
     setUpFloatingButtons();
     buildGoogleApiClient();
     setTracking(TrackEvents.didLoadLocationPicker);
