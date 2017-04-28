@@ -75,6 +75,7 @@ public class LocationPickerActivity extends AppCompatActivity
   public static final String SEARCH_ZONE = "search_zone";
   public static final String BACK_PRESSED_RETURN_OK = "back_pressed_return_ok";
   public static final String ENABLE_SATELLITE_VIEW = "enable_satellite_view";
+  public static final String ENABLE_LOCATION_PERMISSION_REQUEST = "enable_location_permission_request";
   public static final String POIS_LIST = "pois_list";
   public static final String LEKU_POI = "leku_poi";
   private static final String LOCATION_KEY = "location_key";
@@ -116,6 +117,7 @@ public class LocationPickerActivity extends AppCompatActivity
   private boolean isZipCodeVisible = true;
   private boolean shouldReturnOkOnBackPressed = false;
   private boolean enableSatelliteView = true;
+  private boolean enableLocationPermissionRequest = true;
   private String searchZone;
   private List<LekuPoi> poisList;
   private Map<String, LekuPoi> lekuPoisMarkersMap;
@@ -139,7 +141,7 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void checkLocationPermission() {
-    if (PermissionUtils.shouldRequestLocationStoragePermission(getApplicationContext())) {
+    if (enableLocationPermissionRequest && PermissionUtils.shouldRequestLocationStoragePermission(getApplicationContext())) {
       PermissionUtils.requestLocationPermission(this);
     }
   }
@@ -424,6 +426,7 @@ public class LocationPickerActivity extends AppCompatActivity
       savedInstanceState.putParcelableArrayList(POIS_LIST, new ArrayList<>(poisList));
     }
     savedInstanceState.putBoolean(ENABLE_SATELLITE_VIEW, enableSatelliteView);
+    savedInstanceState.putBoolean(ENABLE_LOCATION_PERMISSION_REQUEST, enableLocationPermissionRequest);
     super.onSaveInstanceState(savedInstanceState);
   }
 
@@ -446,6 +449,9 @@ public class LocationPickerActivity extends AppCompatActivity
     }
     if (savedInstanceState.containsKey(ENABLE_SATELLITE_VIEW)) {
       enableSatelliteView = savedInstanceState.getBoolean(ENABLE_SATELLITE_VIEW);
+    }
+    if (savedInstanceState.containsKey(ENABLE_LOCATION_PERMISSION_REQUEST)) {
+      enableLocationPermissionRequest = savedInstanceState.getBoolean(ENABLE_LOCATION_PERMISSION_REQUEST);
     }
   }
 
@@ -625,6 +631,9 @@ public class LocationPickerActivity extends AppCompatActivity
     if (savedInstanceState.keySet().contains(ENABLE_SATELLITE_VIEW)) {
       enableSatelliteView = savedInstanceState.getBoolean(ENABLE_SATELLITE_VIEW);
     }
+    if (savedInstanceState.keySet().contains(ENABLE_LOCATION_PERMISSION_REQUEST)) {
+      enableLocationPermissionRequest = savedInstanceState.getBoolean(ENABLE_LOCATION_PERMISSION_REQUEST);
+    }
   }
 
   private void getTransitionBundleParams(Bundle transitionBundle) {
@@ -644,6 +653,9 @@ public class LocationPickerActivity extends AppCompatActivity
     }
     if (transitionBundle.keySet().contains(ENABLE_SATELLITE_VIEW)) {
       enableSatelliteView = transitionBundle.getBoolean(ENABLE_SATELLITE_VIEW);
+    }
+    if (transitionBundle.keySet().contains(ENABLE_LOCATION_PERMISSION_REQUEST)) {
+      enableLocationPermissionRequest = transitionBundle.getBoolean(ENABLE_LOCATION_PERMISSION_REQUEST);
     }
     if (transitionBundle.keySet().contains(POIS_LIST)) {
       poisList = transitionBundle.getParcelableArrayList(POIS_LIST);
