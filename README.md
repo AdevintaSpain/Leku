@@ -59,8 +59,8 @@ Location picker component for Android. It returns a latitude, longitude and an a
 ### Prerequisites
 
 minSdkVersion >= 15
-Google Play Services = 10.0.1
-Support Library = 25.1.1
+Google Play Services = 10.2.1
+Support Library = 25.3.1
 
 ### Download
 
@@ -76,7 +76,7 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    compile 'com.schibstedspain.android:leku:3.1.0'
+    compile 'com.schibstedspain.android:leku:3.2.0'
 }
 ```
 
@@ -276,6 +276,14 @@ If you want to disable the satellite view button you can use this parameter (not
 
 ```java
 intent.putExtra(LocationPickerActivity.ENABLE_SATELLITE_VIEW, false);
+```
+
+##### Enable/Disable requesting location permissions
+
+If you want to disable asking for location permissions (and prevent any location requests)
+
+```java
+intent.putExtra(LocationPickerActivity.ENABLE_LOCATION_PERMISSION_REQUEST, false);
 ```
 
 #### Tracking
