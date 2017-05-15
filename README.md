@@ -138,11 +138,22 @@ To use the LocationPickerActivity first you need to add these lines to your Andr
 </activity>
 ```
 
-Then you have setup the call to start this activity wherever you like, always as startActivityForResult:
+Then you have setup the call to start this activity wherever you like, always as startActivityForResult.
+You can set a default location, search zone and other customizable parameters to load when you start the activity.
+You only need to use the Builder setters like:
 
 ```java
-Intent i = new Intent(this, LocationPickerActivity.class);
-startActivityForResult(i, 1);
+Intent intent = new LocationPickerActivity.Builder()
+    .withLocation(41.4036299, 2.1743558)
+    .withSearchZone("es_ES")
+    .shouldReturnOkOnBackPressed()
+    .withStreetHidden()
+    .withCityHidden()
+    .withZipCodeHidden()
+    .withSatelliteViewHidden()
+    .build(getApplicationContext());
+
+startActivityForResult(intent, 1);
 ```
 
 And add the response code from that activity:
@@ -204,13 +215,10 @@ I encourage you to add these languages to this component, please fork this proje
 #### Transition Bundle
 
 If you need to send and receive a param through the LocationPickerActivity you can do it.
-Also you can add a default location to load when you start the activity.
 You only need to add an "Extra" param to the intent like:
 
 ```java
 Intent intent = new Intent(getApplicationContext(), LocationPickerActivity.class);
-intent.putExtra(LocationPickerActivity.LATITUDE, 41.4036299);
-intent.putExtra(LocationPickerActivity.LONGITUDE, 2.1743558);
 intent.putExtra("test", "this is a test");
 startActivityForResult(intent, 1);
 ```
