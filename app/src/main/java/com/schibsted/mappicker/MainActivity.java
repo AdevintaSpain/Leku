@@ -43,9 +43,7 @@ public class MainActivity extends AppCompatActivity {
             .withZipCodeHidden()
             //.withSatelliteViewHidden()
             .build(getApplicationContext());
-
-        Intent intent = new LocationPickerActivity.Builder().build(getApplicationContext());
-
+        
         //this is optional if you want to return RESULT_OK if you don't set the latitude/longitude and click back button
         locationPickerIntent.putExtra("test", "this is a test");
 
