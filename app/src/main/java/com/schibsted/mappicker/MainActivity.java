@@ -20,6 +20,9 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
+  public static final int MAP_BUTTON_REQUEST_CODE = 1;
+  public static final int MAP_POIS_BUTTON_REQUEST_CODE = 2;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -31,15 +34,20 @@ public class MainActivity extends AppCompatActivity {
     mapButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        Intent intent = new Intent(getApplicationContext(), LocationPickerActivity.class);
-        intent.putExtra(LocationPickerActivity.LATITUDE, 41.4036299);
-        intent.putExtra(LocationPickerActivity.LONGITUDE, 2.1743558);
-        //intent.putExtra(LocationPickerActivity.LAYOUTS_TO_HIDE, "street|city"); // this is optional if you want to hide some info
-        //intent.putExtra(LocationPickerActivity.SEARCH_ZONE, "es_ES"); // this is optional if an specific search location
-        //intent.putExtra(LocationPickerActivity.BACK_PRESSED_RETURN_OK, true);
-          // this is optional if you want to return RESULT_OK if you don't set the latitude/longitude and click back button
-        intent.putExtra("test", "this is a test");
-        startActivityForResult(intent, 1);
+        Intent locationPickerIntent = new LocationPickerActivity.Builder()
+            .withLocation(41.4036299, 2.1743558)
+            .withSearchZone("es_ES")
+            //.shouldReturnOkOnBackPressed()
+            //.withStreetHidden()
+            //.withCityHidden()
+            .withZipCodeHidden()
+            //.withSatelliteViewHidden()
+            .build(getApplicationContext());
+
+        //this is optional if you want to return RESULT_OK if you don't set the latitude/longitude and click back button
+        locationPickerIntent.putExtra("test", "this is a test");
+
+        startActivityForResult(locationPickerIntent, MAP_BUTTON_REQUEST_CODE);
       }
     });
 
@@ -47,12 +55,12 @@ public class MainActivity extends AppCompatActivity {
     mapPoisButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
-        Intent intent = new Intent(getApplicationContext(), LocationPickerActivity.class);
-        intent.putExtra(LocationPickerActivity.LATITUDE, 41.4036299);
-        intent.putExtra(LocationPickerActivity.LONGITUDE, 2.1743558);
-        List<LekuPoi> pois = getLekuPois();
-        intent.putExtra(LocationPickerActivity.POIS_LIST, new ArrayList<>(pois));
-        startActivityForResult(intent, 2);
+        Intent locationPickerIntent = new LocationPickerActivity.Builder()
+            .withLocation(41.4036299, 2.1743558)
+            .withPois(getLekuPois())
+            .build(getApplicationContext());
+
+        startActivityForResult(locationPickerIntent, MAP_POIS_BUTTON_REQUEST_CODE);
       }
     });
 

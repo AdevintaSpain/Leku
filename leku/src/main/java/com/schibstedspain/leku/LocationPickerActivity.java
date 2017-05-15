@@ -57,13 +57,16 @@ import java.util.Locale;
 import java.util.Map;
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
 
+import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL;
+import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE;
+
 public class LocationPickerActivity extends AppCompatActivity
     implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMapLongClickListener,
     GeocoderViewInterface, GoogleMap.OnMapClickListener {
 
-  public static final String LATITUDE = "latitude";
-  public static final String LONGITUDE = "longitude";
+  public static final String LATITUDE = "locationLatitude";
+  public static final String LONGITUDE = "locationLongitude";
   public static final String ZIPCODE = "zipcode";
   public static final String ADDRESS = "address";
   public static final String LOCATION_ADDRESS = "location_address";
@@ -71,6 +74,8 @@ public class LocationPickerActivity extends AppCompatActivity
   public static final String LAYOUTS_TO_HIDE = "layouts_to_hide";
   public static final String SEARCH_ZONE = "search_zone";
   public static final String BACK_PRESSED_RETURN_OK = "back_pressed_return_ok";
+  public static final String ENABLE_SATELLITE_VIEW = "enable_satellite_view";
+  public static final String ENABLE_LOCATION_PERMISSION_REQUEST = "enable_location_permission_request";
   public static final String POIS_LIST = "pois_list";
   public static final String LEKU_POI = "leku_poi";
   private static final String LOCATION_KEY = "location_key";
@@ -111,10 +116,13 @@ public class LocationPickerActivity extends AppCompatActivity
   private boolean isCityVisible = true;
   private boolean isZipCodeVisible = true;
   private boolean shouldReturnOkOnBackPressed = false;
+  private boolean enableSatelliteView = true;
+  private boolean enableLocationPermissionRequest = true;
   private String searchZone;
   private List<LekuPoi> poisList;
   private Map<String, LekuPoi> lekuPoisMarkersMap;
   private Marker currentMarker;
+  private TextWatcher textWatcher;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -123,17 +131,17 @@ public class LocationPickerActivity extends AppCompatActivity
     setUpMainVariables();
     setUpResultsList();
     setUpToolBar();
+    updateValuesFromBundle(savedInstanceState);
     checkLocationPermission();
     setUpSearchView();
-    setUpFloatingButtons();
     setUpMapIfNeeded();
-    updateValuesFromBundle(savedInstanceState);
+    setUpFloatingButtons();
     buildGoogleApiClient();
     setTracking(TrackEvents.didLoadLocationPicker);
   }
 
   private void checkLocationPermission() {
-    if (PermissionUtils.shouldRequestLocationStoragePermission(getApplicationContext())) {
+    if (enableLocationPermissionRequest && PermissionUtils.shouldRequestLocationStoragePermission(getApplicationContext())) {
       PermissionUtils.requestLocationPermission(this);
     }
   }
@@ -193,7 +201,12 @@ public class LocationPickerActivity extends AppCompatActivity
       }
       return handled;
     });
-    searchView.addTextChangedListener(new TextWatcher() {
+    textWatcher = getSearchTextWatcher();
+    searchView.addTextChangedListener(textWatcher);
+  }
+
+  private TextWatcher getSearchTextWatcher() {
+    return new TextWatcher() {
       @Override
       public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -228,7 +241,7 @@ public class LocationPickerActivity extends AppCompatActivity
       public void afterTextChanged(Editable editable) {
 
       }
-    });
+    };
   }
 
   private void setUpFloatingButtons() {
@@ -239,6 +252,13 @@ public class LocationPickerActivity extends AppCompatActivity
     });
     FloatingActionButton btnAcceptLocation = (FloatingActionButton) findViewById(R.id.btnAccept);
     btnAcceptLocation.setOnClickListener(v -> returnCurrentPosition());
+
+    FloatingActionButton btnSatellite = (FloatingActionButton) findViewById(R.id.btnSatellite);
+    btnSatellite.setOnClickListener(view -> {
+      map.setMapType(map.getMapType() == MAP_TYPE_SATELLITE ? MAP_TYPE_NORMAL : MAP_TYPE_SATELLITE);
+      btnSatellite.setImageResource(map.getMapType() == MAP_TYPE_SATELLITE ? R.drawable.ic_satellite_off : R.drawable.ic_satellite_on);
+    });
+    btnSatellite.setVisibility(enableSatelliteView ? View.VISIBLE : View.GONE);
   }
 
   private void updateValuesFromBundle(Bundle savedInstanceState) {
@@ -332,6 +352,17 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   @Override
+  protected void onDestroy() {
+    if (searchView != null && textWatcher != null) {
+      searchView.removeTextChangedListener(textWatcher);
+    }
+    if (googleApiClient != null) {
+      googleApiClient.unregisterConnectionCallbacks(this);
+    }
+    super.onDestroy();
+  }
+
+  @Override
   public void onBackPressed() {
     if (!shouldReturnOkOnBackPressed || isLocationInformedFromBundle) {
       setResult(RESULT_CANCELED);
@@ -394,6 +425,8 @@ public class LocationPickerActivity extends AppCompatActivity
     if (poisList != null) {
       savedInstanceState.putParcelableArrayList(POIS_LIST, new ArrayList<>(poisList));
     }
+    savedInstanceState.putBoolean(ENABLE_SATELLITE_VIEW, enableSatelliteView);
+    savedInstanceState.putBoolean(ENABLE_LOCATION_PERMISSION_REQUEST, enableLocationPermissionRequest);
     super.onSaveInstanceState(savedInstanceState);
   }
 
@@ -413,6 +446,12 @@ public class LocationPickerActivity extends AppCompatActivity
     }
     if (savedInstanceState.containsKey(POIS_LIST)) {
       poisList = savedInstanceState.getParcelableArrayList(POIS_LIST);
+    }
+    if (savedInstanceState.containsKey(ENABLE_SATELLITE_VIEW)) {
+      enableSatelliteView = savedInstanceState.getBoolean(ENABLE_SATELLITE_VIEW);
+    }
+    if (savedInstanceState.containsKey(ENABLE_LOCATION_PERMISSION_REQUEST)) {
+      enableLocationPermissionRequest = savedInstanceState.getBoolean(ENABLE_LOCATION_PERMISSION_REQUEST);
     }
   }
 
@@ -589,6 +628,12 @@ public class LocationPickerActivity extends AppCompatActivity
     if (savedInstanceState.keySet().contains(POIS_LIST)) {
       poisList = savedInstanceState.getParcelableArrayList(POIS_LIST);
     }
+    if (savedInstanceState.keySet().contains(ENABLE_SATELLITE_VIEW)) {
+      enableSatelliteView = savedInstanceState.getBoolean(ENABLE_SATELLITE_VIEW);
+    }
+    if (savedInstanceState.keySet().contains(ENABLE_LOCATION_PERMISSION_REQUEST)) {
+      enableLocationPermissionRequest = savedInstanceState.getBoolean(ENABLE_LOCATION_PERMISSION_REQUEST);
+    }
   }
 
   private void getTransitionBundleParams(Bundle transitionBundle) {
@@ -605,6 +650,12 @@ public class LocationPickerActivity extends AppCompatActivity
     }
     if (transitionBundle.keySet().contains(BACK_PRESSED_RETURN_OK)) {
       shouldReturnOkOnBackPressed = transitionBundle.getBoolean(BACK_PRESSED_RETURN_OK);
+    }
+    if (transitionBundle.keySet().contains(ENABLE_SATELLITE_VIEW)) {
+      enableSatelliteView = transitionBundle.getBoolean(ENABLE_SATELLITE_VIEW);
+    }
+    if (transitionBundle.keySet().contains(ENABLE_LOCATION_PERMISSION_REQUEST)) {
+      enableLocationPermissionRequest = transitionBundle.getBoolean(ENABLE_LOCATION_PERMISSION_REQUEST);
     }
     if (transitionBundle.keySet().contains(POIS_LIST)) {
       poisList = transitionBundle.getParcelableArrayList(POIS_LIST);
@@ -859,7 +910,7 @@ public class LocationPickerActivity extends AppCompatActivity
 
   private void setDefaultMapSettings() {
     if (map != null) {
-      map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+      map.setMapType(MAP_TYPE_NORMAL);
       map.setOnMapLongClickListener(this);
       map.setOnMapClickListener(this);
       map.getUiSettings().setCompassEnabled(false);
@@ -966,6 +1017,85 @@ public class LocationPickerActivity extends AppCompatActivity
     if (view != null) {
       InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
       imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+  }
+
+  public static class Builder {
+    private Double locationLatitude;
+    private Double locationLongitude;
+    private String locationSearchZone;
+    private String layoutsToHide = "";
+    private boolean enableSatelliteView = true;
+    private boolean shouldReturnOkOnBackPressed = false;
+    private List<LekuPoi> lekuPois;
+
+    public Builder() {
+    }
+
+    public Builder withLocation(double latitude, double longitude) {
+      this.locationLatitude = latitude;
+      this.locationLongitude = longitude;
+      return this;
+    }
+
+    public Builder withSearchZone(String searchZone) {
+      this.locationSearchZone = searchZone;
+      return this;
+    }
+
+    public Builder withSatelliteViewHidden() {
+      this.enableSatelliteView = false;
+      return this;
+    }
+
+    public Builder shouldReturnOkOnBackPressed() {
+      this.shouldReturnOkOnBackPressed = true;
+      return this;
+    }
+
+    public Builder withStreetHidden() {
+      this.layoutsToHide = String.format("%s|%s", layoutsToHide, OPTIONS_HIDE_STREET);
+      return this;
+    }
+
+    public Builder withCityHidden() {
+      this.layoutsToHide = String.format("%s|%s", layoutsToHide, OPTIONS_HIDE_CITY);
+      return this;
+    }
+
+    public Builder withZipCodeHidden() {
+      this.layoutsToHide = String.format("%s|%s", layoutsToHide, OPTIONS_HIDE_ZIPCODE);
+      return this;
+    }
+
+    public Builder withPois(List<LekuPoi> pois) {
+      this.lekuPois = pois;
+      return this;
+    }
+
+    public Intent build(Context context) {
+      Intent intent = new Intent(context, LocationPickerActivity.class);
+
+      if (locationLatitude != null) {
+        intent.putExtra(LATITUDE, locationLatitude);
+      }
+      if (locationLongitude != null) {
+        intent.putExtra(LONGITUDE, locationLongitude);
+      }
+      if (locationSearchZone != null) {
+        intent.putExtra(SEARCH_ZONE, locationSearchZone);
+      }
+      if (!layoutsToHide.isEmpty()) {
+        intent.putExtra(LAYOUTS_TO_HIDE, layoutsToHide);
+      }
+      intent.putExtra(BACK_PRESSED_RETURN_OK, shouldReturnOkOnBackPressed);
+      intent.putExtra(ENABLE_SATELLITE_VIEW, enableSatelliteView);
+
+      if (lekuPois != null && !lekuPois.isEmpty()) {
+        intent.putExtra(POIS_LIST, new ArrayList<>(lekuPois));
+      }
+
+      return intent;
     }
   }
 }
