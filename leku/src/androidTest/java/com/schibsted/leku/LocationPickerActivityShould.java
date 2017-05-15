@@ -73,6 +73,7 @@ public class LocationPickerActivityShould {
   public void showLocationInfoWhenTheActivityStartsAndHasALocationProvided() throws Exception {
     launchActivityWithPermissionsGranted();
     wait300millis();
+    wait300millis();
 
     assertLocationInfoIsShown();
   }
@@ -95,6 +96,7 @@ public class LocationPickerActivityShould {
     onView(withId(R.id.leku_search))
         .check(matches(hasImeAction(EditorInfo.IME_ACTION_SEARCH)))
         .perform(pressImeActionButton());
+    wait300millis();
     wait300millis();
     wait300millis();
 
