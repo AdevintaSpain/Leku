@@ -43,7 +43,7 @@ before_script:
   - android list targets
   - echo no | android create avd --force -n test -t android-25 --abi google_apis/armeabi-v7a
   - emulator -avd test -no-skin -no-audio -no-window -gpu off -no-boot-anim &
-  - travis_wait 20 android-wait-for-emulator
+  - travis_wait 30 android-wait-for-emulator
 
 script:
   - ./gradlew build --continue --stacktrace
