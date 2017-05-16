@@ -36,17 +36,19 @@ android:
   - extra-google-m2repository
   - extra-android-m2repository
   - addon-google_apis-google-25
-  - sys-img-armeabi-v7a-google_apis-25
+  - sys-img-armeabi-v7a-google_apis-21
 
 # Emulator Management: Create, Start and Wait
 before_script:
   - android list targets
-  - echo no | android create avd --force -n test -t android-25 --abi google_apis/armeabi-v7a
+  - echo no | android create avd --force -n test -t android-21 --abi google_apis/armeabi-v7a
   - emulator -avd test -no-window -gpu off -no-boot-anim &
-  - curl https://raw.githubusercontent.com/travis-ci/travis-cookbooks/64ff883360f3d265b87c072a07f78e9ef0a874fb/community-cookbooks/android-sdk/files/default/android-wait-for-emulator > android-wait-for-emulator
-  - chmod u+x android-wait-for-emulator
-  - ./android-wait-for-emulator
-  - travis_wait 20 ./android-wait-for-emulator
+  #- curl https://raw.githubusercontent.com/travis-ci/travis-cookbooks/64ff883360f3d265b87c072a07f78e9ef0a874fb/community-cookbooks/android-sdk/files/default/android-wait-for-emulator > android-wait-for-emulator
+  #- chmod u+x android-wait-for-emulator
+  #- ./android-wait-for-emulator
+  #- travis_wait 20 ./android-wait-for-emulator
+  - android-wait-for-emulator
+  - travis_wait 20 android-wait-for-emulator
   - adb shell input keyevent 82 &
 
 script:
