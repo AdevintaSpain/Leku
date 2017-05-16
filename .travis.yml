@@ -36,22 +36,17 @@ android:
   - extra-google-m2repository
   - extra-android-m2repository
   - addon-google_apis-google-25
-  - sys-img-x86-android-23
-  #- sys-img-armeabi-v7a-google_apis-25
+  - sys-img-armeabi-v7a-google_apis-25
 
 # Emulator Management: Create, Start and Wait
 before_script:
   - android list targets
-  - echo no | android create avd --force -n test -t android-23 --abi x86 -no-accel
-  - emulator -avd test -no-skin -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
-  #- echo no | android create avd --force -n test -t android-25 --abi google_apis/armeabi-v7a
-  #- emulator -avd test -no-skin -no-audio -no-window -gpu off -no-boot-anim &
+  - echo no | android create avd --force -n test -t android-25 --abi google_apis/armeabi-v7a
+  - emulator -avd test -no-skin -no-audio -no-window -gpu off -no-boot-anim &
+  - travis_wait 20 android-wait-for-emulator
 
 script:
   - ./gradlew build --continue --stacktrace
-  #- android-wait-for-emulator
   - adb shell input keyevent 82 &
   - ./gradlew connectedCheck --continue --stacktrace
   - travis_wait ./gradlew connectedCheck --continue --stacktrace
