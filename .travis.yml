@@ -46,6 +46,7 @@ before_script:
   - curl https://raw.githubusercontent.com/travis-ci/travis-cookbooks/64ff883360f3d265b87c072a07f78e9ef0a874fb/community-cookbooks/android-sdk/files/default/android-wait-for-emulator > android-wait-for-emulator
   - chmod u+x android-wait-for-emulator
   - ./android-wait-for-emulator
+  - travis_wait 20 ./android-wait-for-emulator
   - adb shell input keyevent 82 &
 
 script:
