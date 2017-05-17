@@ -21,7 +21,7 @@ public interface GeocoderViewInterface {
 
   void showLocationInfo(List<Address> addresses);
 
-  void willGetLocationInfo();
+  void willGetLocationInfo(double longitude, double latitude);
 
   void didGetLocationInfo();
 
@@ -70,7 +70,7 @@ public interface GeocoderViewInterface {
     }
 
     @Override
-    public void willGetLocationInfo() {
+    public void willGetLocationInfo(double longitude, double latitude) {
 
     }
 

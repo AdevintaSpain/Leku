@@ -97,7 +97,7 @@ public class GeocoderPresenter {
   }
 
   public void getInfoFromLocation(double latitude, double longitude) {
-    view.willGetLocationInfo();
+    view.willGetLocationInfo(latitude, longitude);
     Subscription locationSubscription = interactor.getFromLocation(latitude, longitude)
         .subscribeOn(Schedulers.newThread())
         .observeOn(scheduler)

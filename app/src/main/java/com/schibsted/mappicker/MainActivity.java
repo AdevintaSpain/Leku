@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
             //.withCityHidden()
             .withZipCodeHidden()
             //.withSatelliteViewHidden()
+            .showDefaultLongitudeLatitude(true)
             .build(getApplicationContext());
 
         //this is optional if you want to return RESULT_OK if you don't set the latitude/longitude and click back button
@@ -102,7 +103,8 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = data.getBundleExtra(LocationPickerActivity.TRANSITION_BUNDLE);
         Log.d("BUNDLE TEXT****", bundle.getString("test"));
         Address fullAddress = data.getParcelableExtra(LocationPickerActivity.ADDRESS);
-        Log.d("FULL ADDRESS****", fullAddress.toString());
+        if(fullAddress != null)
+          Log.d("FULL ADDRESS****", fullAddress.toString());
       } else if (requestCode == 2) {
         double latitude = data.getDoubleExtra(LocationPickerActivity.LATITUDE, 0);
         Log.d("LATITUDE****", String.valueOf(latitude));
