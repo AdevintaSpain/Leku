@@ -59,8 +59,8 @@ Location picker component for Android. It returns a latitude, longitude and an a
 ### Prerequisites
 
 minSdkVersion >= 15
-Google Play Services = 10.0.1
-Support Library = 25.1.1
+Google Play Services = 10.2.1
+Support Library = 25.3.1
 
 ### Download
 
@@ -76,7 +76,7 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    compile 'com.schibstedspain.android:leku:3.1.0'
+    compile 'com.schibstedspain.android:leku:3.2.0'
 }
 ```
 
@@ -91,13 +91,14 @@ You must add the following permissions in order to use the Google Maps Android A
 
 * **android.permission.ACCESS_NETWORK_STATE**   Allows the API to check the connection status in order to determine whether data can be downloaded.
 
-* **android.permission.WRITE_EXTERNAL_STORAGE**   Allows the API to cache map tile data in the device's external storage area.
-
-The following two permissions are not required to use Google Maps Android API v2, but are recommended.
+The following permissions are not required to use Google Maps Android API v2, but are recommended.
 
 * **android.permission.ACCESS_COARSE_LOCATION**   Allows the API to use WiFi or mobile cell data (or both) to determine the device's location. The API returns the location with an accuracy approximately equivalent to a city block.
 
 * **android.permission.ACCESS_FINE_LOCATION**   Allows the API to determine as precise a location as possible from the available location providers, including the Global Positioning System (GPS) as well as WiFi and mobile cell data.
+
+* **android.permission.WRITE_EXTERNAL_STORAGE**   Allows the API to cache map tile data in the device's external storage area.
+
 
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
@@ -137,11 +138,22 @@ To use the LocationPickerActivity first you need to add these lines to your Andr
 </activity>
 ```
 
-Then you have setup the call to start this activity wherever you like, always as startActivityForResult:
+Then you have setup the call to start this activity wherever you like, always as startActivityForResult.
+You can set a default location, search zone and other customizable parameters to load when you start the activity.
+You only need to use the Builder setters like:
 
 ```java
-Intent i = new Intent(this, LocationPickerActivity.class);
-startActivityForResult(i, 1);
+Intent intent = new LocationPickerActivity.Builder()
+    .withLocation(41.4036299, 2.1743558)
+    .withSearchZone("es_ES")
+    .shouldReturnOkOnBackPressed()
+    .withStreetHidden()
+    .withCityHidden()
+    .withZipCodeHidden()
+    .withSatelliteViewHidden()
+    .build(getApplicationContext());
+
+startActivityForResult(intent, 1);
 ```
 
 And add the response code from that activity:
@@ -203,13 +215,10 @@ I encourage you to add these languages to this component, please fork this proje
 #### Transition Bundle
 
 If you need to send and receive a param through the LocationPickerActivity you can do it.
-Also you can add a default location to load when you start the activity.
 You only need to add an "Extra" param to the intent like:
 
 ```java
 Intent intent = new Intent(getApplicationContext(), LocationPickerActivity.class);
-intent.putExtra(LocationPickerActivity.LATITUDE, 41.4036299);
-intent.putExtra(LocationPickerActivity.LONGITUDE, 2.1743558);
 intent.putExtra("test", "this is a test");
 startActivityForResult(intent, 1);
 ```
@@ -267,6 +276,14 @@ If you want to disable the satellite view button you can use this parameter (not
 
 ```java
 intent.putExtra(LocationPickerActivity.ENABLE_SATELLITE_VIEW, false);
+```
+
+##### Enable/Disable requesting location permissions
+
+If you want to disable asking for location permissions (and prevent any location requests)
+
+```java
+intent.putExtra(LocationPickerActivity.ENABLE_LOCATION_PERMISSION_REQUEST, false);
 ```
 
 #### Tracking
