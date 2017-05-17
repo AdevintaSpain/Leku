@@ -45,13 +45,19 @@ before_script:
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
 
-script:
-  - ./gradlew build --continue
-  - travis_retry ./gradlew connectedCheck --continue
+jobs:
+  include:
+    - stage: build
+      script: ./gradlew build --continue
+    - stage: test
+      script: travis_retry ./gradlew connectedCheck --continue
+    - stage: deploy
+      deploy:
+        provider: script
+        script: scripts/bintrayUpload.sh
+        skip_cleanup: true
+        on:
+          tags: true
 
-deploy:
-  - provider: script
-    script: scripts/bintrayUpload.sh
-    skip_cleanup: true
-    on:
-      tags: true
+after_success:
+  - aws s3 sync ~/shared s3://leku/shared
