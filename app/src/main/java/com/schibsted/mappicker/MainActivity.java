@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             //.withCityHidden()
             .withZipCodeHidden()
             //.withSatelliteViewHidden()
-            .showDefaultLongitudeLatitude(true)
+            //.showDefaultLongitudeLatitude(true)
             .build(getApplicationContext());
 
         //this is optional if you want to return RESULT_OK if you don't set the latitude/longitude and click back button
