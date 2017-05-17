@@ -45,8 +45,10 @@ jobs:
         - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
       script: ./gradlew build --continue
     - stage: check
+      jdk: oraclejdk8
       script: ./gradlew check --continue
     - stage: check
+      jdk: oraclejdk8
       # Emulator Management: Create, Start and Wait
       before_script:
         - echo no | android create avd --force -n test -t android-21 --abi google_apis/armeabi-v7a
@@ -55,6 +57,7 @@ jobs:
         - adb shell input keyevent 82 &
       script: travis_retry ./gradlew connectedCheck --continue
     - stage: deploy
+      jdk: oraclejdk8
       deploy:
         provider: script
         script: scripts/bintrayUpload.sh
