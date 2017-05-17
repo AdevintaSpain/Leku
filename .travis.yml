@@ -40,14 +40,14 @@ android:
 
 # Emulator Management: Create, Start and Wait
 before_script:
-  - echo no | android create avd --force -n test -t android-21 --abi google_apis/armeabi-v7a --skin WXGA800
-  - emulator -avd test -no-window -gpu off -no-boot-anim &
+  - echo no | android create avd --force -n test -t android-21 --abi google_apis/armeabi-v7a
+  - emulator -memory 1024 -avd test -no-window -gpu off -no-boot-anim &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
 
 script:
   - ./gradlew build --continue
-  - travis_wait ./gradlew connectedCheck --continue
+  - ./gradlew connectedCheck -PdisablePreDex
 
 deploy:
   - provider: script
