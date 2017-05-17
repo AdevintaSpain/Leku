@@ -17,8 +17,11 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
-    - $HOME/app/build/
-    - $HOME/leku/build/
+    - $HOME/app/build/generated
+    - $HOME/app/build/intermediates
+    - $HOME/leku/build/generated
+    - $HOME/leku/build/intermediates
+    - $HOME/.m2
 
 android:
   components:
