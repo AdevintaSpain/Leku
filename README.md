@@ -151,6 +151,7 @@ Intent intent = new LocationPickerActivity.Builder()
     .withCityHidden()
     .withZipCodeHidden()
     .withSatelliteViewHidden()
+    .showDefaultLongitudeLatitude(true)
     .build(getApplicationContext());
 
 startActivityForResult(intent, 1);
@@ -162,7 +163,6 @@ And add the response code from that activity:
 
 @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
     if (requestCode == 1) {
         if(resultCode == RESULT_OK){
             double latitude = data.getDoubleExtra(LocationPickerActivity.LATITUDE, 0);
@@ -176,13 +176,15 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             Bundle bundle = data.getBundleExtra(LocationPickerActivity.TRANSITION_BUNDLE);
             Log.d("BUNDLE TEXT****", bundle.getString("test"));
             Address fullAddress = data.getParcelableExtra(LocationPickerActivity.ADDRESS);
-            Log.d("FULL ADDRESS****", fullAddress.toString());
+            if(fullAddress != null)  
+              Log.d("FULL ADDRESS****", fullAddress.toString());
         }
         if (resultCode == RESULT_CANCELED) {
             //Write your code if there's no result
         }
     }
 }
+
 ```
 
 That's all folks!
