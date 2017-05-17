@@ -40,16 +40,16 @@ android:
 
 # Emulator Management: Create, Start and Wait
 before_script:
-  - android list targets
+  - 'echo $JAVA_OPTS'
+  - 'export JAVA_OPTS="-Xmx2048m"'
   - echo no | android create avd --force -n test -t android-21 --abi google_apis/armeabi-v7a
   - emulator -avd test -no-window -gpu off -no-boot-anim &
   - android-wait-for-emulator
-  - travis_wait 20 android-wait-for-emulator
   - adb shell input keyevent 82 &
 
 script:
   - ./gradlew build --continue
-  - travis_wait 20 ./gradlew connectedCheck --continue
+  - travis_retry ./gradlew connectedCheck --continue
 
 deploy:
   - provider: script
