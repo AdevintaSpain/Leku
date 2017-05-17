@@ -47,9 +47,9 @@ before_script:
 
 jobs:
   include:
-    - stage: build
+    - stage:
       script: ./gradlew build --continue
-    - stage: test
+    - stage: check
       script: travis_retry ./gradlew connectedCheck --continue
     - stage: deploy
       deploy:
