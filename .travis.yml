@@ -47,7 +47,7 @@ before_script:
 
 script:
   - ./gradlew build --continue
-  - travis_retry ./gradlew connectedCheck --continue
+  - travis_wait ./gradlew connectedCheck --continue
 
 deploy:
   - provider: script
