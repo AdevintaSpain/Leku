@@ -17,6 +17,8 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+    - $HOME/app/build/
+    - $HOME/leku/build/
 
 android:
   components:
@@ -54,6 +56,3 @@ jobs:
         skip_cleanup: true
         on:
           tags: true
-
-after_success:
-  - aws s3 sync ~/shared s3://leku/shared
