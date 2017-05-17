@@ -46,7 +46,7 @@ jobs:
         - adb shell input keyevent 82 &
       script: ./gradlew build --continue
     - stage: check
-      script: travis_retry ./gradlew check --continue
+      script: travis_retry ./gradlew connectedCheck --continue
     - stage: deploy
       deploy:
         provider: script
