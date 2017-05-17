@@ -49,7 +49,7 @@ before_script:
 
 script:
   - ./gradlew build --continue
-  - ./gradlew connectedCheck --continue
+  - travis_wait 20 ./gradlew connectedCheck --continue
 
 deploy:
   - provider: script
