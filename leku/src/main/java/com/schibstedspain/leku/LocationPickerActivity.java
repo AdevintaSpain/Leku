@@ -611,10 +611,12 @@ public class LocationPickerActivity extends AppCompatActivity
     this.city.setText("");
     this.zipCode.setText("");
 
-    if(showLongitudeLatitude)
+    if(showLongitudeLatitude) {
       changeLocationInfoLayoutVisibility(View.VISIBLE);
-    else
+    }
+    else {
       changeLocationInfoLayoutVisibility(View.GONE);
+    }
   }
 
   @Override
