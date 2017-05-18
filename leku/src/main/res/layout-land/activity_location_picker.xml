@@ -58,6 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         app:srcCompat="@drawable/ic_satellite_on"
         app:fabSize="normal"
         android:tint="?colorPrimary"
