@@ -459,7 +459,7 @@ public class LocationPickerActivity extends AppCompatActivity
     }
     if (savedInstanceState.containsKey(ENABLE_SATELLITE_VIEW)) {
       enableSatelliteView = savedInstanceState.getBoolean(ENABLE_SATELLITE_VIEW);
-	}
+    }
     if (savedInstanceState.containsKey(SHOW_LONGITUDE_LATITUDE)) {
       showLongitudeLatitude = savedInstanceState.getBoolean(SHOW_LONGITUDE_LATITUDE);
     }
@@ -568,7 +568,7 @@ public class LocationPickerActivity extends AppCompatActivity
 
   @Override
   public void willGetLocationInfo(double lng, double lat) {
-    if(showLongitudeLatitude){
+    if(showLongitudeLatitude) {
       changeLocationInfoLayoutVisibility(View.VISIBLE);
       setLocationInfo(lng, lat);
     } else {
