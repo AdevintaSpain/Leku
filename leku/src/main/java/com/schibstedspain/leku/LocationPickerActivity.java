@@ -567,7 +567,7 @@ public class LocationPickerActivity extends AppCompatActivity
 
   @Override
   public void willGetLocationInfo(double lng, double lat) {
-    if(showLongitudeLatitude) {
+    if (showLongitudeLatitude) {
       changeLocationInfoLayoutVisibility(View.VISIBLE);
       setLocationInfo(lng, lat);
     } else {
