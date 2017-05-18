@@ -34,6 +34,7 @@
       android:layout_marginStart="8dp"
       android:layout_marginLeft="8dp"
       android:layout_marginEnd="8dp"
+      android:layout_marginRight="8dp"
       android:fadingEdgeLength="16dp"
       android:footerDividersEnabled="true"
       android:headerDividersEnabled="true"
@@ -74,6 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:src="@drawable/ic_gps_lime"
         app:fabSize="normal"
         android:tint="?colorPrimary"
@@ -194,7 +196,6 @@
             />
 
       </LinearLayout>
-
     </FrameLayout>
   </LinearLayout>
 

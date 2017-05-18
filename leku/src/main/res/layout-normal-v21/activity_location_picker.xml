@@ -34,6 +34,7 @@
       android:layout_marginStart="8dp"
       android:layout_marginLeft="8dp"
       android:layout_marginEnd="8dp"
+      android:layout_marginRight="8dp"
       android:fadingEdgeLength="16dp"
       android:footerDividersEnabled="true"
       android:headerDividersEnabled="true"
@@ -58,6 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp"
         app:srcCompat="@drawable/ic_satellite_on"
         app:fabSize="normal"
@@ -74,6 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp"
         android:src="@drawable/ic_gps_lime"
         app:fabSize="normal"
@@ -181,8 +184,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-      android:layout_marginLeft="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_gravity="top|end"
             android:src="@drawable/ic_check_light"
             app:fabSize="normal"
@@ -193,7 +197,6 @@
             />
 
       </LinearLayout>
-
     </FrameLayout>
   </LinearLayout>
 
