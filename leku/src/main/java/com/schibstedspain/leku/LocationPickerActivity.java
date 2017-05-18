@@ -66,7 +66,6 @@ public class LocationPickerActivity extends AppCompatActivity
     GeocoderViewInterface, GoogleMap.OnMapClickListener {
 
   public static final String SHOW_LONGITUDE_LATITUDE = "show_longitude_latitude";
-  
   public static final String LATITUDE = "locationLatitude";
   public static final String LONGITUDE = "locationLongitude";
   public static final String ZIPCODE = "zipcode";
