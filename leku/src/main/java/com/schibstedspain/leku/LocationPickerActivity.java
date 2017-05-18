@@ -567,10 +567,10 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   @Override
-  public void willGetLocationInfo(double longitude, double latitude) {
+  public void willGetLocationInfo(double lng, double lat) {
     if(showLongitudeLatitude){
       changeLocationInfoLayoutVisibility(View.VISIBLE);
-      setLocationInfo(longitude, latitude);
+      setLocationInfo(lng, lat);
     }
     else {
       changeLocationInfoLayoutVisibility(View.GONE);
@@ -746,9 +746,9 @@ public class LocationPickerActivity extends AppCompatActivity
     return true;
   }
 
-  private void setLocationInfo(double longitude, double latitude) {
-    this.longitude.setText(getString(R.string.longitude) + ": " + String.valueOf(longitude));
-    this.latitude.setText(getString(R.string.latitude) + ": " + String.valueOf(latitude));
+  private void setLocationInfo(double lng, double lat) {
+    this.longitude.setText(getString(R.string.longitude) + ": " + String.valueOf(lng));
+    this.latitude.setText(getString(R.string.latitude) + ": " + String.valueOf(lat));
     this.longitude.setVisibility(View.VISIBLE);
     this.latitude.setVisibility(View.VISIBLE);
     this.coordinates.setVisibility(View.VISIBLE);
@@ -789,18 +789,18 @@ public class LocationPickerActivity extends AppCompatActivity
     return address.getAddressLine(0).equals(address.getLocality());
   }
 
-  private void setNewMapMarker(double latitude, double longitude) {
+  private void setNewMapMarker(double lng, double lat) {
     if (map != null) {
       if (currentMarker != null) {
         currentMarker.remove();
       }
       CameraPosition cameraPosition =
-          new CameraPosition.Builder().target(new LatLng(latitude, longitude))
+          new CameraPosition.Builder().target(new LatLng(lat, lng))
               .zoom(getDefaultZoom())
               .build();
       hasWiderZoom = false;
       map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-      currentMarker = addMarker(latitude, longitude);
+      currentMarker = addMarker(lat, lng);
       map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
         @Override
         public void onMarkerDragStart(Marker marker) {
@@ -1034,12 +1034,12 @@ public class LocationPickerActivity extends AppCompatActivity
     googleApiClient.connect();
   }
 
-  private Marker addMarker(double latitude, double longitude) {
-    return map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).draggable(true));
+  private Marker addMarker(double lat, double lng) {
+    return map.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).draggable(true));
   }
 
-  private Marker addPoiMarker(double latitude, double longitude, String title, String address) {
-    return map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude))
+  private Marker addPoiMarker(double lat, double lng, String title, String address) {
+    return map.addMarker(new MarkerOptions().position(new LatLng(lat, lng))
         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
         .title(title)
         .snippet(address));
@@ -1051,12 +1051,12 @@ public class LocationPickerActivity extends AppCompatActivity
       currentLocation = new Location(getString(R.string.network_resource));
     }
 
-    double latitude = address.getLatitude();
-    double longitude = address.getLongitude();
+    double lat = address.getLatitude();
+    double lng = address.getLongitude();
 
-    currentLocation.setLatitude(latitude);
-    currentLocation.setLongitude(longitude);
-    setNewMapMarker(latitude, longitude);
+    currentLocation.setLatitude(lat);
+    currentLocation.setLongitude(lng);
+    setNewMapMarker(lat, lng);
     setLocationInfo(address);
     searchView.setText("");
   }
@@ -1089,9 +1089,9 @@ public class LocationPickerActivity extends AppCompatActivity
     public Builder() {
     }
 
-    public Builder withLocation(double latitude, double longitude) {
-      this.locationLatitude = latitude;
-      this.locationLongitude = longitude;
+    public Builder withLocation(double lat, double lng) {
+      this.locationLatitude = lat;
+      this.locationLongitude = lng;
       return this;
     }
 
