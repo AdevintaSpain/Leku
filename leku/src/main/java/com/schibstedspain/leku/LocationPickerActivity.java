@@ -745,8 +745,8 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void setLocationInfo(double lng, double lat) {
-    this.longitude.setText(getString(R.string.longitude) + ": " + String.valueOf(lng));
-    this.latitude.setText(getString(R.string.latitude) + ": " + String.valueOf(lat));
+    this.longitude.setText(getString(R.string.longitude) + ": " + lng);
+    this.latitude.setText(getString(R.string.latitude) + ": " + lat);
     this.longitude.setVisibility(View.VISIBLE);
     this.latitude.setVisibility(View.VISIBLE);
     this.coordinates.setVisibility(View.VISIBLE);
