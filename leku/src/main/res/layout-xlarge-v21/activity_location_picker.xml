@@ -97,7 +97,7 @@
           android:layout_height="wrap_content"
           android:layout_gravity="bottom|end"
           android:paddingStart="16dp"
-          android:paddingLeft="16dp"
+          android:paddingEnd="16dp"
           android:background="@drawable/adress_custom_background"
           android:orientation="horizontal"
           >
