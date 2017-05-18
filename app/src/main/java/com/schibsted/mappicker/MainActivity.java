@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = data.getBundleExtra(LocationPickerActivity.TRANSITION_BUNDLE);
         Log.d("BUNDLE TEXT****", bundle.getString("test"));
         Address fullAddress = data.getParcelableExtra(LocationPickerActivity.ADDRESS);
-        if(fullAddress != null) {
+        if (fullAddress != null) {
           Log.d("FULL ADDRESS****", fullAddress.toString());
         }
       } else if (requestCode == 2) {
