@@ -571,8 +571,7 @@ public class LocationPickerActivity extends AppCompatActivity
     if(showLongitudeLatitude){
       changeLocationInfoLayoutVisibility(View.VISIBLE);
       setLocationInfo(lng, lat);
-    }
-    else {
+    } else {
       changeLocationInfoLayoutVisibility(View.GONE);
     }
   }
