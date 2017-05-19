@@ -15,7 +15,7 @@ import java.util.TimeZone;
 
 public class TimeZoneUtils {
   public static TimeZone getTimeZone(Context context, double lng, double lat) {
-    String api_key = GetGoogleMetadata(context);
+    String api_key = getGoogleMetadata(context);
     if (api_key == null || api_key.length() <= 0) {
       Log.d(TimeZoneUtils.class.getName(), "No Google Maps api specified");
       return null;
@@ -34,7 +34,7 @@ public class TimeZoneUtils {
     return null;
   }
 
-  private static String GetGoogleMetadata(Context context) {
+  private static String getGoogleMetadata(Context context) {
     try {
       ApplicationInfo appInfo = context.getPackageManager().getApplicationInfo(
           context.getPackageName(), PackageManager.GET_META_DATA);
