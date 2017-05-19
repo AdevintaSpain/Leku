@@ -49,12 +49,15 @@ import com.schibstedspain.leku.geocoder.GeocoderInteractor;
 import com.schibstedspain.leku.geocoder.GeocoderPresenter;
 import com.schibstedspain.leku.geocoder.GeocoderViewInterface;
 import com.schibstedspain.leku.permissions.PermissionUtils;
+import com.schibstedspain.leku.timezone.TimeZoneUtils;
 import com.schibstedspain.leku.tracker.TrackEvents;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
+
 import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
 
 import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL;
@@ -73,6 +76,9 @@ public class LocationPickerActivity extends AppCompatActivity
   public static final String TRANSITION_BUNDLE = "transition_bundle";
   public static final String LAYOUTS_TO_HIDE = "layouts_to_hide";
   public static final String SEARCH_ZONE = "search_zone";
+  public static final String TIME_ZONE = "with_timezone";
+  public static final String TIME_ZONE_ID = "id_timezone";
+  public static final String TIME_ZONE_NAME = "name_timezone";
   public static final String BACK_PRESSED_RETURN_OK = "back_pressed_return_ok";
   public static final String ENABLE_SATELLITE_VIEW = "enable_satellite_view";
   public static final String ENABLE_LOCATION_PERMISSION_REQUEST = "enable_location_permission_request";
@@ -116,6 +122,7 @@ public class LocationPickerActivity extends AppCompatActivity
   private boolean isCityVisible = true;
   private boolean isZipCodeVisible = true;
   private boolean shouldReturnOkOnBackPressed = false;
+  private boolean withTimeZone = false;
   private boolean enableSatelliteView = true;
   private boolean enableLocationPermissionRequest = true;
   private String searchZone;
@@ -123,6 +130,7 @@ public class LocationPickerActivity extends AppCompatActivity
   private Map<String, LekuPoi> lekuPoisMarkersMap;
   private Marker currentMarker;
   private TextWatcher textWatcher;
+  private TimeZone timeZone;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -426,6 +434,7 @@ public class LocationPickerActivity extends AppCompatActivity
       savedInstanceState.putParcelableArrayList(POIS_LIST, new ArrayList<>(poisList));
     }
     savedInstanceState.putBoolean(ENABLE_SATELLITE_VIEW, enableSatelliteView);
+    savedInstanceState.putBoolean(TIME_ZONE, withTimeZone);
     savedInstanceState.putBoolean(ENABLE_LOCATION_PERMISSION_REQUEST, enableLocationPermissionRequest);
     super.onSaveInstanceState(savedInstanceState);
   }
@@ -449,6 +458,9 @@ public class LocationPickerActivity extends AppCompatActivity
     }
     if (savedInstanceState.containsKey(ENABLE_SATELLITE_VIEW)) {
       enableSatelliteView = savedInstanceState.getBoolean(ENABLE_SATELLITE_VIEW);
+    }
+    if (savedInstanceState.containsKey(TIME_ZONE)) {
+      withTimeZone = savedInstanceState.getBoolean(TIME_ZONE);
     }
     if (savedInstanceState.containsKey(ENABLE_LOCATION_PERMISSION_REQUEST)) {
       enableLocationPermissionRequest = savedInstanceState.getBoolean(ENABLE_LOCATION_PERMISSION_REQUEST);
@@ -577,6 +589,9 @@ public class LocationPickerActivity extends AppCompatActivity
     if (addresses != null) {
       if (addresses.size() > 0 && addresses.get(0).getMaxAddressLineIndex() > 0) {
         selectedAddress = addresses.get(0);
+        if (withTimeZone) {
+          this.timeZone = TimeZoneUtils.getTimeZone(this, selectedAddress.getLongitude(), selectedAddress.getLatitude());
+        }
         setLocationInfo(selectedAddress);
       } else {
         setLocationEmpty();
@@ -653,6 +668,9 @@ public class LocationPickerActivity extends AppCompatActivity
     }
     if (transitionBundle.keySet().contains(ENABLE_SATELLITE_VIEW)) {
       enableSatelliteView = transitionBundle.getBoolean(ENABLE_SATELLITE_VIEW);
+    }
+    if (transitionBundle.keySet().contains(TIME_ZONE)) {
+      withTimeZone = transitionBundle.getBoolean(TIME_ZONE);
     }
     if (transitionBundle.keySet().contains(ENABLE_LOCATION_PERMISSION_REQUEST)) {
       enableLocationPermissionRequest = transitionBundle.getBoolean(ENABLE_LOCATION_PERMISSION_REQUEST);
@@ -843,6 +861,10 @@ public class LocationPickerActivity extends AppCompatActivity
       }
       returnIntent.putExtra(TRANSITION_BUNDLE, bundle.getBundle(TRANSITION_BUNDLE));
       returnIntent.putExtra(LEKU_POI, currentLekuPoi);
+      if (withTimeZone && timeZone != null) {
+        returnIntent.putExtra(TIME_ZONE_ID, timeZone.getID());
+        returnIntent.putExtra(TIME_ZONE_NAME, timeZone.getDisplayName());
+      }
       setResult(RESULT_OK, returnIntent);
       setTracking(TrackEvents.RESULT_OK);
     } else if (currentLocation != null) {
@@ -854,6 +876,10 @@ public class LocationPickerActivity extends AppCompatActivity
       }
       if (zipCode != null) {
         returnIntent.putExtra(ZIPCODE, zipCode.getText());
+      }
+      if (withTimeZone && timeZone != null) {
+        returnIntent.putExtra(TIME_ZONE_ID, timeZone.getID());
+        returnIntent.putExtra(TIME_ZONE_NAME, timeZone.getDisplayName());
       }
       returnIntent.putExtra(ADDRESS, selectedAddress);
       returnIntent.putExtra(TRANSITION_BUNDLE, bundle.getBundle(TRANSITION_BUNDLE));
@@ -997,7 +1023,6 @@ public class LocationPickerActivity extends AppCompatActivity
 
     double latitude = address.getLatitude();
     double longitude = address.getLongitude();
-
     currentLocation.setLatitude(latitude);
     currentLocation.setLongitude(longitude);
     setNewMapMarker(latitude, longitude);
@@ -1026,6 +1051,7 @@ public class LocationPickerActivity extends AppCompatActivity
     private String locationSearchZone;
     private String layoutsToHide = "";
     private boolean enableSatelliteView = true;
+    private boolean withTimeZone = false;
     private boolean shouldReturnOkOnBackPressed = false;
     private List<LekuPoi> lekuPois;
 
@@ -1045,6 +1071,11 @@ public class LocationPickerActivity extends AppCompatActivity
 
     public Builder withSatelliteViewHidden() {
       this.enableSatelliteView = false;
+      return this;
+    }
+
+    public Builder withTimeZone() {
+      this.withTimeZone = true;
       return this;
     }
 
@@ -1088,8 +1119,10 @@ public class LocationPickerActivity extends AppCompatActivity
       if (!layoutsToHide.isEmpty()) {
         intent.putExtra(LAYOUTS_TO_HIDE, layoutsToHide);
       }
+
       intent.putExtra(BACK_PRESSED_RETURN_OK, shouldReturnOkOnBackPressed);
       intent.putExtra(ENABLE_SATELLITE_VIEW, enableSatelliteView);
+      intent.putExtra(TIME_ZONE, withTimeZone);
 
       if (lekuPois != null && !lekuPois.isEmpty()) {
         intent.putExtra(POIS_LIST, new ArrayList<>(lekuPois));
