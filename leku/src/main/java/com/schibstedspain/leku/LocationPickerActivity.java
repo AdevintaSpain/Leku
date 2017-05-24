@@ -609,10 +609,18 @@ public class LocationPickerActivity extends AppCompatActivity
 
   @Override
   public void retrieveLocationFrom(String query, boolean debounce) {
-    if (searchZone != null && !searchZone.isEmpty()) {
-      retrieveDebouncedLocationFromZone(query, searchZone, SEARCH_DEBOUNCE_TIME);
+    if (debounce) {
+      if (searchZone != null && !searchZone.isEmpty()) {
+        retrieveDebouncedLocationFromZone(query, searchZone, SEARCH_DEBOUNCE_TIME);
+      } else {
+        retrieveDebouncedLocationFromDefaultZone(query, SEARCH_DEBOUNCE_TIME);
+      }
     } else {
-      retrieveDebouncedLocationFromDefaultZone(query, SEARCH_DEBOUNCE_TIME);
+      if (searchZone != null && !searchZone.isEmpty()) {
+        retrieveLocationFromZone(query, searchZone);
+      } else {
+        retrieveLocationFromDefaultZone(query);
+      }
     }
   }
 
