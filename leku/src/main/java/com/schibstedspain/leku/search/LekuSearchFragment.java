@@ -9,7 +9,6 @@ import android.speech.RecognizerIntent;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,10 +22,13 @@ import android.widget.ImageView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.schibstedspain.leku.LocationPickerActivity;
+import com.schibstedspain.leku.NullView;
 import com.schibstedspain.leku.R;
 import java.util.List;
 
 public class LekuSearchFragment extends Fragment {
+
+  private LekuSearchCallback lekuSearchCallback;
 
   public static LekuSearchFragment newInstance() {
     return new LekuSearchFragment();
@@ -80,6 +82,11 @@ public class LekuSearchFragment extends Fragment {
     return false;
   }
 
+  public void clear() {
+    searchView.setText("");
+    closeKeyboard();
+  }
+
   private void onVoiceItemSelected() {
     if (searchView.getText().toString().isEmpty()) {
       startVoiceRecognitionActivity();
@@ -102,6 +109,23 @@ public class LekuSearchFragment extends Fragment {
         Log.d(LocationPickerActivity.class.getName(), e.getMessage());
       }
     }
+  }
+
+  @Override
+  public void onAttach(Context context) {
+    super.onAttach(context);
+
+    if (context instanceof LekuSearchCallback) {
+      lekuSearchCallback = (LekuSearchCallback) context;
+    } else {
+      lekuSearchCallback = NullView.createFor(LekuSearchCallback.class);
+    }
+  }
+
+  @Override
+  public void onDetach() {
+    lekuSearchCallback = NullView.createFor(LekuSearchCallback.class);
+    super.onDetach();
   }
 
   private boolean checkPlayServices() {
@@ -151,11 +175,11 @@ public class LekuSearchFragment extends Fragment {
   }
 
   private void retrieveLocationFrom(String query) {
-    retrieveLocationFrom(query, true);
+    retrieveLocationFrom(query, false);
   }
 
   private void retrieveLocationFrom(String query, boolean debounce) {
-    // TODO
+    lekuSearchCallback.retrieveLocationFrom(query, debounce);
   }
 
   @Override
@@ -173,41 +197,38 @@ public class LekuSearchFragment extends Fragment {
   }
 
   private TextWatcher getSearchTextWatcher() {
-    return new LekuSearchTextWatcher() {
+    return new LekuSearchTextWatcher(MIN_CHARACTERS) {
       @Override
-      public void onTextChanged(CharSequence charSequence, int start, int count, int after) {
-        if ("".equals(charSequence.toString())) {
-          clearSearchResults();
-          showLocationInfoLayout();
-          if (clearSearchButton != null) {
-            clearSearchButton.setVisibility(View.INVISIBLE);
-          }
-
-          if (searchOption != null) {
-            searchOption.setIcon(R.drawable.ic_mic);
-          }
-        } else {
-          if (charSequence.length() > MIN_CHARACTERS && after > count) {
-            retrieveLocationFrom(charSequence.toString(), true);
-          }
-          if (clearSearchButton != null) {
-            clearSearchButton.setVisibility(View.VISIBLE);
-          }
-          if (searchOption != null) {
-            searchOption.setIcon(R.drawable.ic_search);
-          }
+      void onEmptyText() {
+        if (clearSearchButton != null) {
+          clearSearchButton.setVisibility(View.INVISIBLE);
         }
+        if (searchOption != null) {
+          searchOption.setIcon(R.drawable.ic_mic);
+        }
+        clearSearchResults();
+        showLocationInfoLayout();
+      }
+
+      @Override
+      void onText(CharSequence charSequence) {
+        if (clearSearchButton != null) {
+          clearSearchButton.setVisibility(View.VISIBLE);
+        }
+        if (searchOption != null) {
+          searchOption.setIcon(R.drawable.ic_search);
+        }
+        retrieveLocationFrom(charSequence.toString(), true);
       }
     };
   }
 
   private void clearSearchResults() {
-    // TODO adapter.clear();
-    // TODO adapter.notifyDataSetChanged();
+    lekuSearchCallback.clearSearchResults();
   }
 
   private void showLocationInfoLayout() {
-    // TODO view.showLocationInfoLayout()
+    lekuSearchCallback.showLocationInfoLayout();
   }
 
   @Override
@@ -223,23 +244,5 @@ public class LekuSearchFragment extends Fragment {
         break;
     }
     super.onActivityResult(requestCode, resultCode, data);
-  }
-
-  private class LekuSearchTextWatcher implements TextWatcher {
-
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-
-    }
   }
 }

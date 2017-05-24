@@ -1,6 +1,6 @@
 <resources>
   <string name="app_name" translatable="false">Leku Demo</string>
-  <string name="google_maps_key"></string>
+  <string name="google_maps_key">AIzaSyBdnWoeTs_1ubnYMn0tA0agCHKjNlzPS-g</string>
   <string name="launch_map_picker" translatable="false">LAUNCH MAP LOCATION PICKER ACTIVITY</string>
   <string name="launch_map_picker_with_pois" translatable="false">LAUNCH MAP WITH POIS</string>
 </resources>

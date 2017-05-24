@@ -38,9 +38,11 @@ import com.schibstedspain.leku.geocoder.GeocoderInteractor;
 import com.schibstedspain.leku.geocoder.GeocoderPresenter;
 import com.schibstedspain.leku.geocoder.GeocoderViewInterface;
 import com.schibstedspain.leku.permissions.PermissionUtils;
+import com.schibstedspain.leku.search.LekuSearchCallback;
 import com.schibstedspain.leku.search.LekuSearchFragment;
 import com.schibstedspain.leku.tracker.TrackEvents;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -53,7 +55,7 @@ import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE;
 public class LocationPickerActivity extends AppCompatActivity
     implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMapLongClickListener,
-    GeocoderViewInterface, GoogleMap.OnMapClickListener {
+    GeocoderViewInterface, GoogleMap.OnMapClickListener, LekuSearchCallback {
 
   public static final String LATITUDE = "locationLatitude";
   public static final String LONGITUDE = "locationLongitude";
@@ -76,6 +78,9 @@ public class LocationPickerActivity extends AppCompatActivity
   private static final int DEFAULT_ZOOM = 16;
   private static final int WIDER_ZOOM = 6;
   private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+  public static final int SEARCH_DEBOUNCE_TIME = 400;
+
+  private LekuSearchFragment lekuSearchFragment;
 
   private GoogleMap map;
   private GoogleApiClient googleApiClient;
@@ -128,10 +133,10 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void setupSearchFragment() {
-    LekuSearchFragment searchFragment = getLekuSearchFragment();
+    lekuSearchFragment = getLekuSearchFragment();
 
     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-    ft.replace(R.id.frameSearch, searchFragment);
+    ft.replace(R.id.frameSearch, lekuSearchFragment);
     ft.commit();
   }
 
@@ -394,7 +399,7 @@ public class LocationPickerActivity extends AppCompatActivity
       } else {
         updateLocationNameList(addresses);
         if (hasWiderZoom) {
-          // TODO SearchFragment searchView.setText("");
+          lekuSearchFragment.clear();
         }
         if (addresses.size() == 1) {
           setNewLocation(addresses.get(0));
@@ -525,7 +530,14 @@ public class LocationPickerActivity extends AppCompatActivity
     setLocationEmpty();
   }
 
-  private void showLocationInfoLayout() {
+  @Override
+  public void clearSearchResults() {
+    adapter.clear();
+    adapter.notifyDataSetChanged();
+  }
+
+  @Override
+  public void showLocationInfoLayout() {
     changeLocationInfoLayoutVisibility(View.VISIBLE);
   }
 
@@ -592,6 +604,15 @@ public class LocationPickerActivity extends AppCompatActivity
     }
     if (options != null && options.contains(OPTIONS_HIDE_ZIPCODE)) {
       isZipCodeVisible = false;
+    }
+  }
+
+  @Override
+  public void retrieveLocationFrom(String query, boolean debounce) {
+    if (searchZone != null && !searchZone.isEmpty()) {
+      retrieveDebouncedLocationFromZone(query, searchZone, SEARCH_DEBOUNCE_TIME);
+    } else {
+      retrieveDebouncedLocationFromDefaultZone(query, SEARCH_DEBOUNCE_TIME);
     }
   }
 
@@ -869,7 +890,7 @@ public class LocationPickerActivity extends AppCompatActivity
     currentLocation.setLongitude(address.getLongitude());
     setNewMapMarker(new LatLng(address.getLatitude(), address.getLongitude()));
     setLocationInfo(address);
-    // TODO Search Fragment searchView.setText("");
+    lekuSearchFragment.clear();
   }
 
   private void fillLocationList(List<Address> addresses) {
