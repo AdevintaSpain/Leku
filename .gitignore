@@ -40,3 +40,4 @@ atlassian-ide-plugin.xml
 .gradle/*
 
 projectFilesBackup/.idea/*.xml
+app/src/main/res/values/map_key.xml
