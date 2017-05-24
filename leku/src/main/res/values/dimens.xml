@@ -2,4 +2,5 @@
 <resources>
   <dimen name="information_bottom_margin">24dp</dimen>
   <dimen name="gap">8dp</dimen>
+  <dimen name="appbar_search_elevation">8dp</dimen>
 </resources>
