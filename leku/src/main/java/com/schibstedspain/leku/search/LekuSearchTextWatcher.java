@@ -7,7 +7,7 @@ abstract class LekuSearchTextWatcher implements TextWatcher {
 
   private int minCharacters;
 
-  public LekuSearchTextWatcher(int minCharacters) {
+  LekuSearchTextWatcher(int minCharacters) {
     this.minCharacters = minCharacters;
   }
 

@@ -42,7 +42,6 @@ import com.schibstedspain.leku.search.LekuSearchCallback;
 import com.schibstedspain.leku.search.LekuSearchFragment;
 import com.schibstedspain.leku.tracker.TrackEvents;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -607,23 +606,6 @@ public class LocationPickerActivity extends AppCompatActivity
     }
   }
 
-  @Override
-  public void retrieveLocationFrom(String query, boolean debounce) {
-    if (debounce) {
-      if (searchZone != null && !searchZone.isEmpty()) {
-        retrieveDebouncedLocationFromZone(query, searchZone, SEARCH_DEBOUNCE_TIME);
-      } else {
-        retrieveDebouncedLocationFromDefaultZone(query, SEARCH_DEBOUNCE_TIME);
-      }
-    } else {
-      if (searchZone != null && !searchZone.isEmpty()) {
-        retrieveLocationFromZone(query, searchZone);
-      } else {
-        retrieveLocationFromDefaultZone(query);
-      }
-    }
-  }
-
   private void setLocationFromBundle(Bundle transitionBundle) {
     if (currentLocation == null) {
       currentLocation = new Location(getString(R.string.network_resource));
@@ -703,6 +685,23 @@ public class LocationPickerActivity extends AppCompatActivity
       zoom = DEFAULT_ZOOM;
     }
     return zoom;
+  }
+
+  @Override
+  public void retrieveLocationFrom(String query, boolean debounce) {
+    if (debounce) {
+      if (searchZone != null && !searchZone.isEmpty()) {
+        retrieveDebouncedLocationFromZone(query, searchZone, SEARCH_DEBOUNCE_TIME);
+      } else {
+        retrieveDebouncedLocationFromDefaultZone(query, SEARCH_DEBOUNCE_TIME);
+      }
+    } else {
+      if (searchZone != null && !searchZone.isEmpty()) {
+        retrieveLocationFromZone(query, searchZone);
+      } else {
+        retrieveLocationFromDefaultZone(query);
+      }
+    }
   }
 
   private void retrieveLocationFrom(String query) {

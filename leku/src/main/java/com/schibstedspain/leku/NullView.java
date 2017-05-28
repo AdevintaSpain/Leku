@@ -9,7 +9,7 @@ public class NullView {
   public static <T> T createFor(Class<T> viewClass) {
     InvocationHandler emptyHandler = (proxy, method, args) -> null;
     ClassLoader classLoader = viewClass.getClassLoader();
-    Class[] interfaces = new Class[] { viewClass };
+    Class[] interfaces = new Class[] {viewClass};
     return (T) Proxy.newProxyInstance(classLoader, interfaces, emptyHandler);
   }
 }
