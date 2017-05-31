@@ -8,7 +8,7 @@ version = '3.2.0'
 
 android {
   compileSdkVersion 25
-  buildToolsVersion '25.0.2'
+  buildToolsVersion '25.0.3'
 
   defaultConfig {
     minSdkVersion 15
@@ -59,7 +59,7 @@ dependencies {
   compile "com.android.support:appcompat-v7:$supportVersion"
   compile "com.android.support:design:$supportVersion"
 
-  def playServicesVersion = '10.2.1'
+  def playServicesVersion = '10.2.6'
   compile "com.google.android.gms:play-services-maps:$playServicesVersion"
   compile "com.google.android.gms:play-services-location:$playServicesVersion"
 
