@@ -549,6 +549,26 @@ public class LocationPickerActivity extends AppCompatActivity
     locationInfoLayout.setVisibility(visibility);
   }
 
+  private void showCoordinatesLayout() {
+    this.longitude.setVisibility(View.VISIBLE);
+    this.latitude.setVisibility(View.VISIBLE);
+    this.coordinates.setVisibility(View.VISIBLE);
+    this.street.setVisibility(View.GONE);
+    this.city.setVisibility(View.GONE);
+    this.zipCode.setVisibility(View.GONE);
+    changeLocationInfoLayoutVisibility(View.VISIBLE);
+  }
+
+  private void showAddressLayout() {
+    this.longitude.setVisibility(View.GONE);
+    this.latitude.setVisibility(View.GONE);
+    this.coordinates.setVisibility(View.GONE);
+    this.street.setVisibility(View.VISIBLE);
+    this.city.setVisibility(View.VISIBLE);
+    this.zipCode.setVisibility(View.VISIBLE);
+    changeLocationInfoLayoutVisibility(View.VISIBLE);
+  }
+
   private void updateAddressLayoutVisibility() {
     street.setVisibility(isStreetVisible ? View.VISIBLE : View.INVISIBLE);
     city.setVisibility(isCityVisible ? View.VISIBLE : View.INVISIBLE);
@@ -569,7 +589,7 @@ public class LocationPickerActivity extends AppCompatActivity
   public void willGetLocationInfo(double lng, double lat) {
     if (showLongitudeLatitude) {
       changeLocationInfoLayoutVisibility(View.VISIBLE);
-      setLocationInfo(lng, lat);
+      setCoordinatesInfo(lng, lat);
     } else {
       changeLocationInfoLayoutVisibility(View.GONE);
     }
@@ -744,43 +764,25 @@ public class LocationPickerActivity extends AppCompatActivity
     return true;
   }
 
-  private void setLocationInfo(double lng, double lat) {
+  private void setCoordinatesInfo(double lng, double lat) {
     this.longitude.setText(getString(R.string.longitude) + ": " + lng);
     this.latitude.setText(getString(R.string.latitude) + ": " + lat);
-    this.longitude.setVisibility(View.VISIBLE);
-    this.latitude.setVisibility(View.VISIBLE);
-    this.coordinates.setVisibility(View.VISIBLE);
-    this.street.setVisibility(View.GONE);
-    this.city.setVisibility(View.GONE);
-    this.zipCode.setVisibility(View.GONE);
-    changeLocationInfoLayoutVisibility(View.VISIBLE);
+    showCoordinatesLayout();
   }
 
   private void setLocationInfo(Address address) {
     street.setText(address.getAddressLine(0));
     city.setText(isStreetEqualsCity(address) ? "" : address.getLocality());
     zipCode.setText(address.getPostalCode());
-    this.longitude.setVisibility(View.GONE);
-    this.latitude.setVisibility(View.GONE);
-    this.coordinates.setVisibility(View.GONE);
-    this.street.setVisibility(View.VISIBLE);
-    this.city.setVisibility(View.VISIBLE);
-    this.zipCode.setVisibility(View.VISIBLE);
-    changeLocationInfoLayoutVisibility(View.VISIBLE);
+    showAddressLayout();
   }
 
   private void setLocationInfo(LekuPoi poi) {
     this.currentLekuPoi = poi;
     street.setText(poi.getTitle());
     city.setText(poi.getAddress());
-    this.longitude.setVisibility(View.GONE);
-    this.latitude.setVisibility(View.GONE);
-    this.coordinates.setVisibility(View.GONE);
-    this.street.setVisibility(View.VISIBLE);
-    this.city.setVisibility(View.VISIBLE);
-    this.zipCode.setVisibility(View.VISIBLE);
     zipCode.setText(null);
-    changeLocationInfoLayoutVisibility(View.VISIBLE);
+    showAddressLayout();
   }
 
   private boolean isStreetEqualsCity(Address address) {
