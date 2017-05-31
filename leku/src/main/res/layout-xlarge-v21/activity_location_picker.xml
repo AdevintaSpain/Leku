@@ -114,68 +114,9 @@
             android:layout_weight="1"
             >
 
-          <TextView
-              android:id="@+id/coordinates"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="16dp"
-              android:textStyle="normal"
-              android:textSize="18sp"
-              android:textColor="@color/strong_grey"
-              android:text="@string/coordinates"
-              />
+          <include layout="@layout/layout_coordinates" />
+          <include layout="@layout/layout_address" />
 
-          <TextView
-              android:id="@+id/longitude"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:textSize="14sp"
-              android:textColor="@color/mid_grey"
-              tools:text="4.1518484"
-              />
-
-          <TextView
-              android:id="@+id/latitude"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="4dp"
-              android:layout_marginBottom="16dp"
-              android:textSize="14sp"
-              android:textColor="@color/mid_grey"
-              tools:text="15.184845"
-              />
-
-          <TextView
-              android:id="@+id/street"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="16dp"
-              android:textStyle="normal"
-              android:textSize="18sp"
-              android:textColor="@color/strong_grey"
-              tools:text="Calle Mallorca, 150"
-              />
-
-          <TextView
-              android:id="@+id/city"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="4dp"
-              android:textSize="14sp"
-              android:textColor="@color/mid_grey"
-              tools:text="Barcelona"
-              />
-
-          <TextView
-              android:id="@+id/zipCode"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="4dp"
-              android:layout_marginBottom="16dp"
-              android:textSize="14sp"
-              android:textColor="@color/mid_grey"
-              tools:text="08032"
-              />
         </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
