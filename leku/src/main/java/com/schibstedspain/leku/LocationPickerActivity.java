@@ -121,7 +121,6 @@ public class LocationPickerActivity extends AppCompatActivity
   private boolean isZipCodeVisible = true;
   private boolean shouldReturnOkOnBackPressed = false;
   private boolean enableSatelliteView = true;
-  private boolean showLongitudeLatitude = true;
   private boolean enableLocationPermissionRequest = true;
   private String searchZone;
   private List<LekuPoi> poisList;
@@ -434,7 +433,6 @@ public class LocationPickerActivity extends AppCompatActivity
       savedInstanceState.putParcelableArrayList(POIS_LIST, new ArrayList<>(poisList));
     }
     savedInstanceState.putBoolean(ENABLE_SATELLITE_VIEW, enableSatelliteView);
-    savedInstanceState.putBoolean(SHOW_LONGITUDE_LATITUDE, showLongitudeLatitude);
     savedInstanceState.putBoolean(ENABLE_LOCATION_PERMISSION_REQUEST, enableLocationPermissionRequest);
     super.onSaveInstanceState(savedInstanceState);
   }
@@ -458,9 +456,6 @@ public class LocationPickerActivity extends AppCompatActivity
     }
     if (savedInstanceState.containsKey(ENABLE_SATELLITE_VIEW)) {
       enableSatelliteView = savedInstanceState.getBoolean(ENABLE_SATELLITE_VIEW);
-    }
-    if (savedInstanceState.containsKey(SHOW_LONGITUDE_LATITUDE)) {
-      showLongitudeLatitude = savedInstanceState.getBoolean(SHOW_LONGITUDE_LATITUDE);
     }
     if (savedInstanceState.containsKey(ENABLE_LOCATION_PERMISSION_REQUEST)) {
       enableLocationPermissionRequest = savedInstanceState.getBoolean(ENABLE_LOCATION_PERMISSION_REQUEST);
@@ -573,9 +568,9 @@ public class LocationPickerActivity extends AppCompatActivity
     street.setVisibility(isStreetVisible ? View.VISIBLE : View.INVISIBLE);
     city.setVisibility(isCityVisible ? View.VISIBLE : View.INVISIBLE);
     zipCode.setVisibility(isZipCodeVisible ? View.VISIBLE : View.INVISIBLE);
-    longitude.setVisibility(showLongitudeLatitude ? View.VISIBLE : View.INVISIBLE);
-    latitude.setVisibility(showLongitudeLatitude ? View.VISIBLE : View.INVISIBLE);
-    coordinates.setVisibility(showLongitudeLatitude ? View.VISIBLE : View.INVISIBLE);
+    longitude.setVisibility(View.VISIBLE);
+    latitude.setVisibility(View.VISIBLE);
+    coordinates.setVisibility(View.VISIBLE);
   }
 
   @Override
@@ -587,12 +582,8 @@ public class LocationPickerActivity extends AppCompatActivity
 
   @Override
   public void willGetLocationInfo(double lng, double lat) {
-    if (showLongitudeLatitude) {
-      changeLocationInfoLayoutVisibility(View.VISIBLE);
-      setCoordinatesInfo(lng, lat);
-    } else {
-      changeLocationInfoLayoutVisibility(View.GONE);
-    }
+    changeLocationInfoLayoutVisibility(View.VISIBLE);
+    setCoordinatesInfo(lng, lat);
   }
 
   @Override
@@ -628,11 +619,7 @@ public class LocationPickerActivity extends AppCompatActivity
     this.street.setText("");
     this.city.setText("");
     this.zipCode.setText("");
-    if (showLongitudeLatitude) {
-      changeLocationInfoLayoutVisibility(View.VISIBLE);
-    } else {
-      changeLocationInfoLayoutVisibility(View.GONE);
-    }
+    changeLocationInfoLayoutVisibility(View.VISIBLE);
   }
 
   @Override
@@ -646,11 +633,7 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void showLocationInfoLayout() {
-    if (!showLongitudeLatitude && ("".equals(this.street.getText()) && "".equals(this.city.getText()))) {
-      changeLocationInfoLayoutVisibility(View.GONE);
-    } else {
-      changeLocationInfoLayoutVisibility(View.VISIBLE);
-    }
+    changeLocationInfoLayoutVisibility(View.VISIBLE);
   }
 
   private void getSavedInstanceParams(Bundle savedInstanceState) {
@@ -671,9 +654,6 @@ public class LocationPickerActivity extends AppCompatActivity
     }
     if (savedInstanceState.keySet().contains(ENABLE_SATELLITE_VIEW)) {
       enableSatelliteView = savedInstanceState.getBoolean(ENABLE_SATELLITE_VIEW);
-    }
-    if (savedInstanceState.keySet().contains(SHOW_LONGITUDE_LATITUDE)) {
-      showLongitudeLatitude = savedInstanceState.getBoolean(SHOW_LONGITUDE_LATITUDE);
     }
     if (savedInstanceState.keySet().contains(POIS_LIST)) {
       poisList = savedInstanceState.getParcelableArrayList(POIS_LIST);
@@ -700,9 +680,6 @@ public class LocationPickerActivity extends AppCompatActivity
     }
     if (transitionBundle.keySet().contains(ENABLE_SATELLITE_VIEW)) {
       enableSatelliteView = transitionBundle.getBoolean(ENABLE_SATELLITE_VIEW);
-    }
-    if (transitionBundle.keySet().contains(SHOW_LONGITUDE_LATITUDE)) {
-      showLongitudeLatitude = transitionBundle.getBoolean(SHOW_LONGITUDE_LATITUDE);
     }
     if (transitionBundle.keySet().contains(ENABLE_LOCATION_PERMISSION_REQUEST)) {
       enableLocationPermissionRequest = transitionBundle.getBoolean(ENABLE_LOCATION_PERMISSION_REQUEST);
@@ -1097,11 +1074,6 @@ public class LocationPickerActivity extends AppCompatActivity
 
     public Builder withSearchZone(String searchZone) {
       this.locationSearchZone = searchZone;
-      return this;
-    }
-
-    public Builder showDefaultLongitudeLatitude(boolean show) {
-      this.showLongitudeLatitude = show;
       return this;
     }
 
