@@ -36,11 +36,11 @@ public class MainActivity extends AppCompatActivity {
       public void onClick(View view) {
         Intent locationPickerIntent = new LocationPickerActivity.Builder()
             .withLocation(41.4036299, 2.1743558)
-            .withSearchZone("es_ES")
+            //.withSearchZone("es_ES")
             //.shouldReturnOkOnBackPressed()
             //.withStreetHidden()
             //.withCityHidden()
-            .withZipCodeHidden()
+            //.withZipCodeHidden()
             //.withSatelliteViewHidden()
             //.showDefaultLongitudeLatitude(true)
             .build(getApplicationContext());
