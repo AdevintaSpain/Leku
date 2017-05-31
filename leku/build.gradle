@@ -8,7 +8,7 @@ version = '3.2.0'
 
 android {
   compileSdkVersion 25
-  buildToolsVersion '25.0.3'
+  buildToolsVersion '25.0.2'
 
   defaultConfig {
     minSdkVersion 15
@@ -38,19 +38,6 @@ android {
 retrolambda {
   javaVersion JavaVersion.VERSION_1_7
 }
-
-task deleteJar(type: Delete) {
-  delete 'libs/jars/leku.jar'
-}
-
-task createJar(type: Copy) {
-  from('build/intermediates/bundles/default/')
-  into('libs/jars/')
-  include('classes.jar')
-  rename('classes.jar', 'leku.jar')
-}
-
-createJar.dependsOn(deleteJar, build)
 
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
