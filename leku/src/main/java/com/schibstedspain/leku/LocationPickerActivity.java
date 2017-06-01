@@ -975,7 +975,8 @@ public class LocationPickerActivity extends AppCompatActivity
       for (LekuPoi lekuPoi : poisList) {
         Location location = lekuPoi.getLocation();
         if (location != null && lekuPoi.getTitle() != null) {
-          Marker marker = addPoiMarker(new LatLng(location.getLatitude(), location.getLongitude()), lekuPoi.getTitle(), lekuPoi.getAddress());
+          Marker marker = addPoiMarker(new LatLng(location.getLatitude(), location.getLongitude()),
+              lekuPoi.getTitle(), lekuPoi.getAddress());
           lekuPoisMarkersMap.put(marker.getId(), lekuPoi);
         }
       }
@@ -1027,12 +1028,9 @@ public class LocationPickerActivity extends AppCompatActivity
       currentLocation = new Location(getString(R.string.network_resource));
     }
 
-    double latitude = address.getLatitude();
-    double longitude = address.getLongitude();
-
-    currentLocation.setLatitude(latitude);
-    currentLocation.setLongitude(longitude);
-    setNewMapMarker(new LatLng(latitude, longitude));
+    currentLocation.setLatitude(address.getLatitude());
+    currentLocation.setLongitude(address.getLongitude());
+    setNewMapMarker(new LatLng(address.getLatitude(), address.getLongitude()));
     setLocationInfo(address);
     searchView.setText("");
   }
@@ -1071,7 +1069,7 @@ public class LocationPickerActivity extends AppCompatActivity
     }
 
     public Builder withLocation(LatLng latLng) {
-      if (latLng!=null) {
+      if (latLng != null) {
         this.locationLatitude = latLng.latitude;
         this.locationLongitude = latLng.longitude;
       }
