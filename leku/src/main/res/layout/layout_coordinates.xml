@@ -20,22 +20,22 @@
         />
 
     <TextView
+        android:id="@+id/latitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/mid_grey"
+        android:textSize="14sp"
+        tools:text="15.184845"
+        />
+
+    <TextView
         android:id="@+id/longitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/mid_grey"
-        android:textSize="14sp"
-        tools:text="4.1518484"
-        />
-
-    <TextView
-        android:id="@+id/latitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginTop="4dp"
-        android:textColor="@color/mid_grey"
         android:textSize="14sp"
-        tools:text="15.184845"
+        tools:text="4.1518484"
         />
 </LinearLayout>

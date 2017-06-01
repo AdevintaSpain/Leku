@@ -545,22 +545,22 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void showCoordinatesLayout() {
-    this.longitude.setVisibility(View.VISIBLE);
-    this.latitude.setVisibility(View.VISIBLE);
-    this.coordinates.setVisibility(View.VISIBLE);
-    this.street.setVisibility(View.GONE);
-    this.city.setVisibility(View.GONE);
-    this.zipCode.setVisibility(View.GONE);
+    longitude.setVisibility(View.VISIBLE);
+    latitude.setVisibility(View.VISIBLE);
+    coordinates.setVisibility(View.VISIBLE);
+    street.setVisibility(View.GONE);
+    city.setVisibility(View.GONE);
+    zipCode.setVisibility(View.GONE);
     changeLocationInfoLayoutVisibility(View.VISIBLE);
   }
 
   private void showAddressLayout() {
-    this.longitude.setVisibility(View.GONE);
-    this.latitude.setVisibility(View.GONE);
-    this.coordinates.setVisibility(View.GONE);
-    this.street.setVisibility(View.VISIBLE);
-    this.city.setVisibility(View.VISIBLE);
-    this.zipCode.setVisibility(View.VISIBLE);
+    longitude.setVisibility(View.GONE);
+    latitude.setVisibility(View.GONE);
+    coordinates.setVisibility(View.GONE);
+    street.setVisibility(View.VISIBLE);
+    city.setVisibility(View.VISIBLE);
+    zipCode.setVisibility(View.VISIBLE);
     changeLocationInfoLayoutVisibility(View.VISIBLE);
   }
 
@@ -581,9 +581,9 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   @Override
-  public void willGetLocationInfo(double lng, double lat) {
+  public void willGetLocationInfo(double latitude, double longitude) {
     changeLocationInfoLayoutVisibility(View.VISIBLE);
-    setCoordinatesInfo(lng, lat);
+    setCoordinatesInfo(latitude, longitude);
   }
 
   @Override
@@ -741,9 +741,9 @@ public class LocationPickerActivity extends AppCompatActivity
     return true;
   }
 
-  private void setCoordinatesInfo(double lng, double lat) {
-    this.longitude.setText(getString(R.string.longitude) + ": " + lng);
-    this.latitude.setText(getString(R.string.latitude) + ": " + lat);
+  private void setCoordinatesInfo(double latitude, double longitude) {
+    this.latitude.setText(getString(R.string.latitude) + ": " + latitude);
+    this.longitude.setText(getString(R.string.longitude) + ": " + longitude);
     showCoordinatesLayout();
   }
 
@@ -766,18 +766,18 @@ public class LocationPickerActivity extends AppCompatActivity
     return address.getAddressLine(0).equals(address.getLocality());
   }
 
-  private void setNewMapMarker(double lng, double lat) {
+  private void setNewMapMarker(double latitude, double longitude) {
     if (map != null) {
       if (currentMarker != null) {
         currentMarker.remove();
       }
       CameraPosition cameraPosition =
-          new CameraPosition.Builder().target(new LatLng(lat, lng))
+          new CameraPosition.Builder().target(new LatLng(latitude, longitude))
               .zoom(getDefaultZoom())
               .build();
       hasWiderZoom = false;
       map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-      currentMarker = addMarker(lat, lng);
+      currentMarker = addMarker(latitude, longitude);
       map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
         @Override
         public void onMarkerDragStart(Marker marker) {
@@ -1011,12 +1011,12 @@ public class LocationPickerActivity extends AppCompatActivity
     googleApiClient.connect();
   }
 
-  private Marker addMarker(double lat, double lng) {
-    return map.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).draggable(true));
+  private Marker addMarker(double latitude, double longitude) {
+    return map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).draggable(true));
   }
 
-  private Marker addPoiMarker(double lat, double lng, String title, String address) {
-    return map.addMarker(new MarkerOptions().position(new LatLng(lat, lng))
+  private Marker addPoiMarker(double latitude, double longitude, String title, String address) {
+    return map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude))
         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
         .title(title)
         .snippet(address));
@@ -1028,12 +1028,12 @@ public class LocationPickerActivity extends AppCompatActivity
       currentLocation = new Location(getString(R.string.network_resource));
     }
 
-    double lat = address.getLatitude();
-    double lng = address.getLongitude();
+    double latitude = address.getLatitude();
+    double longitude = address.getLongitude();
 
-    currentLocation.setLatitude(lat);
-    currentLocation.setLongitude(lng);
-    setNewMapMarker(lat, lng);
+    currentLocation.setLatitude(latitude);
+    currentLocation.setLongitude(longitude);
+    setNewMapMarker(latitude, longitude);
     setLocationInfo(address);
     searchView.setText("");
   }
@@ -1066,9 +1066,9 @@ public class LocationPickerActivity extends AppCompatActivity
     public Builder() {
     }
 
-    public Builder withLocation(double lat, double lng) {
-      this.locationLatitude = lat;
-      this.locationLongitude = lng;
+    public Builder withLocation(double latitude, double longitude) {
+      this.locationLatitude = latitude;
+      this.locationLongitude = longitude;
       return this;
     }
 
