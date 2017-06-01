@@ -151,7 +151,6 @@ Intent intent = new LocationPickerActivity.Builder()
     .withCityHidden()
     .withZipCodeHidden()
     .withSatelliteViewHidden()
-    .showDefaultLongitudeLatitude(true)
     .build(getApplicationContext());
 
 startActivityForResult(intent, 1);

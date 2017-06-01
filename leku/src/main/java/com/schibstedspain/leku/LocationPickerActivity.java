@@ -65,7 +65,6 @@ public class LocationPickerActivity extends AppCompatActivity
     GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMapLongClickListener,
     GeocoderViewInterface, GoogleMap.OnMapClickListener {
 
-  public static final String SHOW_LONGITUDE_LATITUDE = "show_longitude_latitude";
   public static final String LATITUDE = "locationLatitude";
   public static final String LONGITUDE = "locationLongitude";
   public static final String ZIPCODE = "zipcode";
@@ -581,9 +580,9 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   @Override
-  public void willGetLocationInfo(double latitude, double longitude) {
+  public void willGetLocationInfo(LatLng latLng) {
     changeLocationInfoLayoutVisibility(View.VISIBLE);
-    setCoordinatesInfo(latitude, longitude);
+    setCoordinatesInfo(latLng);
   }
 
   @Override
@@ -741,9 +740,9 @@ public class LocationPickerActivity extends AppCompatActivity
     return true;
   }
 
-  private void setCoordinatesInfo(double latitude, double longitude) {
-    this.latitude.setText(getString(R.string.latitude) + ": " + latitude);
-    this.longitude.setText(getString(R.string.longitude) + ": " + longitude);
+  private void setCoordinatesInfo(LatLng latLng) {
+    this.latitude.setText(getString(R.string.latitude) + ": " + latLng.latitude);
+    this.longitude.setText(getString(R.string.longitude) + ": " + latLng.longitude);
     showCoordinatesLayout();
   }
 
@@ -766,18 +765,18 @@ public class LocationPickerActivity extends AppCompatActivity
     return address.getAddressLine(0).equals(address.getLocality());
   }
 
-  private void setNewMapMarker(double latitude, double longitude) {
+  private void setNewMapMarker(LatLng latLng) {
     if (map != null) {
       if (currentMarker != null) {
         currentMarker.remove();
       }
       CameraPosition cameraPosition =
-          new CameraPosition.Builder().target(new LatLng(latitude, longitude))
+          new CameraPosition.Builder().target(latLng)
               .zoom(getDefaultZoom())
               .build();
       hasWiderZoom = false;
       map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-      currentMarker = addMarker(latitude, longitude);
+      currentMarker = addMarker(latLng);
       map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
         @Override
         public void onMarkerDragStart(Marker marker) {
@@ -964,9 +963,9 @@ public class LocationPickerActivity extends AppCompatActivity
 
   private void setCurrentPositionLocation() {
     if (currentLocation != null) {
-      setNewMapMarker(currentLocation.getLatitude(), currentLocation.getLongitude());
-      geocoderPresenter.getInfoFromLocation(currentLocation.getLatitude(),
-          currentLocation.getLongitude());
+      setNewMapMarker(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+      geocoderPresenter.getInfoFromLocation(new LatLng(currentLocation.getLatitude(),
+          currentLocation.getLongitude()));
     }
   }
 
@@ -976,7 +975,7 @@ public class LocationPickerActivity extends AppCompatActivity
       for (LekuPoi lekuPoi : poisList) {
         Location location = lekuPoi.getLocation();
         if (location != null && lekuPoi.getTitle() != null) {
-          Marker marker = addPoiMarker(location.getLatitude(), location.getLongitude(), lekuPoi.getTitle(), lekuPoi.getAddress());
+          Marker marker = addPoiMarker(new LatLng(location.getLatitude(), location.getLongitude()), lekuPoi.getTitle(), lekuPoi.getAddress());
           lekuPoisMarkersMap.put(marker.getId(), lekuPoi);
         }
       }
@@ -1011,12 +1010,12 @@ public class LocationPickerActivity extends AppCompatActivity
     googleApiClient.connect();
   }
 
-  private Marker addMarker(double latitude, double longitude) {
-    return map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).draggable(true));
+  private Marker addMarker(LatLng latLng) {
+    return map.addMarker(new MarkerOptions().position(latLng).draggable(true));
   }
 
-  private Marker addPoiMarker(double latitude, double longitude, String title, String address) {
-    return map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude))
+  private Marker addPoiMarker(LatLng latLng, String title, String address) {
+    return map.addMarker(new MarkerOptions().position(latLng)
         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
         .title(title)
         .snippet(address));
@@ -1033,7 +1032,7 @@ public class LocationPickerActivity extends AppCompatActivity
 
     currentLocation.setLatitude(latitude);
     currentLocation.setLongitude(longitude);
-    setNewMapMarker(latitude, longitude);
+    setNewMapMarker(new LatLng(latitude, longitude));
     setLocationInfo(address);
     searchView.setText("");
   }
@@ -1059,7 +1058,6 @@ public class LocationPickerActivity extends AppCompatActivity
     private String locationSearchZone;
     private String layoutsToHide = "";
     private boolean enableSatelliteView = true;
-    private boolean showLongitudeLatitude = false;
     private boolean shouldReturnOkOnBackPressed = false;
     private List<LekuPoi> lekuPois;
 
@@ -1069,6 +1067,14 @@ public class LocationPickerActivity extends AppCompatActivity
     public Builder withLocation(double latitude, double longitude) {
       this.locationLatitude = latitude;
       this.locationLongitude = longitude;
+      return this;
+    }
+
+    public Builder withLocation(LatLng latLng) {
+      if (latLng!=null) {
+        this.locationLatitude = latLng.latitude;
+        this.locationLongitude = latLng.longitude;
+      }
       return this;
     }
 
@@ -1124,8 +1130,6 @@ public class LocationPickerActivity extends AppCompatActivity
       }
       intent.putExtra(BACK_PRESSED_RETURN_OK, shouldReturnOkOnBackPressed);
       intent.putExtra(ENABLE_SATELLITE_VIEW, enableSatelliteView);
-      intent.putExtra(SHOW_LONGITUDE_LATITUDE, showLongitudeLatitude);
-
       if (lekuPois != null && !lekuPois.isEmpty()) {
         intent.putExtra(POIS_LIST, new ArrayList<>(lekuPois));
       }
