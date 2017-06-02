@@ -21,6 +21,7 @@
       android:layout_gravity="top|start"
       android:gravity="top|start"
       android:layout_marginTop="80dp"
+      android:layout_marginStart="8dp"
       android:layout_marginLeft="8dp"
       android:visibility="gone"
       />
@@ -30,7 +31,9 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginTop="72dp"
+      android:layout_marginStart="8dp"
       android:layout_marginLeft="8dp"
+      android:layout_marginEnd="8dp"
       android:layout_marginRight="8dp"
       android:fadingEdgeLength="16dp"
       android:footerDividersEnabled="true"
@@ -55,8 +58,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginRight="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         app:srcCompat="@drawable/ic_satellite_on"
         app:fabSize="normal"
         android:tint="?colorPrimary"
@@ -71,8 +74,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginRight="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginBottom="16dp"
         android:src="@drawable/ic_gps_lime"
         app:fabSize="normal"
@@ -89,9 +92,7 @@
         android:layout_gravity="bottom|end"
         android:paddingBottom="8dp"
         android:paddingStart="8dp"
-        android:paddingLeft="8dp"
         android:paddingEnd="8dp"
-        android:paddingRight="8dp"
         android:id="@+id/location_info"
         android:visibility="gone"
         tools:visibility="visible"
@@ -105,6 +106,7 @@
           android:orientation="horizontal"
           >
 
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -112,43 +114,9 @@
             android:layout_weight="1"
             >
 
-          <TextView
-              android:id="@+id/street"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="16dp"
-              android:layout_marginStart="16dp"
-              android:layout_marginLeft="16dp"
-              android:textStyle="normal"
-              android:textSize="18sp"
-              android:textColor="@color/strong_grey"
-              tools:text="Calle Mallorca, 150"
-              />
+          <include layout="@layout/layout_coordinates" />
+          <include layout="@layout/layout_address" />
 
-          <TextView
-              android:id="@+id/city"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="4dp"
-              android:layout_marginStart="16dp"
-              android:layout_marginLeft="16dp"
-              android:textSize="14sp"
-              android:textColor="@color/mid_grey"
-              tools:text="Barcelona"
-              />
-
-          <TextView
-              android:id="@+id/zipCode"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="4dp"
-              android:layout_marginStart="16dp"
-              android:layout_marginLeft="16dp"
-              android:layout_marginBottom="16dp"
-              android:textSize="14sp"
-              android:textColor="@color/mid_grey"
-              tools:text="08032"
-              />
         </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
@@ -165,7 +133,6 @@
             />
 
       </LinearLayout>
-
     </FrameLayout>
   </LinearLayout>
 

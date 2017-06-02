@@ -36,11 +36,11 @@ public class MainActivity extends AppCompatActivity {
       public void onClick(View view) {
         Intent locationPickerIntent = new LocationPickerActivity.Builder()
             .withLocation(41.4036299, 2.1743558)
-            .withSearchZone("es_ES")
+            //.withSearchZone("es_ES")
             //.shouldReturnOkOnBackPressed()
             //.withStreetHidden()
             //.withCityHidden()
-            .withZipCodeHidden()
+            //.withZipCodeHidden()
             //.withSatelliteViewHidden()
             .build(getApplicationContext());
 
@@ -102,7 +102,9 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = data.getBundleExtra(LocationPickerActivity.TRANSITION_BUNDLE);
         Log.d("BUNDLE TEXT****", bundle.getString("test"));
         Address fullAddress = data.getParcelableExtra(LocationPickerActivity.ADDRESS);
-        Log.d("FULL ADDRESS****", fullAddress.toString());
+        if (fullAddress != null) {
+          Log.d("FULL ADDRESS****", fullAddress.toString());
+        }
       } else if (requestCode == 2) {
         double latitude = data.getDoubleExtra(LocationPickerActivity.LATITUDE, 0);
         Log.d("LATITUDE****", String.valueOf(latitude));

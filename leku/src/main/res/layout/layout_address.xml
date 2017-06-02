@@ -1,0 +1,42 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:layout_marginStart="16dp"
+    android:layout_marginLeft="16dp"
+    >
+    <TextView
+        android:id="@+id/street"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textStyle="normal"
+        android:textSize="18sp"
+        android:textColor="@color/strong_grey"
+        tools:text="Calle Mallorca, 150"
+        />
+
+    <TextView
+        android:id="@+id/city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="14sp"
+        android:textColor="@color/mid_grey"
+        tools:text="Barcelona"
+        />
+
+    <TextView
+        android:id="@+id/zipCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="16dp"
+        android:textSize="14sp"
+        android:textColor="@color/mid_grey"
+        tools:text="08032"
+        />
+</LinearLayout>
