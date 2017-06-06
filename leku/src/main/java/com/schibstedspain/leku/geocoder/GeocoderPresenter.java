@@ -96,9 +96,9 @@ public class GeocoderPresenter {
     compositeSubscription.add(locationNameDebounceSubscription);
   }
 
-  public void getInfoFromLocation(double latitude, double longitude) {
-    view.willGetLocationInfo();
-    Subscription locationSubscription = interactor.getFromLocation(latitude, longitude)
+  public void getInfoFromLocation(LatLng latLng) {
+    view.willGetLocationInfo(latLng);
+    Subscription locationSubscription = interactor.getFromLocation(latLng.latitude, latLng.longitude)
         .subscribeOn(Schedulers.newThread())
         .observeOn(scheduler)
         .retry(RETRY_COUNT)

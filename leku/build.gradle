@@ -46,7 +46,7 @@ dependencies {
   compile "com.android.support:appcompat-v7:$supportVersion"
   compile "com.android.support:design:$supportVersion"
 
-  def playServicesVersion = '10.2.4'
+  def playServicesVersion = '10.2.6'
   compile "com.google.android.gms:play-services-maps:$playServicesVersion"
   compile "com.google.android.gms:play-services-location:$playServicesVersion"
   compile 'com.google.maps:google-maps-services:0.1.20'

@@ -10,4 +10,7 @@
   <string name="voice_search_extra_language">en-EN</string>
   <string name="toolbar_action_voice_title">Voice</string>
   <string name="search_hint">Search</string>
+  <string name="longitude">Longitude</string>
+  <string name="latitude">Latitude</string>
+  <string name="coordinates">Coordinates</string>
 </resources>
