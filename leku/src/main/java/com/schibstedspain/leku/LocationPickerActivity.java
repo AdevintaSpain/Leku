@@ -1053,7 +1053,6 @@ public class LocationPickerActivity extends AppCompatActivity
     if (currentLocation == null) {
       currentLocation = new Location(getString(R.string.network_resource));
     }
-    
     currentLocation.setLatitude(address.getLatitude());
     currentLocation.setLongitude(address.getLongitude());
     setNewMapMarker(new LatLng(address.getLatitude(), address.getLongitude()));
@@ -1158,15 +1157,12 @@ public class LocationPickerActivity extends AppCompatActivity
       if (!layoutsToHide.isEmpty()) {
         intent.putExtra(LAYOUTS_TO_HIDE, layoutsToHide);
       }
-
       intent.putExtra(BACK_PRESSED_RETURN_OK, shouldReturnOkOnBackPressed);
       intent.putExtra(ENABLE_SATELLITE_VIEW, enableSatelliteView);
       intent.putExtra(TIME_ZONE, withTimeZone);
-      
       if (lekuPois != null && !lekuPois.isEmpty()) {
         intent.putExtra(POIS_LIST, new ArrayList<>(lekuPois));
       }
-
       return intent;
     }
   }

@@ -7,6 +7,8 @@ public enum TrackEvents {
   didLocalizeByPoi("Long click on map"),
   simpleDidLocalizeByPoi("Click on map"),
   simpleDidLocalizeByLekuPoi("Click on POI"),
+  noGoogleMapsAPIKeySpecified("No Google Maps API Key specified"),
+
   RESULT_OK("Return location"),
   CANCEL("Return without location");
 
