@@ -721,6 +721,25 @@ public class LocationPickerActivity extends AppCompatActivity
     }
   }
 
+  private void retrieveDebouncedLocationFromDefaultZone(String query, int debounceTime) {
+    if (CountryLocaleRect.getDefaultLowerLeft() != null) {
+      geocoderPresenter.getDebouncedFromLocationName(query, CountryLocaleRect.getDefaultLowerLeft(),
+          CountryLocaleRect.getDefaultUpperRight(), debounceTime);
+    } else {
+      geocoderPresenter.getDebouncedFromLocationName(query, debounceTime);
+    }
+  }
+
+  private void retrieveDebouncedLocationFromZone(String query, String zoneKey, int debounceTime) {
+    Locale locale = new Locale(zoneKey);
+    if (CountryLocaleRect.getLowerLeftFromZone(locale) != null) {
+      geocoderPresenter.getDebouncedFromLocationName(query, CountryLocaleRect.getLowerLeftFromZone(locale),
+          CountryLocaleRect.getUpperRightFromZone(locale), debounceTime);
+    } else {
+      geocoderPresenter.getDebouncedFromLocationName(query, debounceTime);
+    }
+  }
+
   private void retrieveLocationFromZone(String query, String zoneKey) {
     Locale locale = new Locale(zoneKey);
     if (CountryLocaleRect.getLowerLeftFromZone(locale) != null) {
