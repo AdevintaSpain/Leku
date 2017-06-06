@@ -616,11 +616,11 @@ public class LocationPickerActivity extends AppCompatActivity
     isLocationInformedFromBundle = true;
   }
 
-   private void setCoordinatesInfo(LatLng latLng) {
-      this.latitude.setText(getString(R.string.latitude) + ": " + latLng.latitude);
-      this.longitude.setText(getString(R.string.longitude) + ": " + latLng.longitude);
-      showCoordinatesLayout();
-   }
+  private void setCoordinatesInfo(LatLng latLng) {
+    this.latitude.setText(getString(R.string.latitude) + ": " + latLng.latitude);
+    this.longitude.setText(getString(R.string.longitude) + ": " + latLng.longitude);
+    showCoordinatesLayout();
+  }
 
   private void setLocationInfo(Address address) {
     street.setText(address.getAddressLine(0));
