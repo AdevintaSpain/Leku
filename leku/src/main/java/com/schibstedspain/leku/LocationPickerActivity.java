@@ -16,7 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -407,7 +406,7 @@ public class LocationPickerActivity extends AppCompatActivity
       try {
         connectionResult.startResolutionForResult(this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
       } catch (IntentSender.SendIntentException e) {
-        Log.d(LocationPickerActivity.class.getName(), e.getMessage());
+        setTracking(TrackEvents.googleApiConnectionFailed);
       }
     }
   }
@@ -723,7 +722,7 @@ public class LocationPickerActivity extends AppCompatActivity
       try {
         startActivityForResult(intent, REQUEST_PLACE_PICKER);
       } catch (ActivityNotFoundException e) {
-        Log.d(LocationPickerActivity.class.getName(), e.getMessage());
+        setTracking(TrackEvents.startVoiceRecognitionActivityFailed);
       }
     }
   }
