@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
       public void onClick(View view) {
         Intent locationPickerIntent = new LocationPickerActivity.Builder()
             .withLocation(41.4036299, 2.1743558)
+            //.withTimeZone()
             //.withSearchZone("es_ES")
             //.shouldReturnOkOnBackPressed()
             //.withStreetHidden()
@@ -95,6 +96,12 @@ public class MainActivity extends AppCompatActivity {
         Log.d("LATITUDE****", String.valueOf(latitude));
         double longitude = data.getDoubleExtra(LocationPickerActivity.LONGITUDE, 0);
         Log.d("LONGITUDE****", String.valueOf(longitude));
+        String timezoneid = data.getStringExtra(LocationPickerActivity.TIME_ZONE_ID);
+        if (timezoneid != null && timezoneid.length() > 0) {
+          Log.d("TIMEZONE ID****", timezoneid);
+          String timezonename = data.getStringExtra(LocationPickerActivity.TIME_ZONE_NAME);
+          Log.d("TIMEZONE NAME****", timezonename);
+        }
         String address = data.getStringExtra(LocationPickerActivity.LOCATION_ADDRESS);
         Log.d("ADDRESS****", String.valueOf(address));
         String postalcode = data.getStringExtra(LocationPickerActivity.ZIPCODE);
@@ -110,6 +117,12 @@ public class MainActivity extends AppCompatActivity {
         Log.d("LATITUDE****", String.valueOf(latitude));
         double longitude = data.getDoubleExtra(LocationPickerActivity.LONGITUDE, 0);
         Log.d("LONGITUDE****", String.valueOf(longitude));
+        String timezoneid = data.getStringExtra(LocationPickerActivity.TIME_ZONE_ID);
+        if (timezoneid != null && timezoneid.length() > 0) {
+          Log.d("TIMEZONE ID****", timezoneid);
+          String timezonename = data.getStringExtra(LocationPickerActivity.TIME_ZONE_NAME);
+          Log.d("TIMEZONE NAME****", timezonename);
+        }
         String address = data.getStringExtra(LocationPickerActivity.LOCATION_ADDRESS);
         Log.d("ADDRESS****", String.valueOf(address));
         LekuPoi lekuPoi = data.getParcelableExtra(LocationPickerActivity.LEKU_POI);

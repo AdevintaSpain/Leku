@@ -49,6 +49,7 @@ dependencies {
   def playServicesVersion = '10.2.6'
   compile "com.google.android.gms:play-services-maps:$playServicesVersion"
   compile "com.google.android.gms:play-services-location:$playServicesVersion"
+  compile 'com.google.maps:google-maps-services:0.1.20'
 
   compile ('com.schibstedspain.android:android-reactive-location:0.10.1') {
     exclude group: 'com.google.android.gms'
