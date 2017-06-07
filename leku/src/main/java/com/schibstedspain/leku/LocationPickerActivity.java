@@ -16,7 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -140,7 +139,7 @@ public class LocationPickerActivity extends AppCompatActivity
     setUpMapIfNeeded();
     setUpFloatingButtons();
     buildGoogleApiClient();
-    setTracking(TrackEvents.didLoadLocationPicker);
+    track(TrackEvents.didLoadLocationPicker);
   }
 
   private void checkLocationPermission() {
@@ -149,7 +148,7 @@ public class LocationPickerActivity extends AppCompatActivity
     }
   }
 
-  protected void setTracking(TrackEvents event) {
+  protected void track(TrackEvents event) {
     LocationPicker.getTracker().onEventTracked(event);
   }
 
@@ -254,7 +253,7 @@ public class LocationPickerActivity extends AppCompatActivity
     FloatingActionButton btnMyLocation = (FloatingActionButton) findViewById(R.id.btnFloatingAction);
     btnMyLocation.setOnClickListener(v -> {
       geocoderPresenter.getLastKnownLocation();
-      setTracking(TrackEvents.didLocalizeMe);
+      track(TrackEvents.didLocalizeMe);
     });
     FloatingActionButton btnAcceptLocation = (FloatingActionButton) findViewById(R.id.btnAccept);
     btnAcceptLocation.setOnClickListener(v -> returnCurrentPosition());
@@ -372,7 +371,7 @@ public class LocationPickerActivity extends AppCompatActivity
   public void onBackPressed() {
     if (!shouldReturnOkOnBackPressed || isLocationInformedFromBundle) {
       setResult(RESULT_CANCELED);
-      setTracking(TrackEvents.CANCEL);
+      track(TrackEvents.CANCEL);
       finish();
     } else {
       returnCurrentPosition();
@@ -407,7 +406,7 @@ public class LocationPickerActivity extends AppCompatActivity
       try {
         connectionResult.startResolutionForResult(this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
       } catch (IntentSender.SendIntentException e) {
-        Log.d(LocationPickerActivity.class.getName(), e.getMessage());
+        track(TrackEvents.googleApiConnectionFailed);
       }
     }
   }
@@ -465,14 +464,14 @@ public class LocationPickerActivity extends AppCompatActivity
   public void onMapLongClick(LatLng latLng) {
     currentLekuPoi = null;
     setNewPosition(latLng);
-    setTracking(TrackEvents.didLocalizeByPoi);
+    track(TrackEvents.didLocalizeByPoi);
   }
 
   @Override
   public void onMapClick(LatLng latLng) {
     currentLekuPoi = null;
     setNewPosition(latLng);
-    setTracking(TrackEvents.simpleDidLocalizeByPoi);
+    track(TrackEvents.simpleDidLocalizeByPoi);
   }
 
   private void setNewPosition(LatLng latLng) {
@@ -532,7 +531,7 @@ public class LocationPickerActivity extends AppCompatActivity
     } else {
       changeLocationInfoLayoutVisibility(View.GONE);
     }
-    setTracking(TrackEvents.didSearchLocations);
+    track(TrackEvents.didSearchLocations);
   }
 
   private void changeListResultVisibility(int visibility) {
@@ -723,7 +722,7 @@ public class LocationPickerActivity extends AppCompatActivity
       try {
         startActivityForResult(intent, REQUEST_PLACE_PICKER);
       } catch (ActivityNotFoundException e) {
-        Log.d(LocationPickerActivity.class.getName(), e.getMessage());
+        track(TrackEvents.startVoiceRecognitionActivityFailed);
       }
     }
   }
@@ -876,7 +875,7 @@ public class LocationPickerActivity extends AppCompatActivity
       returnIntent.putExtra(TRANSITION_BUNDLE, bundle.getBundle(TRANSITION_BUNDLE));
       returnIntent.putExtra(LEKU_POI, currentLekuPoi);
       setResult(RESULT_OK, returnIntent);
-      setTracking(TrackEvents.RESULT_OK);
+      track(TrackEvents.RESULT_OK);
     } else if (currentLocation != null) {
       Intent returnIntent = new Intent();
       returnIntent.putExtra(LATITUDE, currentLocation.getLatitude());
@@ -890,10 +889,10 @@ public class LocationPickerActivity extends AppCompatActivity
       returnIntent.putExtra(ADDRESS, selectedAddress);
       returnIntent.putExtra(TRANSITION_BUNDLE, bundle.getBundle(TRANSITION_BUNDLE));
       setResult(RESULT_OK, returnIntent);
-      setTracking(TrackEvents.RESULT_OK);
+      track(TrackEvents.RESULT_OK);
     } else {
       setResult(RESULT_CANCELED);
-      setTracking(TrackEvents.CANCEL);
+      track(TrackEvents.CANCEL);
     }
     finish();
   }
@@ -986,7 +985,7 @@ public class LocationPickerActivity extends AppCompatActivity
         if (lekuPoi != null) {
           setLocationInfo(lekuPoi);
           centerToPoi(lekuPoi);
-          setTracking(TrackEvents.simpleDidLocalizeByLekuPoi);
+          track(TrackEvents.simpleDidLocalizeByLekuPoi);
         }
         return true;
       });
