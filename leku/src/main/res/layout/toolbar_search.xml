@@ -38,7 +38,7 @@
 
       <ImageView
           android:id="@+id/leku_clear_search_image"
-          android:layout_width="24dp"
+          android:layout_width="@dimen/clear_search_size"
           android:layout_height="wrap_content"
           android:src="@drawable/ic_clean"
           android:tint="@color/strong_grey"
