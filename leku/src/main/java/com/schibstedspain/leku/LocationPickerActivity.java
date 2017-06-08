@@ -76,7 +76,6 @@ public class LocationPickerActivity extends AppCompatActivity
   private static final int DEFAULT_ZOOM = 16;
   private static final int WIDER_ZOOM = 6;
   private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-  public static final int SEARCH_DEBOUNCE_TIME = 400;
 
   private LekuSearchFragment lekuSearchFragment;
 
@@ -690,9 +689,9 @@ public class LocationPickerActivity extends AppCompatActivity
   public void retrieveLocationFrom(String query, boolean debounce) {
     if (debounce) {
       if (searchZone != null && !searchZone.isEmpty()) {
-        retrieveDebouncedLocationFromZone(query, searchZone, SEARCH_DEBOUNCE_TIME);
+        retrieveDebouncedLocationFromZone(query, searchZone);
       } else {
-        retrieveDebouncedLocationFromDefaultZone(query, SEARCH_DEBOUNCE_TIME);
+        retrieveDebouncedLocationFromDefaultZone(query);
       }
     } else {
       if (searchZone != null && !searchZone.isEmpty()) {
@@ -720,22 +719,22 @@ public class LocationPickerActivity extends AppCompatActivity
     }
   }
 
-  private void retrieveDebouncedLocationFromDefaultZone(String query, int debounceTime) {
+  private void retrieveDebouncedLocationFromDefaultZone(String query) {
     if (CountryLocaleRect.getDefaultLowerLeft() != null) {
       geocoderPresenter.getDebouncedFromLocationName(query, CountryLocaleRect.getDefaultLowerLeft(),
-          CountryLocaleRect.getDefaultUpperRight(), debounceTime);
+          CountryLocaleRect.getDefaultUpperRight());
     } else {
-      geocoderPresenter.getDebouncedFromLocationName(query, debounceTime);
+      geocoderPresenter.getDebouncedFromLocationName(query);
     }
   }
 
-  private void retrieveDebouncedLocationFromZone(String query, String zoneKey, int debounceTime) {
+  private void retrieveDebouncedLocationFromZone(String query, String zoneKey) {
     Locale locale = new Locale(zoneKey);
     if (CountryLocaleRect.getLowerLeftFromZone(locale) != null) {
       geocoderPresenter.getDebouncedFromLocationName(query, CountryLocaleRect.getLowerLeftFromZone(locale),
-          CountryLocaleRect.getUpperRightFromZone(locale), debounceTime);
+          CountryLocaleRect.getUpperRightFromZone(locale));
     } else {
-      geocoderPresenter.getDebouncedFromLocationName(query, debounceTime);
+      geocoderPresenter.getDebouncedFromLocationName(query);
     }
   }
 

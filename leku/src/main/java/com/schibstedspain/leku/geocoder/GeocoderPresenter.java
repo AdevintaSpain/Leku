@@ -10,6 +10,8 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 public class GeocoderPresenter {
+
+  public static final int SEARCH_DEBOUNCE_TIME = 400;
   private static final int RETRY_COUNT = 3;
 
   private final GeocoderInteractorInterface interactor;
@@ -72,10 +74,10 @@ public class GeocoderPresenter {
     compositeSubscription.add(locationNameSubscription);
   }
 
-  public void getDebouncedFromLocationName(String query, int debounceTime) {
+  public void getDebouncedFromLocationName(String query) {
     view.willLoadLocation();
     Subscription locationNameDebounceSubscription = interactor.getFromLocationName(query)
-        .debounce(debounceTime, TimeUnit.MILLISECONDS)
+        .debounce(SEARCH_DEBOUNCE_TIME, TimeUnit.MILLISECONDS)
         .subscribeOn(Schedulers.newThread())
         .observeOn(scheduler)
         .retry(RETRY_COUNT)
@@ -84,10 +86,10 @@ public class GeocoderPresenter {
     compositeSubscription.add(locationNameDebounceSubscription);
   }
 
-  public void getDebouncedFromLocationName(String query, LatLng lowerLeft, LatLng upperRight, int debounceTime) {
+  public void getDebouncedFromLocationName(String query, LatLng lowerLeft, LatLng upperRight) {
     view.willLoadLocation();
     Subscription locationNameDebounceSubscription = interactor.getFromLocationName(query, lowerLeft, upperRight)
-        .debounce(debounceTime, TimeUnit.MILLISECONDS)
+        .debounce(SEARCH_DEBOUNCE_TIME, TimeUnit.MILLISECONDS)
         .subscribeOn(Schedulers.newThread())
         .observeOn(scheduler)
         .retry(RETRY_COUNT)
