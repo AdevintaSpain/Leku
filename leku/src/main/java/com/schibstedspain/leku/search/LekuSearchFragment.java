@@ -232,15 +232,9 @@ public class LekuSearchFragment extends Fragment {
 
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    switch (requestCode) {
-      case REQUEST_PLACE_PICKER:
-        if (resultCode == Activity.RESULT_OK) {
-          List<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-          retrieveLocationFrom(matches.get(0));
-        }
-        break;
-      default:
-        break;
+    if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_PLACE_PICKER) {
+      List<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+      retrieveLocationFrom(matches.get(0));
     }
     super.onActivityResult(requestCode, resultCode, data);
   }
