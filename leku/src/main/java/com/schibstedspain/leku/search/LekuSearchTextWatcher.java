@@ -5,10 +5,10 @@ import android.text.TextWatcher;
 
 abstract class LekuSearchTextWatcher implements TextWatcher {
 
-  private int minCharacters;
+  private static final int MIN_CHARACTERS = 2;
 
-  LekuSearchTextWatcher(int minCharacters) {
-    this.minCharacters = minCharacters;
+  LekuSearchTextWatcher() {
+
   }
 
   @Override
@@ -20,7 +20,7 @@ abstract class LekuSearchTextWatcher implements TextWatcher {
   public void onTextChanged(CharSequence charSequence, int start, int count, int after) {
     if ("".equals(charSequence.toString())) {
       onEmptyText();
-    } else if (charSequence.length() > minCharacters && after > count) {
+    } else if (charSequence.length() > MIN_CHARACTERS && after > count) {
       onText(charSequence);
     }
   }

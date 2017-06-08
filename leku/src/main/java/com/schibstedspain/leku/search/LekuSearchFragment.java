@@ -35,7 +35,6 @@ public class LekuSearchFragment extends Fragment {
   }
 
   private static final String LAST_LOCATION_QUERY = "last_location_query";
-  private static final int MIN_CHARACTERS = 2;
   private static final int REQUEST_PLACE_PICKER = 6655;
   private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
@@ -196,7 +195,7 @@ public class LekuSearchFragment extends Fragment {
   }
 
   private TextWatcher getSearchTextWatcher() {
-    return new LekuSearchTextWatcher(MIN_CHARACTERS) {
+    return new LekuSearchTextWatcher() {
       @Override
       void onEmptyText() {
         if (clearSearchButton != null) {
