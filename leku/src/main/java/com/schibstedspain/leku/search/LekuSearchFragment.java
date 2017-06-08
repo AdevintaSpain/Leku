@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,9 +20,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.schibstedspain.leku.LocationPickerActivity;
+import com.schibstedspain.leku.LocationPicker;
 import com.schibstedspain.leku.NullView;
 import com.schibstedspain.leku.R;
+import com.schibstedspain.leku.tracker.TrackEvents;
 import java.util.List;
 
 public class LekuSearchFragment extends Fragment {
@@ -97,18 +97,22 @@ public class LekuSearchFragment extends Fragment {
   }
 
   private void startVoiceRecognitionActivity() {
-    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-    intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.voice_search_promp));
-    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, getString(R.string.voice_search_extra_language));
-
     if (checkPlayServices()) {
+      Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+      intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+      intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.voice_search_promp));
+      intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, getString(R.string.voice_search_extra_language));
+
       try {
         startActivityForResult(intent, REQUEST_PLACE_PICKER);
       } catch (ActivityNotFoundException e) {
-        Log.d(LocationPickerActivity.class.getName(), e.getMessage());
+        setTracking(TrackEvents.noVoiceRecognition);
       }
     }
+  }
+
+  protected void setTracking(TrackEvents event) {
+    LocationPicker.getTracker().onEventTracked(event);
   }
 
   @Override

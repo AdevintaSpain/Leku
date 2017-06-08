@@ -7,6 +7,7 @@ public enum TrackEvents {
   didLocalizeByPoi("Long click on map"),
   simpleDidLocalizeByPoi("Click on map"),
   simpleDidLocalizeByLekuPoi("Click on POI"),
+  noVoiceRecognition("Voice recognition not found"),
   RESULT_OK("Return location"),
   CANCEL("Return without location");
 
