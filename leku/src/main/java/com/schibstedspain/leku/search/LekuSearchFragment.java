@@ -82,7 +82,7 @@ public class LekuSearchFragment extends Fragment {
     return false;
   }
 
-  public void clear() {
+  public void clearFilter() {
     searchView.setText("");
     closeKeyboard();
   }

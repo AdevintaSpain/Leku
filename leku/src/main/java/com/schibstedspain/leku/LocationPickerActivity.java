@@ -397,7 +397,7 @@ public class LocationPickerActivity extends AppCompatActivity
       } else {
         updateLocationNameList(addresses);
         if (hasWiderZoom) {
-          lekuSearchFragment.clear();
+          lekuSearchFragment.clearFilter();
         }
         if (addresses.size() == 1) {
           setNewLocation(addresses.get(0));
@@ -915,7 +915,7 @@ public class LocationPickerActivity extends AppCompatActivity
     currentLocation.setLongitude(address.getLongitude());
     setNewMapMarker(new LatLng(address.getLatitude(), address.getLongitude()));
     setLocationInfo(address);
-    lekuSearchFragment.clear();
+    lekuSearchFragment.clearFilter();
   }
 
   private void fillLocationList(List<Address> addresses) {
