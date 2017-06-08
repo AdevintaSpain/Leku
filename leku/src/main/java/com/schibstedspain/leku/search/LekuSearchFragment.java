@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import com.google.android.gms.common.ConnectionResult;
@@ -23,6 +22,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.schibstedspain.leku.LocationPicker;
 import com.schibstedspain.leku.NullView;
 import com.schibstedspain.leku.R;
+import com.schibstedspain.leku.SoftKeyboardManager;
 import com.schibstedspain.leku.tracker.TrackEvents;
 import java.util.List;
 
@@ -84,7 +84,7 @@ public class LekuSearchFragment extends Fragment {
 
   public void clearFilter() {
     searchView.setText("");
-    closeKeyboard();
+    SoftKeyboardManager.closeKeyboard(getContext(), searchView.getWindowToken());
   }
 
   private void onVoiceItemSelected() {
@@ -92,7 +92,7 @@ public class LekuSearchFragment extends Fragment {
       startVoiceRecognitionActivity();
     } else {
       retrieveLocationFrom(searchView.getText().toString());
-      closeKeyboard();
+      SoftKeyboardManager.closeKeyboard(getContext(), searchView.getWindowToken());
     }
   }
 
@@ -153,18 +153,13 @@ public class LekuSearchFragment extends Fragment {
       boolean handled = false;
       if (actionId == EditorInfo.IME_ACTION_SEARCH) {
         retrieveLocationFrom(v.getText().toString());
-        closeKeyboard();
+        SoftKeyboardManager.closeKeyboard(getContext(), searchView.getWindowToken());
         handled = true;
       }
       return handled;
     });
     textWatcher = getSearchTextWatcher();
     searchView.addTextChangedListener(textWatcher);
-  }
-
-  private void closeKeyboard() {
-    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-    imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
   }
 
   @Override
