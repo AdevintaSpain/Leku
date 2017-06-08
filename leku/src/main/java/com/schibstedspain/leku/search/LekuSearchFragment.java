@@ -58,8 +58,8 @@ public class LekuSearchFragment extends Fragment {
 
     bindViews(view);
     setupToolbar();
-    setUpClearListener();
-    setUpSearchViewListeners();
+    setupClearListener();
+    setupSearchViewListeners();
   }
 
   private void bindViews(View view) {
@@ -144,11 +144,11 @@ public class LekuSearchFragment extends Fragment {
     return true;
   }
 
-  private void setUpClearListener() {
+  private void setupClearListener() {
     clearSearchButton.setOnClickListener(view -> searchView.setText(""));
   }
 
-  private void setUpSearchViewListeners() {
+  private void setupSearchViewListeners() {
     searchView.setOnEditorActionListener((v, actionId, event) -> {
       boolean handled = false;
       if (actionId == EditorInfo.IME_ACTION_SEARCH) {
