@@ -25,9 +25,9 @@ abstract class LekuSearchTextWatcher implements TextWatcher {
     }
   }
 
-  abstract void onEmptyText();
-
   abstract void onTextChanged(CharSequence charSequence);
+
+  abstract void onEmptyText();
 
   @Override
   public void afterTextChanged(Editable s) {
