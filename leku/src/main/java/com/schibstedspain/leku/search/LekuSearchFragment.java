@@ -106,12 +106,12 @@ public class LekuSearchFragment extends Fragment {
       try {
         startActivityForResult(intent, REQUEST_PLACE_PICKER);
       } catch (ActivityNotFoundException e) {
-        setTracking(TrackEvents.noVoiceRecognition);
+        track(TrackEvents.noVoiceRecognition);
       }
     }
   }
 
-  protected void setTracking(TrackEvents event) {
+  protected void track(TrackEvents event) {
     LocationPicker.getTracker().onEventTracked(event);
   }
 
