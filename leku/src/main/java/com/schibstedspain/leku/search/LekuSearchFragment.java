@@ -209,7 +209,7 @@ public class LekuSearchFragment extends Fragment {
       }
 
       @Override
-      void onText(CharSequence charSequence) {
+      void onTextChanged(CharSequence charSequence) {
         if (clearSearchButton != null) {
           clearSearchButton.setVisibility(View.VISIBLE);
         }

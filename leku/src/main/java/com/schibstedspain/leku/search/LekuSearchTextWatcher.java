@@ -21,13 +21,13 @@ abstract class LekuSearchTextWatcher implements TextWatcher {
     if ("".equals(charSequence.toString())) {
       onEmptyText();
     } else if (charSequence.length() > MIN_CHARACTERS && after > count) {
-      onText(charSequence);
+      onTextChanged(charSequence);
     }
   }
 
   abstract void onEmptyText();
 
-  abstract void onText(CharSequence charSequence);
+  abstract void onTextChanged(CharSequence charSequence);
 
   @Override
   public void afterTextChanged(Editable s) {
