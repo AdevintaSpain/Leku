@@ -1,6 +1,8 @@
 package com.schibstedspain.leku.tracker;
 
 public enum TrackEvents {
+  googleApiConnectionFailed("Connection Failed"),
+  startVoiceRecognitionActivityFailed("Start Voice Recognition Activity Failed"),
   didLoadLocationPicker("Location Picker"),
   didSearchLocations("Click on search for locations"),
   didLocalizeMe("Click on localize me"),
