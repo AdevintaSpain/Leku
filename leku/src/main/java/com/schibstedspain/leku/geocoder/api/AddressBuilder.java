@@ -56,6 +56,8 @@ public class AddressBuilder {
     address.setLongitude(longitude);
     address.setPostalCode(postalCode);
     address.setAddressLine(0, fullAddress.toString());
+    address.setAddressLine(1, postalCode);
+    address.setAddressLine(2, city);
     address.setLocality(city);
     return address;
   }

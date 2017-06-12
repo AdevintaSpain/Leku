@@ -13,18 +13,21 @@ public class GeocoderPresenter {
   private static final int RETRY_COUNT = 3;
 
   private final GeocoderInteractorInterface interactor;
+  private final GeocoderInteractorInterface apiInteractor;
   private GeocoderViewInterface view;
   private final GeocoderViewInterface nullView = new GeocoderViewInterface.NullView();
   private CompositeSubscription compositeSubscription;
   private final Scheduler scheduler;
   private ReactiveLocationProvider locationProvider;
 
-  public GeocoderPresenter(ReactiveLocationProvider reactiveLocationProvider, GeocoderInteractorInterface interactor) {
-    this(reactiveLocationProvider, interactor, AndroidSchedulers.mainThread());
+  public GeocoderPresenter(ReactiveLocationProvider reactiveLocationProvider, GeocoderInteractorInterface interactor,
+      GeocoderInteractorInterface apiInteractor) {
+    this(reactiveLocationProvider, interactor, apiInteractor, AndroidSchedulers.mainThread());
   }
 
   public GeocoderPresenter(ReactiveLocationProvider reactiveLocationProvider, GeocoderInteractorInterface interactor,
-      Scheduler scheduler) {
+      GeocoderInteractorInterface apiInteractor, Scheduler scheduler) {
+    this.apiInteractor = apiInteractor;
     this.view = nullView;
     this.scheduler = scheduler;
     this.locationProvider = reactiveLocationProvider;
@@ -56,6 +59,7 @@ public class GeocoderPresenter {
         .subscribeOn(Schedulers.newThread())
         .observeOn(scheduler)
         .retry(RETRY_COUNT)
+        .onErrorResumeNext(apiInteractor.getFromLocationName(query))
         .subscribe(view::showLocations, throwable -> view.showLoadLocationError(),
             view::didLoadLocation);
     compositeSubscription.add(locationNameSubscription);
@@ -67,6 +71,7 @@ public class GeocoderPresenter {
         .subscribeOn(Schedulers.newThread())
         .observeOn(scheduler)
         .retry(RETRY_COUNT)
+        .onErrorResumeNext(apiInteractor.getFromLocationName(query, lowerLeft, upperRight))
         .subscribe(view::showLocations, throwable -> view.showLoadLocationError(),
             view::didLoadLocation);
     compositeSubscription.add(locationNameSubscription);
@@ -79,6 +84,7 @@ public class GeocoderPresenter {
         .subscribeOn(Schedulers.newThread())
         .observeOn(scheduler)
         .retry(RETRY_COUNT)
+        .onErrorResumeNext(apiInteractor.getFromLocationName(query))
         .subscribe(view::showDebouncedLocations, throwable -> view.showLoadLocationError(),
             view::didLoadLocation);
     compositeSubscription.add(locationNameDebounceSubscription);
@@ -91,6 +97,7 @@ public class GeocoderPresenter {
         .subscribeOn(Schedulers.newThread())
         .observeOn(scheduler)
         .retry(RETRY_COUNT)
+        .onErrorResumeNext(apiInteractor.getFromLocationName(query, lowerLeft, upperRight))
         .subscribe(view::showDebouncedLocations, throwable -> view.showLoadLocationError(),
             view::didLoadLocation);
     compositeSubscription.add(locationNameDebounceSubscription);
@@ -102,6 +109,7 @@ public class GeocoderPresenter {
         .subscribeOn(Schedulers.newThread())
         .observeOn(scheduler)
         .retry(RETRY_COUNT)
+        .onErrorResumeNext(apiInteractor.getFromLocation(latLng.latitude, latLng.longitude))
         .subscribe(view::showLocationInfo, throwable -> view.showGetLocationInfoError(),
             view::didGetLocationInfo);
     compositeSubscription.add(locationSubscription);
