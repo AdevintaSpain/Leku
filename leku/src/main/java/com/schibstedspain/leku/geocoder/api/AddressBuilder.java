@@ -14,7 +14,7 @@ public class AddressBuilder {
     List<Address> addresses = new ArrayList<>();
     JSONObject root = new JSONObject(json);
     JSONArray results = root.getJSONArray("results");
-    for(int i = 0; i<results.length();i++) {
+    for (int i = 0; i < results.length(); i++) {
       addresses.add(parseAddress(results.getJSONObject(i)));
     }
     return addresses;
@@ -64,7 +64,7 @@ public class AddressBuilder {
 
   List<AddressComponent> getAddressComponents(JSONArray jsonComponents) throws JSONException {
     List<AddressComponent> components = new ArrayList<>();
-    for (int i = 0;i<jsonComponents.length(); i++) {
+    for (int i = 0; i < jsonComponents.length(); i++) {
       AddressComponent component = new AddressComponent();
       JSONObject jsonComponent = jsonComponents.getJSONObject(i);
       component.name = jsonComponent.getString("long_name");

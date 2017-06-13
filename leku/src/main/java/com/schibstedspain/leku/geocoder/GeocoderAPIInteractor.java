@@ -1,11 +1,9 @@
 package com.schibstedspain.leku.geocoder;
 
 import android.location.Address;
-import android.location.Geocoder;
 import com.google.android.gms.maps.model.LatLng;
 import com.schibstedspain.leku.geocoder.api.AddressBuilder;
 import com.schibstedspain.leku.geocoder.api.NetworkClient;
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import org.json.JSONException;

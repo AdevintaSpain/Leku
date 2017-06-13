@@ -26,7 +26,7 @@ public class AddressBuilderShould {
   }
 
   @Test
-  public void returnExpectedAddress_WhenJsonProvided() throws JSONException {
+  public void returnExpectedAddressWhenJsonProvided() throws JSONException {
     String json = getJson();
 
     List<Address> addresses = addressBuilder.parseResult(json);
@@ -40,7 +40,7 @@ public class AddressBuilderShould {
   }
 
   @Test
-  public void returnExpectedAddress_WhenJsonWithOnlyCityProvided() throws JSONException {
+  public void returnExpectedAddressWhenJsonWithOnlyCityProvided() throws JSONException {
     String json = getJsonForOnlyCity();
 
     List<Address> addresses = addressBuilder.parseResult(json);
