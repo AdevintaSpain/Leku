@@ -11,7 +11,6 @@ import rx.Observable;
 
 public class GeocoderAPIInteractor implements GeocoderInteractorInterface {
 
-  private final static int MAX_RESULTS = 5;
   private static final String QUERY_REQUEST = "https://maps.googleapis.com/maps/api/geocode/json?address=%1$s&key=%2$s";
   private static final String QUERY_REQUEST_WITH_RECTANGLE
       = "https://maps.googleapis.com/maps/api/geocode/json?address=%1$s&key=%2$s&bounds=%3$f,%4$f|%5$f,%6$f";

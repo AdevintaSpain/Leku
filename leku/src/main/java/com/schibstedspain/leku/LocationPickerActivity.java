@@ -129,7 +129,6 @@ public class LocationPickerActivity extends AppCompatActivity
   private Map<String, LekuPoi> lekuPoisMarkersMap;
   private Marker currentMarker;
   private TextWatcher textWatcher;
-  private String apiKey;
   private GeocoderAPIInteractor apiInteractor;
 
   @Override
