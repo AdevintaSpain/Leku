@@ -145,6 +145,7 @@ You only need to use the Builder setters like:
 ```java
 Intent intent = new LocationPickerActivity.Builder()
     .withLocation(41.4036299, 2.1743558)
+    .withGeolocApiKey("<PUT API KEY HERE>")
     .withSearchZone("es_ES")
     .shouldReturnOkOnBackPressed()
     .withStreetHidden()
@@ -305,6 +306,13 @@ Available tracking events are:
 |RESULT_OK|Return location|
 |CANCEL|Return without location|
 
+#### Geocoding API Fallback
+
+In few cases, the geocoding service from Android fails due to an issue with the NetworkLocator. The only way of fixing this is rebooting the device.
+
+In order to cover these cases, you can instruct Leku to use the Geocoding API. To enable it, just use the method '''withGeolocApiKey''' when invoking the LocationPicker.
+
+You should provide your Server Key as parameter. Keep in mind that the free tier only allows 2,500 requests per day. You can track how many times is it used in the Developer Console from Google. 
 
 #### Extra
 
