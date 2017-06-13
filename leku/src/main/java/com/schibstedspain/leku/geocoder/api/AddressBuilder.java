@@ -20,7 +20,7 @@ public class AddressBuilder {
     return addresses;
   }
 
-  Address parseAddress(JSONObject jsonObject) throws JSONException {
+  private Address parseAddress(JSONObject jsonObject) throws JSONException {
     JSONObject location = jsonObject.getJSONObject("geometry").getJSONObject("location");
     double latitude = location.getDouble("lat");
     double longitude = location.getDouble("lng");
@@ -62,7 +62,7 @@ public class AddressBuilder {
     return address;
   }
 
-  List<AddressComponent> getAddressComponents(JSONArray jsonComponents) throws JSONException {
+  private List<AddressComponent> getAddressComponents(JSONArray jsonComponents) throws JSONException {
     List<AddressComponent> components = new ArrayList<>();
     for (int i = 0; i < jsonComponents.length(); i++) {
       AddressComponent component = new AddressComponent();
@@ -78,7 +78,7 @@ public class AddressBuilder {
     return components;
   }
 
-  class AddressComponent {
+  private static class AddressComponent {
     String name;
     List<String> types;
   }
