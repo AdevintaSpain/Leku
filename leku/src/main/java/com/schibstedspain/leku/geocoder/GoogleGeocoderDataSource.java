@@ -9,7 +9,7 @@ import java.util.Locale;
 import org.json.JSONException;
 import rx.Observable;
 
-public class GeocoderAPIInteractor implements GeocoderInteractorInterface {
+public class GoogleGeocoderDataSource implements GeocoderInteractorDataSource {
 
   private static final String QUERY_REQUEST = "https://maps.googleapis.com/maps/api/geocode/json?address=%1$s&key=%2$s";
   private static final String QUERY_REQUEST_WITH_RECTANGLE
@@ -19,7 +19,7 @@ public class GeocoderAPIInteractor implements GeocoderInteractorInterface {
   private final NetworkClient networkClient;
   private final AddressBuilder addressBuilder;
 
-  public GeocoderAPIInteractor(NetworkClient networkClient, AddressBuilder addressBuilder) {
+  public GoogleGeocoderDataSource(NetworkClient networkClient, AddressBuilder addressBuilder) {
     this.networkClient = networkClient;
     this.addressBuilder = addressBuilder;
   }

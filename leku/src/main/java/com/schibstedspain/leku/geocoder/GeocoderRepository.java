@@ -9,10 +9,10 @@ import rx.schedulers.Schedulers;
 public class GeocoderRepository {
   private static final int RETRY_COUNT = 3;
 
-  private final GeocoderInteractorInterface androidGeocoder;
-  private final GeocoderInteractorInterface googleGeocoder;
+  private final GeocoderInteractorDataSource androidGeocoder;
+  private final GeocoderInteractorDataSource googleGeocoder;
 
-  public GeocoderRepository(GeocoderInteractorInterface androidGeocoder, GeocoderInteractorInterface googleGeocoder) {
+  public GeocoderRepository(GeocoderInteractorDataSource androidGeocoder, GeocoderInteractorDataSource googleGeocoder) {
     this.androidGeocoder = androidGeocoder;
     this.googleGeocoder = googleGeocoder;
   }
