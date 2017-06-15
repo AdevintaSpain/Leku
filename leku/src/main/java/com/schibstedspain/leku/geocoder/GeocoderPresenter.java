@@ -6,32 +6,27 @@ import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
 import rx.Scheduler;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 public class GeocoderPresenter {
   private static final int RETRY_COUNT = 3;
 
-  private final GeocoderInteractorInterface interactor;
-  private final GeocoderInteractorInterface apiInteractor;
   private GeocoderViewInterface view;
   private final GeocoderViewInterface nullView = new GeocoderViewInterface.NullView();
   private CompositeSubscription compositeSubscription;
   private final Scheduler scheduler;
   private ReactiveLocationProvider locationProvider;
+  private GeocoderRepository geocoderRepository;
 
-  public GeocoderPresenter(ReactiveLocationProvider reactiveLocationProvider, GeocoderInteractorInterface interactor,
-      GeocoderInteractorInterface apiInteractor) {
-    this(reactiveLocationProvider, interactor, apiInteractor, AndroidSchedulers.mainThread());
+  public GeocoderPresenter(ReactiveLocationProvider reactiveLocationProvider, GeocoderRepository geocoderRepository) {
+    this(reactiveLocationProvider, geocoderRepository, AndroidSchedulers.mainThread());
   }
 
-  public GeocoderPresenter(ReactiveLocationProvider reactiveLocationProvider, GeocoderInteractorInterface interactor,
-      GeocoderInteractorInterface apiInteractor, Scheduler scheduler) {
-    this.apiInteractor = apiInteractor;
+  public GeocoderPresenter(ReactiveLocationProvider reactiveLocationProvider, GeocoderRepository geocoderRepository, Scheduler scheduler) {
+    this.geocoderRepository = geocoderRepository;
     this.view = nullView;
     this.scheduler = scheduler;
     this.locationProvider = reactiveLocationProvider;
-    this.interactor = interactor;
     this.compositeSubscription = new CompositeSubscription();
   }
 
@@ -55,11 +50,8 @@ public class GeocoderPresenter {
 
   public void getFromLocationName(String query) {
     view.willLoadLocation();
-    Subscription locationNameSubscription = interactor.getFromLocationName(query)
-        .subscribeOn(Schedulers.newThread())
+    Subscription locationNameSubscription = geocoderRepository.getFromLocationName(query)
         .observeOn(scheduler)
-        .retry(RETRY_COUNT)
-        .onErrorResumeNext(apiInteractor.getFromLocationName(query))
         .subscribe(view::showLocations, throwable -> view.showLoadLocationError(),
             view::didLoadLocation);
     compositeSubscription.add(locationNameSubscription);
@@ -67,11 +59,9 @@ public class GeocoderPresenter {
 
   public void getFromLocationName(String query, LatLng lowerLeft, LatLng upperRight) {
     view.willLoadLocation();
-    Subscription locationNameSubscription = interactor.getFromLocationName(query, lowerLeft, upperRight)
-        .subscribeOn(Schedulers.newThread())
+    Subscription locationNameSubscription = geocoderRepository.getFromLocationName(query, lowerLeft, upperRight)
         .observeOn(scheduler)
         .retry(RETRY_COUNT)
-        .onErrorResumeNext(apiInteractor.getFromLocationName(query, lowerLeft, upperRight))
         .subscribe(view::showLocations, throwable -> view.showLoadLocationError(),
             view::didLoadLocation);
     compositeSubscription.add(locationNameSubscription);
@@ -79,12 +69,9 @@ public class GeocoderPresenter {
 
   public void getDebouncedFromLocationName(String query, int debounceTime) {
     view.willLoadLocation();
-    Subscription locationNameDebounceSubscription = interactor.getFromLocationName(query)
+    Subscription locationNameDebounceSubscription = geocoderRepository.getFromLocationName(query)
         .debounce(debounceTime, TimeUnit.MILLISECONDS)
-        .subscribeOn(Schedulers.newThread())
         .observeOn(scheduler)
-        .retry(RETRY_COUNT)
-        .onErrorResumeNext(apiInteractor.getFromLocationName(query))
         .subscribe(view::showDebouncedLocations, throwable -> view.showLoadLocationError(),
             view::didLoadLocation);
     compositeSubscription.add(locationNameDebounceSubscription);
@@ -92,12 +79,9 @@ public class GeocoderPresenter {
 
   public void getDebouncedFromLocationName(String query, LatLng lowerLeft, LatLng upperRight, int debounceTime) {
     view.willLoadLocation();
-    Subscription locationNameDebounceSubscription = interactor.getFromLocationName(query, lowerLeft, upperRight)
+    Subscription locationNameDebounceSubscription = geocoderRepository.getFromLocationName(query, lowerLeft, upperRight)
         .debounce(debounceTime, TimeUnit.MILLISECONDS)
-        .subscribeOn(Schedulers.newThread())
         .observeOn(scheduler)
-        .retry(RETRY_COUNT)
-        .onErrorResumeNext(apiInteractor.getFromLocationName(query, lowerLeft, upperRight))
         .subscribe(view::showDebouncedLocations, throwable -> view.showLoadLocationError(),
             view::didLoadLocation);
     compositeSubscription.add(locationNameDebounceSubscription);
@@ -105,11 +89,9 @@ public class GeocoderPresenter {
 
   public void getInfoFromLocation(LatLng latLng) {
     view.willGetLocationInfo(latLng);
-    Subscription locationSubscription = interactor.getFromLocation(latLng.latitude, latLng.longitude)
-        .subscribeOn(Schedulers.newThread())
+    Subscription locationSubscription = geocoderRepository.getFromLocation(latLng)
         .observeOn(scheduler)
         .retry(RETRY_COUNT)
-        .onErrorResumeNext(apiInteractor.getFromLocation(latLng.latitude, latLng.longitude))
         .subscribe(view::showLocationInfo, throwable -> view.showGetLocationInfoError(),
             view::didGetLocationInfo);
     compositeSubscription.add(locationSubscription);

@@ -44,9 +44,10 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.schibstedspain.leku.geocoder.GeocoderAPIInteractor;
-import com.schibstedspain.leku.geocoder.GeocoderInteractor;
+import com.schibstedspain.leku.geocoder.GoogleGeocoderDataSource;
+import com.schibstedspain.leku.geocoder.AndroidGeocoderDataSource;
 import com.schibstedspain.leku.geocoder.GeocoderPresenter;
+import com.schibstedspain.leku.geocoder.GeocoderRepository;
 import com.schibstedspain.leku.geocoder.GeocoderViewInterface;
 import com.schibstedspain.leku.geocoder.api.AddressBuilder;
 import com.schibstedspain.leku.geocoder.api.NetworkClient;
@@ -129,7 +130,7 @@ public class LocationPickerActivity extends AppCompatActivity
   private Map<String, LekuPoi> lekuPoisMarkersMap;
   private Marker currentMarker;
   private TextWatcher textWatcher;
-  private GeocoderAPIInteractor apiInteractor;
+  private GoogleGeocoderDataSource apiInteractor;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -159,9 +160,9 @@ public class LocationPickerActivity extends AppCompatActivity
 
   private void setUpMainVariables() {
     Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-    apiInteractor = new GeocoderAPIInteractor(new NetworkClient(), new AddressBuilder());
-    geocoderPresenter = new GeocoderPresenter(new ReactiveLocationProvider(getApplicationContext()),
-        new GeocoderInteractor(geocoder), apiInteractor);
+    apiInteractor = new GoogleGeocoderDataSource(new NetworkClient(), new AddressBuilder());
+    GeocoderRepository geocoderRepository = new GeocoderRepository(new AndroidGeocoderDataSource(geocoder), apiInteractor);
+    geocoderPresenter = new GeocoderPresenter(new ReactiveLocationProvider(getApplicationContext()), geocoderRepository);
     geocoderPresenter.setUI(this);
     progressBar = (ProgressBar) findViewById(R.id.loading_progress_bar);
     progressBar.setVisibility(View.GONE);
