@@ -33,9 +33,13 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.schibstedspain.leku.geocoder.GeocoderInteractor;
+import com.schibstedspain.leku.geocoder.GoogleGeocoderDataSource;
+import com.schibstedspain.leku.geocoder.AndroidGeocoderDataSource;
 import com.schibstedspain.leku.geocoder.GeocoderPresenter;
+import com.schibstedspain.leku.geocoder.GeocoderRepository;
 import com.schibstedspain.leku.geocoder.GeocoderViewInterface;
+import com.schibstedspain.leku.geocoder.api.AddressBuilder;
+import com.schibstedspain.leku.geocoder.api.NetworkClient;
 import com.schibstedspain.leku.permissions.PermissionUtils;
 import com.schibstedspain.leku.search.LekuSearchCallback;
 import com.schibstedspain.leku.search.LekuSearchFragment;
@@ -68,6 +72,7 @@ public class LocationPickerActivity extends AppCompatActivity
   public static final String ENABLE_LOCATION_PERMISSION_REQUEST = "enable_location_permission_request";
   public static final String POIS_LIST = "pois_list";
   public static final String LEKU_POI = "leku_poi";
+  private static final String GEOLOC_API_KEY = "geoloc_api_key";
   private static final String LOCATION_KEY = "location_key";
 
   private static final String OPTIONS_HIDE_STREET = "street";
@@ -112,6 +117,8 @@ public class LocationPickerActivity extends AppCompatActivity
   private List<LekuPoi> poisList;
   private Map<String, LekuPoi> lekuPoisMarkersMap;
   private Marker currentMarker;
+  private TextWatcher textWatcher;
+  private GoogleGeocoderDataSource apiInteractor;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -153,8 +160,9 @@ public class LocationPickerActivity extends AppCompatActivity
 
   private void setUpMainVariables() {
     Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-    geocoderPresenter = new GeocoderPresenter(new ReactiveLocationProvider(getApplicationContext()),
-        new GeocoderInteractor(geocoder));
+    apiInteractor = new GoogleGeocoderDataSource(new NetworkClient(), new AddressBuilder());
+    GeocoderRepository geocoderRepository = new GeocoderRepository(new AndroidGeocoderDataSource(geocoder), apiInteractor);
+    geocoderPresenter = new GeocoderPresenter(new ReactiveLocationProvider(getApplicationContext()), geocoderRepository);
     geocoderPresenter.setUI(this);
     progressBar = (ProgressBar) findViewById(R.id.loading_progress_bar);
     progressBar.setVisibility(View.GONE);
@@ -551,6 +559,9 @@ public class LocationPickerActivity extends AppCompatActivity
     if (savedInstanceState.keySet().contains(LAYOUTS_TO_HIDE)) {
       setLayoutVisibilityFromBundle(savedInstanceState);
     }
+    if (savedInstanceState.keySet().contains(GEOLOC_API_KEY)) {
+      apiInteractor.setApiKey(savedInstanceState.getString(GEOLOC_API_KEY));
+    }
     if (savedInstanceState.keySet().contains(SEARCH_ZONE)) {
       searchZone = savedInstanceState.getString(SEARCH_ZONE);
     }
@@ -588,6 +599,9 @@ public class LocationPickerActivity extends AppCompatActivity
     }
     if (transitionBundle.keySet().contains(POIS_LIST)) {
       poisList = transitionBundle.getParcelableArrayList(POIS_LIST);
+    }
+    if (transitionBundle.keySet().contains(GEOLOC_API_KEY)) {
+      apiInteractor.setApiKey(transitionBundle.getString(GEOLOC_API_KEY));
     }
   }
 
@@ -932,6 +946,7 @@ public class LocationPickerActivity extends AppCompatActivity
     private boolean enableSatelliteView = true;
     private boolean shouldReturnOkOnBackPressed = false;
     private List<LekuPoi> lekuPois;
+    private String geolocApiKey = null;
 
     public Builder() {
     }
@@ -985,6 +1000,11 @@ public class LocationPickerActivity extends AppCompatActivity
       return this;
     }
 
+    public Builder withGeolocApiKey(String apiKey) {
+      this.geolocApiKey = apiKey;
+      return this;
+    }
+
     public Intent build(Context context) {
       Intent intent = new Intent(context, LocationPickerActivity.class);
 
@@ -1004,6 +1024,9 @@ public class LocationPickerActivity extends AppCompatActivity
       intent.putExtra(ENABLE_SATELLITE_VIEW, enableSatelliteView);
       if (lekuPois != null && !lekuPois.isEmpty()) {
         intent.putExtra(POIS_LIST, new ArrayList<>(lekuPois));
+      }
+      if (geolocApiKey != null) {
+        intent.putExtra(GEOLOC_API_KEY, geolocApiKey);
       }
 
       return intent;
