@@ -22,3 +22,12 @@ allprojects {
     }
   }
 }
+
+ext {
+  sdk = [
+      compileSdkVersion : 25,
+      targetSdkVersion: 25,
+      minSdkVersion: 15,
+      buildToolsVersion: '25.0.2'
+  ]
+}
