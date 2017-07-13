@@ -68,8 +68,8 @@ public class LocationPickerActivity extends AppCompatActivity
     GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMapLongClickListener,
     GeocoderViewInterface, GoogleMap.OnMapClickListener {
 
-  public static final String LATITUDE = "locationLatitude";
-  public static final String LONGITUDE = "locationLongitude";
+  public static final String LATITUDE = "latitude";
+  public static final String LONGITUDE = "longitude";
   public static final String ZIPCODE = "zipcode";
   public static final String ADDRESS = "address";
   public static final String LOCATION_ADDRESS = "location_address";
