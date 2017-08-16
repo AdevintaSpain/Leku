@@ -190,6 +190,7 @@ public class LocationPickerActivity extends AppCompatActivity
     listResult.setOnItemClickListener((adapterView, view, i, l) -> {
       setNewLocation(locationList.get(i));
       changeListResultVisibility(View.GONE);
+      closeKeyboard();
     });
   }
 
@@ -533,7 +534,7 @@ public class LocationPickerActivity extends AppCompatActivity
 
     changeListResultVisibility(locationList.size() > 1 ? View.VISIBLE : View.GONE);
 
-    if (locationList.size() == 1 && locationList.get(0).getMaxAddressLineIndex() > 0) {
+    if (locationList.size() == 1 && locationList.get(0).getMaxAddressLineIndex() >= 0) {
       changeLocationInfoLayoutVisibility(View.VISIBLE);
     } else {
       changeLocationInfoLayoutVisibility(View.GONE);
