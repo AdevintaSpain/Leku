@@ -19,11 +19,14 @@ class CountryLocaleRect {
   private static final LatLng GERMANY_LOWER_LEFT = new LatLng(47.103880, 5.556203);
   private static final LatLng GERMANY_UPPER_RIGHT = new LatLng(55.204320, 15.453816);
 
-  private static final LatLng UAE_LOWER_LEFT = new LatLng(22.523123, 51.513718); // United Arab Emirates
+  private static final LatLng GERMAN_LOWER_LEFT = new LatLng(45.875834, 6.235783);   // DACH Region
+  private static final LatLng GERMAN_UPPER_RIGHT = new LatLng(55.130976, 16.922589); // DACH Region
+
+  private static final LatLng UAE_LOWER_LEFT = new LatLng(22.523123, 51.513718);  // United Arab Emirates
   private static final LatLng UAE_UPPER_RIGHT = new LatLng(26.188523, 56.568692); // United Arab Emirates
   private static final String UAE_COUNTRY_CODE = "AE";
 
-  private static final LatLng INDIA_LOWER_LEFT = new LatLng(5.445640, 67.487799); // United Arab Emirates
+  private static final LatLng INDIA_LOWER_LEFT = new LatLng(5.445640, 67.487799);   // United Arab Emirates
   private static final LatLng INDIA_UPPER_RIGHT = new LatLng(37.691225, 90.413055); // United Arab Emirates
   private static final String INDIA_COUNTRY_CODE = "IN";
 
@@ -50,6 +53,8 @@ class CountryLocaleRect {
       return ITALY_LOWER_LEFT;
     } else if (Locale.GERMANY.equals(locale)) {
       return GERMANY_LOWER_LEFT;
+    } else if (Locale.GERMAN.equals(locale)) {
+      return GERMAN_LOWER_LEFT;
     } else if (UAE_COUNTRY_CODE.equals(locale.getCountry())) {
       return UAE_LOWER_LEFT;
     } else if (INDIA_COUNTRY_CODE.equals(locale.getCountry())) {
@@ -71,6 +76,8 @@ class CountryLocaleRect {
       return ITALY_UPPER_RIGHT;
     } else if (Locale.GERMANY.equals(locale)) {
       return GERMANY_UPPER_RIGHT;
+    } else if (Locale.GERMAN.equals(locale)) {
+      return GERMAN_UPPER_RIGHT;
     } else if (UAE_COUNTRY_CODE.equals(locale.getCountry())) {
       return UAE_UPPER_RIGHT;
     } else if (INDIA_COUNTRY_CODE.equals(locale.getCountry())) {
