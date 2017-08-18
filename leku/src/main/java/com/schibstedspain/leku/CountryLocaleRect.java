@@ -26,8 +26,8 @@ class CountryLocaleRect {
   private static final LatLng UAE_UPPER_RIGHT = new LatLng(26.188523, 56.568692); // United Arab Emirates
   private static final String UAE_COUNTRY_CODE = "AE";
 
-  private static final LatLng INDIA_LOWER_LEFT = new LatLng(5.445640, 67.487799);   // United Arab Emirates
-  private static final LatLng INDIA_UPPER_RIGHT = new LatLng(37.691225, 90.413055); // United Arab Emirates
+  private static final LatLng INDIA_LOWER_LEFT = new LatLng(5.445640, 67.487799);
+  private static final LatLng INDIA_UPPER_RIGHT = new LatLng(37.691225, 90.413055);
   private static final String INDIA_COUNTRY_CODE = "IN";
 
   private static final LatLng SPAIN_LOWER_LEFT = new LatLng(26.525467, -18.910366);
