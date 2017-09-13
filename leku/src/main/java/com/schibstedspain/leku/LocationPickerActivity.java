@@ -534,7 +534,7 @@ public class LocationPickerActivity extends AppCompatActivity
 
     changeListResultVisibility(locationList.size() > 1 ? View.VISIBLE : View.GONE);
 
-    if (locationList.size() == 1 && locationList.get(0).getMaxAddressLineIndex() >= 0) {
+    if (locationList.size() == 1 && locationList.get(0) != null) {
       changeLocationInfoLayoutVisibility(View.VISIBLE);
     } else {
       changeLocationInfoLayoutVisibility(View.GONE);
