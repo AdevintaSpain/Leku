@@ -612,7 +612,7 @@ public class LocationPickerActivity extends AppCompatActivity
   @Override
   public void showLocationInfo(List<Address> addresses) {
     if (addresses != null) {
-      if (addresses.size() > 0 && addresses.get(0).getMaxAddressLineIndex() > 0) {
+      if (addresses.size() > 0 && addresses.get(0) != null) {
         selectedAddress = addresses.get(0);
         setLocationInfo(selectedAddress);
       } else {
