@@ -55,11 +55,11 @@ class CountryLocaleRect {
       return GERMANY_LOWER_LEFT;
     } else if (Locale.GERMAN.equals(locale)) {
       return GERMAN_LOWER_LEFT;
-    } else if (locale.toString().toLowerCase().equals(UAE_COUNTRY_CODE)) {
+    } else if (locale.toString().toLowerCase().equalsIgnoreCase(UAE_COUNTRY_CODE)) {
       return UAE_LOWER_LEFT;
-    } else if (locale.toString().toLowerCase().equals(INDIA_COUNTRY_CODE)) {
+    } else if (locale.toString().toLowerCase().equalsIgnoreCase(INDIA_COUNTRY_CODE)) {
       return INDIA_LOWER_LEFT;
-    } else if (locale.toString().toLowerCase().equals(SPAIN_COUNTRY_CODE)) {
+    } else if (locale.toString().toLowerCase().equalsIgnoreCase(SPAIN_COUNTRY_CODE)) {
       return SPAIN_LOWER_LEFT;
     }
     return null;
@@ -78,11 +78,11 @@ class CountryLocaleRect {
       return GERMANY_UPPER_RIGHT;
     } else if (Locale.GERMAN.equals(locale)) {
       return GERMAN_UPPER_RIGHT;
-    } else if (locale.toString().toLowerCase().equals(UAE_COUNTRY_CODE)) {
+    } else if (locale.toString().toLowerCase().equalsIgnoreCase(UAE_COUNTRY_CODE)) {
       return UAE_UPPER_RIGHT;
-    } else if (locale.toString().toLowerCase().equals(INDIA_COUNTRY_CODE)) {
+    } else if (locale.toString().toLowerCase().equalsIgnoreCase(INDIA_COUNTRY_CODE)) {
       return INDIA_UPPER_RIGHT;
-    } else if (locale.toString().toLowerCase().equals(SPAIN_COUNTRY_CODE)) {
+    } else if (locale.toString().toLowerCase().equalsIgnoreCase(SPAIN_COUNTRY_CODE)) {
       return SPAIN_UPPER_RIGHT;
     }
     return null;
