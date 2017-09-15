@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         Intent locationPickerIntent = new LocationPickerActivity.Builder()
             .withLocation(41.4036299, 2.1743558)
             //.withGeolocApiKey("<PUT API KEY HERE>")
-            //.withSearchZone("es_ES")
+            .withSearchZone("es_ES")
             //.shouldReturnOkOnBackPressed()
             //.withStreetHidden()
             //.withCityHidden()
