@@ -1,7 +1,5 @@
 package com.schibstedspain.leku;
 
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -9,29 +7,21 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
@@ -52,6 +42,8 @@ import com.schibstedspain.leku.geocoder.GeocoderViewInterface;
 import com.schibstedspain.leku.geocoder.api.AddressBuilder;
 import com.schibstedspain.leku.geocoder.api.NetworkClient;
 import com.schibstedspain.leku.permissions.PermissionUtils;
+import com.schibstedspain.leku.search.LekuSearchCallback;
+import com.schibstedspain.leku.search.LekuSearchFragment;
 import com.schibstedspain.leku.tracker.TrackEvents;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,7 +58,7 @@ import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE;
 public class LocationPickerActivity extends AppCompatActivity
     implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMapLongClickListener,
-    GeocoderViewInterface, GoogleMap.OnMapClickListener {
+    GeocoderViewInterface, GoogleMap.OnMapClickListener, LekuSearchCallback {
 
   public static final String LATITUDE = "latitude";
   public static final String LONGITUDE = "longitude";
@@ -83,15 +75,15 @@ public class LocationPickerActivity extends AppCompatActivity
   public static final String LEKU_POI = "leku_poi";
   private static final String GEOLOC_API_KEY = "geoloc_api_key";
   private static final String LOCATION_KEY = "location_key";
-  private static final String LAST_LOCATION_QUERY = "last_location_query";
+
   private static final String OPTIONS_HIDE_STREET = "street";
   private static final String OPTIONS_HIDE_CITY = "city";
   private static final String OPTIONS_HIDE_ZIPCODE = "zipcode";
-  private static final int REQUEST_PLACE_PICKER = 6655;
-  private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
   private static final int DEFAULT_ZOOM = 16;
   private static final int WIDER_ZOOM = 6;
-  private static final int MIN_CHARACTERS = 2;
+  private static final int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+
+  private LekuSearchFragment lekuSearchFragment;
 
   private GoogleMap map;
   private GoogleApiClient googleApiClient;
@@ -100,7 +92,6 @@ public class LocationPickerActivity extends AppCompatActivity
   private GeocoderPresenter geocoderPresenter;
 
   private ArrayAdapter<String> adapter;
-  private EditText searchView;
   private TextView street;
   private TextView coordinates;
   private TextView longitude;
@@ -110,8 +101,6 @@ public class LocationPickerActivity extends AppCompatActivity
   private FrameLayout locationInfoLayout;
   private ProgressBar progressBar;
   private ListView listResult;
-  private ImageView clearSearchButton;
-  private MenuItem searchOption;
 
   private final List<Address> locationList = new ArrayList<>();
   private List<String> locationNameList = new ArrayList<>();
@@ -129,23 +118,34 @@ public class LocationPickerActivity extends AppCompatActivity
   private List<LekuPoi> poisList;
   private Map<String, LekuPoi> lekuPoisMarkersMap;
   private Marker currentMarker;
-  private TextWatcher textWatcher;
   private GoogleGeocoderDataSource apiInteractor;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_location_picker);
+    setupSearchFragment();
     setUpMainVariables();
     setUpResultsList();
     setUpToolBar();
     updateValuesFromBundle(savedInstanceState);
     checkLocationPermission();
-    setUpSearchView();
     setUpMapIfNeeded();
     setUpFloatingButtons();
     buildGoogleApiClient();
     track(TrackEvents.didLoadLocationPicker);
+  }
+
+  private void setupSearchFragment() {
+    lekuSearchFragment = getLekuSearchFragment();
+
+    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+    ft.replace(R.id.frameSearch, lekuSearchFragment);
+    ft.commit();
+  }
+
+  public LekuSearchFragment getLekuSearchFragment() {
+    return LekuSearchFragment.newInstance();
   }
 
   private void checkLocationPermission() {
@@ -173,12 +173,6 @@ public class LocationPickerActivity extends AppCompatActivity
     coordinates = (TextView) findViewById(R.id.coordinates);
     city = (TextView) findViewById(R.id.city);
     zipCode = (TextView) findViewById(R.id.zipCode);
-    clearSearchButton = (ImageView) findViewById(R.id.leku_clear_search_image);
-    clearSearchButton.setOnClickListener(view -> {
-      if (searchView != null) {
-        searchView.setText("");
-      }
-    });
     locationNameList = new ArrayList<>();
   }
 
@@ -201,60 +195,6 @@ public class LocationPickerActivity extends AppCompatActivity
       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
       getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
-  }
-
-  private void setUpSearchView() {
-    searchView = (EditText) findViewById(R.id.leku_search);
-    searchView.setOnEditorActionListener((v, actionId, event) -> {
-      boolean handled = false;
-      if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-        retrieveLocationFrom(v.getText().toString());
-        closeKeyboard();
-        handled = true;
-      }
-      return handled;
-    });
-    textWatcher = getSearchTextWatcher();
-    searchView.addTextChangedListener(textWatcher);
-  }
-
-  private TextWatcher getSearchTextWatcher() {
-    return new TextWatcher() {
-      @Override
-      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-      }
-
-      @Override
-      public void onTextChanged(CharSequence charSequence, int start, int count, int after) {
-        if ("".equals(charSequence.toString())) {
-          adapter.clear();
-          adapter.notifyDataSetChanged();
-          showLocationInfoLayout();
-          if (clearSearchButton != null) {
-            clearSearchButton.setVisibility(View.INVISIBLE);
-          }
-          if (searchOption != null) {
-            searchOption.setIcon(R.drawable.ic_mic);
-          }
-        } else {
-          if (charSequence.length() > MIN_CHARACTERS && after > count) {
-            retrieveLocationFrom(charSequence.toString(), 400);
-          }
-          if (clearSearchButton != null) {
-            clearSearchButton.setVisibility(View.VISIBLE);
-          }
-          if (searchOption != null) {
-            searchOption.setIcon(R.drawable.ic_search);
-          }
-        }
-      }
-
-      @Override
-      public void afterTextChanged(Editable editable) {
-
-      }
-    };
   }
 
   private void setUpFloatingButtons() {
@@ -292,26 +232,10 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    MenuInflater inflater = getMenuInflater();
-    inflater.inflate(R.menu.toolbar_menu, menu);
-    searchOption = menu.findItem(R.id.action_voice);
-    return true;
-  }
-
-  @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     int id = item.getItemId();
     if (id == android.R.id.home) {
       onBackPressed();
-      return true;
-    } else if (id == R.id.action_voice) {
-      if (searchView.getText().toString().isEmpty()) {
-        startVoiceRecognitionActivity();
-      } else {
-        retrieveLocationFrom(searchView.getText().toString());
-        closeKeyboard();
-      }
       return true;
     }
     return super.onOptionsItemSelected(item);
@@ -324,22 +248,6 @@ public class LocationPickerActivity extends AppCompatActivity
     if (PermissionUtils.isLocationPermissionGranted(getApplicationContext())) {
       geocoderPresenter.getLastKnownLocation();
     }
-  }
-
-  @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    switch (requestCode) {
-      case REQUEST_PLACE_PICKER:
-        if (resultCode == Activity.RESULT_OK) {
-          ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-          searchView = (EditText) findViewById(R.id.leku_search);
-          retrieveLocationFrom(matches.get(0));
-        }
-        break;
-      default:
-        break;
-    }
-    super.onActivityResult(requestCode, resultCode, data);
   }
 
   @Override
@@ -366,9 +274,6 @@ public class LocationPickerActivity extends AppCompatActivity
 
   @Override
   protected void onDestroy() {
-    if (searchView != null && textWatcher != null) {
-      searchView.removeTextChangedListener(textWatcher);
-    }
     if (googleApiClient != null) {
       googleApiClient.unregisterConnectionCallbacks(this);
     }
@@ -429,9 +334,6 @@ public class LocationPickerActivity extends AppCompatActivity
     if (currentLocation != null) {
       savedInstanceState.putParcelable(LOCATION_KEY, currentLocation);
     }
-    if (searchView != null) {
-      savedInstanceState.putString(LAST_LOCATION_QUERY, String.valueOf(searchView.getText()));
-    }
     if (bundle.containsKey(TRANSITION_BUNDLE)) {
       savedInstanceState.putBundle(TRANSITION_BUNDLE, bundle.getBundle(TRANSITION_BUNDLE));
     }
@@ -446,10 +348,6 @@ public class LocationPickerActivity extends AppCompatActivity
   @Override
   public void onRestoreInstanceState(Bundle savedInstanceState) {
     super.onRestoreInstanceState(savedInstanceState);
-    String lastQuery = savedInstanceState.getString(LAST_LOCATION_QUERY, "");
-    if (!"".equals(lastQuery)) {
-      retrieveLocationFrom(lastQuery);
-    }
     currentLocation = savedInstanceState.getParcelable(LOCATION_KEY);
     if (currentLocation != null) {
       setCurrentPositionLocation();
@@ -507,7 +405,7 @@ public class LocationPickerActivity extends AppCompatActivity
       } else {
         updateLocationNameList(addresses);
         if (hasWiderZoom) {
-          searchView.setText("");
+          lekuSearchFragment.clearFilter();
         }
         if (addresses.size() == 1) {
           setNewLocation(addresses.get(0));
@@ -638,7 +536,14 @@ public class LocationPickerActivity extends AppCompatActivity
     setLocationEmpty();
   }
 
-  private void showLocationInfoLayout() {
+  @Override
+  public void clearSearchResults() {
+    adapter.clear();
+    adapter.notifyDataSetChanged();
+  }
+
+  @Override
+  public void showLocationInfoLayout() {
     changeLocationInfoLayoutVisibility(View.VISIBLE);
   }
 
@@ -724,35 +629,6 @@ public class LocationPickerActivity extends AppCompatActivity
     isLocationInformedFromBundle = true;
   }
 
-  private void startVoiceRecognitionActivity() {
-    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-    intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.voice_search_promp));
-    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,
-        getString(R.string.voice_search_extra_language));
-
-    if (checkPlayServices()) {
-      try {
-        startActivityForResult(intent, REQUEST_PLACE_PICKER);
-      } catch (ActivityNotFoundException e) {
-        track(TrackEvents.startVoiceRecognitionActivityFailed);
-      }
-    }
-  }
-
-  private boolean checkPlayServices() {
-    GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
-    int result = googleAPI.isGooglePlayServicesAvailable(getApplicationContext());
-    if (result != ConnectionResult.SUCCESS) {
-      if (googleAPI.isUserResolvableError(result)) {
-        googleAPI.getErrorDialog(this, result, CONNECTION_FAILURE_RESOLUTION_REQUEST).show();
-      }
-      return false;
-    }
-    return true;
-  }
-
   private void setCoordinatesInfo(LatLng latLng) {
     this.latitude.setText(getString(R.string.latitude) + ": " + latLng.latitude);
     this.longitude.setText(getString(R.string.longitude) + ": " + latLng.longitude);
@@ -824,19 +700,28 @@ public class LocationPickerActivity extends AppCompatActivity
     return zoom;
   }
 
+  @Override
+  public void retrieveLocationFrom(String query, boolean debounce) {
+    if (debounce) {
+      if (searchZone != null && !searchZone.isEmpty()) {
+        retrieveDebouncedLocationFromZone(query, searchZone);
+      } else {
+        retrieveDebouncedLocationFromDefaultZone(query);
+      }
+    } else {
+      if (searchZone != null && !searchZone.isEmpty()) {
+        retrieveLocationFromZone(query, searchZone);
+      } else {
+        retrieveLocationFromDefaultZone(query);
+      }
+    }
+  }
+
   private void retrieveLocationFrom(String query) {
     if (searchZone != null && !searchZone.isEmpty()) {
       retrieveLocationFromZone(query, searchZone);
     } else {
       retrieveLocationFromDefaultZone(query);
-    }
-  }
-
-  private void retrieveLocationFrom(String query, int debounceTime) {
-    if (searchZone != null && !searchZone.isEmpty()) {
-      retrieveDebouncedLocationFromZone(query, searchZone, debounceTime);
-    } else {
-      retrieveDebouncedLocationFromDefaultZone(query, debounceTime);
     }
   }
 
@@ -849,6 +734,25 @@ public class LocationPickerActivity extends AppCompatActivity
     }
   }
 
+  private void retrieveDebouncedLocationFromDefaultZone(String query) {
+    if (CountryLocaleRect.getDefaultLowerLeft() != null) {
+      geocoderPresenter.getDebouncedFromLocationName(query, CountryLocaleRect.getDefaultLowerLeft(),
+          CountryLocaleRect.getDefaultUpperRight());
+    } else {
+      geocoderPresenter.getDebouncedFromLocationName(query);
+    }
+  }
+
+  private void retrieveDebouncedLocationFromZone(String query, String zoneKey) {
+    Locale locale = new Locale(zoneKey);
+    if (CountryLocaleRect.getLowerLeftFromZone(locale) != null) {
+      geocoderPresenter.getDebouncedFromLocationName(query, CountryLocaleRect.getLowerLeftFromZone(locale),
+          CountryLocaleRect.getUpperRightFromZone(locale));
+    } else {
+      geocoderPresenter.getDebouncedFromLocationName(query);
+    }
+  }
+
   private void retrieveLocationFromZone(String query, String zoneKey) {
     Locale locale = new Locale(zoneKey);
     if (CountryLocaleRect.getLowerLeftFromZone(locale) != null) {
@@ -856,25 +760,6 @@ public class LocationPickerActivity extends AppCompatActivity
           CountryLocaleRect.getUpperRightFromZone(locale));
     } else {
       geocoderPresenter.getFromLocationName(query);
-    }
-  }
-
-  private void retrieveDebouncedLocationFromDefaultZone(String query, int debounceTime) {
-    if (CountryLocaleRect.getDefaultLowerLeft() != null) {
-      geocoderPresenter.getDebouncedFromLocationName(query, CountryLocaleRect.getDefaultLowerLeft(),
-          CountryLocaleRect.getDefaultUpperRight(), debounceTime);
-    } else {
-      geocoderPresenter.getDebouncedFromLocationName(query, debounceTime);
-    }
-  }
-
-  private void retrieveDebouncedLocationFromZone(String query, String zoneKey, int debounceTime) {
-    Locale locale = new Locale(zoneKey);
-    if (CountryLocaleRect.getLowerLeftFromZone(locale) != null) {
-      geocoderPresenter.getDebouncedFromLocationName(query, CountryLocaleRect.getLowerLeftFromZone(locale),
-          CountryLocaleRect.getUpperRightFromZone(locale), debounceTime);
-    } else {
-      geocoderPresenter.getDebouncedFromLocationName(query, debounceTime);
     }
   }
 
@@ -968,7 +853,6 @@ public class LocationPickerActivity extends AppCompatActivity
     if (currentLocation != null) {
       setCurrentPositionLocation();
     } else {
-      searchView = (EditText) findViewById(R.id.leku_search);
       retrieveLocationFrom(Locale.getDefault().getDisplayCountry());
       hasWiderZoom = true;
     }
@@ -1045,21 +929,13 @@ public class LocationPickerActivity extends AppCompatActivity
     currentLocation.setLongitude(address.getLongitude());
     setNewMapMarker(new LatLng(address.getLatitude(), address.getLongitude()));
     setLocationInfo(address);
-    searchView.setText("");
+    lekuSearchFragment.clearFilter();
   }
 
   private void fillLocationList(List<Address> addresses) {
     locationList.clear();
     for (Address address : addresses) {
       locationList.add(address);
-    }
-  }
-
-  private void closeKeyboard() {
-    View view = this.getCurrentFocus();
-    if (view != null) {
-      InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-      imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
   }
 

@@ -143,5 +143,9 @@
     </FrameLayout>
   </LinearLayout>
 
-  <include layout="@layout/toolbar_search" />
+  <FrameLayout
+      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      android:id="@+id/frameSearch"
+      />
 </FrameLayout>
