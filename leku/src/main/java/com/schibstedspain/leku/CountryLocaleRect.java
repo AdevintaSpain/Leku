@@ -24,15 +24,15 @@ class CountryLocaleRect {
 
   private static final LatLng UAE_LOWER_LEFT = new LatLng(22.523123, 51.513718);  // United Arab Emirates
   private static final LatLng UAE_UPPER_RIGHT = new LatLng(26.188523, 56.568692); // United Arab Emirates
-  private static final String UAE_COUNTRY_CODE = "AE";
+  private static final String UAE_COUNTRY_CODE = "ar_ae";
 
   private static final LatLng INDIA_LOWER_LEFT = new LatLng(5.445640, 67.487799);
   private static final LatLng INDIA_UPPER_RIGHT = new LatLng(37.691225, 90.413055);
-  private static final String INDIA_COUNTRY_CODE = "IN";
+  private static final String INDIA_COUNTRY_CODE = "en_in";
 
   private static final LatLng SPAIN_LOWER_LEFT = new LatLng(26.525467, -18.910366);
   private static final LatLng SPAIN_UPPER_RIGHT = new LatLng(43.906271, 5.394197);
-  private static final String SPAIN_COUNTRY_CODE = "ES";
+  private static final String SPAIN_COUNTRY_CODE = "es_es";
 
   static LatLng getDefaultLowerLeft() {
     return getLowerLeftFromZone(Locale.getDefault());
@@ -55,11 +55,11 @@ class CountryLocaleRect {
       return GERMANY_LOWER_LEFT;
     } else if (Locale.GERMAN.equals(locale)) {
       return GERMAN_LOWER_LEFT;
-    } else if (UAE_COUNTRY_CODE.equals(locale.getCountry())) {
+    } else if (locale.toString().equalsIgnoreCase(UAE_COUNTRY_CODE)) {
       return UAE_LOWER_LEFT;
-    } else if (INDIA_COUNTRY_CODE.equals(locale.getCountry())) {
+    } else if (locale.toString().equalsIgnoreCase(INDIA_COUNTRY_CODE)) {
       return INDIA_LOWER_LEFT;
-    } else if (SPAIN_COUNTRY_CODE.equals(locale.getCountry())) {
+    } else if (locale.toString().equalsIgnoreCase(SPAIN_COUNTRY_CODE)) {
       return SPAIN_LOWER_LEFT;
     }
     return null;
@@ -78,11 +78,11 @@ class CountryLocaleRect {
       return GERMANY_UPPER_RIGHT;
     } else if (Locale.GERMAN.equals(locale)) {
       return GERMAN_UPPER_RIGHT;
-    } else if (UAE_COUNTRY_CODE.equals(locale.getCountry())) {
+    } else if (locale.toString().equalsIgnoreCase(UAE_COUNTRY_CODE)) {
       return UAE_UPPER_RIGHT;
-    } else if (INDIA_COUNTRY_CODE.equals(locale.getCountry())) {
+    } else if (locale.toString().equalsIgnoreCase(INDIA_COUNTRY_CODE)) {
       return INDIA_UPPER_RIGHT;
-    } else if (SPAIN_COUNTRY_CODE.equals(locale.getCountry())) {
+    } else if (locale.toString().equalsIgnoreCase(SPAIN_COUNTRY_CODE)) {
       return SPAIN_UPPER_RIGHT;
     }
     return null;
