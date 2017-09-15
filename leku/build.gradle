@@ -7,12 +7,12 @@ group = 'com.schibstedspain.android'
 version = '3.4.5'
 
 android {
-  compileSdkVersion 25
-  buildToolsVersion '25.0.2'
+  compileSdkVersion sdk.compileSdkVersion
+  buildToolsVersion sdk.buildToolsVersion
 
   defaultConfig {
-    minSdkVersion 15
-    targetSdkVersion 25
+    minSdkVersion sdk.minSdkVersion
+    targetSdkVersion sdk.targetSdkVersion
     versionCode 1
     versionName "1.0"
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
