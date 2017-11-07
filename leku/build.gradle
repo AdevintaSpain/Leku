@@ -1,28 +1,29 @@
 apply plugin: 'com.android.library'
-apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.novoda.bintray-release'
 apply from: '../quality.gradle'
 
 group = 'com.schibstedspain.android'
-version = '3.4.5'
+version = '3.5.0'
 
 android {
-  compileSdkVersion 25
-  buildToolsVersion '25.0.2'
+  compileSdkVersion 26
+  buildToolsVersion '26.0.2'
 
   defaultConfig {
     minSdkVersion 15
-    targetSdkVersion 25
+    targetSdkVersion 26
     versionCode 1
     versionName "1.0"
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     consumerProguardFiles 'lib-proguard-rules.txt'
     vectorDrawables.useSupportLibrary = true
   }
+
+  flavorDimensions 'tier'
+
   buildTypes {
     release {
       minifyEnabled false
-      shrinkResources true
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
   }
@@ -35,18 +36,14 @@ android {
   }
 }
 
-retrolambda {
-  javaVersion JavaVersion.VERSION_1_7
-}
-
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
 
-  def supportVersion = '25.3.1'
+  def supportVersion = '26.1.0'
   compile "com.android.support:appcompat-v7:$supportVersion"
   compile "com.android.support:design:$supportVersion"
 
-  def playServicesVersion = '10.2.6'
+  def playServicesVersion = '11.4.2'
   compile "com.google.android.gms:play-services-maps:$playServicesVersion"
   compile "com.google.android.gms:play-services-location:$playServicesVersion"
 
@@ -55,21 +52,21 @@ dependencies {
   }
 
   compile "io.reactivex:rxandroid:1.2.1"
-  compile 'io.reactivex:rxjava:1.2.4'
+  compile 'io.reactivex:rxjava:1.3.2'
 
-  androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
-  androidTestCompile 'com.android.support.test:runner:0.5'
-  androidTestCompile 'com.android.support.test:rules:0.5'
-  androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
-  androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
-  androidTestCompile 'org.mockito:mockito-core:1.10.19'
+  androidTestCompile 'com.android.support.test.espresso:espresso-core:3.0.1'
+  androidTestCompile 'com.android.support.test:runner:1.0.1'
+  androidTestCompile 'com.android.support.test:rules:1.0.1'
+  androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
+  androidTestCompile 'com.android.support.test.espresso:espresso-intents:3.0.1'
+  androidTestCompile 'org.mockito:mockito-core:2.11.0'
 }
 
 publish {
   userOrg = 'schibstedspain'
   groupId = 'com.schibstedspain.android'
   artifactId = 'leku'
-  publishVersion = '3.4.5'
+  publishVersion = '3.5.0'
   desc = 'Location picker component for Android. It returns a latitude,longitude and an address based on the location picked in the LocationPickerActivity provided.'
   website = 'https://github.com/SchibstedSpain/leku'
 }

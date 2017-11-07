@@ -8,4 +8,7 @@
     <ignore regexp="Try-with-resources requires API level 19"/>
   </issue>
   <issue id="GradleDependency" severity="ignore"/>
+  <issue id="UnusedResources">
+    <ignore regexp="ga_trackingId|google_crash_reporting_api_key"/>
+  </issue>
 </lint>

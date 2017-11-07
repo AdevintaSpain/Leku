@@ -92,6 +92,7 @@ public class LocationPickerActivity extends AppCompatActivity
   private static final int DEFAULT_ZOOM = 16;
   private static final int WIDER_ZOOM = 6;
   private static final int MIN_CHARACTERS = 2;
+  private static final int DEBOUNCE_TIME = 400;
 
   private GoogleMap map;
   private GoogleApiClient googleApiClient;
@@ -164,16 +165,16 @@ public class LocationPickerActivity extends AppCompatActivity
     GeocoderRepository geocoderRepository = new GeocoderRepository(new AndroidGeocoderDataSource(geocoder), apiInteractor);
     geocoderPresenter = new GeocoderPresenter(new ReactiveLocationProvider(getApplicationContext()), geocoderRepository);
     geocoderPresenter.setUI(this);
-    progressBar = (ProgressBar) findViewById(R.id.loading_progress_bar);
+    progressBar = findViewById(R.id.loading_progress_bar);
     progressBar.setVisibility(View.GONE);
-    locationInfoLayout = (FrameLayout) findViewById(R.id.location_info);
-    longitude = (TextView) findViewById(R.id.longitude);
-    latitude = (TextView) findViewById(R.id.latitude);
-    street = (TextView) findViewById(R.id.street);
-    coordinates = (TextView) findViewById(R.id.coordinates);
-    city = (TextView) findViewById(R.id.city);
-    zipCode = (TextView) findViewById(R.id.zipCode);
-    clearSearchButton = (ImageView) findViewById(R.id.leku_clear_search_image);
+    locationInfoLayout = findViewById(R.id.location_info);
+    longitude = findViewById(R.id.longitude);
+    latitude = findViewById(R.id.latitude);
+    street = findViewById(R.id.street);
+    coordinates = findViewById(R.id.coordinates);
+    city = findViewById(R.id.city);
+    zipCode = findViewById(R.id.zipCode);
+    clearSearchButton = findViewById(R.id.leku_clear_search_image);
     clearSearchButton.setOnClickListener(view -> {
       if (searchView != null) {
         searchView.setText("");
@@ -183,7 +184,7 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void setUpResultsList() {
-    listResult = (ListView) findViewById(R.id.resultlist);
+    listResult = findViewById(R.id.resultlist);
     adapter =
         new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, locationNameList);
     listResult.setAdapter(adapter);
@@ -195,7 +196,7 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void setUpToolBar() {
-    Toolbar toolbar = (Toolbar) findViewById(R.id.map_search_toolbar);
+    Toolbar toolbar = findViewById(R.id.map_search_toolbar);
     setSupportActionBar(toolbar);
     if (getSupportActionBar() != null) {
       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -204,7 +205,7 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void setUpSearchView() {
-    searchView = (EditText) findViewById(R.id.leku_search);
+    searchView = findViewById(R.id.leku_search);
     searchView.setOnEditorActionListener((v, actionId, event) -> {
       boolean handled = false;
       if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -239,7 +240,7 @@ public class LocationPickerActivity extends AppCompatActivity
           }
         } else {
           if (charSequence.length() > MIN_CHARACTERS && after > count) {
-            retrieveLocationFrom(charSequence.toString(), 400);
+            retrieveLocationWithDebounceTimeFrom(charSequence.toString());
           }
           if (clearSearchButton != null) {
             clearSearchButton.setVisibility(View.VISIBLE);
@@ -258,15 +259,15 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void setUpFloatingButtons() {
-    FloatingActionButton btnMyLocation = (FloatingActionButton) findViewById(R.id.btnFloatingAction);
+    FloatingActionButton btnMyLocation = findViewById(R.id.btnFloatingAction);
     btnMyLocation.setOnClickListener(v -> {
       geocoderPresenter.getLastKnownLocation();
       track(TrackEvents.didLocalizeMe);
     });
-    FloatingActionButton btnAcceptLocation = (FloatingActionButton) findViewById(R.id.btnAccept);
+    FloatingActionButton btnAcceptLocation = findViewById(R.id.btnAccept);
     btnAcceptLocation.setOnClickListener(v -> returnCurrentPosition());
 
-    FloatingActionButton btnSatellite = (FloatingActionButton) findViewById(R.id.btnSatellite);
+    FloatingActionButton btnSatellite = findViewById(R.id.btnSatellite);
     btnSatellite.setOnClickListener(view -> {
       map.setMapType(map.getMapType() == MAP_TYPE_SATELLITE ? MAP_TYPE_NORMAL : MAP_TYPE_SATELLITE);
       btnSatellite.setImageResource(map.getMapType() == MAP_TYPE_SATELLITE ? R.drawable.ic_satellite_off : R.drawable.ic_satellite_on);
@@ -332,7 +333,7 @@ public class LocationPickerActivity extends AppCompatActivity
       case REQUEST_PLACE_PICKER:
         if (resultCode == Activity.RESULT_OK) {
           ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-          searchView = (EditText) findViewById(R.id.leku_search);
+          searchView = findViewById(R.id.leku_search);
           retrieveLocationFrom(matches.get(0));
         }
         break;
@@ -754,8 +755,8 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void setCoordinatesInfo(LatLng latLng) {
-    this.latitude.setText(getString(R.string.latitude) + ": " + latLng.latitude);
-    this.longitude.setText(getString(R.string.longitude) + ": " + latLng.longitude);
+    this.latitude.setText(String.format("%s: %s", getString(R.string.latitude), latLng.latitude));
+    this.longitude.setText(String.format("%s: %s", getString(R.string.longitude), latLng.longitude));
     showCoordinatesLayout();
   }
 
@@ -832,11 +833,11 @@ public class LocationPickerActivity extends AppCompatActivity
     }
   }
 
-  private void retrieveLocationFrom(String query, int debounceTime) {
+  private void retrieveLocationWithDebounceTimeFrom(String query) {
     if (searchZone != null && !searchZone.isEmpty()) {
-      retrieveDebouncedLocationFromZone(query, searchZone, debounceTime);
+      retrieveDebouncedLocationFromZone(query, searchZone, DEBOUNCE_TIME);
     } else {
-      retrieveDebouncedLocationFromDefaultZone(query, debounceTime);
+      retrieveDebouncedLocationFromDefaultZone(query, DEBOUNCE_TIME);
     }
   }
 
@@ -968,7 +969,7 @@ public class LocationPickerActivity extends AppCompatActivity
     if (currentLocation != null) {
       setCurrentPositionLocation();
     } else {
-      searchView = (EditText) findViewById(R.id.leku_search);
+      searchView = findViewById(R.id.leku_search);
       retrieveLocationFrom(Locale.getDefault().getDisplayCountry());
       hasWiderZoom = true;
     }
@@ -1050,16 +1051,16 @@ public class LocationPickerActivity extends AppCompatActivity
 
   private void fillLocationList(List<Address> addresses) {
     locationList.clear();
-    for (Address address : addresses) {
-      locationList.add(address);
-    }
+    locationList.addAll(addresses);
   }
 
   private void closeKeyboard() {
     View view = this.getCurrentFocus();
     if (view != null) {
       InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-      imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+      if (imm != null) {
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+      }
     }
   }
 

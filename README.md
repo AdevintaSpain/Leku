@@ -59,8 +59,8 @@ Location picker component for Android. It returns a latitude, longitude and an a
 ### Prerequisites
 
 minSdkVersion >= 15
-Google Play Services = 10.2.1
-Support Library = 25.3.1
+Google Play Services = 11.4.2
+Support Library = 26.1.0
 
 ### Download
 
@@ -76,7 +76,7 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    compile 'com.schibstedspain.android:leku:3.4.5'
+    compile 'com.schibstedspain.android:leku:3.5.0'
 }
 ```
 
