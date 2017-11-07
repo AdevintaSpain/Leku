@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE module PUBLIC
-    "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
-    "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+    "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 
 
 <!-- Based on https://github.com/square/java-code-styles -->
@@ -23,6 +23,7 @@
         <module name="EmptyBlock"/>
         <module name="EmptyCatchBlock">
             <property name="commentFormat" value="Intentionally blank"/>
+            <property name="exceptionVariableName" value="ignore|expected"/>
         </module>
         <module name="LeftCurly"/>
         <module name="NeedBraces"/>
@@ -44,16 +45,16 @@
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
         <module name="StringLiteralEquality"/>
-        
+
         <module name="IllegalCatch">
             <property name="illegalClassNames" value="Exception"/>
         </module>
-        
+
         <module name="ParameterAssignment"/>
         <module name="FallThrough"/>
         <module name="OneStatementPerLine"/>
         <module name="OverloadMethodsDeclarationOrder"/>
-        
+
     </module>
 
     <!-- Old values -->
@@ -87,7 +88,13 @@
         <!-- Checks for Naming Conventions.                  -->
         <!-- See http://checkstyle.sf.net/config_naming.html -->
 
-        <module name="MethodName"/>
+        <module name="MethodName">
+            <property name="id" value="MethodNameRegular"/>
+        </module>
+        <module name="MethodName">
+            <property name="id" value="MethodNameTest"/>
+            <property name="format" value="^[a-z][a-zA-Z0-9_]*$"/>
+        </module>
         <module name="PackageName"/>
         <module name="ParameterName"/>
         <module name="TypeName"/>
@@ -118,7 +125,17 @@
         <module name="GenericWhitespace"/>
         <module name="EmptyForIteratorPad"/>
         <module name="MethodParamPad"/>
-        <module name="NoWhitespaceAfter"/>
+        <module name="NoWhitespaceAfter">
+            <property name="tokens" value="INC"/>
+            <property name="tokens" value="DEC"/>
+            <property name="tokens" value="UNARY_MINUS"/>
+            <property name="tokens" value="UNARY_PLUS"/>
+            <property name="tokens" value="BNOT"/>
+            <property name="tokens" value="LNOT"/>
+            <property name="tokens" value="DOT"/>
+            <property name="tokens" value="ARRAY_DECLARATOR"/>
+            <property name="tokens" value="INDEX_OP"/>
+        </module>
         <module name="NoWhitespaceBefore"/>
         <module name="OperatorWrap"/>
         <module name="ParenPad"/>
