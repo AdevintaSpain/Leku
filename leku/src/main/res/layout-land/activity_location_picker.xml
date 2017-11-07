@@ -104,6 +104,7 @@
           android:layout_gravity="bottom|end"
           android:background="@drawable/adress_custom_background"
           android:orientation="horizontal"
+          tools:ignore="UselessParent"
           >
 
         <LinearLayout

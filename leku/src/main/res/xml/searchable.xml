@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<searchable xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:label="@string/app_name"
+            android:hint="Search by Name"
+            android:imeOptions="actionSearch"
+            tools:ignore="UnusedResources"
+    >
+</searchable>

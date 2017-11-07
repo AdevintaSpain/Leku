@@ -1,7 +1,7 @@
 <resources
   xmlns:tools="http://schemas.android.com/tools">
-  <string name="app_name" translatable="false" tools:ignore="Unu">Leku</string>
-  <string name="title_activity_location_picker">Location Picker</string>
+  <string name="app_name" translatable="false" tools:ignore="UnusedResources">Leku</string>
+  <string name="title_activity_location_picker" tools:ignore="UnusedResources">Location Picker</string>
   <string name="no_geocoder_available">Service not available</string>
   <string name="load_location_error">Something went wrong. Please try again.</string>
   <string name="no_search_results">There are no results for your search</string>
