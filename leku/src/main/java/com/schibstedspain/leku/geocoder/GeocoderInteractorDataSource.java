@@ -5,7 +5,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.List;
 import rx.Observable;
 
-public interface GeocoderInteractorInterface {
+public interface GeocoderInteractorDataSource {
   Observable<List<Address>> getFromLocationName(String query);
 
   Observable<List<Address>> getFromLocationName(String query, LatLng lowerLeft, LatLng upperRight);

@@ -53,11 +53,11 @@ public class PermissionGranter {
     return permissionStatus == PackageManager.PERMISSION_GRANTED;
   }
 
-  public void waitInMillis(long millis) {
+  private void waitInMillis(long millis) {
     try {
       Thread.sleep(millis);
     } catch (InterruptedException e) {
-      throw new RuntimeException("Cannot execute Thread.sleep()");
+      Log.d(PermissionGranter.class.getName(), "Cannot execute Thread.sleep()");
     }
   }
 

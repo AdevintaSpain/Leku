@@ -16,7 +16,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -45,9 +44,13 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.schibstedspain.leku.geocoder.GeocoderInteractor;
+import com.schibstedspain.leku.geocoder.GoogleGeocoderDataSource;
+import com.schibstedspain.leku.geocoder.AndroidGeocoderDataSource;
 import com.schibstedspain.leku.geocoder.GeocoderPresenter;
+import com.schibstedspain.leku.geocoder.GeocoderRepository;
 import com.schibstedspain.leku.geocoder.GeocoderViewInterface;
+import com.schibstedspain.leku.geocoder.api.AddressBuilder;
+import com.schibstedspain.leku.geocoder.api.NetworkClient;
 import com.schibstedspain.leku.permissions.PermissionUtils;
 import com.schibstedspain.leku.tracker.TrackEvents;
 import java.util.ArrayList;
@@ -65,8 +68,8 @@ public class LocationPickerActivity extends AppCompatActivity
     GoogleApiClient.OnConnectionFailedListener, LocationListener, GoogleMap.OnMapLongClickListener,
     GeocoderViewInterface, GoogleMap.OnMapClickListener {
 
-  public static final String LATITUDE = "locationLatitude";
-  public static final String LONGITUDE = "locationLongitude";
+  public static final String LATITUDE = "latitude";
+  public static final String LONGITUDE = "longitude";
   public static final String ZIPCODE = "zipcode";
   public static final String ADDRESS = "address";
   public static final String LOCATION_ADDRESS = "location_address";
@@ -78,6 +81,7 @@ public class LocationPickerActivity extends AppCompatActivity
   public static final String ENABLE_LOCATION_PERMISSION_REQUEST = "enable_location_permission_request";
   public static final String POIS_LIST = "pois_list";
   public static final String LEKU_POI = "leku_poi";
+  private static final String GEOLOC_API_KEY = "geoloc_api_key";
   private static final String LOCATION_KEY = "location_key";
   private static final String LAST_LOCATION_QUERY = "last_location_query";
   private static final String OPTIONS_HIDE_STREET = "street";
@@ -88,6 +92,7 @@ public class LocationPickerActivity extends AppCompatActivity
   private static final int DEFAULT_ZOOM = 16;
   private static final int WIDER_ZOOM = 6;
   private static final int MIN_CHARACTERS = 2;
+  private static final int DEBOUNCE_TIME = 400;
 
   private GoogleMap map;
   private GoogleApiClient googleApiClient;
@@ -98,6 +103,9 @@ public class LocationPickerActivity extends AppCompatActivity
   private ArrayAdapter<String> adapter;
   private EditText searchView;
   private TextView street;
+  private TextView coordinates;
+  private TextView longitude;
+  private TextView latitude;
   private TextView city;
   private TextView zipCode;
   private FrameLayout locationInfoLayout;
@@ -123,6 +131,7 @@ public class LocationPickerActivity extends AppCompatActivity
   private Map<String, LekuPoi> lekuPoisMarkersMap;
   private Marker currentMarker;
   private TextWatcher textWatcher;
+  private GoogleGeocoderDataSource apiInteractor;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +146,7 @@ public class LocationPickerActivity extends AppCompatActivity
     setUpMapIfNeeded();
     setUpFloatingButtons();
     buildGoogleApiClient();
-    setTracking(TrackEvents.didLoadLocationPicker);
+    track(TrackEvents.didLoadLocationPicker);
   }
 
   private void checkLocationPermission() {
@@ -146,22 +155,26 @@ public class LocationPickerActivity extends AppCompatActivity
     }
   }
 
-  protected void setTracking(TrackEvents event) {
+  protected void track(TrackEvents event) {
     LocationPicker.getTracker().onEventTracked(event);
   }
 
   private void setUpMainVariables() {
     Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-    geocoderPresenter = new GeocoderPresenter(new ReactiveLocationProvider(getApplicationContext()),
-        new GeocoderInteractor(geocoder));
+    apiInteractor = new GoogleGeocoderDataSource(new NetworkClient(), new AddressBuilder());
+    GeocoderRepository geocoderRepository = new GeocoderRepository(new AndroidGeocoderDataSource(geocoder), apiInteractor);
+    geocoderPresenter = new GeocoderPresenter(new ReactiveLocationProvider(getApplicationContext()), geocoderRepository);
     geocoderPresenter.setUI(this);
-    progressBar = (ProgressBar) findViewById(R.id.loading_progress_bar);
+    progressBar = findViewById(R.id.loading_progress_bar);
     progressBar.setVisibility(View.GONE);
-    locationInfoLayout = (FrameLayout) findViewById(R.id.location_info);
-    street = (TextView) findViewById(R.id.street);
-    city = (TextView) findViewById(R.id.city);
-    zipCode = (TextView) findViewById(R.id.zipCode);
-    clearSearchButton = (ImageView) findViewById(R.id.leku_clear_search_image);
+    locationInfoLayout = findViewById(R.id.location_info);
+    longitude = findViewById(R.id.longitude);
+    latitude = findViewById(R.id.latitude);
+    street = findViewById(R.id.street);
+    coordinates = findViewById(R.id.coordinates);
+    city = findViewById(R.id.city);
+    zipCode = findViewById(R.id.zipCode);
+    clearSearchButton = findViewById(R.id.leku_clear_search_image);
     clearSearchButton.setOnClickListener(view -> {
       if (searchView != null) {
         searchView.setText("");
@@ -171,18 +184,19 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void setUpResultsList() {
-    listResult = (ListView) findViewById(R.id.resultlist);
+    listResult = findViewById(R.id.resultlist);
     adapter =
         new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, locationNameList);
     listResult.setAdapter(adapter);
     listResult.setOnItemClickListener((adapterView, view, i, l) -> {
       setNewLocation(locationList.get(i));
       changeListResultVisibility(View.GONE);
+      closeKeyboard();
     });
   }
 
   private void setUpToolBar() {
-    Toolbar toolbar = (Toolbar) findViewById(R.id.map_search_toolbar);
+    Toolbar toolbar = findViewById(R.id.map_search_toolbar);
     setSupportActionBar(toolbar);
     if (getSupportActionBar() != null) {
       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -191,7 +205,7 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void setUpSearchView() {
-    searchView = (EditText) findViewById(R.id.leku_search);
+    searchView = findViewById(R.id.leku_search);
     searchView.setOnEditorActionListener((v, actionId, event) -> {
       boolean handled = false;
       if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -226,7 +240,7 @@ public class LocationPickerActivity extends AppCompatActivity
           }
         } else {
           if (charSequence.length() > MIN_CHARACTERS && after > count) {
-            retrieveLocationFrom(charSequence.toString(), 400);
+            retrieveLocationWithDebounceTimeFrom(charSequence.toString());
           }
           if (clearSearchButton != null) {
             clearSearchButton.setVisibility(View.VISIBLE);
@@ -245,15 +259,15 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void setUpFloatingButtons() {
-    FloatingActionButton btnMyLocation = (FloatingActionButton) findViewById(R.id.btnFloatingAction);
+    FloatingActionButton btnMyLocation = findViewById(R.id.btnFloatingAction);
     btnMyLocation.setOnClickListener(v -> {
       geocoderPresenter.getLastKnownLocation();
-      setTracking(TrackEvents.didLocalizeMe);
+      track(TrackEvents.didLocalizeMe);
     });
-    FloatingActionButton btnAcceptLocation = (FloatingActionButton) findViewById(R.id.btnAccept);
+    FloatingActionButton btnAcceptLocation = findViewById(R.id.btnAccept);
     btnAcceptLocation.setOnClickListener(v -> returnCurrentPosition());
 
-    FloatingActionButton btnSatellite = (FloatingActionButton) findViewById(R.id.btnSatellite);
+    FloatingActionButton btnSatellite = findViewById(R.id.btnSatellite);
     btnSatellite.setOnClickListener(view -> {
       map.setMapType(map.getMapType() == MAP_TYPE_SATELLITE ? MAP_TYPE_NORMAL : MAP_TYPE_SATELLITE);
       btnSatellite.setImageResource(map.getMapType() == MAP_TYPE_SATELLITE ? R.drawable.ic_satellite_off : R.drawable.ic_satellite_on);
@@ -319,7 +333,7 @@ public class LocationPickerActivity extends AppCompatActivity
       case REQUEST_PLACE_PICKER:
         if (resultCode == Activity.RESULT_OK) {
           ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-          searchView = (EditText) findViewById(R.id.leku_search);
+          searchView = findViewById(R.id.leku_search);
           retrieveLocationFrom(matches.get(0));
         }
         break;
@@ -366,7 +380,7 @@ public class LocationPickerActivity extends AppCompatActivity
   public void onBackPressed() {
     if (!shouldReturnOkOnBackPressed || isLocationInformedFromBundle) {
       setResult(RESULT_CANCELED);
-      setTracking(TrackEvents.CANCEL);
+      track(TrackEvents.CANCEL);
       finish();
     } else {
       returnCurrentPosition();
@@ -401,7 +415,7 @@ public class LocationPickerActivity extends AppCompatActivity
       try {
         connectionResult.startResolutionForResult(this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
       } catch (IntentSender.SendIntentException e) {
-        Log.d(LocationPickerActivity.class.getName(), e.getMessage());
+        track(TrackEvents.googleApiConnectionFailed);
       }
     }
   }
@@ -459,14 +473,14 @@ public class LocationPickerActivity extends AppCompatActivity
   public void onMapLongClick(LatLng latLng) {
     currentLekuPoi = null;
     setNewPosition(latLng);
-    setTracking(TrackEvents.didLocalizeByPoi);
+    track(TrackEvents.didLocalizeByPoi);
   }
 
   @Override
   public void onMapClick(LatLng latLng) {
     currentLekuPoi = null;
     setNewPosition(latLng);
-    setTracking(TrackEvents.simpleDidLocalizeByPoi);
+    track(TrackEvents.simpleDidLocalizeByPoi);
   }
 
   private void setNewPosition(LatLng latLng) {
@@ -521,12 +535,12 @@ public class LocationPickerActivity extends AppCompatActivity
 
     changeListResultVisibility(locationList.size() > 1 ? View.VISIBLE : View.GONE);
 
-    if (locationList.size() == 1 && locationList.get(0).getMaxAddressLineIndex() > 0) {
+    if (locationList.size() == 1 && locationList.get(0) != null) {
       changeLocationInfoLayoutVisibility(View.VISIBLE);
     } else {
       changeLocationInfoLayoutVisibility(View.GONE);
     }
-    setTracking(TrackEvents.didSearchLocations);
+    track(TrackEvents.didSearchLocations);
   }
 
   private void changeListResultVisibility(int visibility) {
@@ -537,10 +551,33 @@ public class LocationPickerActivity extends AppCompatActivity
     locationInfoLayout.setVisibility(visibility);
   }
 
+  private void showCoordinatesLayout() {
+    longitude.setVisibility(View.VISIBLE);
+    latitude.setVisibility(View.VISIBLE);
+    coordinates.setVisibility(View.VISIBLE);
+    street.setVisibility(View.GONE);
+    city.setVisibility(View.GONE);
+    zipCode.setVisibility(View.GONE);
+    changeLocationInfoLayoutVisibility(View.VISIBLE);
+  }
+
+  private void showAddressLayout() {
+    longitude.setVisibility(View.GONE);
+    latitude.setVisibility(View.GONE);
+    coordinates.setVisibility(View.GONE);
+    street.setVisibility(View.VISIBLE);
+    city.setVisibility(View.VISIBLE);
+    zipCode.setVisibility(View.VISIBLE);
+    changeLocationInfoLayoutVisibility(View.VISIBLE);
+  }
+
   private void updateAddressLayoutVisibility() {
     street.setVisibility(isStreetVisible ? View.VISIBLE : View.INVISIBLE);
     city.setVisibility(isCityVisible ? View.VISIBLE : View.INVISIBLE);
     zipCode.setVisibility(isZipCodeVisible ? View.VISIBLE : View.INVISIBLE);
+    longitude.setVisibility(View.VISIBLE);
+    latitude.setVisibility(View.VISIBLE);
+    coordinates.setVisibility(View.VISIBLE);
   }
 
   @Override
@@ -551,8 +588,9 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   @Override
-  public void willGetLocationInfo() {
-    changeLocationInfoLayoutVisibility(View.GONE);
+  public void willGetLocationInfo(LatLng latLng) {
+    changeLocationInfoLayoutVisibility(View.VISIBLE);
+    setCoordinatesInfo(latLng);
   }
 
   @Override
@@ -575,7 +613,7 @@ public class LocationPickerActivity extends AppCompatActivity
   @Override
   public void showLocationInfo(List<Address> addresses) {
     if (addresses != null) {
-      if (addresses.size() > 0 && addresses.get(0).getMaxAddressLineIndex() > 0) {
+      if (addresses.size() > 0 && addresses.get(0) != null) {
         selectedAddress = addresses.get(0);
         setLocationInfo(selectedAddress);
       } else {
@@ -588,7 +626,7 @@ public class LocationPickerActivity extends AppCompatActivity
     this.street.setText("");
     this.city.setText("");
     this.zipCode.setText("");
-    changeLocationInfoLayoutVisibility(View.GONE);
+    changeLocationInfoLayoutVisibility(View.VISIBLE);
   }
 
   @Override
@@ -602,11 +640,7 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void showLocationInfoLayout() {
-    if ("".equals(this.street.getText()) && "".equals(this.city.getText())) {
-      changeLocationInfoLayoutVisibility(View.GONE);
-    } else {
-      changeLocationInfoLayoutVisibility(View.VISIBLE);
-    }
+    changeLocationInfoLayoutVisibility(View.VISIBLE);
   }
 
   private void getSavedInstanceParams(Bundle savedInstanceState) {
@@ -622,14 +656,17 @@ public class LocationPickerActivity extends AppCompatActivity
     if (savedInstanceState.keySet().contains(LAYOUTS_TO_HIDE)) {
       setLayoutVisibilityFromBundle(savedInstanceState);
     }
+    if (savedInstanceState.keySet().contains(GEOLOC_API_KEY)) {
+      apiInteractor.setApiKey(savedInstanceState.getString(GEOLOC_API_KEY));
+    }
     if (savedInstanceState.keySet().contains(SEARCH_ZONE)) {
       searchZone = savedInstanceState.getString(SEARCH_ZONE);
     }
-    if (savedInstanceState.keySet().contains(POIS_LIST)) {
-      poisList = savedInstanceState.getParcelableArrayList(POIS_LIST);
-    }
     if (savedInstanceState.keySet().contains(ENABLE_SATELLITE_VIEW)) {
       enableSatelliteView = savedInstanceState.getBoolean(ENABLE_SATELLITE_VIEW);
+    }
+    if (savedInstanceState.keySet().contains(POIS_LIST)) {
+      poisList = savedInstanceState.getParcelableArrayList(POIS_LIST);
     }
     if (savedInstanceState.keySet().contains(ENABLE_LOCATION_PERMISSION_REQUEST)) {
       enableLocationPermissionRequest = savedInstanceState.getBoolean(ENABLE_LOCATION_PERMISSION_REQUEST);
@@ -659,6 +696,9 @@ public class LocationPickerActivity extends AppCompatActivity
     }
     if (transitionBundle.keySet().contains(POIS_LIST)) {
       poisList = transitionBundle.getParcelableArrayList(POIS_LIST);
+    }
+    if (transitionBundle.keySet().contains(GEOLOC_API_KEY)) {
+      apiInteractor.setApiKey(transitionBundle.getString(GEOLOC_API_KEY));
     }
   }
 
@@ -697,7 +737,7 @@ public class LocationPickerActivity extends AppCompatActivity
       try {
         startActivityForResult(intent, REQUEST_PLACE_PICKER);
       } catch (ActivityNotFoundException e) {
-        Log.d(LocationPickerActivity.class.getName(), e.getMessage());
+        track(TrackEvents.startVoiceRecognitionActivityFailed);
       }
     }
   }
@@ -714,11 +754,17 @@ public class LocationPickerActivity extends AppCompatActivity
     return true;
   }
 
+  private void setCoordinatesInfo(LatLng latLng) {
+    this.latitude.setText(String.format("%s: %s", getString(R.string.latitude), latLng.latitude));
+    this.longitude.setText(String.format("%s: %s", getString(R.string.longitude), latLng.longitude));
+    showCoordinatesLayout();
+  }
+
   private void setLocationInfo(Address address) {
     street.setText(address.getAddressLine(0));
     city.setText(isStreetEqualsCity(address) ? "" : address.getLocality());
     zipCode.setText(address.getPostalCode());
-    changeLocationInfoLayoutVisibility(View.VISIBLE);
+    showAddressLayout();
   }
 
   private void setLocationInfo(LekuPoi poi) {
@@ -726,25 +772,25 @@ public class LocationPickerActivity extends AppCompatActivity
     street.setText(poi.getTitle());
     city.setText(poi.getAddress());
     zipCode.setText(null);
-    changeLocationInfoLayoutVisibility(View.VISIBLE);
+    showAddressLayout();
   }
 
   private boolean isStreetEqualsCity(Address address) {
     return address.getAddressLine(0).equals(address.getLocality());
   }
 
-  private void setNewMapMarker(double latitude, double longitude) {
+  private void setNewMapMarker(LatLng latLng) {
     if (map != null) {
       if (currentMarker != null) {
         currentMarker.remove();
       }
       CameraPosition cameraPosition =
-          new CameraPosition.Builder().target(new LatLng(latitude, longitude))
+          new CameraPosition.Builder().target(latLng)
               .zoom(getDefaultZoom())
               .build();
       hasWiderZoom = false;
       map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-      currentMarker = addMarker(latitude, longitude);
+      currentMarker = addMarker(latLng);
       map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
         @Override
         public void onMarkerDragStart(Marker marker) {
@@ -787,11 +833,11 @@ public class LocationPickerActivity extends AppCompatActivity
     }
   }
 
-  private void retrieveLocationFrom(String query, int debounceTime) {
+  private void retrieveLocationWithDebounceTimeFrom(String query) {
     if (searchZone != null && !searchZone.isEmpty()) {
-      retrieveDebouncedLocationFromZone(query, searchZone, debounceTime);
+      retrieveDebouncedLocationFromZone(query, searchZone, DEBOUNCE_TIME);
     } else {
-      retrieveDebouncedLocationFromDefaultZone(query, debounceTime);
+      retrieveDebouncedLocationFromDefaultZone(query, DEBOUNCE_TIME);
     }
   }
 
@@ -844,7 +890,7 @@ public class LocationPickerActivity extends AppCompatActivity
       returnIntent.putExtra(TRANSITION_BUNDLE, bundle.getBundle(TRANSITION_BUNDLE));
       returnIntent.putExtra(LEKU_POI, currentLekuPoi);
       setResult(RESULT_OK, returnIntent);
-      setTracking(TrackEvents.RESULT_OK);
+      track(TrackEvents.RESULT_OK);
     } else if (currentLocation != null) {
       Intent returnIntent = new Intent();
       returnIntent.putExtra(LATITUDE, currentLocation.getLatitude());
@@ -858,10 +904,10 @@ public class LocationPickerActivity extends AppCompatActivity
       returnIntent.putExtra(ADDRESS, selectedAddress);
       returnIntent.putExtra(TRANSITION_BUNDLE, bundle.getBundle(TRANSITION_BUNDLE));
       setResult(RESULT_OK, returnIntent);
-      setTracking(TrackEvents.RESULT_OK);
+      track(TrackEvents.RESULT_OK);
     } else {
       setResult(RESULT_CANCELED);
-      setTracking(TrackEvents.CANCEL);
+      track(TrackEvents.CANCEL);
     }
     finish();
   }
@@ -923,7 +969,7 @@ public class LocationPickerActivity extends AppCompatActivity
     if (currentLocation != null) {
       setCurrentPositionLocation();
     } else {
-      searchView = (EditText) findViewById(R.id.leku_search);
+      searchView = findViewById(R.id.leku_search);
       retrieveLocationFrom(Locale.getDefault().getDisplayCountry());
       hasWiderZoom = true;
     }
@@ -931,9 +977,9 @@ public class LocationPickerActivity extends AppCompatActivity
 
   private void setCurrentPositionLocation() {
     if (currentLocation != null) {
-      setNewMapMarker(currentLocation.getLatitude(), currentLocation.getLongitude());
-      geocoderPresenter.getInfoFromLocation(currentLocation.getLatitude(),
-          currentLocation.getLongitude());
+      setNewMapMarker(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+      geocoderPresenter.getInfoFromLocation(new LatLng(currentLocation.getLatitude(),
+          currentLocation.getLongitude()));
     }
   }
 
@@ -943,7 +989,8 @@ public class LocationPickerActivity extends AppCompatActivity
       for (LekuPoi lekuPoi : poisList) {
         Location location = lekuPoi.getLocation();
         if (location != null && lekuPoi.getTitle() != null) {
-          Marker marker = addPoiMarker(location.getLatitude(), location.getLongitude(), lekuPoi.getTitle(), lekuPoi.getAddress());
+          Marker marker = addPoiMarker(new LatLng(location.getLatitude(), location.getLongitude()),
+              lekuPoi.getTitle(), lekuPoi.getAddress());
           lekuPoisMarkersMap.put(marker.getId(), lekuPoi);
         }
       }
@@ -953,7 +1000,7 @@ public class LocationPickerActivity extends AppCompatActivity
         if (lekuPoi != null) {
           setLocationInfo(lekuPoi);
           centerToPoi(lekuPoi);
-          setTracking(TrackEvents.simpleDidLocalizeByLekuPoi);
+          track(TrackEvents.simpleDidLocalizeByLekuPoi);
         }
         return true;
       });
@@ -978,12 +1025,12 @@ public class LocationPickerActivity extends AppCompatActivity
     googleApiClient.connect();
   }
 
-  private Marker addMarker(double latitude, double longitude) {
-    return map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).draggable(true));
+  private Marker addMarker(LatLng latLng) {
+    return map.addMarker(new MarkerOptions().position(latLng).draggable(true));
   }
 
-  private Marker addPoiMarker(double latitude, double longitude, String title, String address) {
-    return map.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude))
+  private Marker addPoiMarker(LatLng latLng, String title, String address) {
+    return map.addMarker(new MarkerOptions().position(latLng)
         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
         .title(title)
         .snippet(address));
@@ -995,28 +1042,25 @@ public class LocationPickerActivity extends AppCompatActivity
       currentLocation = new Location(getString(R.string.network_resource));
     }
 
-    double latitude = address.getLatitude();
-    double longitude = address.getLongitude();
-
-    currentLocation.setLatitude(latitude);
-    currentLocation.setLongitude(longitude);
-    setNewMapMarker(latitude, longitude);
+    currentLocation.setLatitude(address.getLatitude());
+    currentLocation.setLongitude(address.getLongitude());
+    setNewMapMarker(new LatLng(address.getLatitude(), address.getLongitude()));
     setLocationInfo(address);
     searchView.setText("");
   }
 
   private void fillLocationList(List<Address> addresses) {
     locationList.clear();
-    for (Address address : addresses) {
-      locationList.add(address);
-    }
+    locationList.addAll(addresses);
   }
 
   private void closeKeyboard() {
     View view = this.getCurrentFocus();
     if (view != null) {
       InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-      imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+      if (imm != null) {
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+      }
     }
   }
 
@@ -1028,6 +1072,7 @@ public class LocationPickerActivity extends AppCompatActivity
     private boolean enableSatelliteView = true;
     private boolean shouldReturnOkOnBackPressed = false;
     private List<LekuPoi> lekuPois;
+    private String geolocApiKey = null;
 
     public Builder() {
     }
@@ -1035,6 +1080,14 @@ public class LocationPickerActivity extends AppCompatActivity
     public Builder withLocation(double latitude, double longitude) {
       this.locationLatitude = latitude;
       this.locationLongitude = longitude;
+      return this;
+    }
+
+    public Builder withLocation(LatLng latLng) {
+      if (latLng != null) {
+        this.locationLatitude = latLng.latitude;
+        this.locationLongitude = latLng.longitude;
+      }
       return this;
     }
 
@@ -1073,6 +1126,11 @@ public class LocationPickerActivity extends AppCompatActivity
       return this;
     }
 
+    public Builder withGeolocApiKey(String apiKey) {
+      this.geolocApiKey = apiKey;
+      return this;
+    }
+
     public Intent build(Context context) {
       Intent intent = new Intent(context, LocationPickerActivity.class);
 
@@ -1090,9 +1148,11 @@ public class LocationPickerActivity extends AppCompatActivity
       }
       intent.putExtra(BACK_PRESSED_RETURN_OK, shouldReturnOkOnBackPressed);
       intent.putExtra(ENABLE_SATELLITE_VIEW, enableSatelliteView);
-
       if (lekuPois != null && !lekuPois.isEmpty()) {
         intent.putExtra(POIS_LIST, new ArrayList<>(lekuPois));
+      }
+      if (geolocApiKey != null) {
+        intent.putExtra(GEOLOC_API_KEY, geolocApiKey);
       }
 
       return intent;

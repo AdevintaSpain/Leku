@@ -7,12 +7,12 @@ import java.io.IOException;
 import java.util.List;
 import rx.Observable;
 
-public class GeocoderInteractor implements GeocoderInteractorInterface {
+public class AndroidGeocoderDataSource implements GeocoderInteractorDataSource {
 
   private final Geocoder geocoder;
   private final static int MAX_RESULTS = 5;
 
-  public GeocoderInteractor(Geocoder geocoder) {
+  public AndroidGeocoderDataSource(Geocoder geocoder) {
     this.geocoder = geocoder;
   }
 

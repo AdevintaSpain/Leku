@@ -2,6 +2,7 @@
 <android.support.v7.widget.Toolbar
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/map_search_toolbar"
     android:layout_height="?attr/actionBarSize"
     android:layout_width="match_parent"
@@ -9,10 +10,10 @@
     android:layout_marginLeft="@dimen/gap"
     android:layout_marginRight="@dimen/gap"
     android:elevation="2dp"
-    android:textAppearance="@color/abc_primary_text_material_dark"
     android:background="@drawable/toolbar_custom_background"
     app:theme="@style/ThemeOverlay.AppCompat.Light"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    tools:ignore="UnusedAttribute,elevation"
     >
 
   <LinearLayout

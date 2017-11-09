@@ -29,13 +29,13 @@ android:
   - tools
   - tools
   - platform-tools
-  - build-tools-25.0.2
-  - android-25
+  - build-tools-26.0.2
+  - android-26
   - extra
   - extra-google-google_play_services
   - extra-google-m2repository
   - extra-android-m2repository
-  - addon-google_apis-google-25
+  - addon-google_apis-google-26
   - sys-img-armeabi-v7a-google_apis-21
 
 # Emulator Management: Create, Start and Wait

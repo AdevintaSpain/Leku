@@ -13,6 +13,7 @@ build/
 *.dex
 local.properties
 project.properties
+app/src/debug/
 
 .idea/.name
 .idea/*.xml

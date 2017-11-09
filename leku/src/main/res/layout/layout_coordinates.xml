@@ -1,0 +1,41 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:layout_marginStart="16dp"
+    android:layout_marginLeft="16dp"
+    >
+    <TextView
+        android:id="@+id/coordinates"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/coordinates"
+        android:textColor="@color/strong_grey"
+        android:textSize="18sp"
+        android:textStyle="normal"
+        />
+
+    <TextView
+        android:id="@+id/latitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/mid_grey"
+        android:textSize="14sp"
+        tools:text="15.184845"
+        />
+
+    <TextView
+        android:id="@+id/longitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/mid_grey"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="4dp"
+        android:textSize="14sp"
+        tools:text="4.1518484"
+        />
+</LinearLayout>

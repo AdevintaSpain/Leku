@@ -2,6 +2,9 @@ package com.schibstedspain.leku.geocoder;
 
 import android.location.Address;
 import android.location.Location;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.List;
 
 public interface GeocoderViewInterface {
@@ -21,7 +24,7 @@ public interface GeocoderViewInterface {
 
   void showLocationInfo(List<Address> addresses);
 
-  void willGetLocationInfo();
+  void willGetLocationInfo(LatLng latLng);
 
   void didGetLocationInfo();
 
@@ -70,7 +73,7 @@ public interface GeocoderViewInterface {
     }
 
     @Override
-    public void willGetLocationInfo() {
+    public void willGetLocationInfo(LatLng latLng) {
 
     }
 

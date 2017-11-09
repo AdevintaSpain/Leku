@@ -59,8 +59,8 @@ Location picker component for Android. It returns a latitude, longitude and an a
 ### Prerequisites
 
 minSdkVersion >= 15
-Google Play Services = 10.2.1
-Support Library = 25.3.1
+Google Play Services = 11.4.2
+Support Library = 26.1.0
 
 ### Download
 
@@ -76,7 +76,7 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    compile 'com.schibstedspain.android:leku:3.2.0'
+    compile 'com.schibstedspain.android:leku:3.5.0'
 }
 ```
 
@@ -145,6 +145,7 @@ You only need to use the Builder setters like:
 ```java
 Intent intent = new LocationPickerActivity.Builder()
     .withLocation(41.4036299, 2.1743558)
+    .withGeolocApiKey("<PUT API KEY HERE>")
     .withSearchZone("es_ES")
     .shouldReturnOkOnBackPressed()
     .withStreetHidden()
@@ -162,7 +163,6 @@ And add the response code from that activity:
 
 @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
     if (requestCode == 1) {
         if(resultCode == RESULT_OK){
             double latitude = data.getDoubleExtra(LocationPickerActivity.LATITUDE, 0);
@@ -176,13 +176,15 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             Bundle bundle = data.getBundleExtra(LocationPickerActivity.TRANSITION_BUNDLE);
             Log.d("BUNDLE TEXT****", bundle.getString("test"));
             Address fullAddress = data.getParcelableExtra(LocationPickerActivity.ADDRESS);
-            Log.d("FULL ADDRESS****", fullAddress.toString());
+            if(fullAddress != null)  
+              Log.d("FULL ADDRESS****", fullAddress.toString());
         }
         if (resultCode == RESULT_CANCELED) {
             //Write your code if there's no result
         }
     }
 }
+
 ```
 
 That's all folks!
@@ -304,6 +306,13 @@ Available tracking events are:
 |RESULT_OK|Return location|
 |CANCEL|Return without location|
 
+#### Geocoding API Fallback
+
+In few cases, the geocoding service from Android fails due to an issue with the NetworkLocator. The only way of fixing this is rebooting the device.
+
+In order to cover these cases, you can instruct Leku to use the Geocoding API. To enable it, just use the method '''withGeolocApiKey''' when invoking the LocationPicker.
+
+You should provide your Server Key as parameter. Keep in mind that the free tier only allows 2,500 requests per day. You can track how many times is it used in the Developer Console from Google. 
 
 #### Extra
 
