@@ -40,6 +40,7 @@ android:
 
 # Emulator Management: Create, Start and Wait
 before_script:
+  - android list targets
   - echo no | android create avd --force -n test -t android-21 --abi google_apis/armeabi-v7a
   - emulator -memory 1024 -avd test -no-window -gpu off -no-boot-anim &
   - android-wait-for-emulator
