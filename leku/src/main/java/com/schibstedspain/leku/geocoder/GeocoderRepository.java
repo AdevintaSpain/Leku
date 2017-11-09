@@ -2,9 +2,9 @@ package com.schibstedspain.leku.geocoder;
 
 import android.location.Address;
 import com.google.android.gms.maps.model.LatLng;
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 import java.util.List;
-import rx.Observable;
-import rx.schedulers.Schedulers;
 
 public class GeocoderRepository {
   private static final int RETRY_COUNT = 3;

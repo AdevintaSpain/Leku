@@ -2,8 +2,8 @@ package com.schibstedspain.leku.geocoder;
 
 import android.location.Address;
 import com.google.android.gms.maps.model.LatLng;
+import io.reactivex.Observable;
 import java.util.List;
-import rx.Observable;
 
 public interface GeocoderInteractorDataSource {
   Observable<List<Address>> getFromLocationName(String query);

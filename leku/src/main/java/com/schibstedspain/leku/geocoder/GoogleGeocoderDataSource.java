@@ -4,10 +4,10 @@ import android.location.Address;
 import com.google.android.gms.maps.model.LatLng;
 import com.schibstedspain.leku.geocoder.api.AddressBuilder;
 import com.schibstedspain.leku.geocoder.api.NetworkClient;
+import io.reactivex.Observable;
 import java.util.List;
 import java.util.Locale;
 import org.json.JSONException;
-import rx.Observable;
 
 public class GoogleGeocoderDataSource implements GeocoderInteractorDataSource {
 
@@ -32,7 +32,7 @@ public class GoogleGeocoderDataSource implements GeocoderInteractorDataSource {
   public Observable<List<Address>> getFromLocationName(String query) {
     return Observable.create(subscriber -> {
       if (apiKey == null) {
-        subscriber.onCompleted();
+        subscriber.onComplete();
         return;
       }
       try {
@@ -40,7 +40,7 @@ public class GoogleGeocoderDataSource implements GeocoderInteractorDataSource {
             QUERY_REQUEST, query.trim(), apiKey));
         List<Address> addresses = addressBuilder.parseResult(result);
         subscriber.onNext(addresses);
-        subscriber.onCompleted();
+        subscriber.onComplete();
       } catch (JSONException e) {
         subscriber.onError(e);
       }
@@ -52,7 +52,7 @@ public class GoogleGeocoderDataSource implements GeocoderInteractorDataSource {
       LatLng upperRight) {
     return Observable.create(subscriber -> {
       if (apiKey == null) {
-        subscriber.onCompleted();
+        subscriber.onComplete();
         return;
       }
       try {
@@ -61,7 +61,7 @@ public class GoogleGeocoderDataSource implements GeocoderInteractorDataSource {
             lowerLeft.longitude, upperRight.latitude, upperRight.longitude));
         List<Address> addresses = addressBuilder.parseResult(result);
         subscriber.onNext(addresses);
-        subscriber.onCompleted();
+        subscriber.onComplete();
       } catch (JSONException e) {
         subscriber.onError(e);
       }
@@ -72,7 +72,7 @@ public class GoogleGeocoderDataSource implements GeocoderInteractorDataSource {
   public Observable<List<Address>> getFromLocation(double latitude, double longitude) {
     return Observable.create(subscriber -> {
       if (apiKey == null) {
-        subscriber.onCompleted();
+        subscriber.onComplete();
         return;
       }
       try {
@@ -80,7 +80,7 @@ public class GoogleGeocoderDataSource implements GeocoderInteractorDataSource {
             QUERY_LAT_LONG, latitude, longitude, apiKey));
         List<Address> addresses = addressBuilder.parseResult(result);
         subscriber.onNext(addresses);
-        subscriber.onCompleted();
+        subscriber.onComplete();
       } catch (JSONException e) {
         subscriber.onError(e);
       }
