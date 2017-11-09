@@ -3,9 +3,9 @@ package com.schibstedspain.leku.geocoder;
 import android.location.Address;
 import android.location.Geocoder;
 import com.google.android.gms.maps.model.LatLng;
+import io.reactivex.Observable;
 import java.io.IOException;
 import java.util.List;
-import rx.Observable;
 
 public class AndroidGeocoderDataSource implements GeocoderInteractorDataSource {
 
@@ -21,7 +21,7 @@ public class AndroidGeocoderDataSource implements GeocoderInteractorDataSource {
     return Observable.create(subscriber -> {
       try {
         subscriber.onNext(geocoder.getFromLocationName(query, MAX_RESULTS));
-        subscriber.onCompleted();
+        subscriber.onComplete();
       } catch (IOException e) {
         subscriber.onError(e);
       }
@@ -35,7 +35,7 @@ public class AndroidGeocoderDataSource implements GeocoderInteractorDataSource {
       try {
         subscriber.onNext(geocoder.getFromLocationName(query, MAX_RESULTS, lowerLeft.latitude,
             lowerLeft.longitude, upperRight.latitude, upperRight.longitude));
-        subscriber.onCompleted();
+        subscriber.onComplete();
       } catch (IOException e) {
         subscriber.onError(e);
       }
@@ -47,7 +47,7 @@ public class AndroidGeocoderDataSource implements GeocoderInteractorDataSource {
     return Observable.create(subscriber -> {
       try {
         subscriber.onNext(geocoder.getFromLocation(latitude, longitude, MAX_RESULTS));
-        subscriber.onCompleted();
+        subscriber.onComplete();
       } catch (IOException e) {
         subscriber.onError(e);
       }
