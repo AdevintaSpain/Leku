@@ -38,7 +38,6 @@ android:
   - addon-google_apis-google-26
   - android-22 # Android platform used by your alternative emulator
   - sys-img-armeabi-v7a-google_apis-22
-  #- sys-img-armeabi-v7a-google_apis-26
 
 # Emulator Management: Create, Start and Wait
 before_script:

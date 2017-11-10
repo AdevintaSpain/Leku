@@ -14,6 +14,7 @@ android {
     targetSdkVersion 26
     versionCode 1
     versionName "1.0"
+    multiDexEnabled true
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     consumerProguardFiles 'lib-proguard-rules.txt'
     vectorDrawables.useSupportLibrary = true
@@ -33,6 +34,9 @@ android {
   }
   dexOptions {
     preDexLibraries !"true".equals(System.getenv("TRAVIS"))
+  }
+  packagingOptions {
+    exclude 'protobuf.meta'
   }
 }
 
