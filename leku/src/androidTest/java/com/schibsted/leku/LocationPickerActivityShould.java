@@ -40,7 +40,7 @@ public class LocationPickerActivityShould {
   @Rule public ActivityTestRule<LocationPickerActivity> activityRule =
       new ActivityTestRule<>(LocationPickerActivity.class, true, false);
 
-  @Rule public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION,
+  @Rule public GrantPermissionRule runtimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION,
       Manifest.permission.WRITE_SECURE_SETTINGS);
 
   @Before
@@ -69,6 +69,7 @@ public class LocationPickerActivityShould {
   }
 
   @Test
+  @FlakyTest
   public void showMapWhenTheActivityStarts() throws Exception {
     launchActivityWithPermissionsGranted();
 
@@ -76,6 +77,7 @@ public class LocationPickerActivityShould {
   }
 
   @Test
+  @FlakyTest
   public void showLocationInfoWhenTheActivityStartsAndHasALocationProvided() throws Exception {
     launchActivityWithPermissionsGranted();
     wait300millis();
@@ -96,6 +98,7 @@ public class LocationPickerActivityShould {
   }
 
   @Test
+  @FlakyTest
   public void showSuggestedLocationListWhenATextSearchIsPerformed() throws Exception {
     launchActivityWithPermissionsGranted();
     wait300millis();
@@ -128,6 +131,7 @@ public class LocationPickerActivityShould {
   }
 
   @Test
+  @FlakyTest
   public void notCrashWhenLaunchingActivityAndPermissionsAreNotGranted() throws Exception {
     launchActivityWithoutLocationAndPermissions();
     wait300millis();
@@ -136,6 +140,7 @@ public class LocationPickerActivityShould {
   }
 
   @Test
+  @FlakyTest
   public void notCrashWhenPermissionsAreNotGrantedAndClickToFloatingAction() throws Exception {
     launchActivityWithoutLocationAndPermissions();
     wait300millis();
@@ -154,6 +159,7 @@ public class LocationPickerActivityShould {
   }
 
   @Test
+  @FlakyTest
   public void showStreetAndZipCodeTextWhenALocationIsSelected() throws Exception {
     launchActivityWithPermissionsGranted();
     wait300millis();
