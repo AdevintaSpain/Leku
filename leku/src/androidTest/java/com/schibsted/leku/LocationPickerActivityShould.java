@@ -40,8 +40,8 @@ public class LocationPickerActivityShould {
   @Rule public ActivityTestRule<LocationPickerActivity> activityRule =
       new ActivityTestRule<>(LocationPickerActivity.class, true, false);
 
-  @Rule public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION,
-      android.Manifest.permission.WRITE_SECURE_SETTINGS);
+  @Rule public GrantPermissionRule mRuntimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION,
+      Manifest.permission.WRITE_SECURE_SETTINGS);
 
   @Before
   public void setup() {

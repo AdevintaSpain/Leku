@@ -73,7 +73,7 @@ before_script:
 
 script:
   - ./gradlew build --continue
-  - ./gradlew connectedCheck -PdisablePreDex -Dorg.gradle.parallel=false -Pandroid.testInstrumentationRunnerArguments.notAnnotation=android.support.test.filters.FlakyTest"
+  - ./gradlew connectedCheck -PdisablePreDex -Dorg.gradle.parallel=false -Pandroid.testInstrumentationRunnerArguments.notAnnotation=android.support.test.filters.FlakyTest
 
 deploy:
   - provider: script
