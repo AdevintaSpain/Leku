@@ -36,8 +36,14 @@ android:
   - extra-google-m2repository
   - extra-android-m2repository
   - addon-google_apis-google-26
+  #- sys-img-armeabi-v7a-google_apis-22
+  - android-22
   - android-23
+  - sys-img-x86-android-22
   - sys-img-x86-android-23
+  - sys-img-x86-google_apis-23
+  - sys-img-armeabi-v7a-google_apis-26
+  - sys-img-x86-google_apis-26
 
 # Emulator Management: Create, Start and Wait
 before_script:
