@@ -27,7 +27,7 @@ cache:
 before_install:
   - sudo apt-get update
   - sudo apt-get install qemu-kvm
-  - kvm-ok
+  - sudo kvm-ok
 
 android:
   components:
@@ -47,6 +47,7 @@ android:
   #- sys-img-x86-android-22
   #- sys-img-x86-android-23
   #- sys-img-x86-google_apis-23
+  #- sys-img-armeabi-v7a-google_apis-25
   #- sys-img-armeabi-v7a-google_apis-26
   - sys-img-x86-google_apis-26
 
