@@ -45,7 +45,7 @@ android:
   - extra-android-m2repository
   - addon-google_apis-google-$ANDROID_API
   - sys-img-armeabi-v7a-addon-google_apis-google-$ANDROID_API
-  - sys-img-armeabi-v7a-android-$EMULATOR_API # the fix!
+  - sys-img-armeabi-v7a-android-$EMULATOR_API
 
   licenses:
   - android-sdk-preview-license-.+
@@ -73,7 +73,7 @@ before_script:
 
 script:
   - ./gradlew build --continue
-  - ./gradlew connectedCheck -PdisablePreDex
+  - ./gradlew connectedCheck -PdisablePreDex -Dorg.gradle.parallel=false -Pandroid.testInstrumentationRunnerArguments.notAnnotation=android.support.test.filters.FlakyTest"
 
 deploy:
   - provider: script
