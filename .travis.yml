@@ -24,6 +24,11 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install qemu-kvm
+  - kvm-ok
+
 android:
   components:
   - tools
