@@ -24,11 +24,6 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-before_install:
-  - sudo apt-get update
-  - sudo apt-get install qemu-kvm
-  - sudo kvm-ok
-
 android:
   components:
   - tools
@@ -47,18 +42,17 @@ android:
   #- sys-img-x86-android-22
   #- sys-img-x86-android-23
   #- sys-img-x86-google_apis-23
-  #- sys-img-armeabi-v7a-google_apis-25
+  #- sys-img-x86-google_apis-26
+  - sys-img-armeabi-v7a-google_apis-25
   #- sys-img-armeabi-v7a-google_apis-26
-  - sys-img-x86-google_apis-26
 
 # Emulator Management: Create, Start and Wait
 before_script:
   - android list targets
-  - echo no | android create avd --force -n test -t android-26 --abi google_apis/x86
+  - echo no | android create avd --force -n test -t android-25 --abi google_apis/armeabi-v7a
   - emulator -memory 2048 -avd test -no-skin -no-audio -no-window -gpu off -no-boot-anim &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
-  - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
 
 script:
   - ./gradlew build --continue
