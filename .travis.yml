@@ -37,18 +37,18 @@ android:
   - extra-android-m2repository
   - addon-google_apis-google-26
   #- sys-img-armeabi-v7a-google_apis-22
-  - android-22
-  - android-23
-  - sys-img-x86-android-22
-  - sys-img-x86-android-23
-  - sys-img-x86-google_apis-23
-  - sys-img-armeabi-v7a-google_apis-26
+  #- android-22
+  #- android-23
+  #- sys-img-x86-android-22
+  #- sys-img-x86-android-23
+  #- sys-img-x86-google_apis-23
+  #- sys-img-armeabi-v7a-google_apis-26
   - sys-img-x86-google_apis-26
 
 # Emulator Management: Create, Start and Wait
 before_script:
   - android list targets
-  - echo no | android create avd --force -n test -t android-23 --abi default/x86 -no-accel
+  - echo no | android create avd --force -n test -t android-26 --abi google_apis/x86
   - emulator -memory 2048 -avd test -no-skin -no-audio -no-window -gpu off -no-boot-anim &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
