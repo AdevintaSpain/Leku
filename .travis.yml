@@ -43,13 +43,13 @@ android:
 before_script:
   - android list targets
   - echo no | android create avd --force -n test -t android-22 --abi google_apis/armeabi-v7a
-  - emulator -memory 2048 -avd test -no-window -gpu off -no-boot-anim &
+  - emulator -memory 2048 -avd test -no-skin -no-audio -no-window -gpu off -no-boot-anim &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
 
 script:
   - ./gradlew build --continue
-  - ./gradlew connectedCheck -PdisablePreDex
+  - ./gradlew connectedAndroidTest -PdisablePreDex
 
 deploy:
   - provider: script
