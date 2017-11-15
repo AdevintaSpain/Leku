@@ -565,12 +565,15 @@ public class LocationPickerActivity extends AppCompatActivity
     longitude.setVisibility(View.GONE);
     latitude.setVisibility(View.GONE);
     coordinates.setVisibility(View.GONE);
-    if (isStreetVisible)
+    if (isStreetVisible) {
       street.setVisibility(View.VISIBLE);
-    if (isCityVisible)
+    }
+    if (isCityVisible) {
       city.setVisibility(View.VISIBLE);
-    if (isZipCodeVisible)
+    }
+    if (isZipCodeVisible) {
       zipCode.setVisibility(View.VISIBLE);
+    }
     changeLocationInfoLayoutVisibility(View.VISIBLE);
   }
 
