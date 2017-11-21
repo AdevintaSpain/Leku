@@ -43,7 +43,10 @@ public class GeocoderPresenter {
   }
 
   public void getLastKnownLocation() {
-    @SuppressLint("MissingPermission") Disposable disposable = locationProvider.getLastKnownLocation().retry(RETRY_COUNT).subscribe(view::showLastLocation, throwable -> {
+    @SuppressLint("MissingPermission")
+    Disposable disposable = locationProvider.getLastKnownLocation()
+        .retry(RETRY_COUNT)
+        .subscribe(view::showLastLocation, throwable -> {
         }, view::didGetLastLocation);
     compositeDisposable.add(disposable);
   }
