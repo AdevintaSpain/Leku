@@ -239,7 +239,7 @@ public class LocationPickerActivity extends AppCompatActivity
             searchOption.setIcon(R.drawable.ic_mic);
           }
         } else {
-          if (charSequence.length() > MIN_CHARACTERS && after > count) {
+          if (charSequence.length() > MIN_CHARACTERS) {
             retrieveLocationWithDebounceTimeFrom(charSequence.toString());
           }
           if (clearSearchButton != null) {
@@ -533,7 +533,7 @@ public class LocationPickerActivity extends AppCompatActivity
   public void didLoadLocation() {
     progressBar.setVisibility(View.GONE);
 
-    changeListResultVisibility(locationList.size() > 1 ? View.VISIBLE : View.GONE);
+    changeListResultVisibility(locationList.size() >= 1 ? View.VISIBLE : View.GONE);
 
     if (locationList.size() == 1 && locationList.get(0) != null) {
       changeLocationInfoLayoutVisibility(View.VISIBLE);
