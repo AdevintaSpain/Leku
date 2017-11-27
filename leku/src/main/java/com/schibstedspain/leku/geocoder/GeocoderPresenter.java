@@ -1,13 +1,14 @@
 package com.schibstedspain.leku.geocoder;
 
+import android.annotation.SuppressLint;
+
 import com.google.android.gms.maps.model.LatLng;
-import hu.akarnokd.rxjava.interop.RxJavaInterop;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import java.util.concurrent.TimeUnit;
-import pl.charmas.android.reactivelocation.ReactiveLocationProvider;
+import pl.charmas.android.reactivelocation2.ReactiveLocationProvider;
 
 public class GeocoderPresenter {
   private static final int RETRY_COUNT = 3;
@@ -42,8 +43,10 @@ public class GeocoderPresenter {
   }
 
   public void getLastKnownLocation() {
-    Disposable disposable = RxJavaInterop.toV2Observable(
-        locationProvider.getLastKnownLocation()).retry(RETRY_COUNT).subscribe(view::showLastLocation, throwable -> {
+    @SuppressLint("MissingPermission")
+    Disposable disposable = locationProvider.getLastKnownLocation()
+        .retry(RETRY_COUNT)
+        .subscribe(view::showLastLocation, throwable -> {
         }, view::didGetLastLocation);
     compositeDisposable.add(disposable);
   }
