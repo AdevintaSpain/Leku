@@ -56,7 +56,7 @@ dependencies {
   implementation "io.reactivex:rxandroid:1.2.1"
   implementation 'io.reactivex.rxjava2:rxjava:2.1.6'
   implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-  implementation 'nl.littlerobots.rxlint:rxlint:1.5'
+  implementation 'nl.littlerobots.rxlint:rxlint:1.6'
 
   androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
   androidTestImplementation 'com.android.support.test:runner:1.0.1'
