@@ -7,6 +7,7 @@ import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import java.util.concurrent.TimeUnit;
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider;
 
@@ -73,7 +74,7 @@ public class GeocoderPresenter {
   public void getDebouncedFromLocationName(String query, int debounceTime) {
     view.willLoadLocation();
     Disposable disposable = geocoderRepository.getFromLocationName(query)
-        .debounce(debounceTime, TimeUnit.MILLISECONDS)
+        .debounce(debounceTime, TimeUnit.MILLISECONDS, Schedulers.io())
         .observeOn(scheduler)
         .subscribe(view::showDebouncedLocations, throwable -> view.showLoadLocationError(),
             view::didLoadLocation);
@@ -83,7 +84,7 @@ public class GeocoderPresenter {
   public void getDebouncedFromLocationName(String query, LatLng lowerLeft, LatLng upperRight, int debounceTime) {
     view.willLoadLocation();
     Disposable disposable = geocoderRepository.getFromLocationName(query, lowerLeft, upperRight)
-        .debounce(debounceTime, TimeUnit.MILLISECONDS)
+        .debounce(debounceTime, TimeUnit.MILLISECONDS, Schedulers.io())
         .observeOn(scheduler)
         .subscribe(view::showDebouncedLocations, throwable -> view.showLoadLocationError(),
             view::didLoadLocation);
