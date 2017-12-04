@@ -269,8 +269,10 @@ public class LocationPickerActivity extends AppCompatActivity
 
     FloatingActionButton btnSatellite = findViewById(R.id.btnSatellite);
     btnSatellite.setOnClickListener(view -> {
-      map.setMapType(map.getMapType() == MAP_TYPE_SATELLITE ? MAP_TYPE_NORMAL : MAP_TYPE_SATELLITE);
-      btnSatellite.setImageResource(map.getMapType() == MAP_TYPE_SATELLITE ? R.drawable.ic_satellite_off : R.drawable.ic_satellite_on);
+      if (map != null && btnSatellite != null) {
+        map.setMapType(map.getMapType() == MAP_TYPE_SATELLITE ? MAP_TYPE_NORMAL : MAP_TYPE_SATELLITE);
+        btnSatellite.setImageResource(map.getMapType() == MAP_TYPE_SATELLITE ? R.drawable.ic_satellite_off : R.drawable.ic_satellite_on);
+      }
     });
     btnSatellite.setVisibility(enableSatelliteView ? View.VISIBLE : View.GONE);
   }
