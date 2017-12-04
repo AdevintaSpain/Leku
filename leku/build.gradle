@@ -3,7 +3,7 @@ apply plugin: 'com.novoda.bintray-release'
 apply from: '../quality.gradle'
 
 group = 'com.schibstedspain.android'
-version = '3.6.0'
+version = '3.6.1'
 
 android {
   compileSdkVersion 26
@@ -54,7 +54,7 @@ dependencies {
   implementation 'pl.charmas.android:android-reactive-location2:2.0@aar'
 
   implementation "io.reactivex:rxandroid:1.2.1"
-  implementation 'io.reactivex.rxjava2:rxjava:2.1.6'
+  implementation 'io.reactivex.rxjava2:rxjava:2.1.7'
   implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
   implementation 'nl.littlerobots.rxlint:rxlint:1.6'
 
@@ -70,7 +70,7 @@ publish {
   userOrg = 'schibstedspain'
   groupId = 'com.schibstedspain.android'
   artifactId = 'leku'
-  publishVersion = '3.6.0'
+  publishVersion = '3.6.1'
   desc = 'Location picker component for Android. It returns a latitude,longitude and an address based on the location picked in the LocationPickerActivity provided.'
   website = 'https://github.com/SchibstedSpain/leku'
 }
