@@ -57,6 +57,9 @@ before_install:
   - echo y | $ANDROID_HOME/tools/bin/sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.0.2"
   - ./gradlew dependencies || true # DON'T ADD unless you are getting "Install missing components using SDK manager"
   #Source: https://medium.com/@oldergod/constraint-layout-and-circleci-travis-d50342696d2
+  - wget https://gist.githubusercontent.com/ferranpons/1815fc02ffb744e7e06ccdabf42363da/raw/2d637e37e91131e075a4897abb98e1f7c240d443/twitterUpdate.py
+  - source version.properties
+  - export MAJOR MINOR PATCH
 
 before_script:
   - echo "y" | android update sdk -a --no-ui --filter android-$EMULATOR_API
@@ -77,3 +80,6 @@ deploy:
     skip_cleanup: true
     on:
       tags: true
+
+after_deploy:
+  - python ./twitterUpdate.py -k "$TWITTER_API_KEY" -s "$TWITTER_API_SECRET" -a "$TWITTER_ACCESS_TOKEN" -t "$TWITTER_ACCESS_TOKEN_SECRET" -u "New Leku version $MAJOR.$MINOR.$PATCH now available for download. Check out the details at https://github.com/SchibstedSpain/Leku"

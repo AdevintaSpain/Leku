@@ -2,8 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
 apply from: '../quality.gradle'
 
+def versionMajor = getVersionMajor()
+def versionMinor = getVersionMinor()
+def versionPatch = getVersionPatch()
+
 group = 'com.schibstedspain.android'
-version = '3.6.1'
+version = "${versionMajor}.${versionMinor}.${versionPatch}"
 
 android {
   compileSdkVersion 26
@@ -70,7 +74,37 @@ publish {
   userOrg = 'schibstedspain'
   groupId = 'com.schibstedspain.android'
   artifactId = 'leku'
-  publishVersion = '3.6.1'
+  publishVersion = "${versionMajor}.${versionMinor}.${versionPatch}"
   desc = 'Location picker component for Android. It returns a latitude,longitude and an address based on the location picked in the LocationPickerActivity provided.'
   website = 'https://github.com/SchibstedSpain/leku'
+}
+
+def getVersionMajor() {
+  def content = file('../version.properties')
+
+  Properties properties = new Properties()
+  InputStream is = new ByteArrayInputStream(content.getBytes())
+  properties.load(is)
+
+  return properties['MAJOR'].toInteger()
+}
+
+def getVersionMinor() {
+  def content = file('../version.properties')
+
+  Properties properties = new Properties()
+  InputStream is = new ByteArrayInputStream(content.getBytes())
+  properties.load(is)
+
+  return properties['MINOR'].toInteger()
+}
+
+def getVersionPatch() {
+  def content = file('../version.properties')
+
+  Properties properties = new Properties()
+  InputStream is = new ByteArrayInputStream(content.getBytes())
+  properties.load(is)
+
+  return properties['PATCH'].toInteger()
 }
