@@ -18,12 +18,12 @@ public class AndroidGeocoderDataSource implements GeocoderInteractorDataSource {
 
   @Override
   public Observable<List<Address>> getFromLocationName(String query) {
-    return Observable.create(subscriber -> {
+    return Observable.create(emitter -> {
       try {
-        subscriber.onNext(geocoder.getFromLocationName(query, MAX_RESULTS));
-        subscriber.onComplete();
+        emitter.onNext(geocoder.getFromLocationName(query, MAX_RESULTS));
+        emitter.onComplete();
       } catch (IOException e) {
-        subscriber.onError(e);
+        emitter.tryOnError(e);
       }
     });
   }
@@ -31,25 +31,25 @@ public class AndroidGeocoderDataSource implements GeocoderInteractorDataSource {
   @Override
   public Observable<List<Address>> getFromLocationName(String query, LatLng lowerLeft,
       LatLng upperRight) {
-    return Observable.create(subscriber -> {
+    return Observable.create(emitter -> {
       try {
-        subscriber.onNext(geocoder.getFromLocationName(query, MAX_RESULTS, lowerLeft.latitude,
+        emitter.onNext(geocoder.getFromLocationName(query, MAX_RESULTS, lowerLeft.latitude,
             lowerLeft.longitude, upperRight.latitude, upperRight.longitude));
-        subscriber.onComplete();
+        emitter.onComplete();
       } catch (IOException e) {
-        subscriber.onError(e);
+        emitter.tryOnError(e);
       }
     });
   }
 
   @Override
   public Observable<List<Address>> getFromLocation(double latitude, double longitude) {
-    return Observable.create(subscriber -> {
+    return Observable.create(emitter -> {
       try {
-        subscriber.onNext(geocoder.getFromLocation(latitude, longitude, MAX_RESULTS));
-        subscriber.onComplete();
+        emitter.onNext(geocoder.getFromLocation(latitude, longitude, MAX_RESULTS));
+        emitter.onComplete();
       } catch (IOException e) {
-        subscriber.onError(e);
+        emitter.tryOnError(e);
       }
     });
   }
