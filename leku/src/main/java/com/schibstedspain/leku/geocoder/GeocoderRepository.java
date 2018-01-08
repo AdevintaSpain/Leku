@@ -21,20 +21,23 @@ public class GeocoderRepository {
     return androidGeocoder.getFromLocationName(query)
         .subscribeOn(Schedulers.newThread())
         .retry(RETRY_COUNT)
-        .onErrorResumeNext(googleGeocoder.getFromLocationName(query));
+        .onErrorResumeNext(googleGeocoder.getFromLocationName(query))
+        .onExceptionResumeNext(googleGeocoder.getFromLocationName(query));
   }
 
   public Observable<List<Address>> getFromLocationName(String query, LatLng lowerLeft, LatLng upperRight) {
     return androidGeocoder.getFromLocationName(query, lowerLeft, upperRight)
         .subscribeOn(Schedulers.newThread())
         .retry(RETRY_COUNT)
-        .onErrorResumeNext(googleGeocoder.getFromLocationName(query, lowerLeft, upperRight));
+        .onErrorResumeNext(googleGeocoder.getFromLocationName(query, lowerLeft, upperRight))
+        .onExceptionResumeNext(googleGeocoder.getFromLocationName(query, lowerLeft, upperRight));
   }
 
   public Observable<List<Address>> getFromLocation(LatLng latLng) {
     return androidGeocoder.getFromLocation(latLng.latitude, latLng.longitude)
         .subscribeOn(Schedulers.newThread())
         .retry(RETRY_COUNT)
-        .onErrorResumeNext(googleGeocoder.getFromLocation(latLng.latitude, latLng.longitude));
+        .onErrorResumeNext(googleGeocoder.getFromLocation(latLng.latitude, latLng.longitude))
+        .onExceptionResumeNext(googleGeocoder.getFromLocation(latLng.latitude, latLng.longitude));
   }
 }
