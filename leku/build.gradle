@@ -11,13 +11,13 @@ group = 'com.schibstedspain.android'
 version = "${versionMajor}.${versionMinor}.${versionPatch}"
 
 android {
-  compileSdkVersion 26
-  buildToolsVersion '26.0.2'
+  compileSdkVersion 27
+  buildToolsVersion '27.0.2'
   resourcePrefix 'leku_'
 
   defaultConfig {
     minSdkVersion 15
-    targetSdkVersion 26
+    targetSdkVersion 27
     versionCode 1
     versionName "1.0"
     multiDexEnabled true
@@ -49,11 +49,11 @@ android {
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-  def supportVersion = '26.1.0'
+  def supportVersion = '27.0.2'
   implementation "com.android.support:appcompat-v7:$supportVersion"
   implementation "com.android.support:design:$supportVersion"
 
-  def playServicesVersion = '11.6.0'
+  def playServicesVersion = '11.8.0'
   implementation "com.google.android.gms:play-services-maps:$playServicesVersion"
   implementation "com.google.android.gms:play-services-location:$playServicesVersion"
 
