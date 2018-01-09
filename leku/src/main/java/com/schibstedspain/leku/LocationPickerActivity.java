@@ -271,7 +271,8 @@ public class LocationPickerActivity extends AppCompatActivity
     btnSatellite.setOnClickListener(view -> {
       if (map != null && btnSatellite != null) {
         map.setMapType(map.getMapType() == MAP_TYPE_SATELLITE ? MAP_TYPE_NORMAL : MAP_TYPE_SATELLITE);
-        btnSatellite.setImageResource(map.getMapType() == MAP_TYPE_SATELLITE ? R.drawable.leku_ic_satellite_off : R.drawable.leku_ic_satellite_on);
+        btnSatellite.setImageResource(
+            map.getMapType() == MAP_TYPE_SATELLITE ? R.drawable.leku_ic_satellite_off : R.drawable.leku_ic_satellite_on);
       }
     });
     btnSatellite.setVisibility(enableSatelliteView ? View.VISIBLE : View.GONE);
