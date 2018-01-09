@@ -5,8 +5,8 @@
 
   <item
       android:id="@+id/action_voice"
-      android:icon="@drawable/ic_mic"
-      android:title="@string/toolbar_action_voice_title"
+      android:icon="@drawable/leku_ic_mic"
+      android:title="@string/leku_toolbar_action_voice_title"
       app:showAsAction="ifRoom"
       />
 </menu>
