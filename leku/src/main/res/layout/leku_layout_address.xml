@@ -9,33 +9,34 @@
     android:layout_marginLeft="16dp"
     >
     <TextView
-        android:id="@+id/coordinates"
+        android:id="@+id/street"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/coordinates"
-        android:textColor="@color/strong_grey"
-        android:textSize="18sp"
         android:textStyle="normal"
+        android:textSize="18sp"
+        android:textColor="@color/leku_strong_grey"
+        tools:text="Calle Mallorca, 150"
         />
 
     <TextView
-        android:id="@+id/latitude"
+        android:id="@+id/city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/mid_grey"
-        android:textSize="14sp"
-        tools:text="15.184845"
-        />
-
-    <TextView
-        android:id="@+id/longitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/mid_grey"
-        android:layout_marginBottom="16dp"
         android:layout_marginTop="4dp"
         android:textSize="14sp"
-        tools:text="4.1518484"
+        android:textColor="@color/leku_mid_grey"
+        tools:text="Barcelona"
+        />
+
+    <TextView
+        android:id="@+id/zipCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="16dp"
+        android:textSize="14sp"
+        android:textColor="@color/leku_mid_grey"
+        tools:text="08032"
         />
 </LinearLayout>

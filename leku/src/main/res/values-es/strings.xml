@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="title_activity_location_picker">Location Picker</string>
-  <string name="no_geocoder_available">Servicio no disponible</string>
-  <string name="load_location_error">Algo ha ido mal. Por favor inténtelo de nuevo.</string>
-  <string name="no_search_results">No hay resultados para su búsqueda</string>
-  <string name="network_resource">network</string>
-  <string name="unknown_location">ubicación desconocida</string>
-  <string name="voice_search_promp">Búsqueda por voz…</string>
-  <string name="voice_search_extra_language">es-ES</string>
-  <string name="toolbar_action_voice_title">Voz</string>
-  <string name="search_hint">Buscar</string>
-  <string name="longitude">Longitud</string>
-  <string name="latitude">Latitud</string>
-  <string name="coordinates">Coordenadas</string>
+  <string name="leku_title_activity_location_picker">Location Picker</string>
+  <string name="leku_no_geocoder_available">Servicio no disponible</string>
+  <string name="leku_load_location_error">Algo ha ido mal. Por favor inténtelo de nuevo.</string>
+  <string name="leku_no_search_results">No hay resultados para su búsqueda</string>
+  <string name="leku_network_resource">network</string>
+  <string name="leku_unknown_location">ubicación desconocida</string>
+  <string name="leku_voice_search_promp">Búsqueda por voz…</string>
+  <string name="leku_voice_search_extra_language">es-ES</string>
+  <string name="leku_toolbar_action_voice_title">Voz</string>
+  <string name="leku_search_hint">Buscar</string>
+  <string name="leku_longitude">Longitud</string>
+  <string name="leku_latitude">Latitud</string>
+  <string name="leku_coordinates">Coordenadas</string>
 </resources>

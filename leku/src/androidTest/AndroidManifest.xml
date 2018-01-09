@@ -17,7 +17,7 @@
 
     <activity
         android:name="com.schibstedspain.leku.LocationPickerActivity"
-        android:label="@string/title_activity_location_picker"
+        android:label="@string/leku_title_activity_location_picker"
         android:launchMode="singleTop"
         android:windowSoftInputMode="adjustPan"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
@@ -25,7 +25,7 @@
         <action android:name="android.intent.action.SEARCH" />
       </intent-filter>
       <meta-data android:name="android.app.searchable"
-                 android:resource="@xml/searchable" />
+                 android:resource="@xml/leku_searchable" />
     </activity>
   </application>
 

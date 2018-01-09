@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <dimen name="information_bottom_margin">24dp</dimen>
-  <dimen name="gap">8dp</dimen>
+  <dimen name="leku_information_bottom_margin">24dp</dimen>
+  <dimen name="leku_gap">8dp</dimen>
 </resources>

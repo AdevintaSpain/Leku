@@ -76,11 +76,18 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    compile 'com.schibstedspain.android:leku:3.6.2'
+    implementation 'com.schibstedspain.android:leku:3.7.0'
 }
 ```
 
-**IMPORTANT**: If you want support for Google Play Services version '8.4.0', and support library version '23.1.1' use version '1.0.0'. Beware that **version '1.0.0' is going not be maintained**. Also, if you want to use a version below 10.0.1 for Play Services you can use the version '2.3.1'.
+Alternatively, if you are using a different version of Google Play Services than `11.8.0` use this instead:
+
+```groovy
+implementation ('com.schibstedspain.android:leku:3.6.2') {
+    exclude group: 'com.google.android.gms'
+    exclude group: 'com.android.support'
+}
+```
 
 
 ### Permissions
@@ -123,7 +130,7 @@ To use the LocationPickerActivity first you need to add these lines to your Andr
 ```xml
 <activity
     android:name="com.schibstedspain.leku.LocationPickerActivity"
-    android:label="@string/title_activity_location_picker"
+    android:label="@string/leku_title_activity_location_picker"
     android:theme="@style/Theme.AppCompat.Light.NoActionBar"
     android:windowSoftInputMode="adjustPan"
     android:parentActivityName=".MainActivity">
@@ -198,14 +205,14 @@ If you would like to add more language translations the only thing you have to d
 2. Add all text translations for those strings:
 
 ```xml
-<string name="title_activity_location_picker">Location Picker</string>
-<string name="load_location_error">Something went wrong. Please try again.</string>
-<string name="no_search_results">There are no results for your search</string>
-<string name="unknown_location">unknown location</string>
-<string name="voice_search_promp">Search by voice…</string>
-<string name="voice_search_extra_language">en-EN</string>
-<string name="toolbar_action_voice_title">Voice</string>
-<string name="search_hint">Search</string>
+<string name="leku_title_activity_location_picker">Location Picker</string>
+<string name="leku_load_location_error">Something went wrong. Please try again.</string>
+<string name="leku_no_search_results">There are no results for your search</string>
+<string name="leku_unknown_location">unknown location</string>
+<string name="leku_voice_search_promp">Search by voice…</string>
+<string name="leku_voice_search_extra_language">en-EN</string>
+<string name="leku_toolbar_action_voice_title">Voice</string>
+<string name="leku_search_hint">Search</string>
 ```
 
 Note that you have the **voice_search_extra_language** that is used for the language of the voice recognition.
