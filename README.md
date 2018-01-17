@@ -1,13 +1,13 @@
 <img src="media/leku_logo.png" align="left" height="128px"/>
 <img align="left" width="0" height="128px" hspace="10"/>
 
-<div style="display:block;" align="top">
+<p style="display:block;" align="top">
 *A Location Picker for Android*
 
 [![Build Status](https://travis-ci.org/SchibstedSpain/Leku.svg?branch=master)](https://travis-ci.org/SchibstedSpain/Leku) [ ![Bintray](https://api.bintray.com/packages/schibstedspain/maven/leku/images/download.svg) ](https://bintray.com/schibstedspain/maven/leku/_latestVersion)
 
 Location picker component for Android. It returns a latitude, longitude and an address based on the location picked in the LocationPickerActivity provided.
-</div>
+</p>
 
 <br/>
 <p align="center">
