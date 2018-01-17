@@ -16,7 +16,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/img_leku_logo"
+        android:src="@mipmap/leku_img_logo"
         android:layout_marginBottom="50dp"
         android:contentDescription="@string/leku_app_name"
         />
