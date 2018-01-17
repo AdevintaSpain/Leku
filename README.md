@@ -1,7 +1,7 @@
 <img src="media/leku_logo.png" align="left|middle" height="128px"/>
 <img align="left" width="0" height="128px" hspace="10"/>
 
-<div style="display:block;">
+<div style="display:block; height: 168px;vertical-align: top;">
 *A Location Picker for Android*
 
 [![Build Status](https://travis-ci.org/SchibstedSpain/Leku.svg?branch=master)](https://travis-ci.org/SchibstedSpain/Leku) [ ![Bintray](https://api.bintray.com/packages/schibstedspain/maven/leku/images/download.svg) ](https://bintray.com/schibstedspain/maven/leku/_latestVersion)
