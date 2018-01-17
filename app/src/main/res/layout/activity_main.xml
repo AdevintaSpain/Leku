@@ -12,19 +12,39 @@
       android:gravity="center"
       android:orientation="vertical"
       >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/img_leku_logo"
+        android:layout_marginBottom="50dp"
+        android:contentDescription="@string/leku_app_name"
+        />
+
+
     <Button
         android:text="@string/launch_map_picker"
         android:id="@+id/map_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:backgroundTint="@color/leku_blue"
+        android:textColor="@color/leku_grey"
+        tools:targetApi="lollipop"
         />
     <Button
         android:text="@string/launch_map_picker_with_pois"
         android:id="@+id/map_button_with_pois"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:backgroundTint="@color/leku_blue"
+        android:textColor="@color/leku_grey"
+        tools:targetApi="lollipop"
         />
   </LinearLayout>
 </merge>
