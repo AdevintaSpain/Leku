@@ -1,6 +1,3 @@
-Leku
-====
-
 <img src="media/leku_logo.png" align="left" height="168px"/>
 <img align="left" width="0" height="168px" hspace="10"/>
 
