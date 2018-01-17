@@ -1,5 +1,5 @@
-<img src="media/leku_logo.png" align="left" height="148px"/>
-<img align="left" width="0" height="148px" hspace="10"/>
+<img src="media/leku_logo.png" align="left" height="128px"/>
+<img align="left" width="0" height="128px" hspace="10"/>
 
 *A Location Picker for Android*
 
