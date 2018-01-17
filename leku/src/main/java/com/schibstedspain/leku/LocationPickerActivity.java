@@ -82,6 +82,7 @@ public class LocationPickerActivity extends AppCompatActivity
   public static final String POIS_LIST = "pois_list";
   public static final String LEKU_POI = "leku_poi";
   private static final String GEOLOC_API_KEY = "geoloc_api_key";
+  private static final String PLACES_API_KEY = "places_api_key";
   private static final String LOCATION_KEY = "location_key";
   private static final String LAST_LOCATION_QUERY = "last_location_query";
   private static final String OPTIONS_HIDE_STREET = "street";
@@ -668,6 +669,9 @@ public class LocationPickerActivity extends AppCompatActivity
     if (savedInstanceState.keySet().contains(GEOLOC_API_KEY)) {
       apiInteractor.setApiKey(savedInstanceState.getString(GEOLOC_API_KEY));
     }
+    if (savedInstanceState.keySet().contains(PLACES_API_KEY)) {
+      apiInteractor.setPlacesApiKey(savedInstanceState.getString(PLACES_API_KEY));
+    }
     if (savedInstanceState.keySet().contains(SEARCH_ZONE)) {
       searchZone = savedInstanceState.getString(SEARCH_ZONE);
     }
@@ -708,6 +712,9 @@ public class LocationPickerActivity extends AppCompatActivity
     }
     if (transitionBundle.keySet().contains(GEOLOC_API_KEY)) {
       apiInteractor.setApiKey(transitionBundle.getString(GEOLOC_API_KEY));
+    }
+    if (transitionBundle.keySet().contains(PLACES_API_KEY)) {
+      apiInteractor.setPlacesApiKey(transitionBundle.getString(PLACES_API_KEY));
     }
   }
 
@@ -1027,10 +1034,13 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private synchronized void buildGoogleApiClient() {
-    googleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this)
+    GoogleApiClient.Builder googleApiClientBuilder = new GoogleApiClient.Builder(this).addConnectionCallbacks(this)
         .addOnConnectionFailedListener(this)
-        .addApi(LocationServices.API)
-        .build();
+        .addApi(LocationServices.API);
+
+    if ()
+
+    googleApiClient = googleApiClientBuilder.build();
     googleApiClient.connect();
   }
 
