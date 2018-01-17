@@ -1,5 +1,5 @@
-<img src="media/leku_logo.png" align="left" height="128px" vspace="100" />
-<img align="left" width="0" height="128px" hspace="10" vspace="100"/>
+<img src="media/leku_logo.png" align="left" height="128px" style="margin: 50px 0px" />
+<img align="left" width="0" height="128px" hspace="10" />
 
 <div style="display:block; height: 168px;">
 *The location Picker for Android*
