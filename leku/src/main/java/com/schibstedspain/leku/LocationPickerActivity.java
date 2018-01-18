@@ -35,9 +35,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Places;
-import com.google.android.gms.location.places.PlacesOptions;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -83,10 +81,10 @@ public class LocationPickerActivity extends AppCompatActivity
   public static final String BACK_PRESSED_RETURN_OK = "back_pressed_return_ok";
   public static final String ENABLE_SATELLITE_VIEW = "enable_satellite_view";
   public static final String ENABLE_LOCATION_PERMISSION_REQUEST = "enable_location_permission_request";
+  public static final String ENABLE_GOOGLE_PLACES = "enable_google_places";
   public static final String POIS_LIST = "pois_list";
   public static final String LEKU_POI = "leku_poi";
   private static final String GEOLOC_API_KEY = "geoloc_api_key";
-  private static final String PLACES_API_KEY = "places_api_key";
   private static final String LOCATION_KEY = "location_key";
   private static final String LAST_LOCATION_QUERY = "last_location_query";
   private static final String OPTIONS_HIDE_STREET = "street";
@@ -131,13 +129,13 @@ public class LocationPickerActivity extends AppCompatActivity
   private boolean shouldReturnOkOnBackPressed = false;
   private boolean enableSatelliteView = true;
   private boolean enableLocationPermissionRequest = true;
+  private boolean isGooglePlacesEnabled = false;
   private String searchZone;
   private List<LekuPoi> poisList;
   private Map<String, LekuPoi> lekuPoisMarkersMap;
   private Marker currentMarker;
   private TextWatcher textWatcher;
   private GoogleGeocoderDataSource apiInteractor;
-  private GooglePlacesDataSource placesDataSource;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -399,6 +397,7 @@ public class LocationPickerActivity extends AppCompatActivity
 
   @Override
   public void onMapReady(GoogleMap googleMap) {
+    googleApiClient.connect();
     if (map == null) {
       map = googleMap;
       setDefaultMapSettings();
@@ -675,8 +674,8 @@ public class LocationPickerActivity extends AppCompatActivity
     if (savedInstanceState.keySet().contains(GEOLOC_API_KEY)) {
       apiInteractor.setApiKey(savedInstanceState.getString(GEOLOC_API_KEY));
     }
-    if (savedInstanceState.keySet().contains(PLACES_API_KEY)) {
-      apiInteractor.setPlacesApiKey(savedInstanceState.getString(PLACES_API_KEY));
+    if (savedInstanceState.keySet().contains(ENABLE_GOOGLE_PLACES)) {
+      isGooglePlacesEnabled = savedInstanceState.getBoolean(ENABLE_GOOGLE_PLACES, false);
     }
     if (savedInstanceState.keySet().contains(SEARCH_ZONE)) {
       searchZone = savedInstanceState.getString(SEARCH_ZONE);
@@ -719,8 +718,8 @@ public class LocationPickerActivity extends AppCompatActivity
     if (transitionBundle.keySet().contains(GEOLOC_API_KEY)) {
       apiInteractor.setApiKey(transitionBundle.getString(GEOLOC_API_KEY));
     }
-    if (transitionBundle.keySet().contains(PLACES_API_KEY)) {
-      apiInteractor.setPlacesApiKey(transitionBundle.getString(PLACES_API_KEY));
+    if (transitionBundle.keySet().contains(ENABLE_GOOGLE_PLACES)) {
+      isGooglePlacesEnabled = transitionBundle.getBoolean(ENABLE_GOOGLE_PLACES, false);
     }
   }
 
@@ -1044,7 +1043,9 @@ public class LocationPickerActivity extends AppCompatActivity
         .addOnConnectionFailedListener(this)
         .addApi(LocationServices.API);
 
-    if ()
+    if (isGooglePlacesEnabled) {
+      googleApiClientBuilder.addApi(Places.GEO_DATA_API);
+    }
 
     googleApiClient = googleApiClientBuilder.build();
     googleApiClient.connect();
@@ -1098,6 +1099,7 @@ public class LocationPickerActivity extends AppCompatActivity
     private boolean shouldReturnOkOnBackPressed = false;
     private List<LekuPoi> lekuPois;
     private String geolocApiKey = null;
+    private boolean googlePlacesEnabled = false;
 
     public Builder() {
     }
@@ -1156,6 +1158,11 @@ public class LocationPickerActivity extends AppCompatActivity
       return this;
     }
 
+    public Builder withGooglePlacesEnabled() {
+      this.googlePlacesEnabled = true;
+      return this;
+    }
+
     public Intent build(Context context) {
       Intent intent = new Intent(context, LocationPickerActivity.class);
 
@@ -1179,6 +1186,7 @@ public class LocationPickerActivity extends AppCompatActivity
       if (geolocApiKey != null) {
         intent.putExtra(GEOLOC_API_KEY, geolocApiKey);
       }
+      intent.putExtra(ENABLE_GOOGLE_PLACES, googlePlacesEnabled);
 
       return intent;
     }

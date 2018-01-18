@@ -3,12 +3,15 @@ package com.schibstedspain.leku.geocoder;
 import android.annotation.SuppressLint;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.schibstedspain.leku.geocoder.places.GooglePlacesDataSource;
+import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider;
 
@@ -68,7 +71,11 @@ public class GeocoderPresenter {
 
   public void getFromLocationName(String query, LatLng lowerLeft, LatLng upperRight) {
     view.willLoadLocation();
-    Disposable disposable = geocoderRepository.getFromLocationName(query, lowerLeft, upperRight)
+    Disposable disposable = Observable.concat(
+        geocoderRepository.getFromLocationName(query, lowerLeft, upperRight),
+        googlePlacesDataSource.getFromLocationName(query, new LatLngBounds(lowerLeft, upperRight))
+            .onErrorReturnItem(new ArrayList<>()))
+        .subscribeOn(Schedulers.io())
         .observeOn(scheduler)
         .retry(RETRY_COUNT)
         .subscribe(view::showLocations, throwable -> view.showLoadLocationError(),
@@ -88,7 +95,10 @@ public class GeocoderPresenter {
 
   public void getDebouncedFromLocationName(String query, LatLng lowerLeft, LatLng upperRight, int debounceTime) {
     view.willLoadLocation();
-    Disposable disposable = geocoderRepository.getFromLocationName(query, lowerLeft, upperRight)
+    Disposable disposable = Observable.concat(geocoderRepository.getFromLocationName(query, lowerLeft, upperRight),
+        googlePlacesDataSource.getFromLocationName(query, new LatLngBounds(lowerLeft, upperRight))
+            .onErrorReturnItem(new ArrayList<>()))
+        .subscribeOn(Schedulers.io())
         .debounce(debounceTime, TimeUnit.MILLISECONDS, Schedulers.io())
         .observeOn(scheduler)
         .subscribe(view::showDebouncedLocations, throwable -> view.showLoadLocationError(),

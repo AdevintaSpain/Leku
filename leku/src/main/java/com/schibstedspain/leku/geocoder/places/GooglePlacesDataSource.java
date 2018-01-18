@@ -1,6 +1,7 @@
 package com.schibstedspain.leku.geocoder.places;
 
 import android.location.Address;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -33,10 +34,8 @@ public class GooglePlacesDataSource {
 
   public Observable<List<Address>> getFromLocationName(String query, LatLngBounds latLngBounds) {
     return Observable.defer(() -> {
-
       Task<AutocompletePredictionBufferResponse> results =
           geoDataClient.getAutocompletePredictions(query, latLngBounds, null);
-
       try {
         Tasks.await(results, 6, TimeUnit.SECONDS);
       } catch (ExecutionException | InterruptedException | TimeoutException ignored) {
@@ -44,31 +43,40 @@ public class GooglePlacesDataSource {
 
       try {
         AutocompletePredictionBufferResponse autocompletePredictions = results.getResult();
-
-        Log.i("LEKU", "Query completed. Received " + autocompletePredictions.getCount()
-            + " predictions.");
-
         List<AutocompletePrediction> predictionList = DataBufferUtils.freezeAndClose(autocompletePredictions);
-
-        List<Address> addressList = new ArrayList<>();
-        for (AutocompletePrediction prediction : predictionList) {
-          Task<PlaceBufferResponse> placeBufferResponseTask = geoDataClient.getPlaceById(prediction.getPlaceId());
-          PlaceBufferResponse placeBufferResponse = placeBufferResponseTask.getResult();
-          Place place = placeBufferResponse.get(0);
-
-          Address address = new Address(Locale.getDefault());
-          address.setLatitude(place.getLatLng().latitude);
-          address.setLongitude(place.getLatLng().longitude);
-          address.setAddressLine(0, place.getAddress().toString());
-
-          addressList.add(address);
-        }
-
+        List<Address> addressList = getAddressListFromPrediction(predictionList);
         return Observable.just(addressList);
       } catch (RuntimeExecutionException e) {
         Log.e("LEKU", "Error getting autocomplete prediction API call", e);
         return Observable.empty();
       }
     });
+  }
+
+  @NonNull
+  private List<Address> getAddressListFromPrediction(List<AutocompletePrediction> predictionList) {
+    List<Address> addressList = new ArrayList<>();
+    for (AutocompletePrediction prediction : predictionList) {
+      Task<PlaceBufferResponse> placeBufferResponseTask = geoDataClient.getPlaceById(prediction.getPlaceId());
+      try {
+        Tasks.await(placeBufferResponseTask, 3, TimeUnit.SECONDS);
+      } catch (ExecutionException | InterruptedException | TimeoutException ignored) {
+      }
+      PlaceBufferResponse placeBufferResponse = placeBufferResponseTask.getResult();
+      Place place = placeBufferResponse.get(0);
+      addressList.add(mapPlaceToAddress(place));
+    }
+    return addressList;
+  }
+
+  @NonNull
+  private Address mapPlaceToAddress(Place place) {
+    Address address = new Address(Locale.getDefault());
+    address.setLatitude(place.getLatLng().latitude);
+    address.setLongitude(place.getLatLng().longitude);
+    String addressName = place.getName().toString() + " - " + place.getAddress().toString();
+    address.setAddressLine(0, addressName);
+    address.setFeatureName(addressName);
+    return address;
   }
 }
