@@ -137,7 +137,7 @@ To use the LocationPickerActivity first you need to add these lines to your Andr
         <action android:name="android.intent.action.SEARCH" />
     </intent-filter>
     <meta-data android:name="android.app.searchable"
-        android:resource="@xml/searchable" />
+        android:resource="@xml/leku_searchable" />
     <meta-data
         android:name="android.support.PARENT_ACTIVITY"
         android:value=".MainActivity" />
