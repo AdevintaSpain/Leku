@@ -47,7 +47,6 @@ public class GooglePlacesDataSource {
         List<Address> addressList = getAddressListFromPrediction(predictionList);
         return Observable.just(addressList);
       } catch (RuntimeExecutionException e) {
-        Log.e("LEKU", "Error getting autocomplete prediction API call", e);
         return Observable.empty();
       }
     });

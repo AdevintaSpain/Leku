@@ -292,6 +292,10 @@ public class LocationPickerActivity extends AppCompatActivity
       getSavedInstanceParams(savedInstanceState);
     }
     updateAddressLayoutVisibility();
+
+    if (isGooglePlacesEnabled) {
+      geocoderPresenter.enableGooglePlaces();
+    }
   }
 
   private void setUpMapIfNeeded() {
@@ -397,7 +401,6 @@ public class LocationPickerActivity extends AppCompatActivity
 
   @Override
   public void onMapReady(GoogleMap googleMap) {
-    googleApiClient.connect();
     if (map == null) {
       map = googleMap;
       setDefaultMapSettings();
