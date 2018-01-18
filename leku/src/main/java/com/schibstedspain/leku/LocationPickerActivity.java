@@ -35,6 +35,9 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.PlacesOptions;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -51,6 +54,7 @@ import com.schibstedspain.leku.geocoder.GeocoderRepository;
 import com.schibstedspain.leku.geocoder.GeocoderViewInterface;
 import com.schibstedspain.leku.geocoder.api.AddressBuilder;
 import com.schibstedspain.leku.geocoder.api.NetworkClient;
+import com.schibstedspain.leku.geocoder.places.GooglePlacesDataSource;
 import com.schibstedspain.leku.permissions.PermissionUtils;
 import com.schibstedspain.leku.tracker.TrackEvents;
 import java.util.ArrayList;
@@ -133,6 +137,7 @@ public class LocationPickerActivity extends AppCompatActivity
   private Marker currentMarker;
   private TextWatcher textWatcher;
   private GoogleGeocoderDataSource apiInteractor;
+  private GooglePlacesDataSource placesDataSource;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -161,10 +166,11 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   private void setUpMainVariables() {
+    GooglePlacesDataSource placesDataSource = new GooglePlacesDataSource(Places.getGeoDataClient(this, null));
     Geocoder geocoder = new Geocoder(this, Locale.getDefault());
     apiInteractor = new GoogleGeocoderDataSource(new NetworkClient(), new AddressBuilder());
     GeocoderRepository geocoderRepository = new GeocoderRepository(new AndroidGeocoderDataSource(geocoder), apiInteractor);
-    geocoderPresenter = new GeocoderPresenter(new ReactiveLocationProvider(getApplicationContext()), geocoderRepository);
+    geocoderPresenter = new GeocoderPresenter(new ReactiveLocationProvider(getApplicationContext()), geocoderRepository, placesDataSource);
     geocoderPresenter.setUI(this);
     progressBar = findViewById(R.id.loading_progress_bar);
     progressBar.setVisibility(View.GONE);

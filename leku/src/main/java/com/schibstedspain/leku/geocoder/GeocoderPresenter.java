@@ -3,6 +3,7 @@ package com.schibstedspain.leku.geocoder;
 import android.annotation.SuppressLint;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.schibstedspain.leku.geocoder.places.GooglePlacesDataSource;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -20,16 +21,20 @@ public class GeocoderPresenter {
   private final Scheduler scheduler;
   private ReactiveLocationProvider locationProvider;
   private GeocoderRepository geocoderRepository;
+  private GooglePlacesDataSource googlePlacesDataSource;
 
-  public GeocoderPresenter(ReactiveLocationProvider reactiveLocationProvider, GeocoderRepository geocoderRepository) {
-    this(reactiveLocationProvider, geocoderRepository, AndroidSchedulers.mainThread());
+  public GeocoderPresenter(ReactiveLocationProvider reactiveLocationProvider, GeocoderRepository geocoderRepository,
+      GooglePlacesDataSource placesDataSource) {
+    this(reactiveLocationProvider, geocoderRepository, placesDataSource, AndroidSchedulers.mainThread());
   }
 
-  public GeocoderPresenter(ReactiveLocationProvider reactiveLocationProvider, GeocoderRepository geocoderRepository, Scheduler scheduler) {
+  public GeocoderPresenter(ReactiveLocationProvider reactiveLocationProvider, GeocoderRepository geocoderRepository,
+      GooglePlacesDataSource placesDataSource, Scheduler scheduler) {
     this.geocoderRepository = geocoderRepository;
     this.view = nullView;
     this.scheduler = scheduler;
     this.locationProvider = reactiveLocationProvider;
+    this.googlePlacesDataSource = placesDataSource;
   }
 
   public void setUI(GeocoderViewInterface geocoderViewInterface) {
