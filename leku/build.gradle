@@ -87,7 +87,7 @@ twitterPlugin {
   consumerSecret = System.getenv()['TWITTER_API_SECRET']
   accessToken = System.getenv()['TWITTER_ACCESS_TOKEN']
   accessTokenSecret = System.getenv()['TWITTER_ACCESS_TOKEN_SECRET']
-  message = "New Leku version ${versionMajor}.${versionMinor}.${versionPatch} available for download. Check out the details at https://github.com/SchibstedSpain/Leku"
+  message = "New Leku version ${versionMajor}.${versionMinor}.${versionPatch} available for download. Check out the details at https://github.com/SchibstedSpain/Leku @SchibstedEng #Android #library #AndroidDev"
 }
 
 def getVersionMajor() {
