@@ -1,23 +1,24 @@
 package com.schibstedspain.leku.geocoder;
 
 import android.annotation.SuppressLint;
-
+import android.location.Address;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.schibstedspain.leku.geocoder.places.GooglePlacesDataSource;
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider;
 
 public class GeocoderPresenter {
   private static final int RETRY_COUNT = 3;
+  private static final int MAX_PLACES_RESULTS = 3;
 
   private GeocoderViewInterface view;
   private final GeocoderViewInterface nullView = new GeocoderViewInterface.NullView();
@@ -75,9 +76,7 @@ public class GeocoderPresenter {
     view.willLoadLocation();
     Disposable disposable = Observable.concat(
         geocoderRepository.getFromLocationName(query, lowerLeft, upperRight),
-        isGooglePlacesEnabled ? googlePlacesDataSource.getFromLocationName(query, new LatLngBounds(lowerLeft, upperRight))
-            .take(3)
-            .onErrorReturnItem(new ArrayList<>()) : Observable.empty())
+        getPlacesFromLocationName(query, lowerLeft, upperRight))
         .subscribeOn(Schedulers.io())
         .observeOn(scheduler)
         .retry(RETRY_COUNT)
@@ -100,10 +99,7 @@ public class GeocoderPresenter {
     view.willLoadLocation();
     Disposable disposable = Observable.concat(
         geocoderRepository.getFromLocationName(query, lowerLeft, upperRight),
-        isGooglePlacesEnabled ? googlePlacesDataSource.getFromLocationName(query, new LatLngBounds(lowerLeft, upperRight))
-            .flatMapIterable(addresses -> addresses).take(3).toList().toObservable()
-            .onErrorReturnItem(new ArrayList<>()) : Observable.empty()
-    )
+        getPlacesFromLocationName(query, lowerLeft, upperRight))
         .subscribeOn(Schedulers.io())
         .debounce(debounceTime, TimeUnit.MILLISECONDS, Schedulers.io())
         .observeOn(scheduler)
@@ -124,5 +120,11 @@ public class GeocoderPresenter {
 
   public void enableGooglePlaces() {
     this.isGooglePlacesEnabled = true;
+  }
+
+  private Observable<List<Address>> getPlacesFromLocationName(String query, LatLng lowerLeft, LatLng upperRight) {
+    return isGooglePlacesEnabled ? googlePlacesDataSource.getFromLocationName(query, new LatLngBounds(lowerLeft, upperRight))
+        .flatMapIterable(addresses -> addresses).take(MAX_PLACES_RESULTS).toList().toObservable()
+        .onErrorReturnItem(new ArrayList<>()) : Observable.empty();
   }
 }
