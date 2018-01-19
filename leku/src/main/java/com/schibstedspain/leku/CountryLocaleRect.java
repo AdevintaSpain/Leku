@@ -34,6 +34,10 @@ class CountryLocaleRect {
   private static final LatLng SPAIN_UPPER_RIGHT = new LatLng(43.906271, 5.394197);
   private static final String SPAIN_COUNTRY_CODE = "es_es";
 
+  private static final LatLng PAKISTAN_LOWER_LEFT = new LatLng(22.895428, 60.201233);
+  private static final LatLng PAKISTAN_UPPER_RIGHT = new LatLng(37.228272, 76.918031);
+  private static final String PAKISTAN_COUNTRY_CODE = "en_pk";
+
   static LatLng getDefaultLowerLeft() {
     return getLowerLeftFromZone(Locale.getDefault());
   }
@@ -61,6 +65,8 @@ class CountryLocaleRect {
       return INDIA_LOWER_LEFT;
     } else if (locale.toString().equalsIgnoreCase(SPAIN_COUNTRY_CODE)) {
       return SPAIN_LOWER_LEFT;
+    } else if (locale.toString().equalsIgnoreCase(PAKISTAN_COUNTRY_CODE)) {
+      return PAKISTAN_LOWER_LEFT;
     }
     return null;
   }
@@ -84,6 +90,8 @@ class CountryLocaleRect {
       return INDIA_UPPER_RIGHT;
     } else if (locale.toString().equalsIgnoreCase(SPAIN_COUNTRY_CODE)) {
       return SPAIN_UPPER_RIGHT;
+    } else if (locale.toString().equalsIgnoreCase(PAKISTAN_COUNTRY_CODE)) {
+      return PAKISTAN_UPPER_RIGHT;
     }
     return null;
   }
