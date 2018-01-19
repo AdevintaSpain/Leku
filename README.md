@@ -6,7 +6,7 @@
 
 [![Build Status](https://travis-ci.org/SchibstedSpain/Leku.svg?branch=master)](https://travis-ci.org/SchibstedSpain/Leku) [ ![Bintray](https://api.bintray.com/packages/schibstedspain/maven/leku/images/download.svg) ](https://bintray.com/schibstedspain/maven/leku/_latestVersion)
 
-Location picker component for Android that uses Google Maps and returns a latitude, longitude and an address based on the location picked in the LocationPickerActivity provided.
+Library component for Android that uses Google Maps and returns a latitude, longitude and an address based on the location picked with the Activity provided.
 </div>
 
 <br/>
@@ -47,6 +47,7 @@ Location picker component for Android that uses Google Maps and returns a latitu
 * Search by voice
 * Search by text
 * Geo Location by GPS, network
+* Google Places
 * Pick locations using "touch" gestures on the map
 * Customization (Theme and layout)
 * Events Tracking
@@ -57,9 +58,9 @@ Location picker component for Android that uses Google Maps and returns a latitu
 
 ### Prerequisites
 
-minSdkVersion >= 15
-Google Play Services = 11.4.2
-Support Library = 26.1.0
+minSdkVersion >= 15<br/>
+Google Play Services = 11.8.0<br/>
+Support Library = 27.0.2
 
 ### Download
 
@@ -75,14 +76,14 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.schibstedspain.android:leku:3.7.0'
+    implementation 'com.schibstedspain.android:leku:4.0.0'
 }
 ```
 
 Alternatively, if you are using a different version of Google Play Services than `11.8.0` use this instead:
 
 ```groovy
-implementation ('com.schibstedspain.android:leku:3.6.2') {
+implementation ('com.schibstedspain.android:leku:4.0.0') {
     exclude group: 'com.google.android.gms'
     exclude group: 'com.android.support'
 }
@@ -137,7 +138,7 @@ To use the LocationPickerActivity first you need to add these lines to your Andr
         <action android:name="android.intent.action.SEARCH" />
     </intent-filter>
     <meta-data android:name="android.app.searchable"
-        android:resource="@xml/searchable" />
+        android:resource="@xml/leku_searchable" />
     <meta-data
         android:name="android.support.PARENT_ACTIVITY"
         android:value=".MainActivity" />
@@ -194,6 +195,38 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 ```
 
 That's all folks!
+
+
+#### Google Places
+
+Leku now supports Google Places queries using the search box. If you want to enable it these are the steps you need to follow:
+
+1. You need to replace your old `com.google.android.maps.v2.API_KEY` meta-data for the `com.google.android.geo.API_KEY`
+
+```xml
+<!-- Use this if only using Maps and not Places
+    <meta-data
+        android:name="com.google.android.maps.v2.API_KEY"
+        android:value="@string/google_maps_key"
+        />
+-->
+
+    <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="@string/google_maps_key"/>
+```
+
+2. Enable Google Places API for Android on your [google developer console](https://console.developers.google.com/).
+
+3. Enable it when instantiating LocationPickerActivity by adding `.withGooglePlacesEnabled()`:
+
+```java
+Intent intent = new LocationPickerActivity.Builder()
+    **.withGooglePlacesEnabled()**
+    .build(getApplicationContext());
+```
+
+And you are good to go. :)
 
 
 #### Localization
