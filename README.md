@@ -391,8 +391,11 @@ private GeocoderPresenter geocoderPresenter;
 @Override protected void onCreate(Bundle savedInstanceState) {
   super.onCreate(savedInstanceState);
   ***
-  Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-    geocoderPresenter = new GeocoderPresenter(getApplicationContext(), new GeocoderInteractor(geocoder));
+    GooglePlacesDataSource placesDataSource = new GooglePlacesDataSource(Places.getGeoDataClient(this, null));
+    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+    apiInteractor = new GoogleGeocoderDataSource(new NetworkClient(), new AddressBuilder());
+    GeocoderRepository geocoderRepository = new GeocoderRepository(new AndroidGeocoderDataSource(geocoder), apiInteractor);
+    geocoderPresenter = new GeocoderPresenter(new ReactiveLocationProvider(getApplicationContext()), geocoderRepository, placesDataSource);
     geocoderPresenter.setUI(this);
   ***
 }
