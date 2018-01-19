@@ -6,7 +6,7 @@
 
 [![Build Status](https://travis-ci.org/SchibstedSpain/Leku.svg?branch=master)](https://travis-ci.org/SchibstedSpain/Leku) [ ![Bintray](https://api.bintray.com/packages/schibstedspain/maven/leku/images/download.svg) ](https://bintray.com/schibstedspain/maven/leku/_latestVersion)
 
-Library component for Android that uses Google Maps and returns a latitude, longitude and an address based on the location picked with the Activity provided.
+Component library for Android that uses Google Maps and returns a latitude, longitude and an address based on the location picked with the Activity provided.
 </div>
 
 <br/>
