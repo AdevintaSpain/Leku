@@ -18,3 +18,8 @@
 
 # Retrolambda
 -dontwarn java.lang.invoke.*
+
+# Reactive Location Provider 2
+-dontwarn pl.charmas.android.reactivelocation2.**
+-keep interface pl.charmas.android.reactivelocation2.** { *; }
+-keep class pl.charmas.android.reactivelocation2.** { *; }
