@@ -12,7 +12,7 @@ version = "${versionMajor}.${versionMinor}.${versionPatch}"
 
 android {
   compileSdkVersion 27
-  buildToolsVersion '27.0.2'
+  buildToolsVersion '27.0.3'
   resourcePrefix 'leku_'
 
   defaultConfig {
@@ -56,6 +56,7 @@ dependencies {
   def playServicesVersion = '11.8.0'
   implementation "com.google.android.gms:play-services-maps:$playServicesVersion"
   implementation "com.google.android.gms:play-services-location:$playServicesVersion"
+  implementation "com.google.android.gms:play-services-places:$playServicesVersion"
 
   implementation 'pl.charmas.android:android-reactive-location2:2.0@aar'
 
@@ -86,7 +87,7 @@ twitterPlugin {
   consumerSecret = System.getenv()['TWITTER_API_SECRET']
   accessToken = System.getenv()['TWITTER_ACCESS_TOKEN']
   accessTokenSecret = System.getenv()['TWITTER_ACCESS_TOKEN_SECRET']
-  message = "New Leku version ${versionMajor}.${versionMinor}.${versionPatch} available for download. Check out the details at https://github.com/SchibstedSpain/Leku"
+  message = "New Leku version ${versionMajor}.${versionMinor}.${versionPatch} available for download. Check out the details at https://github.com/SchibstedSpain/Leku @SchibstedEng #Android #library #AndroidDev"
 }
 
 def getVersionMajor() {
