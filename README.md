@@ -2,7 +2,7 @@
 <img align="left" width="0" height="128px" hspace="10" />
 
 <div style="display:block; height: 168px;">
-*The location Picker for Android*
+* <i>The location Picker for Android</i> *
 
 [![Build Status](https://travis-ci.org/SchibstedSpain/Leku.svg?branch=master)](https://travis-ci.org/SchibstedSpain/Leku) [ ![Bintray](https://api.bintray.com/packages/schibstedspain/maven/leku/images/download.svg) ](https://bintray.com/schibstedspain/maven/leku/_latestVersion)
 
@@ -41,8 +41,8 @@ Component library for Android that uses Google Maps and returns a latitude, long
 
 ### Features
 
-<img align="right" width="0" height="328px" hspace="20"/>
-<img src="media/screenshot.gif" height="328px" align="right" />
+<img align="right" width="0" height="368px" hspace="20"/>
+<img src="media/screenshot.gif" height="368px" align="right" />
 
 * Search by voice
 * Search by text
