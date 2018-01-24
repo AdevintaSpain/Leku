@@ -41,8 +41,8 @@ Component library for Android that uses Google Maps and returns a latitude, long
 
 ### Features
 
-<img align="right" width="0" height="328px" hspace="20"/>
-<img src="media/screenshot.gif" height="328px" align="right" />
+<img align="right" width="0" height="368px" hspace="20"/>
+<img src="media/screenshot.gif" height="368px" align="right" />
 
 * Search by voice
 * Search by text
