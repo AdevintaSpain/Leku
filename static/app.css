@@ -122,7 +122,7 @@ h3 {
   font-style: italic;
   color: #888;
   font-size: 20px;
-  padding-top: 115px;
+  padding-top: 80px;
   margin-top: 0;
 }
 
@@ -132,6 +132,14 @@ h4 {
   color: #888;
   font-size: 15px;
   padding-top: 20px;
+}
+
+h5 {
+  font-weight: 400;
+  text-transform: uppercase;
+  color: #888;
+  font-size: 12px;
+  padding-top: 8px;
 }
 
 p.license {

@@ -1,8 +1,5 @@
 # Leku Home Page
 
-<img src="media/leku_logo.png" align="left" height="128px" />
-<img align="left" width="0" height="128px" hspace="10" />
-
 <div style="display:block; height: 168px;">
 * <i>The location Picker for Android</i> *
 

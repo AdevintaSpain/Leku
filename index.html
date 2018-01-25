@@ -175,7 +175,7 @@
                 That's all folks!
 
 
-                #### Google Places
+                <h4>Google Places</h4>
 
                 Leku now supports Google Places queries using the search box. If you want to enable it these are the steps you need to follow:
 
@@ -207,7 +207,7 @@
                 And you are good to go. :)
 
 
-                #### Localization
+                <h4>Localization</h4>
 
                 If you would like to add more language translations the only thing you have to do is:
 
@@ -231,7 +231,7 @@
                 I encourage you to add these languages to this component, please fork this project and submit new languages with a PR. Thanks!
 
 
-                #### Transition Bundle
+                <h4>Transition Bundle</h4>
 
                 If you need to send and receive a param through the LocationPickerActivity you can do it.
                 You only need to add an "Extra" param to the intent like:
@@ -249,9 +249,9 @@
                 String test = bundle.getString("test");
                 ```
 
-                #### Customization
+                <h4>Customization</h4>
 
-                ##### Theming
+                <h5>Theming</h5>
 
                 This library uses AppCompat, so should use Theme.AppCompat or descendant in manifest.
 
@@ -264,7 +264,7 @@
 
                 > `colorControlActivated` is used to colorize Street title, if not set, it uses colorAccent by default
 
-                ##### Layout
+                <h5>Layout</h5>
 
                 It's possible to hide or show some of the information shown after selecting a location.
                 Using tha bundle parameter **LocationPickerActivity.LAYOUTS_TO_HIDE** you can change the visibility of the street, city or the zipcode.
@@ -273,7 +273,7 @@
                 intent.putExtra(LocationPickerActivity.LAYOUTS_TO_HIDE, "street|city|zipcode");
                 ```
 
-                ##### Search Zone
+                <h5>Search Zone</h5>
 
                 By default the search will be restricted to a zone determined by your default locale. If you want to force the search zone you can do it by adding this line with the locale preferred:
 
@@ -281,7 +281,7 @@
                 intent.putExtra(LocationPickerActivity.SEARCH_ZONE, "es_ES");
                 ```
 
-                ##### Force return location on back pressed
+                <h5>Force return location on back pressed</h5>
 
                 If you want to force that when the user clicks on back button it returns the location you can use this parameter (note: is only enabled if you don't provide a location):
 
@@ -289,7 +289,7 @@
                 intent.putExtra(LocationPickerActivity.BACK_PRESSED_RETURN_OK, true);
                 ```
 
-                ##### Enable/Disable the Satellite view
+                <h5>Enable/Disable the Satellite view</h5>
 
                 If you want to disable the satellite view button you can use this parameter (note: the satellite view is enabled by default):
 
@@ -297,7 +297,7 @@
                 intent.putExtra(LocationPickerActivity.ENABLE_SATELLITE_VIEW, false);
                 ```
 
-                ##### Enable/Disable requesting location permissions
+                <h5>Enable/Disable requesting location permissions</h5>
 
                 If you want to disable asking for location permissions (and prevent any location requests)
 
@@ -305,115 +305,114 @@
                 intent.putExtra(LocationPickerActivity.ENABLE_LOCATION_PERMISSION_REQUEST, false);
                 ```
 
-                #### Tracking
+                <h4>Tracking</h4>
 
                 Optionally, you can set a tracking events listener. Implement LocationPickerTracker interface, and set it in your Application class as follows:
 
                 ```java
                 LocationPicker.setTracker(new <<YourOwnTracker implementing LocationPickerTracker>>());
-                    ```
-                    Available tracking events are:
+                ```
+                Available tracking events are:
 
-                    |TAG|Message|
-                    |---|---|
-                    |didLoadLocationPicker|Location Picker|
-                    |didSearchLocations |Click on search for locations|
-                    |didLocalizeMe|Click on localize me|
-                    |didLocalizeByPoi|Long click on map|
-                    |RESULT_OK|Return location|
-                    |CANCEL|Return without location|
+                |TAG|Message|
+                |---|---|
+                |didLoadLocationPicker|Location Picker|
+                |didSearchLocations |Click on search for locations|
+                |didLocalizeMe|Click on localize me|
+                |didLocalizeByPoi|Long click on map|
+                |RESULT_OK|Return location|
+                |CANCEL|Return without location|
 
-                    #### Geocoding API Fallback
+                <h4>Geocoding API Fallback</h4>
 
-                    In few cases, the geocoding service from Android fails due to an issue with the NetworkLocator. The only way of fixing this is rebooting the device.
+                In few cases, the geocoding service from Android fails due to an issue with the NetworkLocator. The only way of fixing this is rebooting the device.
 
-                    In order to cover these cases, you can instruct Leku to use the Geocoding API. To enable it, just use the method '''withGeolocApiKey''' when invoking the LocationPicker.
+                In order to cover these cases, you can instruct Leku to use the Geocoding API. To enable it, just use the method '''withGeolocApiKey''' when invoking the LocationPicker.
 
-                    You should provide your Server Key as parameter. Keep in mind that the free tier only allows 2,500 requests per day. You can track how many times is it used in the Developer Console from Google.
+                You should provide your Server Key as parameter. Keep in mind that the free tier only allows 2,500 requests per day. You can track how many times is it used in the Developer Console from Google.
 
-                    #### Extra
+                <h4>Extra</h4>
 
-                    If you would like to use the Geocoder presenter (MVP) used for this use case you are free to use it!
-                    GeocoderPresenter has three methods:
+                If you would like to use the Geocoder presenter (MVP) used for this use case you are free to use it!
+                GeocoderPresenter has three methods:
 
-                    * ***getLastKnownLocation:***
-                    Which obviously returns the last known user location as a ***Location*** object.
+                * ***getLastKnownLocation:***
+                Which obviously returns the last known user location as a ***Location*** object.
 
-                    * ***getFromLocationName(String query):***
-                    Returns a ***List`<`Address`>`*** for the text introduced.
+                * ***getFromLocationName(String query):***
+                Returns a ***List`<`Address`>`*** for the text introduced.
 
-                    * ***getFromLocationName(String query, LatLng lowerLeft, LatLng upperRight):***
-                    Returns a ***List`<`Address`>`*** for the text and the Rectangle introduced.
+                * ***getFromLocationName(String query, LatLng lowerLeft, LatLng upperRight):***
+                Returns a ***List`<`Address`>`*** for the text and the Rectangle introduced.
 
-                    * ***getDebouncedFromLocationName(String query, int debounceTime):***
-                    Returns a ***List`<`Address`>`*** for the text introduced. Useful if you want to implement your own search view with auto-complete.
+                * ***getDebouncedFromLocationName(String query, int debounceTime):***
+                Returns a ***List`<`Address`>`*** for the text introduced. Useful if you want to implement your own search view with auto-complete.
 
-                    * ***getDebouncedFromLocationName(String query, LatLng lowerLeft, LatLng upperRight, int debounceTime):***
-                    Returns a ***List`<`Address`>`*** for the text and the Rectangle introduced. Useful if you want to implement your own search view with auto-complete.
+                * ***getDebouncedFromLocationName(String query, LatLng lowerLeft, LatLng upperRight, int debounceTime):***
+                Returns a ***List`<`Address`>`*** for the text and the Rectangle introduced. Useful if you want to implement your own search view with auto-complete.
 
-                    * ***getInfoFromLocation(double latitude, double longitude):***
-                    Returns a ***List`<`Address`>`*** based on a latitude and a longitude.
-
-
-                    To use it first you need to implement the GeocoderViewInterface interface in your class like:
-
-                    ```java
-                    public class LocationPickerActivity extends AppCompatActivity implements GeocoderViewInterface {
-                    ```
-
-                    Then you need to setup the presenter:
-
-                    ```java
-                    private GeocoderPresenter geocoderPresenter;
-
-                    @Override protected void onCreate(Bundle savedInstanceState) {
-                    super.onCreate(savedInstanceState);
-                    ***
-                    GooglePlacesDataSource placesDataSource = new GooglePlacesDataSource(Places.getGeoDataClient(this, null));
-                    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-                    apiInteractor = new GoogleGeocoderDataSource(new NetworkClient(), new AddressBuilder());
-                    GeocoderRepository geocoderRepository = new GeocoderRepository(new AndroidGeocoderDataSource(geocoder), apiInteractor);
-                    geocoderPresenter = new GeocoderPresenter(new ReactiveLocationProvider(getApplicationContext()), geocoderRepository, placesDataSource);
-                    geocoderPresenter.setUI(this);
-                    ***
-                    }
-                    ```
-
-                    And besides filling the interface methods you have to add some things to your activity/fragment lifecycle to ensure that there are no leaks.
-
-                    ```java
-
-                    @Override
-                    protected void onStart() {
-                    super.onStart();
-                    geocoderPresenter.setUI(this);
-                    }
-
-                    @Override
-                    protected void onStop() {
-                    geocoderPresenter.stop();
-                    super.onStop();
-                    }
-                    ```
-
-                    ##### Tests
-
-                    Note: If you need to execute the Espresso test you will need to add the Google Maps Key into the Tests AndroidManifest.xml
+                * ***getInfoFromLocation(double latitude, double longitude):***
+                Returns a ***List`<`Address`>`*** based on a latitude and a longitude.
 
 
-                    Now you have all you need. :)
+                To use it first you need to implement the GeocoderViewInterface interface in your class like:
+
+                ```java
+                public class LocationPickerActivity extends AppCompatActivity implements GeocoderViewInterface {
+                ```
+
+                Then you need to setup the presenter:
+
+                ```java
+                private GeocoderPresenter geocoderPresenter;
+
+                @Override protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                ***
+                GooglePlacesDataSource placesDataSource = new GooglePlacesDataSource(Places.getGeoDataClient(this, null));
+                Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                apiInteractor = new GoogleGeocoderDataSource(new NetworkClient(), new AddressBuilder());
+                GeocoderRepository geocoderRepository = new GeocoderRepository(new AndroidGeocoderDataSource(geocoder), apiInteractor);
+                geocoderPresenter = new GeocoderPresenter(new ReactiveLocationProvider(getApplicationContext()), geocoderRepository, placesDataSource);
+                geocoderPresenter.setUI(this);
+                ***
+                }
+                ```
+
+                And besides filling the interface methods you have to add some things to your activity/fragment lifecycle to ensure that there are no leaks.
+
+                ```java
+
+                @Override
+                protected void onStart() {
+                super.onStart();
+                geocoderPresenter.setUI(this);
+                }
+
+                @Override
+                protected void onStop() {
+                geocoderPresenter.stop();
+                super.onStop();
+                }
+                ```
+
+                <h5>Tests</h5>
+
+                Note: If you need to execute the Espresso test you will need to add the Google Maps Key into the Tests AndroidManifest.xml
 
 
-                    ##### Important
-
-                    Searching using the "SearchView" (geocoder) will be restricted to a zone if you are with a Locale from: US, UK, France, Italy and Spain. If not, the search will return results from all the world.
+                Now you have all you need. :)
 
 
-                    Sample usage
-                    ------------
+                <h5>Important</h5>
 
-                    We provide a sample project which provides runnable code samples that demonstrate their use in Android applications.
-                    Note that you need to include your Google Play services key in the sample to be able to test it.
+                Searching using the "SearchView" (geocoder) will be restricted to a zone if you are with a Locale from: US, UK, France, Italy and Spain. If not, the search will return results from all the world.
+
+
+                <h4>Sample usage</h4>
+
+                We provide a sample project which provides runnable code samples that demonstrate their use in Android applications.
+                Note that you need to include your Google Play services key in the sample to be able to test it.
 
                 <h3 id="download">Download</h3>
                 <p><a href="https://search.maven.org/remote_content?g=com.schibstedspain.android&a=leku&v=LATEST"
@@ -479,7 +478,7 @@ limitations under the License.</pre>
         </div>
         <div class="row">
             <div class="span12 logo">
-                <a href="https://www.schibsted.com"><img src="static/logo-schibsted.png" alt="Schibsted Classified Media Spain S.L."/></a>
+                <a href="https://www.schibsted.com"><img src="static/schibsted-logo.png" alt="Schibsted Classified Media Spain S.L."/></a>
             </div>
         </div>
     </div>
