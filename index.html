@@ -1,132 +1,524 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="UTF-8">
-    <title>Leku by Schibsted Spain</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-  </head>
-  <body>
-    <section class="page-header">
-      <img src="https://github.com/SchibstedSpain/Leku/raw/master/media/leku_web.png" height="300px" align="center">
-      <h2 class="project-tagline">Location picker component for Android.</h2>
-      <a href="https://github.com/SchibstedSpain/Leku" class="btn">View on GitHub</a>
-      <a href="https://github.com/SchibstedSpain/Leku/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/SchibstedSpain/Leku/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Leku - The Google maps picker for Android</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Location picker component for Android">
+    <link href="static/bootstrap-combined.min.css" rel="stylesheet">
+    <link href="static/app.css" rel="stylesheet">
+    <link href="static/app-theme.css" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Roboto:400,300italic,100,100italic,300" rel="stylesheet" type="text/css">
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="static/html5shiv.min.js"></script><![endif]-->
+</head>
+<body data-target=".content-nav">
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="span5">
+                <img src="static/leku-logo.png" alt="Leku" />
+            </div>
+            <div class="span7">
+                <menu>
+                    <ul>
+                        <li><a href="#download" class="menu download">Download <span class="version-tag">Latest</span></a></li>
+                        <li><a href="https://github.com/SchibstedSpain/Leku" data-title="View GitHub Project" class="menu github"><img
+                                src="static/icon-github.png" alt="GitHub"/></a></li>
+                    </ul>
+                </menu>
+            </div>
+        </div>
+</header>
+<section id="subtitle">
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+                <h2>A <strong>map location picker component</strong> for Android</h2>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="body">
+    <div class="container">
+        <div class="row">
+            <div class="span9">
+                <h3 id="introduction">Introduction</h3>
 
-    <section class="main-content">
-      <h1>
-<a id="leku-the-map-location-component-for-android" class="anchor" href="#leku-the-map-location-component-for-android" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Leku, the map location component for Android</h1>
+                <p>Component library for Android that uses Google Maps and returns a latitude, longitude and an address based on the location picked with the Activity provided.</p>
 
-<p>"<em>Location and maps-based apps offer a compelling experience on mobile devices</em>". That's how <a href="https://developer.android.com/guide/topics/location/index.html?hl=es#location">Android Location documentation</a> starts, and that's true but Location is not always an easy due. You need to add layers, inputs for search, show results, control possible issues, add touch events, etc.</p>
 
-<p>For our application, <a href="https://play.google.com/store/apps/details?id=com.anuntis.segundamano">Vibbo</a>, we thought that would be interesting to have an easy way to select a location for our searches. But not only searches could need it, also Ad insertion could benefit from it in different ways. And not only our app, also a lot of apps could benefit. So we decided to create a new component for android, test it in our app and bring it to the world.
-<a href="https://github.com/SchibstedSpain/Leku"><em>Leku</em></a> is the result of this process, a component with all you need to get locations and all the information related to in an easy way.</p>
+                <h3 id="features">Features</h3>
 
-<p>What are the features of <a href="https://github.com/SchibstedSpain/Leku"><em>Leku</em></a>? You might ask. Here are some, and a small visual example:</p>
+                <img align="right" width="0" hspace="40"/>
+                <img src="https://github.com/SchibstedSpain/Leku/blob/master/media/screenshot.gif?raw=true" align="right" />
 
-<p><img src="https://github.com/SchibstedSpain/Leku/raw/master/media/screenshot.gif" height="328px" align="left">
-<img align="left" width="0" height="328px" hspace="20"></p>
+                <ul>
+                    <li>Search by voice</li>
+                    <li>Search by text</li>
+                    <li>Geo Location by GPS, network</li>
+                    <li>Google Places</li>
+                    <li>Pick locations using "touch" gestures on the map</li>
+                    <li>Customization (Theme and layout)</li>
+                    <li>Events Tracking</li>
+                    <li>Multi-language support (English and Spanish supported by default)</li>
+                    <li>RTL (Right-To-Left) layout support</li>
+                </ul>
 
-<ul>
-<li>Search by Voice</li>
-<li>Search by Text</li>
-<li>Get your position by GPS or network</li>
-<li>Pick locations using "touch" gestures on the map</li>
-<li>Customization (Adapt to your Theme and you can customize some layouts)</li>
-<li>Events Tracking, to know exactly what are doing your users.</li>
-<li>Multi-language support (English and Spanish supported by default)
-<br><br><br>
-</li>
-</ul>
+                <h3 id="using">Using Leku</h3>
 
-<p><strong>Cool! Isn't it?</strong></p>
+                <h4>Permissions</h4>
 
-<p>But you not only would benefit from all this... We also removed all the hassle of controlling errors, permissions, and the lifecycle of the component. So we made it easy to add it in your application and forget those things, is a plug&amp;play component.</p>
+                You must add the following permissions in order to use the Google Maps Android API:
 
-<h4>
-<a id="how-i-add-it-into-my-application" class="anchor" href="#how-i-add-it-into-my-application" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How I add it into my application?</h4>
+                <ul>
+                    <li>**android.permission.INTERNET**   Used by the API to download map tiles from Google Maps servers.</li>
+                    <li>**android.permission.ACCESS_NETWORK_STATE**   Allows the API to check the connection status in order to determine whether data can be downloaded.</li>
+                </ul>
 
-<p>Include the dependency:</p>
+                The following permissions are not required to use Google Maps Android API v2, but are recommended.
 
-<div class="highlight highlight-source-groovy"><pre>dependencies {
-    compile <span class="pl-s"><span class="pl-pds">'</span>com.schibstedspain.android:leku:1.0.0<span class="pl-pds">'</span></span>
-}</pre></div>
+                <ul>
+                    <li>**android.permission.ACCESS_COARSE_LOCATION**   Allows the API to use WiFi or mobile cell data (or both) to determine the device's location. The API returns the location with an accuracy approximately equivalent to a city block.</li>
+                    <li>**android.permission.ACCESS_FINE_LOCATION**   Allows the API to determine as precise a location as possible from the available location providers, including the Global Positioning System (GPS) as well as WiFi and mobile cell data.</li>
+                    <li>**android.permission.WRITE_EXTERNAL_STORAGE**   Allows the API to cache map tile data in the device's external storage area.</li>
+                </ul>
 
-<p>Add the permissions needed in your manifest:</p>
+                <code>
+                <uses-permission android:name="android.permission.INTERNET" />
+                <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+                <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+                <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+                <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">uses-permission</span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.permission.INTERNET<span class="pl-pds">"</span></span> /&gt;
-&lt;<span class="pl-ent">uses-permission</span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.permission.ACCESS_NETWORK_STATE<span class="pl-pds">"</span></span>/&gt;
-&lt;<span class="pl-ent">uses-permission</span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.permission.WRITE_EXTERNAL_STORAGE<span class="pl-pds">"</span></span>/&gt;
-&lt;<span class="pl-ent">uses-permission</span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.permission.ACCESS_FINE_LOCATION<span class="pl-pds">"</span></span> /&gt;
-&lt;<span class="pl-ent">uses-permission</span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.permission.ACCESS_COARSE_LOCATION<span class="pl-pds">"</span></span> /&gt;</pre></div>
+                <uses-feature android:name="android.hardware.location.network" android:required="false" />
+                <uses-feature android:name="android.hardware.location.gps" android:required="false"  />
+                </code>
 
-<p>Add the locationPickerActivity into your manifest too:</p>
+                You must also explicitly declare that your app uses the android.hardware.location.network or android.hardware.location.gps hardware features if your app targets Android 5.0 (API level 21) or higher and uses the ACCESS_COARSE_LOCATION or ACCESS_FINE_LOCATION permission in order to receive location updates from the network or a GPS, respectively.
 
-<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">activity</span>
-    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>com.schibsted.maplocationpicker.LocationPickerActivity<span class="pl-pds">"</span></span>
-    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">label</span>=<span class="pl-s"><span class="pl-pds">"</span>@string/title_activity_location_picker<span class="pl-pds">"</span></span>
-    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">theme</span>=<span class="pl-s"><span class="pl-pds">"</span>@style/Theme.AppCompat.Light.NoActionBar<span class="pl-pds">"</span></span>
-    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">windowSoftInputMode</span>=<span class="pl-s"><span class="pl-pds">"</span>adjustPan<span class="pl-pds">"</span></span>
-    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">parentActivityName</span>=<span class="pl-s"><span class="pl-pds">"</span>.MainActivity<span class="pl-pds">"</span></span>&gt;
-    &lt;<span class="pl-ent">intent-filter</span>&gt;
-        &lt;<span class="pl-ent">action</span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.intent.action.SEARCH<span class="pl-pds">"</span></span> /&gt;
-    &lt;/<span class="pl-ent">intent-filter</span>&gt;
-    &lt;<span class="pl-ent">meta-data</span> <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.app.searchable<span class="pl-pds">"</span></span>
-        <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">resource</span>=<span class="pl-s"><span class="pl-pds">"</span>@xml/searchable<span class="pl-pds">"</span></span> /&gt;
-    &lt;<span class="pl-ent">meta-data</span>
-        <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>android.support.PARENT_ACTIVITY<span class="pl-pds">"</span></span>
-        <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">value</span>=<span class="pl-s"><span class="pl-pds">"</span>.MainActivity<span class="pl-pds">"</span></span> /&gt;
-&lt;/<span class="pl-ent">activity</span>&gt;</pre></div>
+                **Note**: It supports runtime permissions for *Android 6 (Marshmallow)*. You don't need to do anything, it will ask for permissions if needed.
 
-<p>Then you have setup the call to start this activity wherever you like, always as startActivityForResult:</p>
 
-<div class="highlight highlight-source-java"><pre><span class="pl-smi">Intent</span> i <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">Intent</span>(<span class="pl-v">this</span>, <span class="pl-smi">LocationPickerActivity</span><span class="pl-k">.</span>class);
-startActivityForResult(i, <span class="pl-c1">1</span>);</pre></div>
+                <h4>Usage</h4>
 
-<p>And add the response code from that activity:</p>
+                To use the LocationPickerActivity first you need to add these lines to your AndroidManifest file:
 
-<div class="highlight highlight-source-java"><pre>
-@<span class="pl-smi">Override</span>
-<span class="pl-k">protected</span> <span class="pl-k">void</span> onActivityResult(<span class="pl-k">int</span> requestCode, <span class="pl-k">int</span> resultCode, <span class="pl-smi">Intent</span> data) {
+                <code>
+                <activity
+                        android:name="com.schibstedspain.leku.LocationPickerActivity"
+                        android:label="@string/leku_title_activity_location_picker"
+                        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+                        android:windowSoftInputMode="adjustPan"
+                        android:parentActivityName=".MainActivity">
+                    <intent-filter>
+                        <action android:name="android.intent.action.SEARCH" />
+                    </intent-filter>
+                    <meta-data android:name="android.app.searchable"
+                               android:resource="@xml/leku_searchable" />
+                    <meta-data
+                            android:name="android.support.PARENT_ACTIVITY"
+                            android:value=".MainActivity" />
+                </activity>
+                </code>
 
-    <span class="pl-k">if</span> (requestCode <span class="pl-k">==</span> <span class="pl-c1">1</span>) {
-        <span class="pl-k">if</span>(resultCode <span class="pl-k">==</span> <span class="pl-c1">RESULT_OK</span>){
-            <span class="pl-k">double</span> latitude <span class="pl-k">=</span> data<span class="pl-k">.</span>getDoubleExtra(<span class="pl-smi">LocationPickerActivity</span><span class="pl-c1"><span class="pl-k">.</span>LATITUDE</span>, <span class="pl-c1">0</span>);
-            <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-s"><span class="pl-pds">"</span>LATITUDE****<span class="pl-pds">"</span></span>, <span class="pl-smi">String</span><span class="pl-k">.</span>valueOf(latitude));
-            <span class="pl-k">double</span> longitude <span class="pl-k">=</span> data<span class="pl-k">.</span>getDoubleExtra(<span class="pl-smi">LocationPickerActivity</span><span class="pl-c1"><span class="pl-k">.</span>LONGITUDE</span>, <span class="pl-c1">0</span>);
-            <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-s"><span class="pl-pds">"</span>LONGITUDE****<span class="pl-pds">"</span></span>, <span class="pl-smi">String</span><span class="pl-k">.</span>valueOf(longitude));
-            <span class="pl-smi">String</span> address <span class="pl-k">=</span> data<span class="pl-k">.</span>getStringExtra(<span class="pl-smi">LocationPickerActivity</span><span class="pl-c1"><span class="pl-k">.</span>LOCATION_ADDRESS</span>);
-            <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-s"><span class="pl-pds">"</span>ADDRESS****<span class="pl-pds">"</span></span>, <span class="pl-smi">String</span><span class="pl-k">.</span>valueOf(address));
-            <span class="pl-smi">String</span> postalcode <span class="pl-k">=</span> data<span class="pl-k">.</span>getStringExtra(<span class="pl-smi">LocationPickerActivity</span><span class="pl-c1"><span class="pl-k">.</span>ZIPCODE</span>);
-            <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-s"><span class="pl-pds">"</span>POSTALCODE****<span class="pl-pds">"</span></span>, <span class="pl-smi">String</span><span class="pl-k">.</span>valueOf(postalcode));
-            <span class="pl-smi">Bundle</span> bundle <span class="pl-k">=</span> data<span class="pl-k">.</span>getBundleExtra(<span class="pl-smi">LocationPickerActivity</span><span class="pl-c1"><span class="pl-k">.</span>TRANSITION_BUNDLE</span>);
-            <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-s"><span class="pl-pds">"</span>BUNDLE TEXT****<span class="pl-pds">"</span></span>, bundle<span class="pl-k">.</span>getString(<span class="pl-s"><span class="pl-pds">"</span>test<span class="pl-pds">"</span></span>));
-            <span class="pl-smi">Address</span> fullAddress <span class="pl-k">=</span> data<span class="pl-k">.</span>getParcelableExtra(<span class="pl-smi">LocationPickerActivity</span><span class="pl-c1"><span class="pl-k">.</span>ADDRESS</span>);
-            <span class="pl-smi">Log</span><span class="pl-k">.</span>d(<span class="pl-s"><span class="pl-pds">"</span>FULL ADDRESS****<span class="pl-pds">"</span></span>, fullAddress<span class="pl-k">.</span>toString());
-        }
-        <span class="pl-k">if</span> (resultCode <span class="pl-k">==</span> <span class="pl-c1">RESULT_CANCELED</span>) {
-            <span class="pl-c">//Write your code if there's no result</span>
-        }
-    }
-}</pre></div>
+                Then you have setup the call to start this activity wherever you like, always as startActivityForResult.
+                You can set a default location, search zone and other customizable parameters to load when you start the activity.
+                You only need to use the Builder setters like:
 
-<p>That's all folks! Quick and Easy!</p>
+                <code>
+                Intent intent = new LocationPickerActivity.Builder()
+                .withLocation(41.4036299, 2.1743558)
+                .withGeolocApiKey("<PUT API KEY HERE>")
+                .withSearchZone("es_ES")
+                .shouldReturnOkOnBackPressed()
+                .withStreetHidden()
+                .withCityHidden()
+                .withZipCodeHidden()
+                .withSatelliteViewHidden()
+                .build(getApplicationContext());
 
-<p>If you want more information on how to customize this component and know more about it, check out the <a href="https://github.com/SchibstedSpain/Leku"><em>official repository</em></a>. Enjoy!</p>
+                startActivityForResult(intent, 1);
+                </code>
 
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/SchibstedSpain/Leku">Leku</a> is maintained by <a href="https://github.com/SchibstedSpain">SchibstedSpain</a>.</span>
+                And add the response code from that activity:
 
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-      </footer>
+                ```java
 
-    </section>
+                @Override
+                protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+                if (requestCode == 1) {
+                if(resultCode == RESULT_OK){
+                double latitude = data.getDoubleExtra(LocationPickerActivity.LATITUDE, 0);
+                Log.d("LATITUDE****", String.valueOf(latitude));
+                double longitude = data.getDoubleExtra(LocationPickerActivity.LONGITUDE, 0);
+                Log.d("LONGITUDE****", String.valueOf(longitude));
+                String address = data.getStringExtra(LocationPickerActivity.LOCATION_ADDRESS);
+                Log.d("ADDRESS****", String.valueOf(address));
+                String postalcode = data.getStringExtra(LocationPickerActivity.ZIPCODE);
+                Log.d("POSTALCODE****", String.valueOf(postalcode));
+                Bundle bundle = data.getBundleExtra(LocationPickerActivity.TRANSITION_BUNDLE);
+                Log.d("BUNDLE TEXT****", bundle.getString("test"));
+                Address fullAddress = data.getParcelableExtra(LocationPickerActivity.ADDRESS);
+                if(fullAddress != null)
+                Log.d("FULL ADDRESS****", fullAddress.toString());
+                }
+                if (resultCode == RESULT_CANCELED) {
+                //Write your code if there's no result
+                }
+                }
+                }
 
-  
-  </body>
+                ```
+
+                That's all folks!
+
+
+                #### Google Places
+
+                Leku now supports Google Places queries using the search box. If you want to enable it these are the steps you need to follow:
+
+                1. You need to replace your old `com.google.android.maps.v2.API_KEY` meta-data for the `com.google.android.geo.API_KEY`
+
+                ```xml
+                <!-- Use this if only using Maps and not Places
+                    <meta-data
+                        android:name="com.google.android.maps.v2.API_KEY"
+                        android:value="@string/google_maps_key"
+                        />
+                -->
+
+                <meta-data
+                        android:name="com.google.android.geo.API_KEY"
+                        android:value="@string/google_maps_key"/>
+                ```
+
+                2. Enable Google Places API for Android on your [google developer console](https://console.developers.google.com/).
+
+                3. Enable it when instantiating LocationPickerActivity by adding `.withGooglePlacesEnabled()`:
+
+                ```java
+                Intent intent = new LocationPickerActivity.Builder()
+                **.withGooglePlacesEnabled()**
+                .build(getApplicationContext());
+                ```
+
+                And you are good to go. :)
+
+
+                #### Localization
+
+                If you would like to add more language translations the only thing you have to do is:
+
+                1. Crate a new strings resource folder and file for your language like "/values-ru".
+                2. Add all text translations for those strings:
+
+                ```xml
+                <string name="leku_title_activity_location_picker">Location Picker</string>
+                <string name="leku_load_location_error">Something went wrong. Please try again.</string>
+                <string name="leku_no_search_results">There are no results for your search</string>
+                <string name="leku_unknown_location">unknown location</string>
+                <string name="leku_voice_search_promp">Search by voice…</string>
+                <string name="leku_voice_search_extra_language">en-EN</string>
+                <string name="leku_toolbar_action_voice_title">Voice</string>
+                <string name="leku_search_hint">Search</string>
+                ```
+
+                Note that you have the **voice_search_extra_language** that is used for the language of the voice recognition.
+                Replace it with the allowed voice recognition locale for your language.
+
+                I encourage you to add these languages to this component, please fork this project and submit new languages with a PR. Thanks!
+
+
+                #### Transition Bundle
+
+                If you need to send and receive a param through the LocationPickerActivity you can do it.
+                You only need to add an "Extra" param to the intent like:
+
+                ```java
+                Intent intent = new Intent(getApplicationContext(), LocationPickerActivity.class);
+                intent.putExtra("test", "this is a test");
+                startActivityForResult(intent, 1);
+                ```
+
+                And parse it on onActivityResult callback:
+
+                ```java
+                Bundle bundle = data.getBundleExtra(LocationPickerActivity.TRANSITION_BUNDLE);
+                String test = bundle.getString("test");
+                ```
+
+                #### Customization
+
+                ##### Theming
+
+                This library uses AppCompat, so should use Theme.AppCompat or descendant in manifest.
+
+                ```xml
+                <item name="colorPrimary">#E91E63</item>
+                <item name="colorPrimaryDark">#C51162</item>
+                <item name="colorAccent">#FBC02D</item>
+                <item name="colorControlActivated">#E91E63</item>
+                ```
+
+                > `colorControlActivated` is used to colorize Street title, if not set, it uses colorAccent by default
+
+                ##### Layout
+
+                It's possible to hide or show some of the information shown after selecting a location.
+                Using tha bundle parameter **LocationPickerActivity.LAYOUTS_TO_HIDE** you can change the visibility of the street, city or the zipcode.
+
+                ```java
+                intent.putExtra(LocationPickerActivity.LAYOUTS_TO_HIDE, "street|city|zipcode");
+                ```
+
+                ##### Search Zone
+
+                By default the search will be restricted to a zone determined by your default locale. If you want to force the search zone you can do it by adding this line with the locale preferred:
+
+                ```java
+                intent.putExtra(LocationPickerActivity.SEARCH_ZONE, "es_ES");
+                ```
+
+                ##### Force return location on back pressed
+
+                If you want to force that when the user clicks on back button it returns the location you can use this parameter (note: is only enabled if you don't provide a location):
+
+                ```java
+                intent.putExtra(LocationPickerActivity.BACK_PRESSED_RETURN_OK, true);
+                ```
+
+                ##### Enable/Disable the Satellite view
+
+                If you want to disable the satellite view button you can use this parameter (note: the satellite view is enabled by default):
+
+                ```java
+                intent.putExtra(LocationPickerActivity.ENABLE_SATELLITE_VIEW, false);
+                ```
+
+                ##### Enable/Disable requesting location permissions
+
+                If you want to disable asking for location permissions (and prevent any location requests)
+
+                ```java
+                intent.putExtra(LocationPickerActivity.ENABLE_LOCATION_PERMISSION_REQUEST, false);
+                ```
+
+                #### Tracking
+
+                Optionally, you can set a tracking events listener. Implement LocationPickerTracker interface, and set it in your Application class as follows:
+
+                ```java
+                LocationPicker.setTracker(new <<YourOwnTracker implementing LocationPickerTracker>>());
+                    ```
+                    Available tracking events are:
+
+                    |TAG|Message|
+                    |---|---|
+                    |didLoadLocationPicker|Location Picker|
+                    |didSearchLocations |Click on search for locations|
+                    |didLocalizeMe|Click on localize me|
+                    |didLocalizeByPoi|Long click on map|
+                    |RESULT_OK|Return location|
+                    |CANCEL|Return without location|
+
+                    #### Geocoding API Fallback
+
+                    In few cases, the geocoding service from Android fails due to an issue with the NetworkLocator. The only way of fixing this is rebooting the device.
+
+                    In order to cover these cases, you can instruct Leku to use the Geocoding API. To enable it, just use the method '''withGeolocApiKey''' when invoking the LocationPicker.
+
+                    You should provide your Server Key as parameter. Keep in mind that the free tier only allows 2,500 requests per day. You can track how many times is it used in the Developer Console from Google.
+
+                    #### Extra
+
+                    If you would like to use the Geocoder presenter (MVP) used for this use case you are free to use it!
+                    GeocoderPresenter has three methods:
+
+                    * ***getLastKnownLocation:***
+                    Which obviously returns the last known user location as a ***Location*** object.
+
+                    * ***getFromLocationName(String query):***
+                    Returns a ***List`<`Address`>`*** for the text introduced.
+
+                    * ***getFromLocationName(String query, LatLng lowerLeft, LatLng upperRight):***
+                    Returns a ***List`<`Address`>`*** for the text and the Rectangle introduced.
+
+                    * ***getDebouncedFromLocationName(String query, int debounceTime):***
+                    Returns a ***List`<`Address`>`*** for the text introduced. Useful if you want to implement your own search view with auto-complete.
+
+                    * ***getDebouncedFromLocationName(String query, LatLng lowerLeft, LatLng upperRight, int debounceTime):***
+                    Returns a ***List`<`Address`>`*** for the text and the Rectangle introduced. Useful if you want to implement your own search view with auto-complete.
+
+                    * ***getInfoFromLocation(double latitude, double longitude):***
+                    Returns a ***List`<`Address`>`*** based on a latitude and a longitude.
+
+
+                    To use it first you need to implement the GeocoderViewInterface interface in your class like:
+
+                    ```java
+                    public class LocationPickerActivity extends AppCompatActivity implements GeocoderViewInterface {
+                    ```
+
+                    Then you need to setup the presenter:
+
+                    ```java
+                    private GeocoderPresenter geocoderPresenter;
+
+                    @Override protected void onCreate(Bundle savedInstanceState) {
+                    super.onCreate(savedInstanceState);
+                    ***
+                    GooglePlacesDataSource placesDataSource = new GooglePlacesDataSource(Places.getGeoDataClient(this, null));
+                    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                    apiInteractor = new GoogleGeocoderDataSource(new NetworkClient(), new AddressBuilder());
+                    GeocoderRepository geocoderRepository = new GeocoderRepository(new AndroidGeocoderDataSource(geocoder), apiInteractor);
+                    geocoderPresenter = new GeocoderPresenter(new ReactiveLocationProvider(getApplicationContext()), geocoderRepository, placesDataSource);
+                    geocoderPresenter.setUI(this);
+                    ***
+                    }
+                    ```
+
+                    And besides filling the interface methods you have to add some things to your activity/fragment lifecycle to ensure that there are no leaks.
+
+                    ```java
+
+                    @Override
+                    protected void onStart() {
+                    super.onStart();
+                    geocoderPresenter.setUI(this);
+                    }
+
+                    @Override
+                    protected void onStop() {
+                    geocoderPresenter.stop();
+                    super.onStop();
+                    }
+                    ```
+
+                    ##### Tests
+
+                    Note: If you need to execute the Espresso test you will need to add the Google Maps Key into the Tests AndroidManifest.xml
+
+
+                    Now you have all you need. :)
+
+
+                    ##### Important
+
+                    Searching using the "SearchView" (geocoder) will be restricted to a zone if you are with a Locale from: US, UK, France, Italy and Spain. If not, the search will return results from all the world.
+
+
+                    Sample usage
+                    ------------
+
+                    We provide a sample project which provides runnable code samples that demonstrate their use in Android applications.
+                    Note that you need to include your Google Play services key in the sample to be able to test it.
+
+                <h3 id="download">Download</h3>
+                <p><a href="https://search.maven.org/remote_content?g=com.schibstedspain.android&a=leku&v=LATEST"
+                      class="dl core-version-href">&darr; <span class="version-tag">Latest</span> AAR</a></p>
+                <p>The source code to Leku, its samples, and this website is <a href="https://github.com/SchibstedSpain/leku">available on
+                    GitHub</a>.</p>
+
+                <h4>Maven</h4>
+                <pre class="prettyprint">&lt;dependency>
+  &lt;groupId>com.schibstedspain.android&lt;/groupId>
+  &lt;artifactId>leku&lt;/artifactId>
+  &lt;version><span class="version pln"><em>4.0.0</em></span>&lt;/version>
+&lt;/dependency></pre>
+
+                <h4>Gradle</h4>
+                <pre class="prettyprint">implementation 'com.schibstedspain.android:leku:<span
+                        class="version pln"><em>4.0.0</em></span>'</pre>
+
+                <h3 id="contributing">Contributing</h3>
+                <p>If you would like to contribute code you can do so through GitHub by forking the repository and sending a pull request.</p>
+                <p>When submitting code, please make every effort to follow existing conventions and style in order to keep the code as readable as possible.</p>
+                <br/>
+                <ul>
+                    <li>1. Create an issue to discuss about your idea</li>
+                    <li>2. <a href="https://github.com/SchibstedSpain/leku/fork">Fork it</a></li>
+                    <li>3. Create your feature branch (<code>git checkout -b my-new-feature</code>)</li>
+                    <li>4. Commit your changes (<code>git commit -am 'Add some feature'</code>)</li>
+                    <li>5. Push to the branch (<code>git push origin my-new-feature</code>)</li>
+                    <li>6. Create a new Pull Request</li>
+                    <li>7. Profit! <i class="em em-white_check_mark"></i></li>
+                </ul>
+
+                <h3 id="license">License</h3>
+                <pre>Copyright 2016 Schibsted Classified Media Spain S.L.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.</pre>
+            </div>
+            <div class="span3">
+                <div class="content-nav" data-spy="affix" data-offset-top="80">
+                    <ul class="nav nav-tabs nav-stacked primary">
+                        <li><a href="#introduction">Introduction</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#using">Using Leku</a></li>
+                        <li><a href="#download">Download</a></li>
+                        <li><a href="#contributing">Contributing</a></li>
+                        <li><a href="#license">License</a></li>
+                    </ul>
+                    <ul class="nav nav-pills nav-stacked secondary">
+                        <li><a href="http://stackoverflow.com/questions/tagged/leku?sort=active">StackOverflow</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span12 logo">
+                <a href="https://www.schibsted.com"><img src="static/logo-schibsted.png" alt="Schibsted Classified Media Spain S.L."/></a>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="static/bootstrap.min.js"></script>
+<script src="static/jquery.smooth-scroll.min.js"></script>
+<script src="static/jquery-maven-artifact.min.js"></script>
+<script src="static/prettify.js"></script>
+<script type="text/javascript">
+      $(function() {
+        // Syntax highlight code blocks.
+        prettyPrint();
+
+        // Spy on scroll position for real-time updating of current section.
+        $('body').scrollspy();
+
+        // Use smooth-scroll for internal links.
+        $('a').smoothScroll();
+
+        // Enable tooltips on the header nav image items.
+        $('.menu').tooltip({
+          placement: 'bottom',
+          trigger: 'hover',
+          container: 'body',
+          delay: {
+            show: 500,
+            hide: 0
+          }
+        });
+
+        // Look up the latest version of the library.
+        $.fn.artifactVersion('com.schibstedspain.android', 'leku', function(version, url) {
+          $('.version').text(version);
+          $('.version-tag').text('v' + version);
+          $('.core-version-href').attr('href', url);
+        });
+      });
+
+</script>
+</body>
 </html>
