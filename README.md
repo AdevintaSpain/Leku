@@ -47,7 +47,7 @@ Component library for Android that uses Google Maps and returns a latitude, long
 * Search by voice
 * Search by text
 * Geo Location by GPS, network
-* Google Places
+* Google Places (optional)
 * Pick locations using "touch" gestures on the map
 * Customization (Theme and layout)
 * Events Tracking
