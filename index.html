@@ -73,16 +73,16 @@
                 You must add the following permissions in order to use the Google Maps Android API:
 
                 <ul>
-                    <li>**android.permission.INTERNET**   Used by the API to download map tiles from Google Maps servers.</li>
-                    <li>**android.permission.ACCESS_NETWORK_STATE**   Allows the API to check the connection status in order to determine whether data can be downloaded.</li>
+                    <li><code>android.permission.INTERNET</code> - Used by the API to download map tiles from Google Maps servers.</li>
+                    <li><code>android.permission.ACCESS_NETWORK_STATE</code> -  Allows the API to check the connection status in order to determine whether data can be downloaded.</li>
                 </ul>
 
                 The following permissions are not required to use Google Maps Android API v2, but are recommended.
 
                 <ul>
-                    <li>**android.permission.ACCESS_COARSE_LOCATION**   Allows the API to use WiFi or mobile cell data (or both) to determine the device's location. The API returns the location with an accuracy approximately equivalent to a city block.</li>
-                    <li>**android.permission.ACCESS_FINE_LOCATION**   Allows the API to determine as precise a location as possible from the available location providers, including the Global Positioning System (GPS) as well as WiFi and mobile cell data.</li>
-                    <li>**android.permission.WRITE_EXTERNAL_STORAGE**   Allows the API to cache map tile data in the device's external storage area.</li>
+                    <li><code>android.permission.ACCESS_COARSE_LOCATION</code> -  Allows the API to use WiFi or mobile cell data (or both) to determine the device's location. The API returns the location with an accuracy approximately equivalent to a city block.</li>
+                    <li><code>android.permission.ACCESS_FINE_LOCATION</code> -  Allows the API to determine as precise a location as possible from the available location providers, including the Global Positioning System (GPS) as well as WiFi and mobile cell data.</li>
+                    <li><code>android.permission.WRITE_EXTERNAL_STORAGE</code> -  Allows the API to cache map tile data in the device's external storage area.</li>
                 </ul>
 
                 <code>
@@ -96,81 +96,76 @@
                 <uses-feature android:name="android.hardware.location.gps" android:required="false"  />
                 </code>
 
-                You must also explicitly declare that your app uses the android.hardware.location.network or android.hardware.location.gps hardware features if your app targets Android 5.0 (API level 21) or higher and uses the ACCESS_COARSE_LOCATION or ACCESS_FINE_LOCATION permission in order to receive location updates from the network or a GPS, respectively.
+                You must also explicitly declare that your app uses the <code>android.hardware.location.network</code> or <code>android.hardware.location.gps</code> hardware features if your app targets Android 5.0 (API level 21) or higher and uses the <code>ACCESS_COARSE_LOCATION</code> or <code>ACCESS_FINE_LOCATION</code> permission in order to receive location updates from the network or a GPS, respectively.
 
                 **Note**: It supports runtime permissions for *Android 6 (Marshmallow)*. You don't need to do anything, it will ask for permissions if needed.
 
 
                 <h4>Usage</h4>
 
-                To use the LocationPickerActivity first you need to add these lines to your AndroidManifest file:
+                To use the <code>LocationPickerActivity</code> first you need to add these lines to your AndroidManifest file:<br/><br/>
 
-                <code>
-                <activity
-                        android:name="com.schibstedspain.leku.LocationPickerActivity"
-                        android:label="@string/leku_title_activity_location_picker"
-                        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-                        android:windowSoftInputMode="adjustPan"
-                        android:parentActivityName=".MainActivity">
-                    <intent-filter>
-                        <action android:name="android.intent.action.SEARCH" />
-                    </intent-filter>
-                    <meta-data android:name="android.app.searchable"
-                               android:resource="@xml/leku_searchable" />
-                    <meta-data
-                            android:name="android.support.PARENT_ACTIVITY"
-                            android:value=".MainActivity" />
-                </activity>
-                </code>
+                <pre class="prettyprint">
+&lt;activity
+        android:name="com.schibstedspain.leku.LocationPickerActivity"
+        android:label="@string/leku_title_activity_location_picker"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:windowSoftInputMode="adjustPan"
+        android:parentActivityName=".MainActivity">
+    &lt;intent-filter>
+        &lt;action android:name="android.intent.action.SEARCH" />
+    &lt;/intent-filter>
+    &lt;meta-data android:name="android.app.searchable"
+               android:resource="@xml/leku_searchable" />
+    &lt;meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".MainActivity" />
+&lt;/activity></pre>
 
                 Then you have setup the call to start this activity wherever you like, always as startActivityForResult.
                 You can set a default location, search zone and other customizable parameters to load when you start the activity.
-                You only need to use the Builder setters like:
+                You only need to use the Builder setters like:<br/><br/>
 
-                <code>
-                Intent intent = new LocationPickerActivity.Builder()
-                .withLocation(41.4036299, 2.1743558)
-                .withGeolocApiKey("<PUT API KEY HERE>")
-                .withSearchZone("es_ES")
-                .shouldReturnOkOnBackPressed()
-                .withStreetHidden()
-                .withCityHidden()
-                .withZipCodeHidden()
-                .withSatelliteViewHidden()
-                .build(getApplicationContext());
+                <pre class="prettyprint">
+Intent intent = new LocationPickerActivity.Builder()
+.withLocation(41.4036299, 2.1743558)
+.withGeolocApiKey("<PUT API KEY HERE>")
+.withSearchZone("es_ES")
+.shouldReturnOkOnBackPressed()
+.withStreetHidden()
+.withCityHidden()
+.withZipCodeHidden()
+.withSatelliteViewHidden()
+.build(getApplicationContext());
 
-                startActivityForResult(intent, 1);
-                </code>
+startActivityForResult(intent, 1);</pre>
 
-                And add the response code from that activity:
+                And add the response code from that activity:<br/><br/>
 
-                ```java
-
-                @Override
-                protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-                if (requestCode == 1) {
-                if(resultCode == RESULT_OK){
-                double latitude = data.getDoubleExtra(LocationPickerActivity.LATITUDE, 0);
-                Log.d("LATITUDE****", String.valueOf(latitude));
-                double longitude = data.getDoubleExtra(LocationPickerActivity.LONGITUDE, 0);
-                Log.d("LONGITUDE****", String.valueOf(longitude));
-                String address = data.getStringExtra(LocationPickerActivity.LOCATION_ADDRESS);
-                Log.d("ADDRESS****", String.valueOf(address));
-                String postalcode = data.getStringExtra(LocationPickerActivity.ZIPCODE);
-                Log.d("POSTALCODE****", String.valueOf(postalcode));
-                Bundle bundle = data.getBundleExtra(LocationPickerActivity.TRANSITION_BUNDLE);
-                Log.d("BUNDLE TEXT****", bundle.getString("test"));
-                Address fullAddress = data.getParcelableExtra(LocationPickerActivity.ADDRESS);
-                if(fullAddress != null)
-                Log.d("FULL ADDRESS****", fullAddress.toString());
-                }
-                if (resultCode == RESULT_CANCELED) {
-                //Write your code if there's no result
-                }
-                }
-                }
-
-                ```
+                <pre class="prettyprint">
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+  if (requestCode == 1) {
+    if(resultCode == RESULT_OK){
+      double latitude = data.getDoubleExtra(LocationPickerActivity.LATITUDE, 0);
+      Log.d("LATITUDE****", String.valueOf(latitude));
+      double longitude = data.getDoubleExtra(LocationPickerActivity.LONGITUDE, 0);
+      Log.d("LONGITUDE****", String.valueOf(longitude));
+      String address = data.getStringExtra(LocationPickerActivity.LOCATION_ADDRESS);
+      Log.d("ADDRESS****", String.valueOf(address));
+      String postalcode = data.getStringExtra(LocationPickerActivity.ZIPCODE);
+      Log.d("POSTALCODE****", String.valueOf(postalcode));
+      Bundle bundle = data.getBundleExtra(LocationPickerActivity.TRANSITION_BUNDLE);
+      Log.d("BUNDLE TEXT****", bundle.getString("test"));
+      Address fullAddress = data.getParcelableExtra(LocationPickerActivity.ADDRESS);
+      if(fullAddress != null)
+      Log.d("FULL ADDRESS****", fullAddress.toString());
+    }
+    if (resultCode == RESULT_CANCELED) {
+      //Write your code if there's no result
+    }
+  }
+}</pre>
 
                 That's all folks!
 
@@ -179,30 +174,28 @@
 
                 Leku now supports Google Places queries using the search box. If you want to enable it these are the steps you need to follow:
 
-                1. You need to replace your old `com.google.android.maps.v2.API_KEY` meta-data for the `com.google.android.geo.API_KEY`
+                1. You need to replace your old <code>com.google.android.maps.v2.API_KEY</code> meta-data for the <code>com.google.android.geo.API_KEY</code><br/><br/>
 
-                ```xml
-                <!-- Use this if only using Maps and not Places
-                    <meta-data
-                        android:name="com.google.android.maps.v2.API_KEY"
-                        android:value="@string/google_maps_key"
-                        />
-                -->
+                <pre class="prettyprint">
+&lt;!-- Use this if only using Maps and not Places
+    &lt;meta-data
+        android:name="com.google.android.maps.v2.API_KEY"
+        android:value="@string/google_maps_key"
+        />
+-->
 
-                <meta-data
-                        android:name="com.google.android.geo.API_KEY"
-                        android:value="@string/google_maps_key"/>
-                ```
+&lt;meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="@string/google_maps_key"/></pre>
 
-                2. Enable Google Places API for Android on your [google developer console](https://console.developers.google.com/).
+                2. Enable Google Places API for Android on your <a href="https://console.developers.google.com/">google developer console</a>.
 
-                3. Enable it when instantiating LocationPickerActivity by adding `.withGooglePlacesEnabled()`:
+                3. Enable it when instantiating <code>LocationPickerActivity</code> by adding <code>.withGooglePlacesEnabled()</code>:<br/><br/>
 
-                ```java
-                Intent intent = new LocationPickerActivity.Builder()
-                **.withGooglePlacesEnabled()**
-                .build(getApplicationContext());
-                ```
+                <pre class="prettyprint">
+Intent intent = new LocationPickerActivity.Builder()
+**.withGooglePlacesEnabled()**
+.build(getApplicationContext());</pre>
 
                 And you are good to go. :)
 
@@ -212,20 +205,19 @@
                 If you would like to add more language translations the only thing you have to do is:
 
                 1. Crate a new strings resource folder and file for your language like "/values-ru".
-                2. Add all text translations for those strings:
+                2. Add all text translations for those strings:<br/><br/>
 
-                ```xml
-                <string name="leku_title_activity_location_picker">Location Picker</string>
-                <string name="leku_load_location_error">Something went wrong. Please try again.</string>
-                <string name="leku_no_search_results">There are no results for your search</string>
-                <string name="leku_unknown_location">unknown location</string>
-                <string name="leku_voice_search_promp">Search by voice…</string>
-                <string name="leku_voice_search_extra_language">en-EN</string>
-                <string name="leku_toolbar_action_voice_title">Voice</string>
-                <string name="leku_search_hint">Search</string>
-                ```
+                <pre class="prettyprint">
+&lt;string name="leku_title_activity_location_picker">Location Picker&lt;/string>
+&lt;string name="leku_load_location_error">Something went wrong. Please try again.&lt;/string>
+&lt;string name="leku_no_search_results">There are no results for your search&lt;/string>
+&lt;string name="leku_unknown_location">unknown location&lt;/string>
+&lt;string name="leku_voice_search_promp">Search by voice…&lt;/string>
+&lt;string name="leku_voice_search_extra_language">en-EN&lt;/string>
+&lt;string name="leku_toolbar_action_voice_title">Voice&lt;/string>
+&lt;string name="leku_search_hint">Search&lt;/string></pre>
 
-                Note that you have the **voice_search_extra_language** that is used for the language of the voice recognition.
+                Note that you have the <code>voice_search_extra_language</code> that is used for the language of the voice recognition.
                 Replace it with the allowed voice recognition locale for your language.
 
                 I encourage you to add these languages to this component, please fork this project and submit new languages with a PR. Thanks!
@@ -234,84 +226,76 @@
                 <h4>Transition Bundle</h4>
 
                 If you need to send and receive a param through the LocationPickerActivity you can do it.
-                You only need to add an "Extra" param to the intent like:
+                You only need to add an "Extra" param to the intent like:<br/><br/>
 
-                ```java
-                Intent intent = new Intent(getApplicationContext(), LocationPickerActivity.class);
-                intent.putExtra("test", "this is a test");
-                startActivityForResult(intent, 1);
-                ```
+                <pre class="prettyprint">
+Intent intent = new Intent(getApplicationContext(), LocationPickerActivity.class);
+intent.putExtra("test", "this is a test");
+startActivityForResult(intent, 1);</pre>
 
-                And parse it on onActivityResult callback:
+                And parse it on onActivityResult callback:<br/><br/>
 
-                ```java
-                Bundle bundle = data.getBundleExtra(LocationPickerActivity.TRANSITION_BUNDLE);
-                String test = bundle.getString("test");
-                ```
+                <pre class="prettyprint">
+Bundle bundle = data.getBundleExtra(LocationPickerActivity.TRANSITION_BUNDLE);
+String test = bundle.getString("test");</pre>
 
                 <h4>Customization</h4>
 
                 <h5>Theming</h5>
 
-                This library uses AppCompat, so should use Theme.AppCompat or descendant in manifest.
+                This library uses AppCompat, so should use Theme.AppCompat or descendant in manifest.<br/><br/>
 
-                ```xml
-                <item name="colorPrimary">#E91E63</item>
-                <item name="colorPrimaryDark">#C51162</item>
-                <item name="colorAccent">#FBC02D</item>
-                <item name="colorControlActivated">#E91E63</item>
-                ```
+                <pre class="prettyprint">
+&lt;item name="colorPrimary">#E91E63&lt;/item>
+&lt;item name="colorPrimaryDark">#C51162&lt;/item>
+&lt;item name="colorAccent">#FBC02D&lt;/item>
+&lt;item name="colorControlActivated">#E91E63&lt;/item></pre>
 
-                > `colorControlActivated` is used to colorize Street title, if not set, it uses colorAccent by default
+                > <code>colorControlActivated</code> is used to colorize Street title, if not set, it uses colorAccent by default
 
                 <h5>Layout</h5>
 
                 It's possible to hide or show some of the information shown after selecting a location.
-                Using tha bundle parameter **LocationPickerActivity.LAYOUTS_TO_HIDE** you can change the visibility of the street, city or the zipcode.
+                Using tha bundle parameter **LocationPickerActivity.LAYOUTS_TO_HIDE** you can change the visibility of the street, city or the zipcode.<br/><br/>
 
-                ```java
-                intent.putExtra(LocationPickerActivity.LAYOUTS_TO_HIDE, "street|city|zipcode");
-                ```
+                <pre class="prettyprint">
+intent.putExtra(LocationPickerActivity.LAYOUTS_TO_HIDE, "street|city|zipcode");</pre>
 
                 <h5>Search Zone</h5>
 
-                By default the search will be restricted to a zone determined by your default locale. If you want to force the search zone you can do it by adding this line with the locale preferred:
+                By default the search will be restricted to a zone determined by your default locale. If you want to force the search zone you can do it by adding this line with the locale preferred:<br/><br/>
 
-                ```java
-                intent.putExtra(LocationPickerActivity.SEARCH_ZONE, "es_ES");
-                ```
+                <pre class="prettyprint">
+intent.putExtra(LocationPickerActivity.SEARCH_ZONE, "es_ES");</pre>
 
                 <h5>Force return location on back pressed</h5>
 
-                If you want to force that when the user clicks on back button it returns the location you can use this parameter (note: is only enabled if you don't provide a location):
+                If you want to force that when the user clicks on back button it returns the location you can use this parameter (note: is only enabled if you don't provide a location):<br/><br/>
 
-                ```java
-                intent.putExtra(LocationPickerActivity.BACK_PRESSED_RETURN_OK, true);
-                ```
+                <pre class="prettyprint">
+intent.putExtra(LocationPickerActivity.BACK_PRESSED_RETURN_OK, true);</pre>
 
                 <h5>Enable/Disable the Satellite view</h5>
 
-                If you want to disable the satellite view button you can use this parameter (note: the satellite view is enabled by default):
+                If you want to disable the satellite view button you can use this parameter (note: the satellite view is enabled by default):<br/><br/>
 
-                ```java
-                intent.putExtra(LocationPickerActivity.ENABLE_SATELLITE_VIEW, false);
-                ```
+                <pre class="prettyprint">
+intent.putExtra(LocationPickerActivity.ENABLE_SATELLITE_VIEW, false);</pre>
 
                 <h5>Enable/Disable requesting location permissions</h5>
 
-                If you want to disable asking for location permissions (and prevent any location requests)
+                If you want to disable asking for location permissions (and prevent any location requests)<br/><br/>
 
-                ```java
-                intent.putExtra(LocationPickerActivity.ENABLE_LOCATION_PERMISSION_REQUEST, false);
-                ```
+                <pre class="prettyprint">
+intent.putExtra(LocationPickerActivity.ENABLE_LOCATION_PERMISSION_REQUEST, false);</pre>
 
                 <h4>Tracking</h4>
 
-                Optionally, you can set a tracking events listener. Implement LocationPickerTracker interface, and set it in your Application class as follows:
+                Optionally, you can set a tracking events listener. Implement LocationPickerTracker interface, and set it in your Application class as follows:<br/><br/>
 
-                ```java
-                LocationPicker.setTracker(new <<YourOwnTracker implementing LocationPickerTracker>>());
-                ```
+                <pre class="prettyprint">
+LocationPicker.setTracker(new <<YourOwnTracker implementing LocationPickerTracker>>());</pre>
+
                 Available tracking events are:
 
                 |TAG|Message|
@@ -333,68 +317,71 @@
 
                 <h4>Extra</h4>
 
-                If you would like to use the Geocoder presenter (MVP) used for this use case you are free to use it!
-                GeocoderPresenter has three methods:
+                <p>If you would like to use the Geocoder presenter (MVP) used for this use case you are free to use it!
+                GeocoderPresenter has three methods:</p>
 
-                * ***getLastKnownLocation:***
-                Which obviously returns the last known user location as a ***Location*** object.
+                <ul>
+                  <li>
+                    <code>getLastKnownLocation:</code> Which obviously returns the last known user location as a ***Location*** object.
+                  </li>
 
-                * ***getFromLocationName(String query):***
-                Returns a ***List`<`Address`>`*** for the text introduced.
+                  <li>
+                    <code>getFromLocationName(String query):</code> Returns a <code>List&lt;Address></code> for the text introduced.
+                  </li>
 
-                * ***getFromLocationName(String query, LatLng lowerLeft, LatLng upperRight):***
-                Returns a ***List`<`Address`>`*** for the text and the Rectangle introduced.
+                  <li>
+                    <code>getFromLocationName(String query, LatLng lowerLeft, LatLng upperRight):</code> Returns a <code>List&lt;Address></code> for the text and the Rectangle introduced.
+                  </li>
 
-                * ***getDebouncedFromLocationName(String query, int debounceTime):***
-                Returns a ***List`<`Address`>`*** for the text introduced. Useful if you want to implement your own search view with auto-complete.
+                  <li>
+                    <code>getDebouncedFromLocationName(String query, int debounceTime):</code> Returns a <code>List&lt;Address></code> for the text introduced. Useful if you want to implement your own search view with auto-complete.
+                  </li>
 
-                * ***getDebouncedFromLocationName(String query, LatLng lowerLeft, LatLng upperRight, int debounceTime):***
-                Returns a ***List`<`Address`>`*** for the text and the Rectangle introduced. Useful if you want to implement your own search view with auto-complete.
+                  <li>
+                    <code>getDebouncedFromLocationName(String query, LatLng lowerLeft, LatLng upperRight, int debounceTime):</code> Returns a <code>List&lt;Address></code> for the text and the Rectangle introduced. Useful if you want to implement your own search view with auto-complete.
+                  </li>
 
-                * ***getInfoFromLocation(double latitude, double longitude):***
-                Returns a ***List`<`Address`>`*** based on a latitude and a longitude.
+                  <li>
+                    <code>getInfoFromLocation(double latitude, double longitude):</code> Returns a <code>List&lt;Address></code> based on a latitude and a longitude.
+                  </li>
+              </ul>
 
+                To use it first you need to implement the GeocoderViewInterface interface in your class like:<br/><br/>
 
-                To use it first you need to implement the GeocoderViewInterface interface in your class like:
+                <pre class="prettyprint">
+public class LocationPickerActivity extends AppCompatActivity implements GeocoderViewInterface {</pre>
 
-                ```java
-                public class LocationPickerActivity extends AppCompatActivity implements GeocoderViewInterface {
-                ```
+                Then you need to setup the presenter:<br/><br/>
 
-                Then you need to setup the presenter:
+                <pre class="prettyprint">
+private GeocoderPresenter geocoderPresenter;
 
-                ```java
-                private GeocoderPresenter geocoderPresenter;
-
-                @Override protected void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-                ***
-                GooglePlacesDataSource placesDataSource = new GooglePlacesDataSource(Places.getGeoDataClient(this, null));
-                Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-                apiInteractor = new GoogleGeocoderDataSource(new NetworkClient(), new AddressBuilder());
-                GeocoderRepository geocoderRepository = new GeocoderRepository(new AndroidGeocoderDataSource(geocoder), apiInteractor);
-                geocoderPresenter = new GeocoderPresenter(new ReactiveLocationProvider(getApplicationContext()), geocoderRepository, placesDataSource);
-                geocoderPresenter.setUI(this);
-                ***
-                }
-                ```
+@Override protected void onCreate(Bundle savedInstanceState) {
+  super.onCreate(savedInstanceState);
+  ***
+  GooglePlacesDataSource placesDataSource = new GooglePlacesDataSource(Places.getGeoDataClient(this, null));
+  Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+  apiInteractor = new GoogleGeocoderDataSource(new NetworkClient(), new AddressBuilder());
+  GeocoderRepository geocoderRepository = new GeocoderRepository(new AndroidGeocoderDataSource(geocoder), apiInteractor);
+  geocoderPresenter = new GeocoderPresenter(new ReactiveLocationProvider(getApplicationContext()), geocoderRepository, placesDataSource);
+  geocoderPresenter.setUI(this);
+  ***
+}</pre>
 
                 And besides filling the interface methods you have to add some things to your activity/fragment lifecycle to ensure that there are no leaks.
 
-                ```java
+                <pre class="prettyprint">
+@Override
+protected void onStart() {
+  super.onStart();
+  geocoderPresenter.setUI(this);
+}
 
-                @Override
-                protected void onStart() {
-                super.onStart();
-                geocoderPresenter.setUI(this);
-                }
-
-                @Override
-                protected void onStop() {
-                geocoderPresenter.stop();
-                super.onStop();
-                }
-                ```
+@Override
+protected void onStop() {
+  geocoderPresenter.stop();
+  super.onStop();
+}</pre>
 
                 <h5>Tests</h5>
 
