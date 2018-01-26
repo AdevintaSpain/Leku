@@ -70,14 +70,14 @@
 
                 <h4>Permissions</h4>
 
-                You must add the following permissions in order to use the Google Maps Android API:
+                <p>You must add the following permissions in order to use the Google Maps Android API:</p>
 
                 <ul>
                     <li><code>android.permission.INTERNET</code> - Used by the API to download map tiles from Google Maps servers.</li>
                     <li><code>android.permission.ACCESS_NETWORK_STATE</code> -  Allows the API to check the connection status in order to determine whether data can be downloaded.</li>
                 </ul>
 
-                The following permissions are not required to use Google Maps Android API v2, but are recommended.
+                <p>The following permissions are not required to use Google Maps Android API v2, but are recommended.</p>
 
                 <ul>
                     <li><code>android.permission.ACCESS_COARSE_LOCATION</code> -  Allows the API to use WiFi or mobile cell data (or both) to determine the device's location. The API returns the location with an accuracy approximately equivalent to a city block.</li>
@@ -96,14 +96,14 @@
                 <uses-feature android:name="android.hardware.location.gps" android:required="false"  />
                 </code>
 
-                You must also explicitly declare that your app uses the <code>android.hardware.location.network</code> or <code>android.hardware.location.gps</code> hardware features if your app targets Android 5.0 (API level 21) or higher and uses the <code>ACCESS_COARSE_LOCATION</code> or <code>ACCESS_FINE_LOCATION</code> permission in order to receive location updates from the network or a GPS, respectively.
+                <p>You must also explicitly declare that your app uses the <code>android.hardware.location.network</code> or <code>android.hardware.location.gps</code> hardware features if your app targets Android 5.0 (API level 21) or higher and uses the <code>ACCESS_COARSE_LOCATION</code> or <code>ACCESS_FINE_LOCATION</code> permission in order to receive location updates from the network or a GPS, respectively.</p>
 
-                **Note**: It supports runtime permissions for *Android 6 (Marshmallow)*. You don't need to do anything, it will ask for permissions if needed.
+                <p>**Note**: It supports runtime permissions for *Android 6 (Marshmallow)*. You don't need to do anything, it will ask for permissions if needed.</p>
 
 
                 <h4>Usage</h4>
 
-                To use the <code>LocationPickerActivity</code> first you need to add these lines to your AndroidManifest file:<br/><br/>
+                <p>To use the <code>LocationPickerActivity</code> first you need to add these lines to your AndroidManifest file:</p>
 
                 <pre class="prettyprint">
 &lt;activity
@@ -122,9 +122,9 @@
             android:value=".MainActivity" />
 &lt;/activity></pre>
 
-                Then you have setup the call to start this activity wherever you like, always as startActivityForResult.
+                <p>Then you have setup the call to start this activity wherever you like, always as startActivityForResult.
                 You can set a default location, search zone and other customizable parameters to load when you start the activity.
-                You only need to use the Builder setters like:<br/><br/>
+                You only need to use the Builder setters like:</p>
 
                 <pre class="prettyprint">
 Intent intent = new LocationPickerActivity.Builder()
@@ -140,7 +140,7 @@ Intent intent = new LocationPickerActivity.Builder()
 
 startActivityForResult(intent, 1);</pre>
 
-                And add the response code from that activity:<br/><br/>
+                <p>And add the response code from that activity:</p>
 
                 <pre class="prettyprint">
 @Override
@@ -172,9 +172,9 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
                 <h4>Google Places</h4>
 
-                Leku now supports Google Places queries using the search box. If you want to enable it these are the steps you need to follow:
+                <p>Leku now supports Google Places queries using the search box. If you want to enable it these are the steps you need to follow:
 
-                1. You need to replace your old <code>com.google.android.maps.v2.API_KEY</code> meta-data for the <code>com.google.android.geo.API_KEY</code><br/><br/>
+                1. You need to replace your old <code>com.google.android.maps.v2.API_KEY</code> meta-data for the <code>com.google.android.geo.API_KEY</code></p>
 
                 <pre class="prettyprint">
 &lt;!-- Use this if only using Maps and not Places
@@ -188,9 +188,9 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         android:name="com.google.android.geo.API_KEY"
         android:value="@string/google_maps_key"/></pre>
 
-                2. Enable Google Places API for Android on your <a href="https://console.developers.google.com/">google developer console</a>.
+                <p>2. Enable Google Places API for Android on your <a href="https://console.developers.google.com/">google developer console</a>.
 
-                3. Enable it when instantiating <code>LocationPickerActivity</code> by adding <code>.withGooglePlacesEnabled()</code>:<br/><br/>
+                3. Enable it when instantiating <code>LocationPickerActivity</code> by adding <code>.withGooglePlacesEnabled()</code>:</p>
 
                 <pre class="prettyprint">
 Intent intent = new LocationPickerActivity.Builder()
@@ -202,10 +202,10 @@ Intent intent = new LocationPickerActivity.Builder()
 
                 <h4>Localization</h4>
 
-                If you would like to add more language translations the only thing you have to do is:
+                <p>If you would like to add more language translations the only thing you have to do is:
 
-                1. Crate a new strings resource folder and file for your language like "/values-ru".
-                2. Add all text translations for those strings:<br/><br/>
+                1. Crate a new strings resource folder and file for your language like <code>"/values-ru"</code>.
+                2. Add all text translations for those strings:</p>
 
                 <pre class="prettyprint">
 &lt;string name="leku_title_activity_location_picker">Location Picker&lt;/string>
@@ -217,23 +217,23 @@ Intent intent = new LocationPickerActivity.Builder()
 &lt;string name="leku_toolbar_action_voice_title">Voice&lt;/string>
 &lt;string name="leku_search_hint">Search&lt;/string></pre>
 
-                Note that you have the <code>voice_search_extra_language</code> that is used for the language of the voice recognition.
+                <p>Note that you have the <code>voice_search_extra_language</code> that is used for the language of the voice recognition.
                 Replace it with the allowed voice recognition locale for your language.
 
-                I encourage you to add these languages to this component, please fork this project and submit new languages with a PR. Thanks!
+                I encourage you to add these languages to this component, please fork this project and submit new languages with a PR. Thanks!</p>
 
 
                 <h4>Transition Bundle</h4>
 
-                If you need to send and receive a param through the LocationPickerActivity you can do it.
-                You only need to add an "Extra" param to the intent like:<br/><br/>
+                <p>If you need to send and receive a param through the LocationPickerActivity you can do it.
+                You only need to add an "Extra" param to the intent like:</p>
 
                 <pre class="prettyprint">
 Intent intent = new Intent(getApplicationContext(), LocationPickerActivity.class);
 intent.putExtra("test", "this is a test");
 startActivityForResult(intent, 1);</pre>
 
-                And parse it on onActivityResult callback:<br/><br/>
+                <p>And parse it on onActivityResult callback:</p>
 
                 <pre class="prettyprint">
 Bundle bundle = data.getBundleExtra(LocationPickerActivity.TRANSITION_BUNDLE);
@@ -243,7 +243,7 @@ String test = bundle.getString("test");</pre>
 
                 <h5>Theming</h5>
 
-                This library uses AppCompat, so should use Theme.AppCompat or descendant in manifest.<br/><br/>
+                <p>This library uses AppCompat, so should use Theme.AppCompat or descendant in manifest.</p>
 
                 <pre class="prettyprint">
 &lt;item name="colorPrimary">#E91E63&lt;/item>
@@ -255,65 +255,65 @@ String test = bundle.getString("test");</pre>
 
                 <h5>Layout</h5>
 
-                It's possible to hide or show some of the information shown after selecting a location.
-                Using tha bundle parameter **LocationPickerActivity.LAYOUTS_TO_HIDE** you can change the visibility of the street, city or the zipcode.<br/><br/>
+                <p>It's possible to hide or show some of the information shown after selecting a location.
+                Using tha bundle parameter <code>LocationPickerActivity.LAYOUTS_TO_HIDE</code> you can change the visibility of the street, city or the zipcode.</p>
 
                 <pre class="prettyprint">
 intent.putExtra(LocationPickerActivity.LAYOUTS_TO_HIDE, "street|city|zipcode");</pre>
 
                 <h5>Search Zone</h5>
 
-                By default the search will be restricted to a zone determined by your default locale. If you want to force the search zone you can do it by adding this line with the locale preferred:<br/><br/>
+                <p>By default the search will be restricted to a zone determined by your default locale. If you want to force the search zone you can do it by adding this line with the locale preferred:</p>
 
                 <pre class="prettyprint">
 intent.putExtra(LocationPickerActivity.SEARCH_ZONE, "es_ES");</pre>
 
                 <h5>Force return location on back pressed</h5>
 
-                If you want to force that when the user clicks on back button it returns the location you can use this parameter (note: is only enabled if you don't provide a location):<br/><br/>
+                <p>If you want to force that when the user clicks on back button it returns the location you can use this parameter (note: is only enabled if you don't provide a location):</p>
 
                 <pre class="prettyprint">
 intent.putExtra(LocationPickerActivity.BACK_PRESSED_RETURN_OK, true);</pre>
 
                 <h5>Enable/Disable the Satellite view</h5>
 
-                If you want to disable the satellite view button you can use this parameter (note: the satellite view is enabled by default):<br/><br/>
+                <p>If you want to disable the satellite view button you can use this parameter (note: the satellite view is enabled by default):</p>
 
                 <pre class="prettyprint">
 intent.putExtra(LocationPickerActivity.ENABLE_SATELLITE_VIEW, false);</pre>
 
                 <h5>Enable/Disable requesting location permissions</h5>
 
-                If you want to disable asking for location permissions (and prevent any location requests)<br/><br/>
+                <p>If you want to disable asking for location permissions (and prevent any location requests)</p>
 
                 <pre class="prettyprint">
 intent.putExtra(LocationPickerActivity.ENABLE_LOCATION_PERMISSION_REQUEST, false);</pre>
 
                 <h4>Tracking</h4>
 
-                Optionally, you can set a tracking events listener. Implement LocationPickerTracker interface, and set it in your Application class as follows:<br/><br/>
+                <p>Optionally, you can set a tracking events listener. Implement LocationPickerTracker interface, and set it in your Application class as follows:</p>
 
                 <pre class="prettyprint">
 LocationPicker.setTracker(new <<YourOwnTracker implementing LocationPickerTracker>>());</pre>
 
-                Available tracking events are:
+                <p>Available tracking events are:</p>
 
-                |TAG|Message|
-                |---|---|
-                |didLoadLocationPicker|Location Picker|
-                |didSearchLocations |Click on search for locations|
-                |didLocalizeMe|Click on localize me|
-                |didLocalizeByPoi|Long click on map|
-                |RESULT_OK|Return location|
-                |CANCEL|Return without location|
+                <ul>
+                  <li><code>didLoadLocationPicker</code> - Location Picker</li>
+                  <li><code>didSearchLocations</code> - Click on search for locations</li>
+                  <li><code>didLocalizeMe</code> - Click on localize me</li>
+                  <li><code>didLocalizeByPoi</code> - Long click on map</li>
+                  <li><code>RESULT_OK</code> - Return location</li>
+                  <li><code>CANCEL</code> - Return without location</li>
+                </ul>
 
                 <h4>Geocoding API Fallback</h4>
 
-                In few cases, the geocoding service from Android fails due to an issue with the NetworkLocator. The only way of fixing this is rebooting the device.
+                <p>In few cases, the geocoding service from Android fails due to an issue with the NetworkLocator. The only way of fixing this is rebooting the device.</p>
 
-                In order to cover these cases, you can instruct Leku to use the Geocoding API. To enable it, just use the method '''withGeolocApiKey''' when invoking the LocationPicker.
+                <p>In order to cover these cases, you can instruct Leku to use the Geocoding API. To enable it, just use the method <code>withGeolocApiKey</code> when invoking the LocationPicker.</p>
 
-                You should provide your Server Key as parameter. Keep in mind that the free tier only allows 2,500 requests per day. You can track how many times is it used in the Developer Console from Google.
+                <p>You should provide your Server Key as parameter. Keep in mind that the free tier only allows 2,500 requests per day. You can track how many times is it used in the Developer Console from Google.</p>
 
                 <h4>Extra</h4>
 
@@ -346,12 +346,12 @@ LocationPicker.setTracker(new <<YourOwnTracker implementing LocationPickerTracke
                   </li>
               </ul>
 
-                To use it first you need to implement the GeocoderViewInterface interface in your class like:<br/><br/>
+                <p>To use it first you need to implement the GeocoderViewInterface interface in your class like:</p>
 
                 <pre class="prettyprint">
 public class LocationPickerActivity extends AppCompatActivity implements GeocoderViewInterface {</pre>
 
-                Then you need to setup the presenter:<br/><br/>
+                <p>Then you need to setup the presenter:</p>
 
                 <pre class="prettyprint">
 private GeocoderPresenter geocoderPresenter;
@@ -368,7 +368,7 @@ private GeocoderPresenter geocoderPresenter;
   ***
 }</pre>
 
-                And besides filling the interface methods you have to add some things to your activity/fragment lifecycle to ensure that there are no leaks.
+                <p>And besides filling the interface methods you have to add some things to your activity/fragment lifecycle to ensure that there are no leaks.</p>
 
                 <pre class="prettyprint">
 @Override
@@ -385,21 +385,21 @@ protected void onStop() {
 
                 <h5>Tests</h5>
 
-                Note: If you need to execute the Espresso test you will need to add the Google Maps Key into the Tests AndroidManifest.xml
+                <p>Note: If you need to execute the Espresso test you will need to add the Google Maps Key into the Tests AndroidManifest.xml</p>
 
 
-                Now you have all you need. :)
+                <p>Now you have all you need. :)</p>
 
 
                 <h5>Important</h5>
 
-                Searching using the "SearchView" (geocoder) will be restricted to a zone if you are with a Locale from: US, UK, France, Italy and Spain. If not, the search will return results from all the world.
+                <p>Searching using the "SearchView" (geocoder) will be restricted to a zone if you are with a Locale from: US, UK, France, Italy and Spain. If not, the search will return results from all the world.</p>
 
 
                 <h4>Sample usage</h4>
 
-                We provide a sample project which provides runnable code samples that demonstrate their use in Android applications.
-                Note that you need to include your Google Play services key in the sample to be able to test it.
+                <p>We provide a sample project which provides runnable code samples that demonstrate their use in Android applications.
+                Note that you need to include your Google Play services key in the sample to be able to test it.</p>
 
                 <h3 id="download">Download</h3>
                 <p><a href="https://search.maven.org/remote_content?g=com.schibstedspain.android&a=leku&v=LATEST"
