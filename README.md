@@ -1,3 +1,9 @@
+<!--
+  Title: Leku - Map location picker for Android
+  Description: Google Maps based library for Android that returns a latitude, longitude and an address based on the location picked with the Activity provided.
+  Author: SchibstedSpain
+  -->
+
 <img src="media/leku_logo.png" align="left" height="128px" />
 <img align="left" width="0" height="128px" hspace="10" />
 
