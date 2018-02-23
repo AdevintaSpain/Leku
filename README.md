@@ -82,14 +82,14 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.schibstedspain.android:leku:4.0.0'
+    implementation 'com.schibstedspain.android:leku:4.0.1'
 }
 ```
 
 Alternatively, if you are using a different version of Google Play Services than `11.8.0` use this instead:
 
 ```groovy
-implementation ('com.schibstedspain.android:leku:4.0.0') {
+implementation ('com.schibstedspain.android:leku:4.0.1') {
     exclude group: 'com.google.android.gms'
     exclude group: 'com.android.support'
 }
