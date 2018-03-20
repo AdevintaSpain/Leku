@@ -12,7 +12,6 @@ version = "${versionMajor}.${versionMinor}.${versionPatch}"
 
 android {
   compileSdkVersion 27
-  buildToolsVersion '27.0.3'
   resourcePrefix 'leku_'
 
   defaultConfig {
@@ -49,7 +48,7 @@ android {
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-  def supportVersion = '27.0.2'
+  def supportVersion = '27.1.0'
   implementation "com.android.support:appcompat-v7:$supportVersion"
   implementation "com.android.support:design:$supportVersion"
 
@@ -60,8 +59,7 @@ dependencies {
 
   implementation 'pl.charmas.android:android-reactive-location2:2.0@aar'
 
-  implementation "io.reactivex:rxandroid:1.2.1"
-  implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
+  implementation 'io.reactivex.rxjava2:rxjava:2.1.10'
   implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
   implementation 'nl.littlerobots.rxlint:rxlint:1.6'
 
