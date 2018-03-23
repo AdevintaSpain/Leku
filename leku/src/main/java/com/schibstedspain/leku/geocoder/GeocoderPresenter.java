@@ -35,6 +35,10 @@ public class GeocoderPresenter {
     this(reactiveLocationProvider, geocoderRepository, placesDataSource, AndroidSchedulers.mainThread());
   }
 
+  public GeocoderPresenter(ReactiveLocationProvider reactiveLocationProvider, GeocoderRepository geocoderRepository) {
+    this(reactiveLocationProvider, geocoderRepository, null, AndroidSchedulers.mainThread());
+  }
+
   public GeocoderPresenter(ReactiveLocationProvider reactiveLocationProvider, GeocoderRepository geocoderRepository,
       GooglePlacesDataSource placesDataSource, Scheduler scheduler) {
     this.geocoderRepository = geocoderRepository;
