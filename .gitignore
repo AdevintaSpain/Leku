@@ -1,4 +1,3 @@
-/*/build/
 build/
 /*/bin/
 /*/gen/
@@ -6,10 +5,8 @@ build/
 /*/out/
 /*/.svn/
 /*/.settings/
-/*/*.iml
 *.apk
 *.ap_
-*.class
 *.dex
 local.properties
 project.properties
@@ -19,15 +16,12 @@ app/src/debug/*.xml
 .idea/.name
 .idea/*.xml
 .idea/dataSources.ids
-.idea/libraries/
 .idea/scopes/
-.idea/copyright/
-.idea/dictionaries/
 .idea/inspectionProfiles/
+.idea/*/
 .metadata/
 *.iml
 
-*/.DS_Store
 .DS_Store
 Thumbs.db
 

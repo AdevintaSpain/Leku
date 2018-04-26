@@ -1,5 +1,6 @@
 package com.schibstedspain.leku.geocoder.places;
 
+import android.annotation.SuppressLint;
 import android.location.Address;
 import android.support.annotation.NonNull;
 import com.google.android.gms.common.data.DataBufferUtils;
@@ -57,7 +58,7 @@ public class GooglePlacesDataSource {
       } catch (ExecutionException | InterruptedException | TimeoutException ignored) {
       }
       PlaceBufferResponse placeBufferResponse = placeBufferResponseTask.getResult();
-      Place place = placeBufferResponse.get(0);
+      @SuppressLint("RestrictedApi") Place place = placeBufferResponse.get(0);
       addressList.add(mapPlaceToAddress(place));
     }
     return addressList;
