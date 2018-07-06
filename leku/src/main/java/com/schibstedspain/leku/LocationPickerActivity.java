@@ -60,6 +60,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import org.jetbrains.annotations.NotNull;
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider;
 
 import static com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL;
@@ -511,33 +512,29 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   @Override
-  public void showLocations(List<Address> addresses) {
-    if (addresses != null) {
-      fillLocationList(addresses);
-      if (addresses.isEmpty()) {
-        Toast.makeText(getApplicationContext(), R.string.leku_no_search_results, Toast.LENGTH_LONG)
-            .show();
-      } else {
-        updateLocationNameList(addresses);
-        if (hasWiderZoom) {
-          searchView.setText("");
-        }
-        if (addresses.size() == 1) {
-          setNewLocation(addresses.get(0));
-        }
-        adapter.notifyDataSetChanged();
+  public void showLocations(@NotNull List<? extends Address> addresses) {
+    fillLocationList(addresses);
+    if (addresses.isEmpty()) {
+      Toast.makeText(getApplicationContext(), R.string.leku_no_search_results, Toast.LENGTH_LONG)
+          .show();
+    } else {
+      updateLocationNameList(addresses);
+      if (hasWiderZoom) {
+        searchView.setText("");
       }
+      if (addresses.size() == 1) {
+        setNewLocation(addresses.get(0));
+      }
+      adapter.notifyDataSetChanged();
     }
   }
 
   @Override
-  public void showDebouncedLocations(List<Address> addresses) {
-    if (addresses != null) {
-      fillLocationList(addresses);
-      if (!addresses.isEmpty()) {
-        updateLocationNameList(addresses);
-        adapter.notifyDataSetChanged();
-      }
+  public void showDebouncedLocations(@NotNull List<? extends Address> addresses) {
+    fillLocationList(addresses);
+    if (!addresses.isEmpty()) {
+      updateLocationNameList(addresses);
+      adapter.notifyDataSetChanged();
     }
   }
 
@@ -629,7 +626,7 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   @Override
-  public void showLocationInfo(List<Address> addresses) {
+  public void showLocationInfo(@NotNull List<? extends Address> addresses) {
     if (addresses != null) {
       if (addresses.size() > 0 && addresses.get(0) != null) {
         selectedAddress = addresses.get(0);
@@ -950,7 +947,7 @@ public class LocationPickerActivity extends AppCompatActivity
     return locationAddress;
   }
 
-  private void updateLocationNameList(List<Address> addresses) {
+  private void updateLocationNameList(List<? extends Address> addresses) {
     locationNameList.clear();
     for (Address address : addresses) {
       if (address.getFeatureName() == null) {
@@ -1078,7 +1075,7 @@ public class LocationPickerActivity extends AppCompatActivity
     searchView.setText("");
   }
 
-  private void fillLocationList(List<Address> addresses) {
+  private void fillLocationList(List<? extends Address> addresses) {
     locationList.clear();
     locationList.addAll(addresses);
   }
