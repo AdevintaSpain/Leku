@@ -19,7 +19,7 @@ android {
     }
   }
   dexOptions {
-    preDexLibraries !"true".equals(System.getenv("TRAVIS"))
+    preDexLibraries "true" != System.getenv("TRAVIS")
   }
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_1_8
