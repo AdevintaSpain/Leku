@@ -28,7 +28,6 @@ class AddressBuilder {
 
     val components = getAddressComponents(jsonObject.getJSONArray("address_components"))
 
-
     var postalCode: String? = ""
     var city: String? = ""
     var number: String? = ""
