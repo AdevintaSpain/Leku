@@ -24,7 +24,7 @@ class GoogleGeocoderDataSource(private val networkClient: NetworkClient,
             try {
                 val result = networkClient.requestFromLocationName(String.format(Locale.ENGLISH,
                         QUERY_REQUEST, query.trim { it <= ' ' }, apiKey))
-                val addresses = addressBuilder.parseResult(result)
+                val addresses = addressBuilder.parseResult(result!!)
                 subscriber.onNext(addresses)
                 subscriber.onComplete()
             } catch (e: JSONException) {
@@ -43,7 +43,7 @@ class GoogleGeocoderDataSource(private val networkClient: NetworkClient,
                 val result = networkClient.requestFromLocationName(String.format(Locale.ENGLISH,
                         QUERY_REQUEST_WITH_RECTANGLE, query.trim { it <= ' ' }, apiKey, lowerLeft.latitude,
                         lowerLeft.longitude, upperRight.latitude, upperRight.longitude))
-                val addresses = addressBuilder.parseResult(result)
+                val addresses = addressBuilder.parseResult(result!!)
                 subscriber.onNext(addresses)
                 subscriber.onComplete()
             } catch (e: JSONException) {
@@ -60,7 +60,7 @@ class GoogleGeocoderDataSource(private val networkClient: NetworkClient,
             try {
                 val result = networkClient.requestFromLocationName(String.format(Locale.ENGLISH,
                         QUERY_LAT_LONG, latitude, longitude, apiKey))
-                val addresses = addressBuilder.parseResult(result)
+                val addresses = addressBuilder.parseResult(result!!)
                 subscriber.onNext(addresses)
                 subscriber.onComplete()
             } catch (e: JSONException) {
