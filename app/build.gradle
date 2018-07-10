@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: "org.jlleitschuh.gradle.ktlint"
 apply from: '../quality.gradle'
 
 android {
@@ -23,6 +24,20 @@ android {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
   }
+}
+
+detekt {
+  version = "1.0.0.RC7-3"
+  profile("main") {
+    input = "$projectDir/src/main/java"
+    config = "$projectDir/detekt-config.yml"
+    output = "$projectDir/build/reports/detekt/detekt.xml"
+    filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+  }
+}
+
+ktlint {
+  reporters = ["PLAIN", "CHECKSTYLE"]
 }
 
 dependencies {

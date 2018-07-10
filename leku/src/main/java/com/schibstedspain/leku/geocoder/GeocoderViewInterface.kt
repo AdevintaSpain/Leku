@@ -6,29 +6,29 @@ import android.location.Location
 import com.google.android.gms.maps.model.LatLng
 
 interface GeocoderViewInterface {
-  fun willLoadLocation()
-  fun showLocations(addresses: List<Address>)
-  fun showDebouncedLocations(addresses: List<Address>)
-  fun didLoadLocation()
-  fun showLoadLocationError()
-  fun showLastLocation(location: Location)
-  fun didGetLastLocation()
-  fun showLocationInfo(addresses: List<Address>)
-  fun willGetLocationInfo(latLng: LatLng)
-  fun didGetLocationInfo()
-  fun showGetLocationInfoError()
+    fun willLoadLocation()
+    fun showLocations(addresses: List<Address>)
+    fun showDebouncedLocations(addresses: List<Address>)
+    fun didLoadLocation()
+    fun showLoadLocationError()
+    fun showLastLocation(location: Location)
+    fun didGetLastLocation()
+    fun showLocationInfo(addresses: List<Address>)
+    fun willGetLocationInfo(latLng: LatLng)
+    fun didGetLocationInfo()
+    fun showGetLocationInfoError()
 
-  class NullView : GeocoderViewInterface {
-    override fun willLoadLocation() {}
-    override fun showLocations(addresses: List<Address>) {}
-    override fun showDebouncedLocations(addresses: List<Address>) {}
-    override fun didLoadLocation() {}
-    override fun showLoadLocationError() {}
-    override fun showLastLocation(location: Location) {}
-    override fun didGetLastLocation() {}
-    override fun showLocationInfo(addresses: List<Address>) {}
-    override fun willGetLocationInfo(latLng: LatLng) {}
-    override fun didGetLocationInfo() {}
-    override fun showGetLocationInfoError() {}
-  }
+    class NullView : GeocoderViewInterface {
+        override fun willLoadLocation() {}
+        override fun showLocations(addresses: List<Address>) {}
+        override fun showDebouncedLocations(addresses: List<Address>) {}
+        override fun didLoadLocation() {}
+        override fun showLoadLocationError() {}
+        override fun showLastLocation(location: Location) {}
+        override fun didGetLastLocation() {}
+        override fun showLocationInfo(addresses: List<Address>) {}
+        override fun willGetLocationInfo(latLng: LatLng) {}
+        override fun didGetLocationInfo() {}
+        override fun showGetLocationInfoError() {}
+    }
 }
