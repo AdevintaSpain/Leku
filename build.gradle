@@ -20,8 +20,13 @@ buildscript {
     classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.6.2"
     classpath 'com.novoda:bintray-release:0.8.0'
     classpath 'com.ferranpons:twitter-gradle-plugin:1.0.2'
+    classpath "gradle.plugin.org.jlleitschuh.gradle:ktlint-gradle:4.1.0"
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
+}
+
+plugins {
+  id "io.gitlab.arturbosch.detekt" version "1.0.0.RC7-3"
 }
 
 allprojects {
