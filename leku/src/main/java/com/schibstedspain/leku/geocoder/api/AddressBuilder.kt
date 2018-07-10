@@ -25,13 +25,12 @@ class AddressBuilder {
     val location = jsonObject.getJSONObject("geometry").getJSONObject("location")
     val latitude = location.getDouble("lat")
     val longitude = location.getDouble("lng")
-
     val components = getAddressComponents(jsonObject.getJSONArray("address_components"))
-
     var postalCode: String? = ""
     var city: String? = ""
     var number: String? = ""
     var street: String? = ""
+
     for (component in components) {
       if (component.types!!.contains("postal_code")) {
         postalCode = component.name
@@ -46,11 +45,13 @@ class AddressBuilder {
         street = component.name
       }
     }
+
     val fullAddress = StringBuilder()
     fullAddress.append(street)
     if (!street!!.isEmpty() && !number!!.isEmpty()) {
       fullAddress.append(", ").append(number)
     }
+
     val address = Address(Locale.getDefault())
     address.latitude = latitude
     address.longitude = longitude
