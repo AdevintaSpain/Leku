@@ -161,7 +161,7 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   protected void track(TrackEvents event) {
-    LocationPicker.getTracker().onEventTracked(event);
+    LocationPicker.INSTANCE.getTracker().onEventTracked(event);
   }
 
   private void setUpMainVariables() {
