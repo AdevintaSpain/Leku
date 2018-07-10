@@ -57,7 +57,7 @@ dependencies {
   implementation "com.google.android.gms:play-services-location:$playServicesVersion"
   implementation "com.google.android.gms:play-services-places:$playServicesVersion"
 
-  implementation 'pl.charmas.android:android-reactive-location2:2.0@aar'
+  implementation 'pl.charmas.android:android-reactive-location2:2.1@aar'
 
   implementation 'io.reactivex.rxjava2:rxjava:2.1.16'
   implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
@@ -73,6 +73,7 @@ dependencies {
   androidTestImplementation "com.android.support.test:rules:$supportTestVersion"
   androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
   androidTestImplementation 'org.mockito:mockito-core:2.18.3'
+
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
