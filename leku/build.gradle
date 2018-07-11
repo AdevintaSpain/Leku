@@ -3,7 +3,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'twitter-gradle-plugin'
 apply plugin: "org.jlleitschuh.gradle.ktlint"
-apply from: '../quality.gradle'
 
 def versionMajor = getVersionMajor()
 def versionMinor = getVersionMinor()

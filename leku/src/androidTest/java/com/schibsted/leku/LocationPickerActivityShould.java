@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import com.schibstedspain.leku.LocationPickerActivity;
+import com.schibstedspain.leku.LocationPickerActivityKt;
 import com.schibstedspain.leku.R;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -177,10 +178,10 @@ public class LocationPickerActivityShould {
   private void launchActivity() {
     Context targetContext = getInstrumentation().getTargetContext();
     Intent intent = new Intent(targetContext, LocationPickerActivity.class);
-    intent.putExtra(LocationPickerActivity.Companion.getLATITUDE(), 41.4036299);
-    intent.putExtra(LocationPickerActivity.Companion.getLONGITUDE(), 2.1743558);
-    intent.putExtra(LocationPickerActivity.Companion.getLAYOUTS_TO_HIDE(), "street");
-    intent.putExtra(LocationPickerActivity.Companion.getSEARCH_ZONE(), "es_ES");
+    intent.putExtra(LocationPickerActivityKt.LATITUDE, 41.4036299);
+    intent.putExtra(LocationPickerActivityKt.LONGITUDE, 2.1743558);
+    intent.putExtra(LocationPickerActivityKt.LAYOUTS_TO_HIDE, "street");
+    intent.putExtra(LocationPickerActivityKt.SEARCH_ZONE, "es_ES");
     intent.putExtra("test", "this is a test");
     activityRule.launchActivity(intent);
 

@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val mapPoisButton = findViewById<View>(R.id.map_button_with_pois)
-        mapPoisButton.setOnClickListener { view ->
+        mapPoisButton.setOnClickListener { _ ->
             val locationPickerIntent = LocationPickerActivity.Builder()
                     .withLocation(41.4036299, 2.1743558)
                     .withPois(lekuPois)
