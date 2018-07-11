@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void initializeLocationPickerTracker() {
-    LocationPicker.setTracker(new LocationPickerTracker() {
+    LocationPicker.INSTANCE.setTracker(new LocationPickerTracker() {
       @Override
       public void onEventTracked(TrackEvents event) {
         Toast.makeText(MainActivity.this, "Event: " + event.getEventName(), Toast.LENGTH_SHORT)

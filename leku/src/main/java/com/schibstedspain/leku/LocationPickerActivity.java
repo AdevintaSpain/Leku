@@ -161,7 +161,7 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   protected void track(TrackEvents event) {
-    LocationPicker.getTracker().onEventTracked(event);
+    LocationPicker.INSTANCE.getTracker().onEventTracked(event);
   }
 
   private void setUpMainVariables() {
@@ -603,13 +603,13 @@ public class LocationPickerActivity extends AppCompatActivity
   }
 
   @Override
-  public void willGetLocationInfo(LatLng latLng) {
+  public void willGetLocationInfo(@NonNull LatLng latLng) {
     changeLocationInfoLayoutVisibility(View.VISIBLE);
     setCoordinatesInfo(latLng);
   }
 
   @Override
-  public void showLastLocation(Location location) {
+  public void showLastLocation(@NonNull Location location) {
     currentLocation = location;
   }
 
@@ -627,13 +627,11 @@ public class LocationPickerActivity extends AppCompatActivity
 
   @Override
   public void showLocationInfo(@NotNull List<? extends Address> addresses) {
-    if (addresses != null) {
-      if (addresses.size() > 0 && addresses.get(0) != null) {
-        selectedAddress = addresses.get(0);
-        setLocationInfo(selectedAddress);
-      } else {
-        setLocationEmpty();
-      }
+    if (addresses.size() > 0 && addresses.get(0) != null) {
+      selectedAddress = addresses.get(0);
+      setLocationInfo(selectedAddress);
+    } else {
+      setLocationEmpty();
     }
   }
 
@@ -672,7 +670,7 @@ public class LocationPickerActivity extends AppCompatActivity
       setLayoutVisibilityFromBundle(savedInstanceState);
     }
     if (savedInstanceState.keySet().contains(GEOLOC_API_KEY)) {
-      apiInteractor.setApiKey(savedInstanceState.getString(GEOLOC_API_KEY));
+      apiInteractor.setApiKey(savedInstanceState.getString(GEOLOC_API_KEY, ""));
     }
     if (savedInstanceState.keySet().contains(ENABLE_GOOGLE_PLACES)) {
       isGooglePlacesEnabled = savedInstanceState.getBoolean(ENABLE_GOOGLE_PLACES, false);
@@ -716,7 +714,7 @@ public class LocationPickerActivity extends AppCompatActivity
       poisList = transitionBundle.getParcelableArrayList(POIS_LIST);
     }
     if (transitionBundle.keySet().contains(GEOLOC_API_KEY)) {
-      apiInteractor.setApiKey(transitionBundle.getString(GEOLOC_API_KEY));
+      apiInteractor.setApiKey(transitionBundle.getString(GEOLOC_API_KEY, ""));
     }
     if (transitionBundle.keySet().contains(ENABLE_GOOGLE_PLACES)) {
       isGooglePlacesEnabled = transitionBundle.getBoolean(ENABLE_GOOGLE_PLACES, false);
@@ -1032,7 +1030,8 @@ public class LocationPickerActivity extends AppCompatActivity
     if (map != null) {
       Location location = lekuPoi.getLocation();
       CameraPosition cameraPosition = new CameraPosition.Builder()
-          .target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(getDefaultZoom()).build();
+          .target(new LatLng(location != null ? location.getLatitude() : 0,
+              location != null ? location.getLongitude() : 0)).zoom(getDefaultZoom()).build();
       hasWiderZoom = false;
       map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
