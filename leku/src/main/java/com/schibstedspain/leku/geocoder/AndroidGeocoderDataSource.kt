@@ -6,6 +6,8 @@ import com.google.android.gms.maps.model.LatLng
 import io.reactivex.Observable
 import java.io.IOException
 
+private const val MAX_RESULTS = 5
+
 class AndroidGeocoderDataSource(private val geocoder: Geocoder) : GeocoderInteractorDataSource {
 
     override fun getFromLocationName(query: String): Observable<List<Address>> {
@@ -40,9 +42,5 @@ class AndroidGeocoderDataSource(private val geocoder: Geocoder) : GeocoderIntera
                 emitter.tryOnError(e)
             }
         }
-    }
-
-    companion object {
-        private const val MAX_RESULTS = 5
     }
 }

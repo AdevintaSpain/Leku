@@ -5,6 +5,8 @@ import com.google.android.gms.maps.model.LatLng
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 
+private const val RETRY_COUNT = 3
+
 class GeocoderRepository(
     private val androidGeocoder: GeocoderInteractorDataSource,
     private val googleGeocoder: GeocoderInteractorDataSource
@@ -29,9 +31,5 @@ class GeocoderRepository(
                 .subscribeOn(Schedulers.newThread())
                 .retry(RETRY_COUNT.toLong())
                 .onErrorResumeNext(googleGeocoder.getFromLocation(latLng.latitude, latLng.longitude))
-    }
-
-    companion object {
-        private const val RETRY_COUNT = 3
     }
 }

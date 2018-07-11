@@ -14,6 +14,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import java.util.concurrent.TimeUnit
 
+private const val RETRY_COUNT = 3
+private const val MAX_PLACES_RESULTS = 3
+
 class GeocoderPresenter @JvmOverloads constructor(
     private val locationProvider: ReactiveLocationProvider,
     private val geocoderRepository: GeocoderRepository,
@@ -130,10 +133,5 @@ class GeocoderPresenter @JvmOverloads constructor(
         mergedList.addAll(geocoderList)
         mergedList.addAll(placesList)
         return mergedList
-    }
-
-    companion object {
-        private const val RETRY_COUNT = 3
-        private const val MAX_PLACES_RESULTS = 3
     }
 }

@@ -6,6 +6,10 @@ import java.io.InputStream
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
+private const val REPONSE_MAX_LENGTH = 1024
+private const val READ_TIMEOUT = 3000
+private const val CONNECT_TIMEOUT = 3000
+
 class NetworkClient {
 
     fun requestFromLocationName(request: String): String? {
@@ -53,11 +57,5 @@ class NetworkClient {
             length = stream.read(buffer)
         }
         return result.toString("UTF-8")
-    }
-
-    companion object {
-        private const val REPONSE_MAX_LENGTH = 1024
-        private const val READ_TIMEOUT = 3000
-        private const val CONNECT_TIMEOUT = 3000
     }
 }
