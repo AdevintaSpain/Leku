@@ -24,7 +24,7 @@ object LocationPicker {
         tracker = EMPTY_TRACKER
     }
 
-    class EmptyLocationPickerTracker: LocationPickerTracker {
+    class EmptyLocationPickerTracker : LocationPickerTracker {
         override fun onEventTracked(event: TrackEvents) { }
     }
 }

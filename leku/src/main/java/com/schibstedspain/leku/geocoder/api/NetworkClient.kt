@@ -31,20 +31,17 @@ class NetworkClient {
         } catch (ioException: IOException) {
             throw NetworkException(ioException)
         } finally {
-
             if (stream != null) {
                 try {
                     stream.close()
                 } catch (ioException: IOException) {
                     throw NetworkException(ioException)
                 }
-
             }
             connection?.disconnect()
         }
         return result
     }
-
 
     @Throws(IOException::class)
     private fun readStream(stream: InputStream, maxLength: Int): String {
@@ -63,5 +60,4 @@ class NetworkClient {
         private const val READ_TIMEOUT = 3000
         private const val CONNECT_TIMEOUT = 3000
     }
-
 }

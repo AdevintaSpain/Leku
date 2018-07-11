@@ -10,14 +10,16 @@ import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import java.util.concurrent.TimeUnit
 
-class GeocoderPresenter @JvmOverloads constructor(private val locationProvider: ReactiveLocationProvider,
-                                                  private val geocoderRepository: GeocoderRepository,
-                                                  private val googlePlacesDataSource: GooglePlacesDataSource? = null,
-                                                  private val scheduler: Scheduler = AndroidSchedulers.mainThread()) {
+class GeocoderPresenter @JvmOverloads constructor(
+    private val locationProvider: ReactiveLocationProvider,
+    private val geocoderRepository: GeocoderRepository,
+    private val googlePlacesDataSource: GooglePlacesDataSource? = null,
+    private val scheduler: Scheduler = AndroidSchedulers.mainThread()
+) {
 
     private var view: GeocoderViewInterface? = null
     private val nullView = GeocoderViewInterface.NullView()

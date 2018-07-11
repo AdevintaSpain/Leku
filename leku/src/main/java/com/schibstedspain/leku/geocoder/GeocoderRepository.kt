@@ -5,8 +5,10 @@ import com.google.android.gms.maps.model.LatLng
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 
-class GeocoderRepository(private val androidGeocoder: GeocoderInteractorDataSource,
-                         private val googleGeocoder: GeocoderInteractorDataSource) {
+class GeocoderRepository(
+    private val androidGeocoder: GeocoderInteractorDataSource,
+    private val googleGeocoder: GeocoderInteractorDataSource
+) {
 
     fun getFromLocationName(query: String): Observable<List<Address>> {
         return androidGeocoder.getFromLocationName(query)

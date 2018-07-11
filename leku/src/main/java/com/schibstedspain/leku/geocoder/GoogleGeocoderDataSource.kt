@@ -8,8 +8,11 @@ import io.reactivex.Observable
 import java.util.Locale
 import org.json.JSONException
 
-class GoogleGeocoderDataSource(private val networkClient: NetworkClient,
-                               private val addressBuilder: AddressBuilder) : GeocoderInteractorDataSource {
+class GoogleGeocoderDataSource(
+    private val networkClient: NetworkClient,
+    private val addressBuilder: AddressBuilder
+) : GeocoderInteractorDataSource {
+
     private var apiKey: String? = null
 
     fun setApiKey(apiKey: String) {
@@ -33,8 +36,7 @@ class GoogleGeocoderDataSource(private val networkClient: NetworkClient,
         }
     }
 
-    override fun getFromLocationName(query: String, lowerLeft: LatLng,
-                                     upperRight: LatLng): Observable<List<Address>> {
+    override fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): Observable<List<Address>> {
         return Observable.create { subscriber ->
             if (apiKey == null) {
                 subscriber.onComplete()

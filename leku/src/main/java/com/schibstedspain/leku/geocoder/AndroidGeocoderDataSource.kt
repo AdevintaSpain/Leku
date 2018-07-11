@@ -19,8 +19,7 @@ class AndroidGeocoderDataSource(private val geocoder: Geocoder) : GeocoderIntera
         }
     }
 
-    override fun getFromLocationName(query: String, lowerLeft: LatLng,
-                                     upperRight: LatLng): Observable<List<Address>> {
+    override fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): Observable<List<Address>> {
         return Observable.create { emitter ->
             try {
                 emitter.onNext(geocoder.getFromLocationName(query, MAX_RESULTS, lowerLeft.latitude,
