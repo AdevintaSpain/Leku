@@ -94,7 +94,9 @@ class GeocoderPresenter @JvmOverloads constructor(
         view!!.willLoadLocation()
         val disposable = Observable.zip<List<Address>, List<Address>, List<Address>>(
                 geocoderRepository.getFromLocationName(query, lowerLeft, upperRight),
-                getPlacesFromLocationName(query, lowerLeft, upperRight), BiFunction<List<Address>, List<Address>, List<Address>> { geocoderList, placesList -> this.getMergedList(geocoderList, placesList) })
+                getPlacesFromLocationName(query, lowerLeft, upperRight),
+                BiFunction<List<Address>, List<Address>, List<Address>> {
+                    geocoderList, placesList -> this.getMergedList(geocoderList, placesList) })
                 .subscribeOn(Schedulers.io())
                 .debounce(debounceTime.toLong(), TimeUnit.MILLISECONDS, Schedulers.io())
                 .observeOn(scheduler)
@@ -119,10 +121,13 @@ class GeocoderPresenter @JvmOverloads constructor(
         this.isGooglePlacesEnabled = true
     }
 
-    private fun getPlacesFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): Observable<List<Address>> {
+    private fun getPlacesFromLocationName(query: String,
+                                          lowerLeft: LatLng,
+                                          upperRight: LatLng): Observable<List<Address>> {
         return if (isGooglePlacesEnabled)
             googlePlacesDataSource!!.getFromLocationName(query, LatLngBounds(lowerLeft, upperRight))
-                    .flatMapIterable { addresses -> addresses }.take(MAX_PLACES_RESULTS.toLong()).toList().toObservable()
+                    .flatMapIterable { addresses -> addresses }
+                    .take(MAX_PLACES_RESULTS.toLong()).toList().toObservable()
                     .onErrorReturnItem(ArrayList())
         else
             Observable.just(ArrayList())

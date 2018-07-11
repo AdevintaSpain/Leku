@@ -17,13 +17,16 @@ import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
+private const val PREDICTIONS_WAITING_TIME: Long = 6
+private const val PLACE_BY_ID_WAITING_TIME: Long = 3
+
 class GooglePlacesDataSource(private val geoDataClient: GeoDataClient) {
 
     fun getFromLocationName(query: String, latLngBounds: LatLngBounds): Observable<List<Address>> {
         return defer {
             val results = geoDataClient.getAutocompletePredictions(query, latLngBounds, null)
             try {
-                Tasks.await(results, 6, TimeUnit.SECONDS)
+                Tasks.await(results, PREDICTIONS_WAITING_TIME, TimeUnit.SECONDS)
             } catch (ignored: ExecutionException) {
             } catch (ignored: InterruptedException) {
             } catch (ignored: TimeoutException) {
@@ -45,7 +48,7 @@ class GooglePlacesDataSource(private val geoDataClient: GeoDataClient) {
         for (prediction in predictionList) {
             val placeBufferResponseTask = geoDataClient.getPlaceById(prediction.placeId!!)
             try {
-                Tasks.await(placeBufferResponseTask, 3, TimeUnit.SECONDS)
+                Tasks.await(placeBufferResponseTask, PLACE_BY_ID_WAITING_TIME, TimeUnit.SECONDS)
             } catch (ignored: ExecutionException) {
             } catch (ignored: InterruptedException) {
             } catch (ignored: TimeoutException) {
