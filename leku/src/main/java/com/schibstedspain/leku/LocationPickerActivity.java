@@ -60,7 +60,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider;
 
@@ -628,12 +627,12 @@ public class LocationPickerActivity extends AppCompatActivity
 
   @Override
   public void showLocationInfo(@NotNull List<? extends Address> addresses) {
-      if (addresses.size() > 0 && addresses.get(0) != null) {
-        selectedAddress = addresses.get(0);
-        setLocationInfo(selectedAddress);
-      } else {
-        setLocationEmpty();
-      }
+    if (addresses.size() > 0 && addresses.get(0) != null) {
+      selectedAddress = addresses.get(0);
+      setLocationInfo(selectedAddress);
+    } else {
+      setLocationEmpty();
+    }
   }
 
   public void setLocationEmpty() {
