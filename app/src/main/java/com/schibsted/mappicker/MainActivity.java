@@ -12,16 +12,14 @@ import android.widget.Toast;
 import com.schibstedspain.leku.LekuPoi;
 import com.schibstedspain.leku.LocationPicker;
 import com.schibstedspain.leku.LocationPickerActivity;
-import com.schibstedspain.leku.tracker.LocationPickerTracker;
-import com.schibstedspain.leku.tracker.TrackEvents;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
-  public static final int MAP_BUTTON_REQUEST_CODE = 1;
-  public static final int MAP_POIS_BUTTON_REQUEST_CODE = 2;
+  private static final int MAP_BUTTON_REQUEST_CODE = 1;
+  private static final int MAP_POIS_BUTTON_REQUEST_CODE = 2;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -31,39 +29,33 @@ public class MainActivity extends AppCompatActivity {
     StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build());
     setContentView(R.layout.activity_main);
     View mapButton = findViewById(R.id.map_button);
-    mapButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        Intent locationPickerIntent = new LocationPickerActivity.Builder()
-            .withLocation(41.4036299, 2.1743558)
-            //.withGeolocApiKey("<PUT API KEY HERE>")
-            .withSearchZone("es_ES")
-            //.shouldReturnOkOnBackPressed()
-            //.withStreetHidden()
-            //.withCityHidden()
-            //.withZipCodeHidden()
-            //.withSatelliteViewHidden()
-            //.withGooglePlacesEnabled()
-            .build(getApplicationContext());
+    mapButton.setOnClickListener(view -> {
+      Intent locationPickerIntent = new LocationPickerActivity.Builder()
+          .withLocation(41.4036299, 2.1743558)
+          //.withGeolocApiKey("<PUT API KEY HERE>")
+          .withSearchZone("es_ES")
+          //.shouldReturnOkOnBackPressed()
+          //.withStreetHidden()
+          //.withCityHidden()
+          //.withZipCodeHidden()
+          //.withSatelliteViewHidden()
+          //.withGooglePlacesEnabled()
+          .build(getApplicationContext());
 
-        //this is optional if you want to return RESULT_OK if you don't set the latitude/longitude and click back button
-        locationPickerIntent.putExtra("test", "this is a test");
+      //this is optional if you want to return RESULT_OK if you don't set the latitude/longitude and click back button
+      locationPickerIntent.putExtra("test", "this is a test");
 
-        startActivityForResult(locationPickerIntent, MAP_BUTTON_REQUEST_CODE);
-      }
+      startActivityForResult(locationPickerIntent, MAP_BUTTON_REQUEST_CODE);
     });
 
     View mapPoisButton = findViewById(R.id.map_button_with_pois);
-    mapPoisButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        Intent locationPickerIntent = new LocationPickerActivity.Builder()
-            .withLocation(41.4036299, 2.1743558)
-            .withPois(getLekuPois())
-            .build(getApplicationContext());
+    mapPoisButton.setOnClickListener(view -> {
+      Intent locationPickerIntent = new LocationPickerActivity.Builder()
+          .withLocation(41.4036299, 2.1743558)
+          .withPois(getLekuPois())
+          .build(getApplicationContext());
 
-        startActivityForResult(locationPickerIntent, MAP_POIS_BUTTON_REQUEST_CODE);
-      }
+      startActivityForResult(locationPickerIntent, MAP_POIS_BUTTON_REQUEST_CODE);
     });
 
     initializeLocationPickerTracker();
@@ -124,12 +116,8 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private void initializeLocationPickerTracker() {
-    LocationPicker.INSTANCE.setTracker(new LocationPickerTracker() {
-      @Override
-      public void onEventTracked(TrackEvents event) {
-        Toast.makeText(MainActivity.this, "Event: " + event.getEventName(), Toast.LENGTH_SHORT)
-            .show();
-      }
-    });
+    LocationPicker.INSTANCE.setTracker(
+        event -> Toast.makeText(MainActivity.this, "Event: " + event.getEventName(), Toast.LENGTH_SHORT)
+            .show());
   }
 }
