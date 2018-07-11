@@ -5,10 +5,10 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class LekuPoi : Parcelable {
-    var id: String? = null
-    var location: Location? = null
-    var title: String? = null
-    var address: String? = null
+    var id: String
+    var location: Location
+    var title: String
+    lateinit var address: String
 
     constructor(id: String, title: String, location: Location) {
         this.id = id
