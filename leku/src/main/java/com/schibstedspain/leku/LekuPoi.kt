@@ -8,7 +8,7 @@ class LekuPoi : Parcelable {
     var id: String
     var location: Location
     var title: String
-    lateinit var address: String
+    var address: String = ""
 
     constructor(id: String, title: String, location: Location) {
         this.id = id
@@ -40,7 +40,7 @@ class LekuPoi : Parcelable {
 
     companion object {
 
-        val CREATOR: Parcelable.Creator<LekuPoi> = object : Parcelable.Creator<LekuPoi> {
+        @JvmField val CREATOR: Parcelable.Creator<LekuPoi> = object : Parcelable.Creator<LekuPoi> {
             override fun createFromParcel(source: Parcel): LekuPoi {
                 return LekuPoi(source)
             }

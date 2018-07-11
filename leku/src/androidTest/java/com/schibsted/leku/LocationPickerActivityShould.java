@@ -177,10 +177,10 @@ public class LocationPickerActivityShould {
   private void launchActivity() {
     Context targetContext = getInstrumentation().getTargetContext();
     Intent intent = new Intent(targetContext, LocationPickerActivity.class);
-    intent.putExtra(LocationPickerActivity.LATITUDE, 41.4036299);
-    intent.putExtra(LocationPickerActivity.LONGITUDE, 2.1743558);
-    intent.putExtra(LocationPickerActivity.LAYOUTS_TO_HIDE, "street");
-    intent.putExtra(LocationPickerActivity.SEARCH_ZONE, "es_ES");
+    intent.putExtra(LocationPickerActivity.Companion.getLATITUDE(), 41.4036299);
+    intent.putExtra(LocationPickerActivity.Companion.getLONGITUDE(), 2.1743558);
+    intent.putExtra(LocationPickerActivity.Companion.getLAYOUTS_TO_HIDE(), "street");
+    intent.putExtra(LocationPickerActivity.Companion.getSEARCH_ZONE(), "es_ES");
     intent.putExtra("test", "this is a test");
     activityRule.launchActivity(intent);
 

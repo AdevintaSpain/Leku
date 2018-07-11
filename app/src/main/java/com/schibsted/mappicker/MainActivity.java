@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.schibstedspain.leku.LekuPoi;
 import com.schibstedspain.leku.LocationPicker;
 import com.schibstedspain.leku.LocationPickerActivity;
+import com.schibstedspain.leku.LocationPickerActivityKt;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -85,28 +86,28 @@ public class MainActivity extends AppCompatActivity {
     if (resultCode == RESULT_OK) {
       Log.d("RESULT****", "OK");
       if (requestCode == 1) {
-        double latitude = data.getDoubleExtra(LocationPickerActivity.LATITUDE, 0);
+        double latitude = data.getDoubleExtra(LocationPickerActivityKt.LATITUDE, 0);
         Log.d("LATITUDE****", String.valueOf(latitude));
-        double longitude = data.getDoubleExtra(LocationPickerActivity.LONGITUDE, 0);
+        double longitude = data.getDoubleExtra(LocationPickerActivityKt.LONGITUDE, 0);
         Log.d("LONGITUDE****", String.valueOf(longitude));
-        String address = data.getStringExtra(LocationPickerActivity.LOCATION_ADDRESS);
+        String address = data.getStringExtra(LocationPickerActivityKt.LOCATION_ADDRESS);
         Log.d("ADDRESS****", String.valueOf(address));
-        String postalcode = data.getStringExtra(LocationPickerActivity.ZIPCODE);
+        String postalcode = data.getStringExtra(LocationPickerActivityKt.ZIPCODE);
         Log.d("POSTALCODE****", String.valueOf(postalcode));
-        Bundle bundle = data.getBundleExtra(LocationPickerActivity.TRANSITION_BUNDLE);
+        Bundle bundle = data.getBundleExtra(LocationPickerActivityKt.TRANSITION_BUNDLE);
         Log.d("BUNDLE TEXT****", bundle.getString("test"));
-        Address fullAddress = data.getParcelableExtra(LocationPickerActivity.ADDRESS);
+        Address fullAddress = data.getParcelableExtra(LocationPickerActivityKt.ADDRESS);
         if (fullAddress != null) {
           Log.d("FULL ADDRESS****", fullAddress.toString());
         }
       } else if (requestCode == 2) {
-        double latitude = data.getDoubleExtra(LocationPickerActivity.LATITUDE, 0);
+        double latitude = data.getDoubleExtra(LocationPickerActivityKt.LATITUDE, 0);
         Log.d("LATITUDE****", String.valueOf(latitude));
-        double longitude = data.getDoubleExtra(LocationPickerActivity.LONGITUDE, 0);
+        double longitude = data.getDoubleExtra(LocationPickerActivityKt.LONGITUDE, 0);
         Log.d("LONGITUDE****", String.valueOf(longitude));
-        String address = data.getStringExtra(LocationPickerActivity.LOCATION_ADDRESS);
+        String address = data.getStringExtra(LocationPickerActivityKt.LOCATION_ADDRESS);
         Log.d("ADDRESS****", String.valueOf(address));
-        LekuPoi lekuPoi = data.getParcelableExtra(LocationPickerActivity.LEKU_POI);
+        LekuPoi lekuPoi = data.getParcelableExtra(LocationPickerActivityKt.LEKU_POI);
         Log.d("LekuPoi****", String.valueOf(lekuPoi));
       }
     }
