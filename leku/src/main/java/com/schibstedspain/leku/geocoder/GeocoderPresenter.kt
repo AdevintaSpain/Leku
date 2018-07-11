@@ -121,9 +121,11 @@ class GeocoderPresenter @JvmOverloads constructor(
         this.isGooglePlacesEnabled = true
     }
 
-    private fun getPlacesFromLocationName(query: String,
-                                          lowerLeft: LatLng,
-                                          upperRight: LatLng): Observable<List<Address>> {
+    private fun getPlacesFromLocationName(
+        query: String,
+        lowerLeft: LatLng,
+        upperRight: LatLng
+    ): Observable<List<Address>> {
         return if (isGooglePlacesEnabled)
             googlePlacesDataSource!!.getFromLocationName(query, LatLngBounds(lowerLeft, upperRight))
                     .flatMapIterable { addresses -> addresses }
