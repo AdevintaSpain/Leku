@@ -38,10 +38,10 @@ import android.support.test.espresso.matcher.ViewMatchers.withId
 class LocationPickerActivityShould {
     private var permissionGranter: PermissionGranter? = null
 
-    @Rule
+    @Rule @JvmField
     var activityRule = ActivityTestRule(LocationPickerActivity::class.java, true, false)
 
-    @Rule
+    @Rule @JvmField
     var runtimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.WRITE_SECURE_SETTINGS)!!
 
