@@ -1,8 +1,6 @@
 package com.schibsted.leku
 
 import android.Manifest
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Build
@@ -15,7 +13,10 @@ import android.util.Log
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import com.schibstedspain.leku.LocationPickerActivity
-import com.schibstedspain.leku.*
+import com.schibstedspain.leku.LATITUDE
+import com.schibstedspain.leku.LONGITUDE
+import com.schibstedspain.leku.LAYOUTS_TO_HIDE
+import com.schibstedspain.leku.SEARCH_ZONE
 import com.schibstedspain.leku.R
 import org.junit.Before
 import org.junit.Ignore
@@ -50,8 +51,7 @@ class LocationPickerActivityShould {
         permissionGranter = PermissionGranter()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getInstrumentation().uiAutomation.executeShellCommand(
-                    "pm grant " + getTargetContext().packageName
-                            + " android.permission.WRITE_SECURE_SETTINGS")
+                    "pm grant " + getTargetContext().packageName + " android.permission.WRITE_SECURE_SETTINGS")
         }
     }
 
@@ -229,6 +229,5 @@ class LocationPickerActivityShould {
         } catch (e: InterruptedException) {
             Log.d(LocationPickerActivityShould::class.java.name, e.message)
         }
-
     }
 }

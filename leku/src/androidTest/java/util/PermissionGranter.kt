@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Build
 import android.support.test.uiautomator.UiDevice
-import android.support.test.uiautomator.UiObject
 import android.support.test.uiautomator.UiObjectNotFoundException
 import android.support.test.uiautomator.UiSelector
 import android.support.v4.content.ContextCompat
@@ -31,7 +30,6 @@ class PermissionGranter {
         } catch (e: UiObjectNotFoundException) {
             logNoPermissionDialogError()
         }
-
     }
 
     fun denyPermissionsIfNeeded(activity: Activity, permissionNeeded: String) {
@@ -47,7 +45,6 @@ class PermissionGranter {
         } catch (e: UiObjectNotFoundException) {
             logNoPermissionDialogError()
         }
-
     }
 
     private fun hasNeededPermission(activity: Activity, permissionNeeded: String): Boolean {
@@ -61,7 +58,6 @@ class PermissionGranter {
         } catch (e: InterruptedException) {
             Log.d(PermissionGranter::class.java.name, "Cannot execute Thread.sleep()")
         }
-
     }
 
     private fun logNoPermissionDialogError() {
