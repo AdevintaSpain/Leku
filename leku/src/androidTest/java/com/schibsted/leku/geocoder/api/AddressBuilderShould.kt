@@ -1,20 +1,17 @@
 package com.schibsted.leku.geocoder.api
 
-import android.location.Address
 import com.schibstedspain.leku.geocoder.api.AddressBuilder
+import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertTrue
 import org.json.JSONException
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.junit.MockitoRule
-
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertTrue
 import org.mockito.junit.MockitoJUnit.rule
 
 class AddressBuilderShould {
 
-    @Rule
+    @Rule @JvmField
     var mockitoRule = rule()!!
 
     private var addressBuilder: AddressBuilder? = null
