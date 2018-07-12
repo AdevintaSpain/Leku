@@ -264,6 +264,11 @@ class LocationPickerActivity : AppCompatActivity(),
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             supportActionBar!!.setDisplayShowTitleEnabled(false)
         }
+        if (!isPlayServicesAvailable()) {
+            toolbar.visibility = View.GONE
+        } else {
+            toolbar.visibility = View.VISIBLE
+        }
     }
 
     private fun setUpSearchView() {
@@ -357,9 +362,9 @@ class LocationPickerActivity : AppCompatActivity(),
         }
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
-            REQUEST_PLACE_PICKER -> if (resultCode == Activity.RESULT_OK) {
+            REQUEST_PLACE_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
                 val matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                 searchView = findViewById(R.id.leku_search)
                 retrieveLocationFrom(matches[0])
@@ -387,6 +392,7 @@ class LocationPickerActivity : AppCompatActivity(),
     override fun onResume() {
         super.onResume()
         setUpMapIfNeeded()
+        setUpToolBar()
     }
 
     override fun onDestroy() {
@@ -741,7 +747,7 @@ class LocationPickerActivity : AppCompatActivity(),
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,
                 getString(R.string.leku_voice_search_extra_language))
 
-        if (checkPlayServices()) {
+        if (isPlayServicesAvailable()) {
             try {
                 startActivityForResult(intent, REQUEST_PLACE_PICKER)
             } catch (e: ActivityNotFoundException) {
@@ -750,7 +756,7 @@ class LocationPickerActivity : AppCompatActivity(),
         }
     }
 
-    private fun checkPlayServices(): Boolean {
+    private fun isPlayServicesAvailable(): Boolean {
         val googleAPI = GoogleApiAvailability.getInstance()
         val result = googleAPI.isGooglePlayServicesAvailable(applicationContext)
         if (result != ConnectionResult.SUCCESS) {
