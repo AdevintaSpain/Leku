@@ -268,10 +268,10 @@ class LocationPickerActivity : AppCompatActivity(),
     }
 
     private fun switchToolbarVisibility() {
-        if (!isPlayServicesAvailable()) {
-            toolbar.visibility = View.GONE
-        } else {
+        if (isPlayServicesAvailable()) {
             toolbar.visibility = View.VISIBLE
+        } else {
+            toolbar.visibility = View.GONE
         }
     }
 
