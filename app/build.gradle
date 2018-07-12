@@ -29,7 +29,7 @@ detekt {
   version = "1.0.0.RC7-3"
   profile("main") {
     input = "$projectDir/src/main/java"
-    config = "$projectDir/detekt-config.yml"
+  	config = "config/detekt/detekt-config.yml"
     output = "$projectDir/build/reports/detekt/detekt.xml"
     filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
   }
