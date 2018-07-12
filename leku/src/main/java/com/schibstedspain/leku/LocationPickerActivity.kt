@@ -136,6 +136,7 @@ class LocationPickerActivity : AppCompatActivity(),
     private var currentMarker: Marker? = null
     private var textWatcher: TextWatcher? = null
     private var apiInteractor: GoogleGeocoderDataSource? = null
+    private lateinit var toolbar: Toolbar
 
     private val searchTextWatcher: TextWatcher
         get() = object : TextWatcher {
@@ -258,12 +259,15 @@ class LocationPickerActivity : AppCompatActivity(),
     }
 
     private fun setUpToolBar() {
-        val toolbar = findViewById<Toolbar>(R.id.map_search_toolbar)
+        toolbar = findViewById(R.id.map_search_toolbar)
         setSupportActionBar(toolbar)
         if (supportActionBar != null) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             supportActionBar!!.setDisplayShowTitleEnabled(false)
         }
+    }
+
+    private fun switchToolbarVisibility() {
         if (!isPlayServicesAvailable()) {
             toolbar.visibility = View.GONE
         } else {
@@ -392,7 +396,7 @@ class LocationPickerActivity : AppCompatActivity(),
     override fun onResume() {
         super.onResume()
         setUpMapIfNeeded()
-        setUpToolBar()
+        switchToolbarVisibility()
     }
 
     override fun onDestroy() {
