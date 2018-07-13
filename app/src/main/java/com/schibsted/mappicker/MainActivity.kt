@@ -89,8 +89,8 @@ class MainActivity : AppCompatActivity() {
         initializeLocationPickerTracker()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        if (resultCode == Activity.RESULT_OK) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK && data != null) {
             Log.d("RESULT****", "OK")
             if (requestCode == 1) {
                 val latitude = data.getDoubleExtra(LATITUDE, 0.0)
