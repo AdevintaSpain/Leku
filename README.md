@@ -165,6 +165,7 @@ Intent intent = new LocationPickerActivity.Builder()
     .withCityHidden()
     .withZipCodeHidden()
     .withSatelliteViewHidden()
+    .withVoiceSearchHidden()
     .build(getApplicationContext());
 
 startActivityForResult(intent, 1);
@@ -331,6 +332,14 @@ If you want to disable asking for location permissions (and prevent any location
 
 ```java
 intent.putExtra(LocationPickerActivity.ENABLE_LOCATION_PERMISSION_REQUEST, false);
+```
+
+##### Enable/Disable voice search
+
+Now you can hide the voice search option on the search view
+
+```java
+intent.putExtra(LocationPickerActivity.ENABLE_VOICE_SEARCH, false);
 ```
 
 #### Tracking
