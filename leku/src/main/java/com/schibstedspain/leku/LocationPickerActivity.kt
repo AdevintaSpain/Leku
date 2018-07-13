@@ -138,6 +138,7 @@ class LocationPickerActivity : AppCompatActivity(),
     private var textWatcher: TextWatcher? = null
     private var apiInteractor: GoogleGeocoderDataSource? = null
     private var isVoiceSearchEnabled = true
+    private lateinit var toolbar: Toolbar
 
     private val searchTextWatcher: TextWatcher
         get() = object : TextWatcher {
@@ -254,11 +255,19 @@ class LocationPickerActivity : AppCompatActivity(),
     }
 
     private fun setUpToolBar() {
-        val toolbar = findViewById<Toolbar>(R.id.map_search_toolbar)
+        toolbar = findViewById(R.id.map_search_toolbar)
         setSupportActionBar(toolbar)
         if (supportActionBar != null) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             supportActionBar!!.setDisplayShowTitleEnabled(false)
+        }
+    }
+
+    private fun switchToolbarVisibility() {
+        if (isPlayServicesAvailable()) {
+            toolbar.visibility = View.VISIBLE
+        } else {
+            toolbar.visibility = View.GONE
         }
     }
 
@@ -356,9 +365,9 @@ class LocationPickerActivity : AppCompatActivity(),
         }
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
-            REQUEST_PLACE_PICKER -> if (resultCode == Activity.RESULT_OK) {
+            REQUEST_PLACE_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
                 val matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                 searchView = findViewById(R.id.leku_search)
                 retrieveLocationFrom(matches[0])
@@ -386,6 +395,7 @@ class LocationPickerActivity : AppCompatActivity(),
     override fun onResume() {
         super.onResume()
         setUpMapIfNeeded()
+        switchToolbarVisibility()
     }
 
     override fun onDestroy() {
@@ -750,7 +760,7 @@ class LocationPickerActivity : AppCompatActivity(),
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,
                 getString(R.string.leku_voice_search_extra_language))
 
-        if (checkPlayServices()) {
+        if (isPlayServicesAvailable()) {
             try {
                 startActivityForResult(intent, REQUEST_PLACE_PICKER)
             } catch (e: ActivityNotFoundException) {
@@ -759,7 +769,7 @@ class LocationPickerActivity : AppCompatActivity(),
         }
     }
 
-    private fun checkPlayServices(): Boolean {
+    private fun isPlayServicesAvailable(): Boolean {
         val googleAPI = GoogleApiAvailability.getInstance()
         val result = googleAPI.isGooglePlayServicesAvailable(applicationContext)
         if (result != ConnectionResult.SUCCESS) {
