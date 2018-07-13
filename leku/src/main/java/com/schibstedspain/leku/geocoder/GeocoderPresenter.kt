@@ -6,8 +6,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.schibstedspain.leku.geocoder.places.GooglePlacesDataSource
 import com.schibstedspain.leku.geocoder.timezone.GoogleTimeZoneDataSource
-import io.reactivex.CompletableSource
 import io.reactivex.Observable
+import io.reactivex.ObservableSource
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
@@ -117,10 +117,17 @@ class GeocoderPresenter @JvmOverloads constructor(
                 .retry(RETRY_COUNT.toLong())
                 .filter { addresses -> !addresses.isEmpty() }
                 .map { addresses -> addresses[0] }
-                .subscribe({ view!!.showLocationInfo(it) },
+                .flatMap { address -> returnTimeZone(address) }
+                .subscribe({ pair: Pair<Address, TimeZone?> -> view!!.showLocationInfo(pair) },
                         { _ -> view!!.showGetLocationInfoError() },
                         { view!!.didGetLocationInfo() })
         compositeDisposable.add(disposable)
+    }
+
+    private fun returnTimeZone(address: Address): ObservableSource<out Pair<Address, TimeZone?>>? {
+        return Observable.just(
+                Pair(address, googleTimeZoneDataSource?.getTimeZone(address.latitude, address.longitude))
+        )
     }
 
     fun enableGooglePlaces() {

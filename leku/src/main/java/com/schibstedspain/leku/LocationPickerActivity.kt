@@ -57,6 +57,8 @@ import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 
 import com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
 import com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE
+import com.google.maps.GeoApiContext
+import com.schibstedspain.leku.geocoder.timezone.GoogleTimeZoneDataSource
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.Locale
@@ -226,8 +228,10 @@ class LocationPickerActivity : AppCompatActivity(),
         val geocoder = Geocoder(this, Locale.getDefault())
         apiInteractor = GoogleGeocoderDataSource(NetworkClient(), AddressBuilder())
         val geocoderRepository = GeocoderRepository(AndroidGeocoderDataSource(geocoder), apiInteractor!!)
+        val timeZoneDataSource = GoogleTimeZoneDataSource(
+                GeoApiContext.Builder().apiKey(GoogleTimeZoneDataSource.getApiKey(this)).build())
         geocoderPresenter = GeocoderPresenter(
-                ReactiveLocationProvider(applicationContext), geocoderRepository, placesDataSource)
+                ReactiveLocationProvider(applicationContext), geocoderRepository, placesDataSource, timeZoneDataSource)
         geocoderPresenter!!.setUI(this)
         progressBar = findViewById(R.id.loading_progress_bar)
         progressBar!!.visibility = View.GONE
@@ -634,13 +638,9 @@ class LocationPickerActivity : AppCompatActivity(),
         setUpDefaultMapLocation()
     }
 
-    override fun showLocationInfo(address: Address) {
-        if (true) {
-            selectedAddress = address
-            setLocationInfo(selectedAddress!!)
-        } else {
-            setLocationEmpty()
-        }
+    override fun showLocationInfo(address: Pair<Address, TimeZone?>) {
+        selectedAddress = address.first
+        setLocationInfo(selectedAddress!!)
     }
 
     private fun setLocationEmpty() {
