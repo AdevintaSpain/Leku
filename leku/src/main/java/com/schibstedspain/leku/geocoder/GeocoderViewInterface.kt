@@ -13,7 +13,7 @@ interface GeocoderViewInterface {
     fun showLoadLocationError()
     fun showLastLocation(location: Location)
     fun didGetLastLocation()
-    fun showLocationInfo(addresses: List<Address>)
+    fun showLocationInfo(address: Address)
     fun willGetLocationInfo(latLng: LatLng)
     fun didGetLocationInfo()
     fun showGetLocationInfoError()
@@ -26,7 +26,7 @@ interface GeocoderViewInterface {
         override fun showLoadLocationError() {}
         override fun showLastLocation(location: Location) {}
         override fun didGetLastLocation() {}
-        override fun showLocationInfo(addresses: List<Address>) {}
+        override fun showLocationInfo(address: Address) {}
         override fun willGetLocationInfo(latLng: LatLng) {}
         override fun didGetLocationInfo() {}
         override fun showGetLocationInfoError() {}

@@ -5,6 +5,8 @@ import android.location.Address
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.schibstedspain.leku.geocoder.places.GooglePlacesDataSource
+import com.schibstedspain.leku.geocoder.timezone.GoogleTimeZoneDataSource
+import io.reactivex.CompletableSource
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
@@ -12,6 +14,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.android.schedulers.AndroidSchedulers
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 private const val RETRY_COUNT = 3
@@ -21,6 +24,7 @@ class GeocoderPresenter @JvmOverloads constructor(
     private val locationProvider: ReactiveLocationProvider,
     private val geocoderRepository: GeocoderRepository,
     private val googlePlacesDataSource: GooglePlacesDataSource? = null,
+    private val googleTimeZoneDataSource: GoogleTimeZoneDataSource? = null,
     private val scheduler: Scheduler = AndroidSchedulers.mainThread()
 ) {
 
@@ -111,6 +115,8 @@ class GeocoderPresenter @JvmOverloads constructor(
         val disposable = geocoderRepository.getFromLocation(latLng)
                 .observeOn(scheduler)
                 .retry(RETRY_COUNT.toLong())
+                .filter { addresses -> !addresses.isEmpty() }
+                .map { addresses -> addresses[0] }
                 .subscribe({ view!!.showLocationInfo(it) },
                         { _ -> view!!.showGetLocationInfoError() },
                         { view!!.didGetLocationInfo() })

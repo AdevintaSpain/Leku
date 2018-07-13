@@ -57,8 +57,10 @@ import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 
 import com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
 import com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE
-import com.google.maps.TimeZoneApi
-import java.util.*
+import java.util.ArrayList
+import java.util.HashMap
+import java.util.Locale
+import java.util.TimeZone
 
 const val LATITUDE = "latitude"
 const val LONGITUDE = "longitude"
@@ -630,9 +632,9 @@ class LocationPickerActivity : AppCompatActivity(),
         setUpDefaultMapLocation()
     }
 
-    override fun showLocationInfo(addresses: List<Address>) {
-        if (addresses.isNotEmpty()) {
-            selectedAddress = addresses[0]
+    override fun showLocationInfo(address: Address) {
+        if (true) {
+            selectedAddress = address
             setLocationInfo(selectedAddress!!)
         } else {
             setLocationEmpty()
