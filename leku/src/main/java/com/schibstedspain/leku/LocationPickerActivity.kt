@@ -75,6 +75,7 @@ const val ENABLE_LOCATION_PERMISSION_REQUEST = "enable_location_permission_reque
 const val ENABLE_GOOGLE_PLACES = "enable_google_places"
 const val POIS_LIST = "pois_list"
 const val LEKU_POI = "leku_poi"
+const val ENABLE_VOICE_SEARCH = "enable_voice_search"
 private const val GEOLOC_API_KEY = "geoloc_api_key"
 private const val LOCATION_KEY = "location_key"
 private const val LAST_LOCATION_QUERY = "last_location_query"
@@ -136,6 +137,7 @@ class LocationPickerActivity : AppCompatActivity(),
     private var currentMarker: Marker? = null
     private var textWatcher: TextWatcher? = null
     private var apiInteractor: GoogleGeocoderDataSource? = null
+    private var isVoiceSearchEnabled = true
     private lateinit var toolbar: Toolbar
 
     private val searchTextWatcher: TextWatcher
@@ -148,22 +150,16 @@ class LocationPickerActivity : AppCompatActivity(),
                     adapter!!.clear()
                     adapter!!.notifyDataSetChanged()
                     showLocationInfoLayout()
-                    if (clearSearchButton != null) {
-                        clearSearchButton!!.visibility = View.INVISIBLE
-                    }
-                    if (searchOption != null) {
-                        searchOption!!.setIcon(R.drawable.leku_ic_mic)
-                    }
+                    clearSearchButton?.visibility = View.INVISIBLE
+                    searchOption?.setIcon(R.drawable.leku_ic_mic)
+                    updateVoiceSearchVisibility()
                 } else {
                     if (charSequence.length > MIN_CHARACTERS) {
                         retrieveLocationWithDebounceTimeFrom(charSequence.toString())
                     }
-                    if (clearSearchButton != null) {
-                        clearSearchButton!!.visibility = View.VISIBLE
-                    }
-                    if (searchOption != null) {
-                        searchOption!!.setIcon(R.drawable.leku_ic_search)
-                    }
+                    clearSearchButton?.visibility = View.VISIBLE
+                    searchOption?.setIcon(R.drawable.leku_ic_search)
+                    searchOption?.isVisible = true
                 }
             }
 
@@ -217,7 +213,7 @@ class LocationPickerActivity : AppCompatActivity(),
         }
     }
 
-    protected fun track(event: TrackEvents) {
+    private fun track(event: TrackEvents) {
         LocationPicker.getTracker().onEventTracked(event)
     }
 
@@ -239,7 +235,7 @@ class LocationPickerActivity : AppCompatActivity(),
         city = findViewById(R.id.city)
         zipCode = findViewById(R.id.zipCode)
         clearSearchButton = findViewById(R.id.leku_clear_search_image)
-        clearSearchButton!!.setOnClickListener { view ->
+        clearSearchButton!!.setOnClickListener { _ ->
             if (searchView != null) {
                 searchView!!.setText("")
             }
@@ -323,6 +319,7 @@ class LocationPickerActivity : AppCompatActivity(),
             getSavedInstanceParams(savedInstanceState)
         }
         updateAddressLayoutVisibility()
+        updateVoiceSearchVisibility()
 
         if (isGooglePlacesEnabled) {
             geocoderPresenter!!.enableGooglePlaces()
@@ -339,6 +336,7 @@ class LocationPickerActivity : AppCompatActivity(),
         val inflater = menuInflater
         inflater.inflate(R.menu.leku_toolbar_menu, menu)
         searchOption = menu.findItem(R.id.action_voice)
+        updateVoiceSearchVisibility()
         return true
     }
 
@@ -602,6 +600,10 @@ class LocationPickerActivity : AppCompatActivity(),
         coordinates!!.visibility = View.VISIBLE
     }
 
+    private fun updateVoiceSearchVisibility() {
+        searchOption?.isVisible = isVoiceSearchEnabled
+    }
+
     override fun showLoadLocationError() {
         progressBar!!.visibility = View.GONE
         changeListResultVisibility(View.GONE)
@@ -637,7 +639,7 @@ class LocationPickerActivity : AppCompatActivity(),
         }
     }
 
-    fun setLocationEmpty() {
+    private fun setLocationEmpty() {
         this.street!!.text = ""
         this.city!!.text = ""
         this.zipCode!!.text = ""
@@ -687,6 +689,9 @@ class LocationPickerActivity : AppCompatActivity(),
         if (savedInstanceState.keySet().contains(ENABLE_LOCATION_PERMISSION_REQUEST)) {
             enableLocationPermissionRequest = savedInstanceState.getBoolean(ENABLE_LOCATION_PERMISSION_REQUEST)
         }
+        if (savedInstanceState.keySet().contains(ENABLE_VOICE_SEARCH)) {
+            isVoiceSearchEnabled = savedInstanceState.getBoolean(ENABLE_VOICE_SEARCH, true)
+        }
     }
 
     private fun getTransitionBundleParams(transitionBundle: Bundle) {
@@ -718,6 +723,9 @@ class LocationPickerActivity : AppCompatActivity(),
         }
         if (transitionBundle.keySet().contains(ENABLE_GOOGLE_PLACES)) {
             isGooglePlacesEnabled = transitionBundle.getBoolean(ENABLE_GOOGLE_PLACES, false)
+        }
+        if (transitionBundle.keySet().contains(ENABLE_VOICE_SEARCH)) {
+            isVoiceSearchEnabled = transitionBundle.getBoolean(ENABLE_VOICE_SEARCH, true)
         }
     }
 
@@ -982,7 +990,7 @@ class LocationPickerActivity : AppCompatActivity(),
             for (lekuPoi in poisList!!) {
                 val location = lekuPoi.location
                 val marker = addPoiMarker(LatLng(location.latitude, location.longitude),
-                        lekuPoi.title, lekuPoi.address!!)
+                        lekuPoi.title, lekuPoi.address)
                 lekuPoisMarkersMap!![marker.id] = lekuPoi
             }
 
@@ -1056,7 +1064,7 @@ class LocationPickerActivity : AppCompatActivity(),
         val view = this.currentFocus
         if (view != null) {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm?.hideSoftInputFromWindow(view.windowToken, 0)
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
 
@@ -1070,6 +1078,7 @@ class LocationPickerActivity : AppCompatActivity(),
         private var lekuPois: List<LekuPoi>? = null
         private var geolocApiKey: String? = null
         private var googlePlacesEnabled = false
+        private var voiceSearchEnabled = true
 
         fun withLocation(latitude: Double, longitude: Double): Builder {
             this.locationLatitude = latitude
@@ -1130,6 +1139,11 @@ class LocationPickerActivity : AppCompatActivity(),
             return this
         }
 
+        fun withVoiceSearchHidden(): Builder {
+            this.voiceSearchEnabled = false
+            return this
+        }
+
         fun build(context: Context): Intent {
             val intent = Intent(context, LocationPickerActivity::class.java)
 
@@ -1154,6 +1168,7 @@ class LocationPickerActivity : AppCompatActivity(),
                 intent.putExtra(GEOLOC_API_KEY, geolocApiKey)
             }
             intent.putExtra(ENABLE_GOOGLE_PLACES, googlePlacesEnabled)
+            intent.putExtra(ENABLE_VOICE_SEARCH, voiceSearchEnabled)
 
             return intent
         }
