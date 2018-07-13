@@ -53,13 +53,12 @@ import com.schibstedspain.leku.geocoder.api.NetworkClient
 import com.schibstedspain.leku.geocoder.places.GooglePlacesDataSource
 import com.schibstedspain.leku.permissions.PermissionUtils
 import com.schibstedspain.leku.tracker.TrackEvents
-import java.util.ArrayList
-import java.util.HashMap
-import java.util.Locale
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 
 import com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
 import com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE
+import com.google.maps.TimeZoneApi
+import java.util.*
 
 const val LATITUDE = "latitude"
 const val LONGITUDE = "longitude"
@@ -73,6 +72,7 @@ const val BACK_PRESSED_RETURN_OK = "back_pressed_return_ok"
 const val ENABLE_SATELLITE_VIEW = "enable_satellite_view"
 const val ENABLE_LOCATION_PERMISSION_REQUEST = "enable_location_permission_request"
 const val ENABLE_GOOGLE_PLACES = "enable_google_places"
+const val ENABLE_GOOGLE_TIME_ZONE = "enable_google_time_zone"
 const val POIS_LIST = "pois_list"
 const val LEKU_POI = "leku_poi"
 private const val GEOLOC_API_KEY = "geoloc_api_key"
@@ -130,12 +130,14 @@ class LocationPickerActivity : AppCompatActivity(),
     private var enableSatelliteView = true
     private var enableLocationPermissionRequest = true
     private var isGooglePlacesEnabled = false
+    private var isGoogleTimeZoneEnabled = false
     private var searchZone: String? = null
     private var poisList: List<LekuPoi>? = null
     private var lekuPoisMarkersMap: MutableMap<String, LekuPoi>? = null
     private var currentMarker: Marker? = null
     private var textWatcher: TextWatcher? = null
     private var apiInteractor: GoogleGeocoderDataSource? = null
+    private lateinit var timeZone: TimeZone
 
     private val searchTextWatcher: TextWatcher
         get() = object : TextWatcher {
@@ -665,6 +667,9 @@ class LocationPickerActivity : AppCompatActivity(),
         if (savedInstanceState.keySet().contains(ENABLE_GOOGLE_PLACES)) {
             isGooglePlacesEnabled = savedInstanceState.getBoolean(ENABLE_GOOGLE_PLACES, false)
         }
+        if (savedInstanceState.keySet().contains(ENABLE_GOOGLE_TIME_ZONE)) {
+            isGoogleTimeZoneEnabled = savedInstanceState.getBoolean(ENABLE_GOOGLE_TIME_ZONE, false)
+        }
         if (savedInstanceState.keySet().contains(SEARCH_ZONE)) {
             searchZone = savedInstanceState.getString(SEARCH_ZONE)
         }
@@ -708,6 +713,9 @@ class LocationPickerActivity : AppCompatActivity(),
         }
         if (transitionBundle.keySet().contains(ENABLE_GOOGLE_PLACES)) {
             isGooglePlacesEnabled = transitionBundle.getBoolean(ENABLE_GOOGLE_PLACES, false)
+        }
+        if (transitionBundle.keySet().contains(ENABLE_GOOGLE_TIME_ZONE)) {
+            isGoogleTimeZoneEnabled = transitionBundle.getBoolean(ENABLE_GOOGLE_TIME_ZONE, false)
         }
     }
 
@@ -1060,6 +1068,7 @@ class LocationPickerActivity : AppCompatActivity(),
         private var lekuPois: List<LekuPoi>? = null
         private var geolocApiKey: String? = null
         private var googlePlacesEnabled = false
+        private var googleTimeZoneEnabled = false
 
         fun withLocation(latitude: Double, longitude: Double): Builder {
             this.locationLatitude = latitude
@@ -1120,6 +1129,11 @@ class LocationPickerActivity : AppCompatActivity(),
             return this
         }
 
+        fun withGoogleTimeZoneEnabled(): Builder {
+            this.googleTimeZoneEnabled = true
+            return this
+        }
+
         fun build(context: Context): Intent {
             val intent = Intent(context, LocationPickerActivity::class.java)
 
@@ -1144,6 +1158,7 @@ class LocationPickerActivity : AppCompatActivity(),
                 intent.putExtra(GEOLOC_API_KEY, geolocApiKey)
             }
             intent.putExtra(ENABLE_GOOGLE_PLACES, googlePlacesEnabled)
+            intent.putExtra(ENABLE_GOOGLE_TIME_ZONE, googleTimeZoneEnabled)
 
             return intent
         }
