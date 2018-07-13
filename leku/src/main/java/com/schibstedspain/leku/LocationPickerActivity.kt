@@ -292,7 +292,8 @@ class LocationPickerActivity : AppCompatActivity(),
 
     private fun setUpFloatingButtons() {
         val btnMyLocation = findViewById<FloatingActionButton>(R.id.btnFloatingAction)
-        btnMyLocation.setOnClickListener { v ->
+        btnMyLocation.setOnClickListener { _ ->
+            checkLocationPermission()
             geocoderPresenter!!.getLastKnownLocation()
             track(TrackEvents.ON_LOCALIZED_ME)
         }
