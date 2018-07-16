@@ -257,7 +257,7 @@ class LocationPickerActivity : AppCompatActivity(),
         listResult = findViewById(R.id.resultlist)
         adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, locationNameList)
         listResult!!.adapter = adapter
-        listResult!!.setOnItemClickListener { adapterView, view, i, l ->
+        listResult!!.setOnItemClickListener { _, _, i, _ ->
             setNewLocation(locationList[i])
             changeListResultVisibility(View.GONE)
             closeKeyboard()
@@ -283,7 +283,7 @@ class LocationPickerActivity : AppCompatActivity(),
 
     private fun setUpSearchView() {
         searchView = findViewById(R.id.leku_search)
-        searchView!!.setOnEditorActionListener { v, actionId, event ->
+        searchView!!.setOnEditorActionListener { v, actionId, _ ->
             var handled = false
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 retrieveLocationFrom(v.text.toString())
