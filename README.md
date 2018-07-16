@@ -156,8 +156,8 @@ Then you have setup the call to start this activity wherever you like, always as
 You can set a default location, search zone and other customizable parameters to load when you start the activity.
 You only need to use the Builder setters like:
 
-```java
-Intent intent = new LocationPickerActivity.Builder()
+```kotlin
+val locationPickerIntent = LocationPickerActivity.Builder()
     .withLocation(41.4036299, 2.1743558)
     .withGeolocApiKey("<PUT API KEY HERE>")
     .withSearchZone("es_ES")
@@ -166,40 +166,54 @@ Intent intent = new LocationPickerActivity.Builder()
     .withCityHidden()
     .withZipCodeHidden()
     .withSatelliteViewHidden()
+    .withGooglePlacesEnabled()
+    .withGoogleTimeZoneEnabled()
     .withVoiceSearchHidden()
-    .build(getApplicationContext());
+    .build(applicationContext)
 
-startActivityForResult(intent, 1);
+startActivityForResult(locationPickerIntent, MAP_BUTTON_REQUEST_CODE)
 ```
 
 And add the response code from that activity:
 
-```java
-
-@Override
-protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (requestCode == 1) {
-        if(resultCode == RESULT_OK){
-            double latitude = data.getDoubleExtra(LocationPickerActivity.LATITUDE, 0);
-            Log.d("LATITUDE****", String.valueOf(latitude));
-            double longitude = data.getDoubleExtra(LocationPickerActivity.LONGITUDE, 0);
-            Log.d("LONGITUDE****", String.valueOf(longitude));
-            String address = data.getStringExtra(LocationPickerActivity.LOCATION_ADDRESS);
-            Log.d("ADDRESS****", String.valueOf(address));
-            String postalcode = data.getStringExtra(LocationPickerActivity.ZIPCODE);
-            Log.d("POSTALCODE****", String.valueOf(postalcode));
-            Bundle bundle = data.getBundleExtra(LocationPickerActivity.TRANSITION_BUNDLE);
-            Log.d("BUNDLE TEXT****", bundle.getString("test"));
-            Address fullAddress = data.getParcelableExtra(LocationPickerActivity.ADDRESS);
-            if(fullAddress != null)  
-              Log.d("FULL ADDRESS****", fullAddress.toString());
-        }
-        if (resultCode == RESULT_CANCELED) {
-            //Write your code if there's no result
+```kotlin
+override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    if (resultCode == Activity.RESULT_OK && data != null) {
+        Log.d("RESULT****", "OK")
+        if (requestCode == 1) {
+            val latitude = data.getDoubleExtra(LATITUDE, 0.0)
+            Log.d("LATITUDE****", latitude.toString())
+            val longitude = data.getDoubleExtra(LONGITUDE, 0.0)
+            Log.d("LONGITUDE****", longitude.toString())
+            val address = data.getStringExtra(LOCATION_ADDRESS)
+            Log.d("ADDRESS****", address.toString())
+            val postalcode = data.getStringExtra(ZIPCODE)
+            Log.d("POSTALCODE****", postalcode.toString())
+            val bundle = data.getBundleExtra(TRANSITION_BUNDLE)
+            Log.d("BUNDLE TEXT****", bundle.getString("test"))
+            val fullAddress = data.getParcelableExtra<Address>(ADDRESS)
+            if (fullAddress != null) {
+                Log.d("FULL ADDRESS****", fullAddress.toString())
+            }
+            val timeZoneId = data.getStringExtra(TIME_ZONE_ID)
+            Log.d("TIME ZONE ID****", timeZoneId)
+            val timeZoneDisplayName = data.getStringExtra(TIME_ZONE_DISPLAY_NAME)
+            Log.d("TIME ZONE NAME****", timeZoneDisplayName)
+        } else if (requestCode == 2) {
+            val latitude = data.getDoubleExtra(LATITUDE, 0.0)
+            Log.d("LATITUDE****", latitude.toString())
+            val longitude = data.getDoubleExtra(LONGITUDE, 0.0)
+            Log.d("LONGITUDE****", longitude.toString())
+            val address = data.getStringExtra(LOCATION_ADDRESS)
+            Log.d("ADDRESS****", address.toString())
+            val lekuPoi = data.getParcelableExtra<LekuPoi>(LEKU_POI)
+            Log.d("LekuPoi****", lekuPoi.toString())
         }
     }
+    if (resultCode == Activity.RESULT_CANCELED) {
+        Log.d("RESULT****", "CANCELLED")
+    }
 }
-
 ```
 
 That's all folks!
@@ -228,10 +242,10 @@ Leku now supports Google Places queries using the search box. If you want to ena
 
 3. Enable it when instantiating LocationPickerActivity by adding `.withGooglePlacesEnabled()`:
 
-```java
-Intent intent = new LocationPickerActivity.Builder()
+```kotlin
+val locationPickerIntent = LocationPickerActivity.Builder()
     **.withGooglePlacesEnabled()**
-    .build(getApplicationContext());
+    .build(applicationContext)
 ```
 
 And you are good to go. :)
@@ -266,17 +280,17 @@ I encourage you to add these languages to this component, please fork this proje
 If you need to send and receive a param through the LocationPickerActivity you can do it.
 You only need to add an "Extra" param to the intent like:
 
-```java
-Intent intent = new Intent(getApplicationContext(), LocationPickerActivity.class);
-intent.putExtra("test", "this is a test");
-startActivityForResult(intent, 1);
+```kotlin
+val locationPickerIntent = LocationPickerActivity.Builder().build(applicationContext)
+locationPickerIntent.putExtra("test", "this is a test")
+startActivityForResult(locationPickerIntent, MAP_BUTTON_REQUEST_CODE)
 ```
 
 And parse it on onActivityResult callback:
 
-```java
-Bundle bundle = data.getBundleExtra(LocationPickerActivity.TRANSITION_BUNDLE);
-String test = bundle.getString("test");
+```kotlin
+val bundle = data.getBundleExtra(LocationPickerActivity.TRANSITION_BUNDLE)
+val test = bundle.getString("test")
 ```
 
 #### Customization
@@ -299,56 +313,56 @@ This library uses AppCompat, so should use Theme.AppCompat or descendant in mani
 It's possible to hide or show some of the information shown after selecting a location.
 Using tha bundle parameter **LocationPickerActivity.LAYOUTS_TO_HIDE** you can change the visibility of the street, city or the zipcode.
 
-```java
-intent.putExtra(LocationPickerActivity.LAYOUTS_TO_HIDE, "street|city|zipcode");
+```kotlin
+intent.putExtra(LocationPickerActivity.LAYOUTS_TO_HIDE, "street|city|zipcode")
 ```
 
 ##### Search Zone
 
 By default the search will be restricted to a zone determined by your default locale. If you want to force the search zone you can do it by adding this line with the locale preferred:
 
-```java
-intent.putExtra(LocationPickerActivity.SEARCH_ZONE, "es_ES");
+```kotlin
+intent.putExtra(LocationPickerActivity.SEARCH_ZONE, "es_ES")
 ```
 
 ##### Force return location on back pressed
 
 If you want to force that when the user clicks on back button it returns the location you can use this parameter (note: is only enabled if you don't provide a location):
 
-```java
-intent.putExtra(LocationPickerActivity.BACK_PRESSED_RETURN_OK, true);
+```kotlin
+intent.putExtra(LocationPickerActivity.BACK_PRESSED_RETURN_OK, true)
 ```
 
 ##### Enable/Disable the Satellite view
 
 If you want to disable the satellite view button you can use this parameter (note: the satellite view is enabled by default):
 
-```java
-intent.putExtra(LocationPickerActivity.ENABLE_SATELLITE_VIEW, false);
+```kotlin
+intent.putExtra(LocationPickerActivity.ENABLE_SATELLITE_VIEW, false)
 ```
 
 ##### Enable/Disable requesting location permissions
 
 If you want to disable asking for location permissions (and prevent any location requests)
 
-```java
-intent.putExtra(LocationPickerActivity.ENABLE_LOCATION_PERMISSION_REQUEST, false);
+```kotlin
+intent.putExtra(LocationPickerActivity.ENABLE_LOCATION_PERMISSION_REQUEST, false)
 ```
 
 ##### Enable/Disable voice search
 
 Now you can hide the voice search option on the search view
 
-```java
-intent.putExtra(LocationPickerActivity.ENABLE_VOICE_SEARCH, false);
+```kotlin
+intent.putExtra(LocationPickerActivity.ENABLE_VOICE_SEARCH, false)
 ```
 
 #### Tracking
 
 Optionally, you can set a tracking events listener. Implement LocationPickerTracker interface, and set it in your Application class as follows:
 
-```java
-LocationPicker.setTracker(new <<YourOwnTracker implementing LocationPickerTracker>>());
+```kotlin
+LocationPicker.tracker = <<YourOwnTracker implementing LocationPickerTracker>>()
 ```
 Available tracking events are:
 
@@ -395,42 +409,42 @@ Returns a ***List`<`Address`>`*** based on a latitude and a longitude.
 
 To use it first you need to implement the GeocoderViewInterface interface in your class like:
 
-```java
-public class LocationPickerActivity extends AppCompatActivity implements GeocoderViewInterface {
+```kotlin
+class LocationPickerActivity : AppCompatActivity(), GeocoderViewInterface {
 ```
 
 Then you need to setup the presenter:
 
-```java
-private GeocoderPresenter geocoderPresenter;
+```kotlin
+private val geocoderPresenter: GeocoderPresenter
 
-@Override protected void onCreate(Bundle savedInstanceState) {
-  super.onCreate(savedInstanceState);
+override fun onCreate(savedInstanceState: Bundle?) {
+  super.onCreate(savedInstanceState)
   ***
-    GooglePlacesDataSource placesDataSource = new GooglePlacesDataSource(Places.getGeoDataClient(this, null));
-    Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-    apiInteractor = new GoogleGeocoderDataSource(new NetworkClient(), new AddressBuilder());
-    GeocoderRepository geocoderRepository = new GeocoderRepository(new AndroidGeocoderDataSource(geocoder), apiInteractor);
-    geocoderPresenter = new GeocoderPresenter(new ReactiveLocationProvider(getApplicationContext()), geocoderRepository, placesDataSource);
-    geocoderPresenter.setUI(this);
+  val placesDataSource = GooglePlacesDataSource(Places.getGeoDataClient(this, null))
+  val geocoder = Geocoder(this, Locale.getDefault())
+  apiInteractor = GoogleGeocoderDataSource(NetworkClient(), AddressBuilder())
+  val geocoderRepository = GeocoderRepository(AndroidGeocoderDataSource(geocoder), apiInteractor!!)
+  val timeZoneDataSource = GoogleTimeZoneDataSource(
+          GeoApiContext.Builder().apiKey(GoogleTimeZoneDataSource.getApiKey(this)).build())
+  geocoderPresenter = GeocoderPresenter(
+          ReactiveLocationProvider(applicationContext), geocoderRepository, placesDataSource, timeZoneDataSource)
+  geocoderPresenter!!.setUI(this)
   ***
 }
 ```
 
 And besides filling the interface methods you have to add some things to your activity/fragment lifecycle to ensure that there are no leaks.
 
-```java
-
-@Override
-protected void onStart() {
-    super.onStart();
-    geocoderPresenter.setUI(this);
+```kotlin
+override fun onStart() {
+    super.onStart()
+    geocoderPresenter!!.setUI(this)
 }
 
-@Override
-protected void onStop() {
-    geocoderPresenter.stop();
-    super.onStop();
+override fun onStop() {
+    geocoderPresenter!!.stop()
+    super.onStop()
 }
 ```
 
