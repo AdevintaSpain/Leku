@@ -18,6 +18,8 @@ import com.schibstedspain.leku.ADDRESS
 import com.schibstedspain.leku.ZIPCODE
 import com.schibstedspain.leku.TRANSITION_BUNDLE
 import com.schibstedspain.leku.LEKU_POI
+import com.schibstedspain.leku.TIME_ZONE_ID
+import com.schibstedspain.leku.TIME_ZONE_DISPLAY_NAME
 import com.schibstedspain.leku.LekuPoi
 import com.schibstedspain.leku.LocationPickerActivity
 import com.schibstedspain.leku.LocationPicker
@@ -68,6 +70,7 @@ class MainActivity : AppCompatActivity() {
                     //.withZipCodeHidden()
                     //.withSatelliteViewHidden()
                     //.withGooglePlacesEnabled()
+                    .withGoogleTimeZoneEnabled()
                     //.withVoiceSearchHidden()
                     .build(applicationContext)
 
@@ -108,6 +111,10 @@ class MainActivity : AppCompatActivity() {
                 if (fullAddress != null) {
                     Log.d("FULL ADDRESS****", fullAddress.toString())
                 }
+                val timeZoneId = data.getStringExtra(TIME_ZONE_ID)
+                Log.d("TIME ZONE ID****", timeZoneId)
+                val timeZoneDisplayName = data.getStringExtra(TIME_ZONE_DISPLAY_NAME)
+                Log.d("TIME ZONE NAME****", timeZoneDisplayName)
             } else if (requestCode == 2) {
                 val latitude = data.getDoubleExtra(LATITUDE, 0.0)
                 Log.d("LATITUDE****", latitude.toString())

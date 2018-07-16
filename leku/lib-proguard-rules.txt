@@ -23,3 +23,15 @@
 -dontwarn pl.charmas.android.reactivelocation2.**
 -keep interface pl.charmas.android.reactivelocation2.** { *; }
 -keep class pl.charmas.android.reactivelocation2.** { *; }
+
+# Google Maps
+-keep class com.google.maps.** { *; }
+-dontwarn com.google.maps.**
+-keep class org.joda.time.** { *; }
+-dontwarn org.joda.time.**
+-keep class org.slf4j.** { *; }
+-dontwarn org.slf4j.**
+-keep class okhttp3.** { *; }
+-dontwarn okhttp3.**
+-keep class okio.** { *; }
+-dontwarn okio.**

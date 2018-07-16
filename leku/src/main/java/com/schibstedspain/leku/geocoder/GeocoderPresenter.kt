@@ -5,13 +5,16 @@ import android.location.Address
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.schibstedspain.leku.geocoder.places.GooglePlacesDataSource
+import com.schibstedspain.leku.geocoder.timezone.GoogleTimeZoneDataSource
 import io.reactivex.Observable
+import io.reactivex.ObservableSource
 import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.android.schedulers.AndroidSchedulers
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
+import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 
 private const val RETRY_COUNT = 3
@@ -21,6 +24,7 @@ class GeocoderPresenter @JvmOverloads constructor(
     private val locationProvider: ReactiveLocationProvider,
     private val geocoderRepository: GeocoderRepository,
     private val googlePlacesDataSource: GooglePlacesDataSource? = null,
+    private val googleTimeZoneDataSource: GoogleTimeZoneDataSource? = null,
     private val scheduler: Scheduler = AndroidSchedulers.mainThread()
 ) {
 
@@ -111,10 +115,19 @@ class GeocoderPresenter @JvmOverloads constructor(
         val disposable = geocoderRepository.getFromLocation(latLng)
                 .observeOn(scheduler)
                 .retry(RETRY_COUNT.toLong())
-                .subscribe({ view!!.showLocationInfo(it) },
+                .filter { addresses -> !addresses.isEmpty() }
+                .map { addresses -> addresses[0] }
+                .flatMap { address -> returnTimeZone(address) }
+                .subscribe({ pair: Pair<Address, TimeZone?> -> view!!.showLocationInfo(pair) },
                         { _ -> view!!.showGetLocationInfoError() },
                         { view!!.didGetLocationInfo() })
         compositeDisposable.add(disposable)
+    }
+
+    private fun returnTimeZone(address: Address): ObservableSource<out Pair<Address, TimeZone?>>? {
+        return Observable.just(
+                Pair(address, googleTimeZoneDataSource?.getTimeZone(address.latitude, address.longitude))
+        ).onErrorReturn { Pair(address, null) }
     }
 
     fun enableGooglePlaces() {

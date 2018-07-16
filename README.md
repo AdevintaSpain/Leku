@@ -54,6 +54,7 @@ Component library for Android that uses Google Maps and returns a latitude, long
 * Search by text
 * Geo Location by GPS, network
 * Google Places (optional)
+* Google Time Zone API (optional)
 * Pick locations using "touch" gestures on the map
 * Customization (Theme and layout)
 * Events Tracking
@@ -65,7 +66,7 @@ Component library for Android that uses Google Maps and returns a latitude, long
 ### Prerequisites
 
 minSdkVersion >= 15<br/>
-Google Play Services = 12.0.1<br/>
+Google Play Services = 15.0.1<br/>
 Support Library = 27.1.1
 
 ### Download
@@ -82,14 +83,14 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.schibstedspain.android:leku:4.0.2'
+    implementation 'com.schibstedspain.android:leku:5.0.0'
 }
 ```
 
-Alternatively, if you are using a different version of Google Play Services than `11.8.0` use this instead:
+Alternatively, if you are using a different version of Google Play Services than `15.0.1` use this instead:
 
 ```groovy
-implementation ('com.schibstedspain.android:leku:4.0.2') {
+implementation ('com.schibstedspain.android:leku:5.0.0') {
     exclude group: 'com.google.android.gms'
     exclude group: 'com.android.support'
 }
@@ -501,7 +502,7 @@ For bugs, questions and discussions please use the [Github Issues](https://githu
 License
 -------
 
-Copyright 2016 Schibsted Classified Media Spain S.L.
+Copyright 2016-2018 Schibsted Classified Media Spain S.L.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
