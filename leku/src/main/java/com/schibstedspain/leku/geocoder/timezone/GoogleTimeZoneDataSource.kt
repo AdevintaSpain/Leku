@@ -9,7 +9,6 @@ import java.io.IOException
 import java.util.TimeZone
 import android.content.pm.PackageManager
 
-
 class GoogleTimeZoneDataSource(private val geoApiContext: GeoApiContext) {
 
     companion object {

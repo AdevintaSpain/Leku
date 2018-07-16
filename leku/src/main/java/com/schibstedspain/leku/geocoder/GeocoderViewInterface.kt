@@ -4,7 +4,7 @@ import android.location.Address
 import android.location.Location
 
 import com.google.android.gms.maps.model.LatLng
-import java.util.*
+import java.util.TimeZone
 
 interface GeocoderViewInterface {
     fun willLoadLocation()
