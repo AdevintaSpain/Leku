@@ -110,6 +110,10 @@ twitterPlugin {
   message = "New Leku version ${versionMajor}.${versionMinor}.${versionPatch} available for download. Check out the details at https://github.com/SchibstedSpain/Leku @SchibstedEng #Android #library #AndroidDev"
 }
 
+tasks.withType(Javadoc).all {
+  enabled = false
+}
+
 def getVersionMajor() {
   def content = file('../version.properties')
 
