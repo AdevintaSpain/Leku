@@ -14,7 +14,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.android.schedulers.AndroidSchedulers
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
-import java.util.*
+import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 
 private const val RETRY_COUNT = 3
@@ -127,7 +127,7 @@ class GeocoderPresenter @JvmOverloads constructor(
     private fun returnTimeZone(address: Address): ObservableSource<out Pair<Address, TimeZone?>>? {
         return Observable.just(
                 Pair(address, googleTimeZoneDataSource?.getTimeZone(address.latitude, address.longitude))
-        )
+        ).onErrorReturn { Pair(address, null) }
     }
 
     fun enableGooglePlaces() {

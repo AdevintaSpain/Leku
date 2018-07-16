@@ -80,6 +80,8 @@ const val ENABLE_GOOGLE_TIME_ZONE = "enable_google_time_zone"
 const val POIS_LIST = "pois_list"
 const val LEKU_POI = "leku_poi"
 const val ENABLE_VOICE_SEARCH = "enable_voice_search"
+const val TIME_ZONE_ID = "time_zone_id"
+const val TIME_ZONE_DISPLAY_NAME = "time_zone_display_name"
 private const val GEOLOC_API_KEY = "geoloc_api_key"
 private const val LOCATION_KEY = "location_key"
 private const val LAST_LOCATION_QUERY = "last_location_query"
@@ -640,6 +642,9 @@ class LocationPickerActivity : AppCompatActivity(),
 
     override fun showLocationInfo(address: Pair<Address, TimeZone?>) {
         selectedAddress = address.first
+        if (address.second != null) {
+            timeZone = address.second!!
+        }
         setLocationInfo(selectedAddress!!)
     }
 
@@ -925,6 +930,10 @@ class LocationPickerActivity : AppCompatActivity(),
                     returnIntent.putExtra(ZIPCODE, zipCode!!.text)
                 }
                 returnIntent.putExtra(ADDRESS, selectedAddress)
+                if (isGoogleTimeZoneEnabled) {
+                    returnIntent.putExtra(TIME_ZONE_ID, timeZone.id)
+                    returnIntent.putExtra(TIME_ZONE_DISPLAY_NAME, timeZone.displayName)
+                }
                 returnIntent.putExtra(TRANSITION_BUNDLE, bundle.getBundle(TRANSITION_BUNDLE))
                 setResult(Activity.RESULT_OK, returnIntent)
                 track(TrackEvents.RESULT_OK)

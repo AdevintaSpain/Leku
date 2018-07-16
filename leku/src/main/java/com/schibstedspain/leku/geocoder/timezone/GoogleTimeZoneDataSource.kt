@@ -18,7 +18,7 @@ class GoogleTimeZoneDataSource(private val geoApiContext: GeoApiContext) {
                 val appInfo = context.packageManager.getApplicationInfo(
                         context.packageName, PackageManager.GET_META_DATA)
                 if (appInfo.metaData != null) {
-                    return appInfo.metaData.getString("com.google.android.maps.v2.API_KEY")
+                    return appInfo.metaData.getString("com.google.android.geo.API_KEY")
                 }
             } catch (ignored: PackageManager.NameNotFoundException) {
             }
