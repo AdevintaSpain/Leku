@@ -317,7 +317,7 @@ class LocationPickerActivity : AppCompatActivity(),
                             R.drawable.leku_ic_satellite_on)
             }
         }
-        btnSatellite.visibility = if (enableSatelliteView) View.VISIBLE else View.GONE
+        if (enableSatelliteView) btnSatellite.show() else btnSatellite.hide()
     }
 
     private fun updateValuesFromBundle(savedInstanceState: Bundle?) {

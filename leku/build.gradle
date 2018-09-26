@@ -12,12 +12,12 @@ group = 'com.schibstedspain.android'
 version = "${versionMajor}.${versionMinor}.${versionPatch}"
 
 android {
-  compileSdkVersion 27
+  compileSdkVersion 28
   resourcePrefix 'leku_'
 
   defaultConfig {
     minSdkVersion 15
-    targetSdkVersion 27
+    targetSdkVersion 28
     versionName version
     multiDexEnabled true
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -43,6 +43,9 @@ android {
   packagingOptions {
     exclude 'protobuf.meta'
   }
+  lintOptions {
+    disable 'ObsoleteLintCustomCheck'
+  }
 }
 
 detekt {
@@ -62,14 +65,20 @@ ktlint {
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-  def supportVersion = '27.1.1'
+  def supportVersion = '28.0.0'
   implementation "com.android.support:appcompat-v7:$supportVersion"
   implementation "com.android.support:design:$supportVersion"
 
   def playServicesVersion = '15.0.1'
-  implementation "com.google.android.gms:play-services-maps:$playServicesVersion"
-  implementation "com.google.android.gms:play-services-location:$playServicesVersion"
-  implementation "com.google.android.gms:play-services-places:$playServicesVersion"
+  implementation ("com.google.android.gms:play-services-maps:$playServicesVersion") {
+	  exclude group: "com.android.support"
+  }
+  implementation ("com.google.android.gms:play-services-location:$playServicesVersion"){
+	  exclude group: "com.android.support"
+  }
+  implementation ("com.google.android.gms:play-services-places:$playServicesVersion"){
+	  exclude group: "com.android.support"
+  }
 
   implementation "com.google.maps:google-maps-services:0.2.9"
 
