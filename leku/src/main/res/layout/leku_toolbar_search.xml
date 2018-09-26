@@ -34,6 +34,7 @@
         android:hint="@string/leku_search_hint"
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
+        tools:ignore="Autofill"
         />
 
     <ImageView
