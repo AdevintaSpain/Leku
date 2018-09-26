@@ -32,8 +32,10 @@ class GoogleGeocoderDataSource(
             try {
                 val result = networkClient.requestFromLocationName(String.format(Locale.ENGLISH,
                         QUERY_REQUEST, query.trim { it <= ' ' }, apiKey))
-                val addresses = addressBuilder.parseResult(result!!)
-                subscriber.onNext(addresses)
+                if (result != null) {
+                    val addresses = addressBuilder.parseResult(result)
+                    subscriber.onNext(addresses)
+                }
                 subscriber.onComplete()
             } catch (e: JSONException) {
                 subscriber.onError(e)
@@ -50,8 +52,10 @@ class GoogleGeocoderDataSource(
                 val result = networkClient.requestFromLocationName(String.format(Locale.ENGLISH,
                         QUERY_REQUEST_WITH_RECTANGLE, query.trim { it <= ' ' }, apiKey, lowerLeft.latitude,
                         lowerLeft.longitude, upperRight.latitude, upperRight.longitude))
-                val addresses = addressBuilder.parseResult(result!!)
-                subscriber.onNext(addresses)
+                if (result != null) {
+                    val addresses = addressBuilder.parseResult(result)
+                    subscriber.onNext(addresses)
+                }
                 subscriber.onComplete()
             } catch (e: JSONException) {
                 subscriber.onError(e)
@@ -67,8 +71,10 @@ class GoogleGeocoderDataSource(
             try {
                 val result = networkClient.requestFromLocationName(String.format(Locale.ENGLISH,
                         QUERY_LAT_LONG, latitude, longitude, apiKey))
-                val addresses = addressBuilder.parseResult(result!!)
-                subscriber.onNext(addresses)
+                if (result != null) {
+                    val addresses = addressBuilder.parseResult(result)
+                    subscriber.onNext(addresses)
+                }
                 subscriber.onComplete()
             } catch (e: JSONException) {
                 subscriber.onError(e)
