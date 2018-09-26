@@ -43,6 +43,9 @@ android {
   packagingOptions {
     exclude 'protobuf.meta'
   }
+  lintOptions {
+    disable 'ObsoleteLintCustomCheck'
+  }
 }
 
 detekt {
