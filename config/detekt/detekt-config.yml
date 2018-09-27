@@ -20,7 +20,7 @@ test-pattern: # Configure exclusions for test sources
     - 'TooManyFunctions'
 
 build:
-  maxIssues: 70
+  maxIssues: 60
   weights:
     # complexity: 2
     # LongParameterList: 1
