@@ -112,9 +112,13 @@ class MainActivity : AppCompatActivity() {
                     Log.d("FULL ADDRESS****", fullAddress.toString())
                 }
                 val timeZoneId = data.getStringExtra(TIME_ZONE_ID)
-                Log.d("TIME ZONE ID****", timeZoneId)
+                if (timeZoneId != null) {
+                    Log.d("TIME ZONE ID****", timeZoneId)
+                }
                 val timeZoneDisplayName = data.getStringExtra(TIME_ZONE_DISPLAY_NAME)
-                Log.d("TIME ZONE NAME****", timeZoneDisplayName)
+                if (timeZoneDisplayName != null) {
+                    Log.d("TIME ZONE NAME****", timeZoneDisplayName)
+                }
             } else if (requestCode == 2) {
                 val latitude = data.getDoubleExtra(LATITUDE, 0.0)
                 Log.d("LATITUDE****", latitude.toString())

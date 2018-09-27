@@ -930,7 +930,7 @@ class LocationPickerActivity : AppCompatActivity(),
                     returnIntent.putExtra(ZIPCODE, zipCode!!.text)
                 }
                 returnIntent.putExtra(ADDRESS, selectedAddress)
-                if (isGoogleTimeZoneEnabled) {
+                if (isGoogleTimeZoneEnabled && ::timeZone.isInitialized) {
                     returnIntent.putExtra(TIME_ZONE_ID, timeZone.id)
                     returnIntent.putExtra(TIME_ZONE_DISPLAY_NAME, timeZone.displayName)
                 }

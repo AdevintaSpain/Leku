@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.net.URL
+import java.net.UnknownHostException
 import javax.net.ssl.HttpsURLConnection
 
 private const val REPONSE_MAX_LENGTH = 1024
@@ -32,6 +33,7 @@ class NetworkClient {
             if (stream != null) {
                 result = readStream(stream, REPONSE_MAX_LENGTH)
             }
+        } catch (ignore: UnknownHostException) {
         } catch (ioException: IOException) {
             throw NetworkException(ioException)
         } finally {
