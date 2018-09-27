@@ -3,5 +3,5 @@
   <string name="google_maps_key"></string>
   <string name="launch_map_picker" translatable="false">LAUNCH MAP LOCATION PICKER ACTIVITY</string>
   <string name="launch_map_picker_with_pois" translatable="false">LAUNCH MAP WITH POIS</string>
-  <string name="leku_lib_version">version 4.0.2</string>
+  <string name="leku_lib_version" translatable="false">version 5.1.0</string>
 </resources>
