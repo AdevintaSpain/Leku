@@ -35,7 +35,8 @@ class LekuPoi : Parcelable {
     }
 
     override fun toString(): String {
-        return "LekuPoi{" + "id='" + id + '\''.toString() + ", location=" + location + ", title='" + title + '\''.toString() + ", address='" + address + '\''.toString() + '}'.toString()
+        return "LekuPoi{" + "id='" + id + '\''.toString() + ", location=" + location + ", title='" +
+                title + '\''.toString() + ", address='" + address + '\''.toString() + '}'.toString()
     }
 
     companion object {

@@ -45,11 +45,7 @@ class AddressBuilder {
             }
         }
 
-        val fullAddress = StringBuilder()
-        fullAddress.append(street)
-        if (!street!!.isEmpty() && !number!!.isEmpty()) {
-            fullAddress.append(", ").append(number)
-        }
+        val fullAddress = getFullAddress(street, number)
 
         val address = Address(Locale.getDefault())
         address.latitude = latitude
@@ -77,6 +73,15 @@ class AddressBuilder {
             components.add(component)
         }
         return components
+    }
+
+    private fun getFullAddress(street: String?, number: String?): StringBuilder {
+        val fullAddress = StringBuilder()
+        fullAddress.append(street)
+        if (!street!!.isEmpty() && !number!!.isEmpty()) {
+            fullAddress.append(", ").append(number)
+        }
+        return fullAddress
     }
 
     private class AddressComponent {
