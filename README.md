@@ -67,7 +67,7 @@ Component library for Android that uses Google Maps and returns a latitude, long
 
 minSdkVersion >= 15<br/>
 Google Play Services = 15.0.1<br/>
-Support Library = 28.0.0
+Support Library = 27.1.1
 
 ### Download
 
@@ -83,14 +83,14 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.schibstedspain.android:leku:5.1.0'
+    implementation 'com.schibstedspain.android:leku:5.0.0'
 }
 ```
 
 Alternatively, if you are using a different version of Google Play Services than `15.0.1` use this instead:
 
 ```groovy
-implementation ('com.schibstedspain.android:leku:5.1.0') {
+implementation ('com.schibstedspain.android:leku:5.0.0') {
     exclude group: 'com.google.android.gms'
     exclude group: 'com.android.support'
 }
