@@ -12,13 +12,16 @@ buildscript {
     maven {
       url  "https://dl.bintray.com/ferranpons/maven"
     }
+    maven {
+	  url "https://novoda.bintray.com/snapshots"
+    }
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.2.0'
+    classpath 'com.android.tools.build:gradle:3.2.1'
 
     classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
-    classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.7.0"
-    classpath 'com.novoda:bintray-release:0.8.1'
+    classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.8.1"
+    classpath 'com.novoda:bintray-release:SNAPSHOT-6'
     classpath 'com.ferranpons:twitter-gradle-plugin:1.0.2'
     classpath "gradle.plugin.org.jlleitschuh.gradle:ktlint-gradle:4.1.0"
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
