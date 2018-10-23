@@ -226,7 +226,7 @@ class LocationPickerActivity : AppCompatActivity(),
     }
 
     private fun setUpMainVariables() {
-        val placesDataSource = GooglePlacesDataSource(Places.getGeoDataClient(this, null))
+        val placesDataSource = GooglePlacesDataSource(Places.getGeoDataClient(this))
         val geocoder = Geocoder(this, Locale.getDefault())
         apiInteractor = GoogleGeocoderDataSource(NetworkClient(), AddressBuilder())
         val geocoderRepository = GeocoderRepository(AndroidGeocoderDataSource(geocoder), apiInteractor!!)
