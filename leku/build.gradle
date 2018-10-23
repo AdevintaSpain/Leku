@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
 apply plugin: 'twitter-gradle-plugin'
 apply plugin: "org.jlleitschuh.gradle.ktlint"
 
@@ -102,13 +103,54 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
-publish {
-  userOrg = 'schibstedspain'
-  groupId = 'com.schibstedspain.android'
-  artifactId = 'leku'
-  publishVersion = "${versionMajor}.${versionMinor}.${versionPatch}"
-  desc = 'Location picker component for Android. It returns a latitude,longitude and an address based on the location picked in the LocationPickerActivity provided.'
-  website = 'https://github.com/SchibstedSpain/leku'
+publishing {
+  publications {
+    Production(MavenPublication) {
+      artifact("$buildDir/outputs/aar/leku-release.aar")
+      groupId 'com.schibstedspain.android'
+      artifactId 'leku'
+      version "${versionMajor}.${versionMinor}.${versionPatch}"
+
+      pom.withXml {
+        def dependenciesNode = asNode().appendNode('dependencies')
+
+        configurations.implementation.allDependencies.each {
+          if (it.name != 'unspecified') {
+            def dependencyNode = dependenciesNode.appendNode('dependency')
+            dependencyNode.appendNode('groupId', it.group)
+            dependencyNode.appendNode('artifactId', it.name)
+            dependencyNode.appendNode('version', it.version)
+          }
+        }
+      }
+    }
+  }
+}
+
+bintray {
+  user = System.getenv('BINTRAY_USER')
+  key = System.getenv('BINTRAY_KEY')
+  publications = ['Production']
+  configurations = ['archives']
+  override = true
+
+  pkg {
+    repo = 'maven'
+    name = 'leku'
+    userOrg = 'schibstedspain'
+    description = "Location picker component for Android. It returns a latitude,longitude and an address based on the location picked in the LocationPickerActivity provided."
+    publish = true
+    publicDownloadNumbers = true
+    licenses = ['Apache-2.0']
+    vcsUrl = 'https://github.com/SchibstedSpain/Leku.git'
+    dryRun = true
+    version {
+      name = "${versionMajor}.${versionMinor}.${versionPatch}"
+      desc = "Location picker component for Android. It returns a latitude,longitude and an address based on the location picked in the LocationPickerActivity provided."
+      released = new Date()
+      vcsTag = "${versionMajor}.${versionMinor}.${versionPatch}"
+    }
+  }
 }
 
 twitterPlugin {
