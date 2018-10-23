@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./gradlew bintrayUpload -PbintrayUser="${BINTRAY_USER}" -PbintrayKey="${BINTRAY_KEY}" -PdryRun=false
+./gradlew -Puser="${BINTRAY_USER}" -Pkey="${BINTRAY_KEY}" bintrayUpload
