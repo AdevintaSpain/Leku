@@ -134,6 +134,10 @@ bintray {
   configurations = ['archives']
   override = true
 
+  filesSpec {
+    from "$buildDir/outputs/aar"
+    into '.'
+  }
   pkg {
     repo = 'maven'
     name = 'leku'
