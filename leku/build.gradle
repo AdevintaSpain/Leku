@@ -106,7 +106,6 @@ dependencies {
 publishing {
   publications {
     Production(MavenPublication) {
-      artifact("$buildDir/outputs/aar/leku-release.aar")
       groupId 'com.schibstedspain.android'
       artifactId 'leku'
       version "${versionMajor}.${versionMinor}.${versionPatch}"
@@ -128,27 +127,22 @@ publishing {
 }
 
 bintray {
-  user = System.getenv('BINTRAY_USER')
-  key = System.getenv('BINTRAY_KEY')
-  dryRun false
-  publish true
+  user = project.hasProperty('BINTRAY_USER') ? project.property('BINTRAY_USER') : System.getenv('BINTRAY_USER')
+  key = project.hasProperty('BINTRAY_KEY') ? project.property('BINTRAY_KEY') : System.getenv('BINTRAY_KEY')
   publications = ['Production']
-  override = true
+  configurations = ['archives']
 
-  filesSpec {
-    from "$buildDir/outputs/aar"
-    into '.'
-  }
   pkg {
     repo = 'maven'
     name = 'leku'
     userOrg = 'schibstedspain'
     description = "Location picker component for Android. It returns a latitude,longitude and an address based on the location picked in the LocationPickerActivity provided."
     publish = true
+    dryRun = false
+    override = true
     publicDownloadNumbers = true
     licenses = ['Apache-2.0']
     vcsUrl = 'https://github.com/SchibstedSpain/Leku.git'
-    dryRun = true
     version {
       name = "${versionMajor}.${versionMinor}.${versionPatch}"
       desc = "Location picker component for Android. It returns a latitude,longitude and an address based on the location picked in the LocationPickerActivity provided."
