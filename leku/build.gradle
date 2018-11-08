@@ -160,8 +160,25 @@ twitterPlugin {
   message = "New Leku version ${versionMajor}.${versionMinor}.${versionPatch} available for download. Check out the details at https://github.com/SchibstedSpain/Leku @SchibstedEng #Android #library #AndroidDev"
 }
 
-tasks.withType(Javadoc).all {
-  enabled = false
+task sourcesJar(type: Jar) {
+	from android.sourceSets.main.java.srcDirs
+	classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+	excludes = ['**/*.kt']
+	source = android.sourceSets.main.java.srcDirs
+	classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	classifier = 'javadoc'
+	from javadoc.destinationDir
+}
+
+artifacts {
+	archives javadocJar
+	archives sourcesJar
 }
 
 def getVersionMajor() {
