@@ -55,7 +55,7 @@ class GooglePlacesDataSource(private val geoDataClient: GeoDataClient) {
             }
 
             val placeBufferResponse = placeBufferResponseTask.result
-            @SuppressLint("RestrictedApi") val place = placeBufferResponse.get(0)
+            @SuppressLint("RestrictedApi") val place = placeBufferResponse!!.get(0)
             addressList.add(mapPlaceToAddress(place))
         }
         return addressList

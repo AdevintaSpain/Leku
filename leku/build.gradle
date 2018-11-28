@@ -70,7 +70,7 @@ dependencies {
   implementation "com.android.support:appcompat-v7:$supportVersion"
   implementation "com.android.support:design:$supportVersion"
 
-  def playServicesVersion = '15.0.1'
+  def playServicesVersion = '16.0.0'
   implementation ("com.google.android.gms:play-services-maps:$playServicesVersion") {
 	  exclude group: "com.android.support"
   }
@@ -85,9 +85,9 @@ dependencies {
 
   implementation 'pl.charmas.android:android-reactive-location2:2.1@aar'
 
-  implementation 'io.reactivex.rxjava2:rxjava:2.1.17'
-  implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
-  implementation 'nl.littlerobots.rxlint:rxlint:1.6.1'
+  implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
+  implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+  implementation 'nl.littlerobots.rxlint:rxlint:1.7.0'
 
 
   def espressoVersion = '3.0.2'
@@ -98,7 +98,7 @@ dependencies {
   androidTestImplementation "com.android.support.test:runner:$supportTestVersion"
   androidTestImplementation "com.android.support.test:rules:$supportTestVersion"
   androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
-  androidTestImplementation 'org.mockito:mockito-core:2.18.3'
+  androidTestImplementation 'org.mockito:mockito-core:2.23.0'
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
