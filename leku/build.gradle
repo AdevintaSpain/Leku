@@ -103,6 +103,33 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
+task sourceJar(type: Jar) {
+	from android.sourceSets.main.java.srcDirs
+	classifier "sources"
+}
+
+task androidJavadocs(type: Javadoc) {
+	source = android.sourceSets.main.java.srcDirs
+	classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+	android.libraryVariants.all { variant ->
+		if (variant.name == 'release') {
+			owner.classpath += variant.javaCompile.classpath
+		}
+	}
+	exclude '**/R.html', '**/R.*.html', '**/index.html'
+}
+
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+	classifier = 'javadoc'
+	from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+	classifier = 'sources'
+	from android.sourceSets.main.java.srcDirs
+}
+
+
 publishing {
   publications {
     Production(MavenPublication) {
@@ -121,7 +148,18 @@ publishing {
             dependencyNode.appendNode('version', it.version)
           }
         }
+
+	    // List all "compile" dependencies (for old Gradle)
+	    configurations.compile.getDependencies().each { dep -> addDependency(dep, "compile") }
+	    // List all "api" dependencies (for new Gradle) as "compile" dependencies
+	    configurations.api.getDependencies().each { dep -> addDependency(dep, "compile") }
+	    // List all "implementation" dependencies (for new Gradle) as "runtime" dependencies
+	    configurations.implementation.getDependencies().each { dep -> addDependency(dep, "runtime") }
       }
+
+	  artifact androidJavadocsJar
+	  artifact androidSourcesJar
+	  artifact(sourceJar)
     }
   }
 }
