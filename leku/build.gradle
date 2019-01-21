@@ -177,7 +177,6 @@ bintray {
     description = "Location picker component for Android. It returns a latitude,longitude and an address based on the location picked in the LocationPickerActivity provided."
     publish = true
     dryRun = false
-    override = false
     publicDownloadNumbers = true
     licenses = ['Apache-2.0']
     vcsUrl = 'https://github.com/SchibstedSpain/Leku.git'
