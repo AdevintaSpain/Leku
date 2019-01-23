@@ -103,11 +103,6 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
-task sourceJar(type: Jar) {
-	from android.sourceSets.main.java.srcDirs
-	classifier "sources"
-}
-
 task androidJavadocs(type: Javadoc) {
 	source = android.sourceSets.main.java.srcDirs
 	classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
@@ -164,7 +159,6 @@ publishing {
 
 	  artifact androidJavadocsJar
 	  artifact androidSourcesJar
-	  artifact(sourceJar)
     }
   }
 }
