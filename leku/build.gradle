@@ -103,11 +103,6 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
-task sourceJar(type: Jar) {
-	from android.sourceSets.main.java.srcDirs
-	classifier "sources"
-}
-
 task androidJavadocs(type: Javadoc) {
 	source = android.sourceSets.main.java.srcDirs
 	classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
@@ -151,7 +146,7 @@ publishing {
 
 	    // List all "compile" dependencies (for old Gradle)
 	    configurations.compile.getDependencies().each { dep -> addDependency(dep, "compile") }
-	    // List all "api" dependencies (for new Gradle) as "compile" dependencies
+	    // List all "api" dependencies 	(for new Gradle) as "compile" dependencies
 	    configurations.api.getDependencies().each { dep -> addDependency(dep, "compile") }
 	    // List all "implementation" dependencies (for new Gradle) as "runtime" dependencies
 	    configurations.implementation.getAllDependencies().each { dep ->
@@ -164,7 +159,6 @@ publishing {
 
 	  artifact androidJavadocsJar
 	  artifact androidSourcesJar
-	  artifact(sourceJar)
     }
   }
 }
