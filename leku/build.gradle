@@ -155,10 +155,10 @@ publishing {
 	    configurations.api.getDependencies().each { dep -> addDependency(dep, "compile") }
 	    // List all "implementation" dependencies (for new Gradle) as "runtime" dependencies
 	    configurations.implementation.getAllDependencies().each { dep ->
-			try {
-				addDependency(dep, "runtime")
-			} catch(Exception ignored) {
-			}
+		  try {
+		    addDependency(dep, "runtime")
+		  } catch(Exception ignored) {
+		  }
 		}
       }
 
