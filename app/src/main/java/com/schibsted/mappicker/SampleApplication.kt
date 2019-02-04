@@ -1,5 +1,5 @@
 package com.schibsted.mappicker
 
-import android.support.multidex.MultiDexApplication
+import androidx.multidex.MultiDexApplication
 
 class SampleApplication : MultiDexApplication()
