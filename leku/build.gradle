@@ -63,6 +63,12 @@ ktlint {
   reporters = ["PLAIN", "CHECKSTYLE"]
 }
 
+configurations.all {
+  // This is a workaround for the issue (remove when androidx exits alpha libraries):
+  // https://stackoverflow.com/questions/37347326/errorconflict-with-dependency-com-google-code-findbugsjsr305
+  exclude group: 'com.google.code.findbugs', module: 'jsr305'
+}
+
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
