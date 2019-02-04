@@ -10,9 +10,9 @@ import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.speech.RecognizerIntent
-import android.support.design.widget.FloatingActionButton
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu

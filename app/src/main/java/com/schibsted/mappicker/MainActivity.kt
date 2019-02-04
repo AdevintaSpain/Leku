@@ -7,7 +7,7 @@ import android.location.Address
 import android.location.Location
 import android.os.Bundle
 import android.os.StrictMode
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.Toast
