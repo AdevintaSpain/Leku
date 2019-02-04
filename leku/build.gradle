@@ -74,11 +74,12 @@ dependencies {
   implementation ("com.google.android.gms:play-services-maps:$playServicesVersion") {
 	  exclude group: "com.android.support"
   }
-  implementation ("com.google.android.gms:play-services-location:$playServicesVersion"){
+  implementation ("com.google.android.gms:play-services-location:$playServicesVersion") {
 	  exclude group: "com.android.support"
   }
-  implementation ("com.google.android.gms:play-services-places:$playServicesVersion"){
-	  exclude group: "com.android.support"
+
+  implementation ("com.google.android.libraries.places:places-compat:1.0.0") {
+    exclude group: "com.android.support"
   }
 
   implementation "com.google.maps:google-maps-services:0.2.9"
