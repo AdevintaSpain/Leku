@@ -90,6 +90,15 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(locationPickerIntent, MAP_POIS_BUTTON_REQUEST_CODE)
         }
 
+        val mapStyleButton = findViewById<View>(R.id.map_button_with_style)
+        mapStyleButton.setOnClickListener {
+            val locationPickerIntent = LocationPickerActivity.Builder()
+                    .withLocation(41.4036299, 2.1743558)
+                    .withMapStyle(R.raw.map_style_retro)
+                    .build(applicationContext)
+            startActivityForResult(locationPickerIntent, MAP_POIS_BUTTON_REQUEST_CODE)
+        }
+
         initializeLocationPickerTracker()
     }
 
