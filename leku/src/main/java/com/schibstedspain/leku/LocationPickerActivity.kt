@@ -987,7 +987,7 @@ class LocationPickerActivity : AppCompatActivity(),
 
     private fun setMapStyle() {
         map?.let { googleMap ->
-            mapStyle?.let {style ->
+            mapStyle?.let { style ->
                 val loadStyle = MapStyleOptions.loadRawResourceStyle(this, style)
                 googleMap.setMapStyle(loadStyle)
             }
@@ -1218,7 +1218,7 @@ class LocationPickerActivity : AppCompatActivity(),
             if (geolocApiKey != null) {
                 intent.putExtra(GEOLOC_API_KEY, geolocApiKey)
             }
-            mapStyle?.let {style -> intent.putExtra(MAP_STYLE, style) }
+            mapStyle?.let { style -> intent.putExtra(MAP_STYLE, style) }
             intent.putExtra(ENABLE_GOOGLE_PLACES, googlePlacesEnabled)
             intent.putExtra(ENABLE_GOOGLE_TIME_ZONE, googleTimeZoneEnabled)
             intent.putExtra(ENABLE_VOICE_SEARCH, voiceSearchEnabled)
