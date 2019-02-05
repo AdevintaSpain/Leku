@@ -10,9 +10,6 @@ import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.speech.RecognizerIntent
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
@@ -20,14 +17,10 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.ListView
-import android.widget.ProgressBar
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.annotation.RawRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
@@ -36,33 +29,22 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.places.Places
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
+import com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
-import com.schibstedspain.leku.geocoder.GoogleGeocoderDataSource
-import com.schibstedspain.leku.geocoder.AndroidGeocoderDataSource
-import com.schibstedspain.leku.geocoder.GeocoderPresenter
-import com.schibstedspain.leku.geocoder.GeocoderRepository
-import com.schibstedspain.leku.geocoder.GeocoderViewInterface
+import com.google.android.gms.maps.model.*
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.maps.GeoApiContext
+import com.schibstedspain.leku.geocoder.*
 import com.schibstedspain.leku.geocoder.api.AddressBuilder
 import com.schibstedspain.leku.geocoder.api.NetworkClient
 import com.schibstedspain.leku.geocoder.places.GooglePlacesDataSource
+import com.schibstedspain.leku.geocoder.timezone.GoogleTimeZoneDataSource
 import com.schibstedspain.leku.permissions.PermissionUtils
 import com.schibstedspain.leku.tracker.TrackEvents
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
-
-import com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
-import com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE
-import com.google.maps.GeoApiContext
-import com.schibstedspain.leku.geocoder.timezone.GoogleTimeZoneDataSource
-import java.util.ArrayList
-import java.util.HashMap
-import java.util.Locale
-import java.util.TimeZone
+import java.util.*
 
 const val LATITUDE = "latitude"
 const val LONGITUDE = "longitude"
@@ -82,6 +64,7 @@ const val LEKU_POI = "leku_poi"
 const val ENABLE_VOICE_SEARCH = "enable_voice_search"
 const val TIME_ZONE_ID = "time_zone_id"
 const val TIME_ZONE_DISPLAY_NAME = "time_zone_display_name"
+const val MAP_STYLE = "map_style"
 private const val GEOLOC_API_KEY = "geoloc_api_key"
 private const val LOCATION_KEY = "location_key"
 private const val LAST_LOCATION_QUERY = "last_location_query"
@@ -145,6 +128,7 @@ class LocationPickerActivity : AppCompatActivity(),
     private var textWatcher: TextWatcher? = null
     private var apiInteractor: GoogleGeocoderDataSource? = null
     private var isVoiceSearchEnabled = true
+    private var mapStyle: Int? = null
     private lateinit var toolbar: Toolbar
     private lateinit var timeZone: TimeZone
 
@@ -431,6 +415,7 @@ class LocationPickerActivity : AppCompatActivity(),
     override fun onMapReady(googleMap: GoogleMap) {
         if (map == null) {
             map = googleMap
+            setMapStyle()
             setDefaultMapSettings()
             setCurrentPositionLocation()
             setPois()
@@ -704,6 +689,9 @@ class LocationPickerActivity : AppCompatActivity(),
         if (savedInstanceState.keySet().contains(ENABLE_VOICE_SEARCH)) {
             isVoiceSearchEnabled = savedInstanceState.getBoolean(ENABLE_VOICE_SEARCH, true)
         }
+        if (savedInstanceState.keySet().contains(MAP_STYLE)) {
+            mapStyle = savedInstanceState.getInt(GEOLOC_API_KEY)
+        }
     }
 
     private fun getTransitionBundleParams(transitionBundle: Bundle) {
@@ -741,6 +729,9 @@ class LocationPickerActivity : AppCompatActivity(),
         }
         if (transitionBundle.keySet().contains(ENABLE_VOICE_SEARCH)) {
             isVoiceSearchEnabled = transitionBundle.getBoolean(ENABLE_VOICE_SEARCH, true)
+        }
+        if (transitionBundle.keySet().contains(MAP_STYLE)) {
+            mapStyle = transitionBundle.getInt(GEOLOC_API_KEY)
         }
     }
 
@@ -974,6 +965,15 @@ class LocationPickerActivity : AppCompatActivity(),
         return fullAddress
     }
 
+    private fun setMapStyle() {
+        map?.let { googleMap ->
+            mapStyle?.let {style ->
+                val loadStyle = MapStyleOptions.loadRawResourceStyle(this, style)
+                googleMap.setMapStyle(loadStyle)
+            }
+        }
+    }
+
     private fun setDefaultMapSettings() {
         if (map != null) {
             map!!.mapType = MAP_TYPE_NORMAL
@@ -1099,6 +1099,7 @@ class LocationPickerActivity : AppCompatActivity(),
         private var googlePlacesEnabled = false
         private var googleTimeZoneEnabled = false
         private var voiceSearchEnabled = true
+        private var mapStyle: Int? = null
 
         fun withLocation(latitude: Double, longitude: Double): Builder {
             this.locationLatitude = latitude
@@ -1169,6 +1170,11 @@ class LocationPickerActivity : AppCompatActivity(),
             return this
         }
 
+        fun withMapStyle(@RawRes mapStyle: Int): Builder {
+            this.mapStyle = mapStyle
+            return this
+        }
+
         fun build(context: Context): Intent {
             val intent = Intent(context, LocationPickerActivity::class.java)
 
@@ -1192,6 +1198,7 @@ class LocationPickerActivity : AppCompatActivity(),
             if (geolocApiKey != null) {
                 intent.putExtra(GEOLOC_API_KEY, geolocApiKey)
             }
+            mapStyle?.let {style -> intent.putExtra(MAP_STYLE, style) }
             intent.putExtra(ENABLE_GOOGLE_PLACES, googlePlacesEnabled)
             intent.putExtra(ENABLE_GOOGLE_TIME_ZONE, googleTimeZoneEnabled)
             intent.putExtra(ENABLE_VOICE_SEARCH, voiceSearchEnabled)
