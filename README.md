@@ -308,6 +308,15 @@ This library uses AppCompat, so should use Theme.AppCompat or descendant in mani
 
 > `colorControlActivated` is used to colorize Street title, if not set, it uses colorAccent by default
 
+
+To customize map, use:
+
+```kotlin
+.withMapStyle(R.raw.map_style_retro)
+```
+
+> Theme creator here: https://mapstyle.withgoogle.com/
+
 ##### Layout
 
 It's possible to hide or show some of the information shown after selecting a location.
