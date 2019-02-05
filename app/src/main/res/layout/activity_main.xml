@@ -21,13 +21,26 @@
         android:contentDescription="@string/leku_app_name"
         />
 
-
     <Button
         android:text="@string/launch_map_picker"
         android:id="@+id/map_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="18dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/leku_app_button_border"
+        android:textColor="@color/leku_app_strong_blue"
+        tools:targetApi="lollipop"
+        />
+
+    <Button
+        android:text="@string/launch_map_picker_with_style"
+        android:id="@+id/map_button_with_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="18dp"
+        android:layout_marginTop="16dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/leku_app_button_border"
