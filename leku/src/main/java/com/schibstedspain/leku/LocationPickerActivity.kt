@@ -690,7 +690,7 @@ class LocationPickerActivity : AppCompatActivity(),
             isVoiceSearchEnabled = savedInstanceState.getBoolean(ENABLE_VOICE_SEARCH, true)
         }
         if (savedInstanceState.keySet().contains(MAP_STYLE)) {
-            mapStyle = savedInstanceState.getInt(GEOLOC_API_KEY)
+            mapStyle = savedInstanceState.getInt(MAP_STYLE)
         }
     }
 
@@ -731,7 +731,7 @@ class LocationPickerActivity : AppCompatActivity(),
             isVoiceSearchEnabled = transitionBundle.getBoolean(ENABLE_VOICE_SEARCH, true)
         }
         if (transitionBundle.keySet().contains(MAP_STYLE)) {
-            mapStyle = transitionBundle.getInt(GEOLOC_API_KEY)
+            mapStyle = transitionBundle.getInt(MAP_STYLE)
         }
     }
 
