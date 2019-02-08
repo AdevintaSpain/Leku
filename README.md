@@ -131,8 +131,6 @@ configurations.all {
 ```
 
 
-
-
 ### Permissions
 
 You must add the following permissions in order to use the Google Maps Android API:
