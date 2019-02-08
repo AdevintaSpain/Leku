@@ -109,6 +109,29 @@ implementation ("com.schibstedspain.android:leku:5.0.0") {
 }
 ```
 
+##### Troubleshoot
+
+If you find this issue:
+
+> Execution failed for task ':app:transformClassesWithMultidexlistForDebug'.
+> com.android.build.api.transform.TransformException: Error while generating the main dex list:
+>  Error while merging dex archives:
+>  Program type already present: com.google.common.util.concurrent.ListenableFuture
+>  Learn how to resolve the issue at https://developer.android.com/studio/build/dependencies#duplicate_classes.
+
+The workaround for this is:
+
+```groovy
+// Add this to your app build.gradle file
+configurations.all {
+	// this is a workaround for the issue:
+	// https://stackoverflow.com/questions/52521302/how-to-solve-program-type-already-present-com-google-common-util-concurrent-lis
+	exclude group: 'com.google.guava', module: 'listenablefuture'
+}
+```
+
+
+
 
 ### Permissions
 
