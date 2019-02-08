@@ -72,9 +72,8 @@ configurations.all {
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-  def supportVersion = '1.1.0-alpha01'
-  implementation "androidx.appcompat:appcompat:$supportVersion"
-  implementation "com.google.android.material:material:1.1.0-alpha02"
+  implementation "androidx.appcompat:appcompat:1.1.0-alpha01"
+  implementation "com.google.android.material:material:1.1.0-alpha03"
 
   def playServicesVersion = '16.0.0'
   implementation ("com.google.android.gms:play-services-maps:$playServicesVersion") {
