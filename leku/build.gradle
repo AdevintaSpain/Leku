@@ -67,14 +67,14 @@ configurations.all {
   // This is a workaround for the issue (remove when androidx exits alpha libraries):
   // https://stackoverflow.com/questions/37347326/errorconflict-with-dependency-com-google-code-findbugsjsr305
   exclude group: 'com.google.code.findbugs', module: 'jsr305'
+  exclude group: 'com.google.guava', module: 'listenablefuture'
 }
 
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-  def supportVersion = '1.1.0-alpha01'
-  implementation "androidx.appcompat:appcompat:$supportVersion"
-  implementation "com.google.android.material:material:1.1.0-alpha02"
+  implementation "androidx.appcompat:appcompat:1.1.0-alpha01"
+  implementation "com.google.android.material:material:1.1.0-alpha03"
 
   def playServicesVersion = '16.0.0'
   implementation ("com.google.android.gms:play-services-maps:$playServicesVersion") {
