@@ -164,6 +164,7 @@ publishing {
 		}
       }
 
+	  artifact("$buildDir/outputs/aar/${project.getName()}-${versionMajor}.${versionMinor}.${versionPatch}.aar")
 	  artifact androidJavadocsJar
 	  artifact androidSourcesJar
     }
