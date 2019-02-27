@@ -47,8 +47,8 @@ internal object CountryLocaleRect {
     private val HK_UPPER_RIGHT = LatLng(22.563333, 114.441389)  // Hong Kong
     private const val HK_COUNTRY_CODE = "zh_HK"
 
-    private val BRAZIL_LOWER_LEFT = LatLng(-34.990322, -75.004705)   // Brazil
-    private val BRAZIL_UPPER_RIGHT = LatLng(10.236344, -30.084353)  // Brazil
+    private val BRAZIL_LOWER_LEFT = LatLng(-34.990322, -75.004705) // Brazil
+    private val BRAZIL_UPPER_RIGHT = LatLng(10.236344, -30.084353) // Brazil
     private const val BRAZIL_COUNTRY_CODE = "pt_BR"
 
     val defaultLowerLeft: LatLng?
