@@ -4,7 +4,6 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.android.gms.maps.model.LatLng
 
-
 data class SearchZoneRect(val lowerLeft: LatLng, val upperRight: LatLng) : Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readParcelable(LatLng::class.java.classLoader)!!,
