@@ -66,8 +66,8 @@ Component library for Android that uses Google Maps and returns a latitude, long
 ### Prerequisites
 
 minSdkVersion >= 15<br/>
-Google Play Services = 15.0.1<br/>
-Support Library = 28.0.0
+Google Play Services = 16.0.0<br/>
+AndroidX
 
 ### Download
 
@@ -83,16 +83,50 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.schibstedspain.android:leku:5.1.3'
+    implementation 'com.schibstedspain.android:leku:6.0.0'
 }
 ```
 
-Alternatively, if you are using a different version of Google Play Services than `15.0.1` use this instead:
+Alternatively, if you are using a different version of Google Play Services and AndroidX use this instead:
 
 ```groovy
-implementation ('com.schibstedspain.android:leku:5.1.3') {
+implementation ('com.schibstedspain.android:leku:6.0.0') {
     exclude group: 'com.google.android.gms'
-    exclude group: 'com.android.support'
+    exclude group: 'androidx.appcompat'
+}
+```
+
+Note that Places on Google Play services is deprecated and this library currently uses the Compat Places SDK, that is a transition version.
+
+
+For the <b>legacy versions of Leku</b> that does not use AndroidX and want to use the latest Places SDK, you could use it in this way:
+
+```groovy
+implementation ("com.google.android.libraries.places:places-compat:1.0.0")
+implementation ("com.schibstedspain.android:leku:5.0.0") {
+    exclude group: 'com.google.android.gms'
+    exclude module: "play-services-places"
+}
+```
+
+##### Troubleshoot
+
+If you find this issue:
+
+> Execution failed for task ':app:transformClassesWithMultidexlistForDebug'.
+> com.android.build.api.transform.TransformException: Error while generating the main dex list:
+>  Error while merging dex archives:
+>  Program type already present: com.google.common.util.concurrent.ListenableFuture
+>  Learn how to resolve the issue at https://developer.android.com/studio/build/dependencies#duplicate_classes.
+
+The workaround for this is:
+
+```groovy
+// Add this to your app build.gradle file
+configurations.all {
+	// this is a workaround for the issue:
+	// https://stackoverflow.com/questions/52521302/how-to-solve-program-type-already-present-com-google-common-util-concurrent-lis
+	exclude group: 'com.google.guava', module: 'listenablefuture'
 }
 ```
 
@@ -525,7 +559,7 @@ For bugs, questions and discussions please use the [Github Issues](https://githu
 License
 -------
 
-Copyright 2016-2018 Schibsted Classified Media Spain S.L.
+Copyright 2016-2019 Schibsted Classified Media Spain S.L.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
