@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.google.android.gms.maps.model.LatLng
 import com.schibstedspain.leku.LATITUDE
 import com.schibstedspain.leku.LONGITUDE
 import com.schibstedspain.leku.LOCATION_ADDRESS
@@ -24,7 +23,6 @@ import com.schibstedspain.leku.TIME_ZONE_DISPLAY_NAME
 import com.schibstedspain.leku.LekuPoi
 import com.schibstedspain.leku.LocationPickerActivity
 import com.schibstedspain.leku.LocationPicker
-import com.schibstedspain.leku.locale.SearchZoneRect
 import com.schibstedspain.leku.tracker.LocationPickerTracker
 import com.schibstedspain.leku.tracker.TrackEvents
 import java.util.UUID

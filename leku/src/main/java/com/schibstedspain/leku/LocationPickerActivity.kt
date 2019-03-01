@@ -885,7 +885,7 @@ class LocationPickerActivity : AppCompatActivity(),
             retrieveLocationFromZone(query, searchZone!!)
         } else if (searchZoneRect != null) {
             retrieveLocationFromZone(query, searchZoneRect!!)
-        } else if (isSearchZoneWithDefaultLocale){
+        } else if (isSearchZoneWithDefaultLocale) {
             retrieveLocationFromDefaultZone(query)
         } else {
             geocoderPresenter!!.getFromLocationName(query)
