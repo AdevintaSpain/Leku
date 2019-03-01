@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.google.android.gms.maps.model.LatLng
 import com.schibstedspain.leku.LATITUDE
 import com.schibstedspain.leku.LONGITUDE
 import com.schibstedspain.leku.LOCATION_ADDRESS
@@ -24,7 +23,6 @@ import com.schibstedspain.leku.TIME_ZONE_DISPLAY_NAME
 import com.schibstedspain.leku.LekuPoi
 import com.schibstedspain.leku.LocationPickerActivity
 import com.schibstedspain.leku.LocationPicker
-import com.schibstedspain.leku.locale.SearchZoneRect
 import com.schibstedspain.leku.tracker.LocationPickerTracker
 import com.schibstedspain.leku.tracker.TrackEvents
 import java.util.UUID
@@ -61,12 +59,13 @@ class MainActivity : AppCompatActivity() {
         StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build())
         setContentView(R.layout.activity_main)
         val mapButton = findViewById<View>(R.id.map_button)
-        mapButton.setOnClickListener { _ ->
+        mapButton.setOnClickListener {
             val locationPickerIntent = LocationPickerActivity.Builder()
                     .withLocation(41.4036299, 2.1743558)
                     //.withGeolocApiKey("<PUT API KEY HERE>")
                     //.withSearchZone("es_ES")
-                    .withSearchZone(SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
+                    //.withSearchZone(SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
+                    .withDefaultLocaleSearchZone()
                     //.shouldReturnOkOnBackPressed()
                     //.withStreetHidden()
                     //.withCityHidden()

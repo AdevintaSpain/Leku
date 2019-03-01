@@ -83,14 +83,14 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.schibstedspain.android:leku:6.0.0'
+    implementation 'com.schibstedspain.android:leku:6.1.0'
 }
 ```
 
 Alternatively, if you are using a different version of Google Play Services and AndroidX use this instead:
 
 ```groovy
-implementation ('com.schibstedspain.android:leku:6.0.0') {
+implementation ('com.schibstedspain.android:leku:6.1.0') {
     exclude group: 'com.google.android.gms'
     exclude group: 'androidx.appcompat'
 }
@@ -196,6 +196,7 @@ val locationPickerIntent = LocationPickerActivity.Builder()
     .withGeolocApiKey("<PUT API KEY HERE>")
     .withSearchZone("es_ES")
     .withSearchZone(SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
+    .withDefaultLocaleSearchZone()
     .shouldReturnOkOnBackPressed()
     .withStreetHidden()
     .withCityHidden()
@@ -376,6 +377,16 @@ If you want to force the search zone you can do it by adding this line with the 
 ```kotlin
 intent.putExtra(LocationPickerActivity.SEARCH_ZONE_RECT, SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
 ```
+
+##### Default Search Zone Locale
+
+If you want to be able to search with the default device locale, you can do it by adding this line:
+
+```kotlin
+intent.putExtra(LocationPickerActivity.SEARCH_ZONE_DEFAULT_LOCALE, true)
+```
+
+Note: If you don't specify any search zone it will not search using any default search zone. It will search on all around the world.
 
 ##### Force return location on back pressed
 
