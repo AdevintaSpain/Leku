@@ -195,6 +195,7 @@ val locationPickerIntent = LocationPickerActivity.Builder()
     .withLocation(41.4036299, 2.1743558)
     .withGeolocApiKey("<PUT API KEY HERE>")
     .withSearchZone("es_ES")
+    .withSearchZone(SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
     .shouldReturnOkOnBackPressed()
     .withStreetHidden()
     .withCityHidden()
@@ -366,6 +367,14 @@ By default the search will be restricted to a zone determined by your default lo
 
 ```kotlin
 intent.putExtra(LocationPickerActivity.SEARCH_ZONE, "es_ES")
+```
+
+##### Search Zone Rect
+
+If you want to force the search zone you can do it by adding this line with the lower left and upper right rect locations:
+
+```kotlin
+intent.putExtra(LocationPickerActivity.SEARCH_ZONE_RECT, SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
 ```
 
 ##### Force return location on back pressed
