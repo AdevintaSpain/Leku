@@ -1,10 +1,10 @@
-package com.schibstedspain.leku
+package com.schibstedspain.leku.locale
 
 import com.google.android.gms.maps.model.LatLng
 import java.util.Locale
 
 @SuppressWarnings("MagicNumber")
-internal object CountryLocaleRect {
+internal object DefaultCountryLocaleRect {
     private val US_LOWER_LEFT = LatLng(16.132785, -168.372760)
     private val US_UPPER_RIGHT = LatLng(72.344643, -47.598995)
 

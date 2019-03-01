@@ -61,6 +61,8 @@ import com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
 import com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE
 import com.google.maps.GeoApiContext
 import com.schibstedspain.leku.geocoder.timezone.GoogleTimeZoneDataSource
+import com.schibstedspain.leku.locale.DefaultCountryLocaleRect
+import com.schibstedspain.leku.locale.SearchZoneRect
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.Locale
@@ -74,6 +76,7 @@ const val LOCATION_ADDRESS = "location_address"
 const val TRANSITION_BUNDLE = "transition_bundle"
 const val LAYOUTS_TO_HIDE = "layouts_to_hide"
 const val SEARCH_ZONE = "search_zone"
+const val SEARCH_ZONE_RECT = "search_zone_rect"
 const val BACK_PRESSED_RETURN_OK = "back_pressed_return_ok"
 const val ENABLE_SATELLITE_VIEW = "enable_satellite_view"
 const val ENABLE_LOCATION_PERMISSION_REQUEST = "enable_location_permission_request"
@@ -142,6 +145,7 @@ class LocationPickerActivity : AppCompatActivity(),
     private var isGooglePlacesEnabled = false
     private var isGoogleTimeZoneEnabled = false
     private var searchZone: String? = null
+    private var searchZoneRect: SearchZoneRect? = null
     private var poisList: List<LekuPoi>? = null
     private var lekuPoisMarkersMap: MutableMap<String, LekuPoi>? = null
     private var currentMarker: Marker? = null
@@ -697,6 +701,9 @@ class LocationPickerActivity : AppCompatActivity(),
         if (savedInstanceState.keySet().contains(SEARCH_ZONE)) {
             searchZone = savedInstanceState.getString(SEARCH_ZONE)
         }
+        if (savedInstanceState.keySet().contains(SEARCH_ZONE_RECT)) {
+            searchZoneRect = savedInstanceState.getParcelable(SEARCH_ZONE_RECT)
+        }
         if (savedInstanceState.keySet().contains(ENABLE_SATELLITE_VIEW)) {
             enableSatelliteView = savedInstanceState.getBoolean(ENABLE_SATELLITE_VIEW)
         }
@@ -725,6 +732,9 @@ class LocationPickerActivity : AppCompatActivity(),
         }
         if (transitionBundle.keySet().contains(SEARCH_ZONE)) {
             searchZone = transitionBundle.getString(SEARCH_ZONE)
+        }
+        if (transitionBundle.keySet().contains(SEARCH_ZONE_RECT)) {
+            searchZoneRect = transitionBundle.getParcelable(SEARCH_ZONE_RECT)
         }
         if (transitionBundle.keySet().contains(BACK_PRESSED_RETURN_OK)) {
             shouldReturnOkOnBackPressed = transitionBundle.getBoolean(BACK_PRESSED_RETURN_OK)
@@ -865,6 +875,8 @@ class LocationPickerActivity : AppCompatActivity(),
     private fun retrieveLocationFrom(query: String) {
         if (searchZone != null && !searchZone!!.isEmpty()) {
             retrieveLocationFromZone(query, searchZone!!)
+        } else if (searchZoneRect != null) {
+            retrieveLocationFromZone(query, searchZoneRect!!)
         } else {
             retrieveLocationFromDefaultZone(query)
         }
@@ -873,15 +885,17 @@ class LocationPickerActivity : AppCompatActivity(),
     private fun retrieveLocationWithDebounceTimeFrom(query: String) {
         if (searchZone != null && !searchZone!!.isEmpty()) {
             retrieveDebouncedLocationFromZone(query, searchZone!!, DEBOUNCE_TIME)
+        } else if (searchZoneRect != null) {
+            retrieveDebouncedLocationFromZone(query, searchZoneRect!!, DEBOUNCE_TIME)
         } else {
             retrieveDebouncedLocationFromDefaultZone(query, DEBOUNCE_TIME)
         }
     }
 
     private fun retrieveLocationFromDefaultZone(query: String) {
-        if (CountryLocaleRect.defaultLowerLeft != null) {
-            geocoderPresenter!!.getFromLocationName(query, CountryLocaleRect.defaultLowerLeft!!,
-                    CountryLocaleRect.defaultUpperRight!!)
+        if (DefaultCountryLocaleRect.defaultLowerLeft != null) {
+            geocoderPresenter!!.getFromLocationName(query, DefaultCountryLocaleRect.defaultLowerLeft!!,
+                    DefaultCountryLocaleRect.defaultUpperRight!!)
         } else {
             geocoderPresenter!!.getFromLocationName(query)
         }
@@ -889,18 +903,26 @@ class LocationPickerActivity : AppCompatActivity(),
 
     private fun retrieveLocationFromZone(query: String, zoneKey: String) {
         val locale = Locale(zoneKey)
-        if (CountryLocaleRect.getLowerLeftFromZone(locale) != null) {
-            geocoderPresenter!!.getFromLocationName(query, CountryLocaleRect.getLowerLeftFromZone(locale)!!,
-                    CountryLocaleRect.getUpperRightFromZone(locale)!!)
+        if (DefaultCountryLocaleRect.getLowerLeftFromZone(locale) != null) {
+            geocoderPresenter!!.getFromLocationName(query, DefaultCountryLocaleRect.getLowerLeftFromZone(locale)!!,
+                    DefaultCountryLocaleRect.getUpperRightFromZone(locale)!!)
         } else {
             geocoderPresenter!!.getFromLocationName(query)
         }
     }
 
+    private fun retrieveLocationFromZone(query: String, zoneRect: SearchZoneRect) {
+        geocoderPresenter!!.getFromLocationName(
+                query,
+                zoneRect.lowerLeft,
+                zoneRect.upperRight
+        )
+    }
+
     private fun retrieveDebouncedLocationFromDefaultZone(query: String, debounceTime: Int) {
-        if (CountryLocaleRect.defaultLowerLeft != null) {
-            geocoderPresenter!!.getDebouncedFromLocationName(query, CountryLocaleRect.defaultLowerLeft!!,
-                    CountryLocaleRect.defaultUpperRight!!, debounceTime)
+        if (DefaultCountryLocaleRect.defaultLowerLeft != null) {
+            geocoderPresenter!!.getDebouncedFromLocationName(query, DefaultCountryLocaleRect.defaultLowerLeft!!,
+                    DefaultCountryLocaleRect.defaultUpperRight!!, debounceTime)
         } else {
             geocoderPresenter!!.getDebouncedFromLocationName(query, debounceTime)
         }
@@ -908,12 +930,21 @@ class LocationPickerActivity : AppCompatActivity(),
 
     private fun retrieveDebouncedLocationFromZone(query: String, zoneKey: String, debounceTime: Int) {
         val locale = Locale(zoneKey)
-        if (CountryLocaleRect.getLowerLeftFromZone(locale) != null) {
-            geocoderPresenter!!.getDebouncedFromLocationName(query, CountryLocaleRect.getLowerLeftFromZone(locale)!!,
-                    CountryLocaleRect.getUpperRightFromZone(locale)!!, debounceTime)
+        if (DefaultCountryLocaleRect.getLowerLeftFromZone(locale) != null) {
+            geocoderPresenter!!.getDebouncedFromLocationName(query, DefaultCountryLocaleRect.getLowerLeftFromZone(locale)!!,
+                    DefaultCountryLocaleRect.getUpperRightFromZone(locale)!!, debounceTime)
         } else {
             geocoderPresenter!!.getDebouncedFromLocationName(query, debounceTime)
         }
+    }
+
+    private fun retrieveDebouncedLocationFromZone(query: String, zoneRect: SearchZoneRect, debounceTime: Int) {
+        geocoderPresenter!!.getDebouncedFromLocationName(
+                query,
+                zoneRect.lowerLeft,
+                zoneRect.upperRight,
+                debounceTime
+        )
     }
 
     private fun returnCurrentPosition() {
@@ -1110,7 +1141,8 @@ class LocationPickerActivity : AppCompatActivity(),
     class Builder {
         private var locationLatitude: Double? = null
         private var locationLongitude: Double? = null
-        private var locationSearchZone: String? = null
+        private var searchZoneLocale: String? = null
+        private var searchZoneRect: SearchZoneRect? = null
         private var layoutsToHide = ""
         private var enableSatelliteView = true
         private var shouldReturnOkOnBackPressed = false
@@ -1135,8 +1167,13 @@ class LocationPickerActivity : AppCompatActivity(),
             return this
         }
 
-        fun withSearchZone(searchZone: String): Builder {
-            this.locationSearchZone = searchZone
+        fun withSearchZone(localeZone: String): Builder {
+            this.searchZoneLocale = localeZone
+            return this
+        }
+
+        fun withSearchZone(zoneRect: SearchZoneRect): Builder {
+            this.searchZoneRect = zoneRect
             return this
         }
 
@@ -1204,8 +1241,11 @@ class LocationPickerActivity : AppCompatActivity(),
             if (locationLongitude != null) {
                 intent.putExtra(LONGITUDE, locationLongitude!!)
             }
-            if (locationSearchZone != null) {
-                intent.putExtra(SEARCH_ZONE, locationSearchZone)
+            if (searchZoneLocale != null) {
+                intent.putExtra(SEARCH_ZONE, searchZoneLocale)
+            }
+            if (searchZoneLocale != null) {
+                intent.putExtra(SEARCH_ZONE_RECT, searchZoneRect)
             }
             if (!layoutsToHide.isEmpty()) {
                 intent.putExtra(LAYOUTS_TO_HIDE, layoutsToHide)
