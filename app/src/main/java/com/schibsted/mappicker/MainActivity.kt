@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build())
         setContentView(R.layout.activity_main)
         val mapButton = findViewById<View>(R.id.map_button)
-        mapButton.setOnClickListener { _ ->
+        mapButton.setOnClickListener {
             val locationPickerIntent = LocationPickerActivity.Builder()
                     .withLocation(41.4036299, 2.1743558)
                     //.withGeolocApiKey("<PUT API KEY HERE>")
