@@ -77,6 +77,7 @@ const val TRANSITION_BUNDLE = "transition_bundle"
 const val LAYOUTS_TO_HIDE = "layouts_to_hide"
 const val SEARCH_ZONE = "search_zone"
 const val SEARCH_ZONE_RECT = "search_zone_rect"
+const val SEARCH_ZONE_DEFAULT_LOCALE = "search_zone_default_locale"
 const val BACK_PRESSED_RETURN_OK = "back_pressed_return_ok"
 const val ENABLE_SATELLITE_VIEW = "enable_satellite_view"
 const val ENABLE_LOCATION_PERMISSION_REQUEST = "enable_location_permission_request"
@@ -146,6 +147,7 @@ class LocationPickerActivity : AppCompatActivity(),
     private var isGoogleTimeZoneEnabled = false
     private var searchZone: String? = null
     private var searchZoneRect: SearchZoneRect? = null
+    private var isSearchZoneWithDefaultLocale = false
     private var poisList: List<LekuPoi>? = null
     private var lekuPoisMarkersMap: MutableMap<String, LekuPoi>? = null
     private var currentMarker: Marker? = null
@@ -704,6 +706,9 @@ class LocationPickerActivity : AppCompatActivity(),
         if (savedInstanceState.keySet().contains(SEARCH_ZONE_RECT)) {
             searchZoneRect = savedInstanceState.getParcelable(SEARCH_ZONE_RECT)
         }
+        if (savedInstanceState.keySet().contains(SEARCH_ZONE_DEFAULT_LOCALE)) {
+            isSearchZoneWithDefaultLocale = savedInstanceState.getBoolean(SEARCH_ZONE_DEFAULT_LOCALE, false)
+        }
         if (savedInstanceState.keySet().contains(ENABLE_SATELLITE_VIEW)) {
             enableSatelliteView = savedInstanceState.getBoolean(ENABLE_SATELLITE_VIEW)
         }
@@ -735,6 +740,9 @@ class LocationPickerActivity : AppCompatActivity(),
         }
         if (transitionBundle.keySet().contains(SEARCH_ZONE_RECT)) {
             searchZoneRect = transitionBundle.getParcelable(SEARCH_ZONE_RECT)
+        }
+        if (transitionBundle.keySet().contains(SEARCH_ZONE_DEFAULT_LOCALE)) {
+            isSearchZoneWithDefaultLocale = transitionBundle.getBoolean(SEARCH_ZONE_DEFAULT_LOCALE, false)
         }
         if (transitionBundle.keySet().contains(BACK_PRESSED_RETURN_OK)) {
             shouldReturnOkOnBackPressed = transitionBundle.getBoolean(BACK_PRESSED_RETURN_OK)
@@ -877,8 +885,10 @@ class LocationPickerActivity : AppCompatActivity(),
             retrieveLocationFromZone(query, searchZone!!)
         } else if (searchZoneRect != null) {
             retrieveLocationFromZone(query, searchZoneRect!!)
-        } else {
+        } else if (isSearchZoneWithDefaultLocale) {
             retrieveLocationFromDefaultZone(query)
+        } else {
+            geocoderPresenter!!.getFromLocationName(query)
         }
     }
 
@@ -887,8 +897,10 @@ class LocationPickerActivity : AppCompatActivity(),
             retrieveDebouncedLocationFromZone(query, searchZone!!, DEBOUNCE_TIME)
         } else if (searchZoneRect != null) {
             retrieveDebouncedLocationFromZone(query, searchZoneRect!!, DEBOUNCE_TIME)
-        } else {
+        } else if (isSearchZoneWithDefaultLocale) {
             retrieveDebouncedLocationFromDefaultZone(query, DEBOUNCE_TIME)
+        } else {
+            geocoderPresenter!!.getDebouncedFromLocationName(query, DEBOUNCE_TIME)
         }
     }
 
@@ -1143,6 +1155,7 @@ class LocationPickerActivity : AppCompatActivity(),
         private var locationLongitude: Double? = null
         private var searchZoneLocale: String? = null
         private var searchZoneRect: SearchZoneRect? = null
+        private var searchZoneDefaultLocale = false
         private var layoutsToHide = ""
         private var enableSatelliteView = true
         private var shouldReturnOkOnBackPressed = false
@@ -1174,6 +1187,11 @@ class LocationPickerActivity : AppCompatActivity(),
 
         fun withSearchZone(zoneRect: SearchZoneRect): Builder {
             this.searchZoneRect = zoneRect
+            return this
+        }
+
+        fun withDefaultLocaleSearchZone(): Builder {
+            this.searchZoneDefaultLocale = true
             return this
         }
 
@@ -1247,6 +1265,7 @@ class LocationPickerActivity : AppCompatActivity(),
             if (searchZoneLocale != null) {
                 intent.putExtra(SEARCH_ZONE_RECT, searchZoneRect)
             }
+            intent.putExtra(SEARCH_ZONE_DEFAULT_LOCALE, searchZoneDefaultLocale)
             if (!layoutsToHide.isEmpty()) {
                 intent.putExtra(LAYOUTS_TO_HIDE, layoutsToHide)
             }
