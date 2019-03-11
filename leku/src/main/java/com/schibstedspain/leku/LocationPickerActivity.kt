@@ -633,6 +633,7 @@ class LocationPickerActivity : AppCompatActivity(),
 
     override fun willGetLocationInfo(latLng: LatLng) {
         changeLocationInfoLayoutVisibility(View.VISIBLE)
+        resetLocationAddress()
         setCoordinatesInfo(latLng)
     }
 
@@ -829,6 +830,12 @@ class LocationPickerActivity : AppCompatActivity(),
         this.latitude!!.text = String.format("%s: %s", getString(R.string.leku_latitude), latLng.latitude)
         this.longitude!!.text = String.format("%s: %s", getString(R.string.leku_longitude), latLng.longitude)
         showCoordinatesLayout()
+    }
+
+    private fun resetLocationAddress() {
+        street?.text = ""
+        city?.text = ""
+        zipCode?.text = ""
     }
 
     private fun setLocationInfo(address: Address) {
