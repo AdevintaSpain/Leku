@@ -1,0 +1,16 @@
+addReviewers: true
+addAssignees: true
+reviewers:
+- marcserrascmspain
+- gerardpedreny
+
+# A number of reviewers added to the pull request
+# Set 0 to add all the reviewers (default: 0)
+numberOfReviewers: 0
+
+assignees:
+   - ferranpons
+
+# A list of keywords to be skipped the process that add reviewers if pull requests include it
+skipKeywords:
+   - wip
