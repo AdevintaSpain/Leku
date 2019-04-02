@@ -83,14 +83,14 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.schibstedspain.android:leku:6.1.1'
+    implementation 'com.schibstedspain.android:leku:6.2.0'
 }
 ```
 
 Alternatively, if you are using a different version of Google Play Services and AndroidX use this instead:
 
 ```groovy
-implementation ('com.schibstedspain.android:leku:6.1.1') {
+implementation ('com.schibstedspain.android:leku:6.2.0') {
     exclude group: 'com.google.android.gms'
     exclude group: 'androidx.appcompat'
 }
@@ -205,6 +205,7 @@ val locationPickerIntent = LocationPickerActivity.Builder()
     .withGooglePlacesEnabled()
     .withGoogleTimeZoneEnabled()
     .withVoiceSearchHidden()
+    .withUnnamedRoadHidden()
     .build(applicationContext)
 
 startActivityForResult(locationPickerIntent, MAP_BUTTON_REQUEST_CODE)
@@ -418,6 +419,14 @@ Now you can hide the voice search option on the search view
 
 ```kotlin
 intent.putExtra(LocationPickerActivity.ENABLE_VOICE_SEARCH, false)
+```
+
+##### Hide/Show "Unnamed Road" on Address view
+
+Now you can hide or show the text returned by the google service with "Unnamed Road" when no road name available
+
+```kotlin
+intent.putExtra(LocationPickerActivity.UNNAMED_ROAD_VISIBILITY, false)
 ```
 
 #### Tracking
