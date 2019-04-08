@@ -74,6 +74,7 @@ class MainActivity : AppCompatActivity() {
                     //.withGooglePlacesEnabled()
                     .withGoogleTimeZoneEnabled()
                     //.withVoiceSearchHidden()
+                    .withUnnamedRoadHidden()
                     .build(applicationContext)
 
             //this is optional if you want to return RESULT_OK if you don't set the latitude/longitude and click back button

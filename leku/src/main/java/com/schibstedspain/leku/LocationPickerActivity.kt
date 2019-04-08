@@ -89,6 +89,7 @@ const val ENABLE_VOICE_SEARCH = "enable_voice_search"
 const val TIME_ZONE_ID = "time_zone_id"
 const val TIME_ZONE_DISPLAY_NAME = "time_zone_display_name"
 const val MAP_STYLE = "map_style"
+const val UNNAMED_ROAD_VISIBILITY = "unnamed_road_visibility"
 private const val GEOLOC_API_KEY = "geoloc_api_key"
 private const val LOCATION_KEY = "location_key"
 private const val LAST_LOCATION_QUERY = "last_location_query"
@@ -101,6 +102,7 @@ private const val DEFAULT_ZOOM = 16
 private const val WIDER_ZOOM = 6
 private const val MIN_CHARACTERS = 2
 private const val DEBOUNCE_TIME = 400
+private const val UNNAMED_ROAD = "Unnamed Road, "
 
 class LocationPickerActivity : AppCompatActivity(),
         OnMapReadyCallback,
@@ -154,6 +156,7 @@ class LocationPickerActivity : AppCompatActivity(),
     private var textWatcher: TextWatcher? = null
     private var apiInteractor: GoogleGeocoderDataSource? = null
     private var isVoiceSearchEnabled = true
+    private var isUnnamedRoadVisible = true
     private var mapStyle: Int? = null
     private lateinit var toolbar: Toolbar
     private lateinit var timeZone: TimeZone
@@ -198,7 +201,11 @@ class LocationPickerActivity : AppCompatActivity(),
         get() {
             var locationAddress = ""
             if (street != null && !street!!.text.toString().isEmpty()) {
-                locationAddress = street!!.text.toString()
+                locationAddress = if (isUnnamedRoadVisible) {
+                    street!!.text.toString()
+                } else {
+                    street!!.text.toString().replace(UNNAMED_ROAD, "")
+                }
             }
             if (city != null && !city!!.text.toString().isEmpty()) {
                 if (!locationAddress.isEmpty()) {
@@ -722,6 +729,9 @@ class LocationPickerActivity : AppCompatActivity(),
         if (savedInstanceState.keySet().contains(ENABLE_VOICE_SEARCH)) {
             isVoiceSearchEnabled = savedInstanceState.getBoolean(ENABLE_VOICE_SEARCH, true)
         }
+        if (savedInstanceState.keySet().contains(UNNAMED_ROAD_VISIBILITY)) {
+            isUnnamedRoadVisible = savedInstanceState.getBoolean(UNNAMED_ROAD_VISIBILITY, true)
+        }
         if (savedInstanceState.keySet().contains(MAP_STYLE)) {
             mapStyle = savedInstanceState.getInt(MAP_STYLE)
         }
@@ -768,6 +778,9 @@ class LocationPickerActivity : AppCompatActivity(),
         }
         if (transitionBundle.keySet().contains(ENABLE_VOICE_SEARCH)) {
             isVoiceSearchEnabled = transitionBundle.getBoolean(ENABLE_VOICE_SEARCH, true)
+        }
+        if (transitionBundle.keySet().contains(UNNAMED_ROAD_VISIBILITY)) {
+            isUnnamedRoadVisible = transitionBundle.getBoolean(UNNAMED_ROAD_VISIBILITY, true)
         }
         if (transitionBundle.keySet().contains(MAP_STYLE)) {
             mapStyle = transitionBundle.getInt(MAP_STYLE)
@@ -839,7 +852,11 @@ class LocationPickerActivity : AppCompatActivity(),
     }
 
     private fun setLocationInfo(address: Address) {
-        street!!.text = address.getAddressLine(0)
+        if (isUnnamedRoadVisible) {
+            street!!.text = address.getAddressLine(0)
+        } else {
+            street!!.text = address.getAddressLine(0).replace(UNNAMED_ROAD, "")
+        }
         city!!.text = if (isStreetEqualsCity(address)) "" else address.locality
         zipCode!!.text = address.postalCode
         showAddressLayout()
@@ -1172,6 +1189,7 @@ class LocationPickerActivity : AppCompatActivity(),
         private var googleTimeZoneEnabled = false
         private var voiceSearchEnabled = true
         private var mapStyle: Int? = null
+        private var unnamedRoadVisible = true
 
         fun withLocation(latitude: Double, longitude: Double): Builder {
             this.locationLatitude = latitude
@@ -1252,6 +1270,11 @@ class LocationPickerActivity : AppCompatActivity(),
             return this
         }
 
+        fun withUnnamedRoadHidden(): Builder {
+            this.unnamedRoadVisible = false
+            return this
+        }
+
         fun withMapStyle(@RawRes mapStyle: Int): Builder {
             this.mapStyle = mapStyle
             return this
@@ -1288,6 +1311,7 @@ class LocationPickerActivity : AppCompatActivity(),
             intent.putExtra(ENABLE_GOOGLE_PLACES, googlePlacesEnabled)
             intent.putExtra(ENABLE_GOOGLE_TIME_ZONE, googleTimeZoneEnabled)
             intent.putExtra(ENABLE_VOICE_SEARCH, voiceSearchEnabled)
+            intent.putExtra(UNNAMED_ROAD_VISIBILITY, unnamedRoadVisible)
 
             return intent
         }
