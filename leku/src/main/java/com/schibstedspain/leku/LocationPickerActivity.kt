@@ -96,13 +96,14 @@ private const val LAST_LOCATION_QUERY = "last_location_query"
 private const val OPTIONS_HIDE_STREET = "street"
 private const val OPTIONS_HIDE_CITY = "city"
 private const val OPTIONS_HIDE_ZIPCODE = "zipcode"
+private const val UNNAMED_ROAD_WITH_COMMA = "Unnamed Road, "
+private const val UNNAMED_ROAD_WITH_HYPHEN = "Unnamed Road - "
 private const val REQUEST_PLACE_PICKER = 6655
 private const val CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000
 private const val DEFAULT_ZOOM = 16
 private const val WIDER_ZOOM = 6
 private const val MIN_CHARACTERS = 2
 private const val DEBOUNCE_TIME = 400
-private const val UNNAMED_ROAD = "Unnamed Road, "
 
 class LocationPickerActivity : AppCompatActivity(),
         OnMapReadyCallback,
@@ -204,7 +205,7 @@ class LocationPickerActivity : AppCompatActivity(),
                 locationAddress = if (isUnnamedRoadVisible) {
                     street!!.text.toString()
                 } else {
-                    street!!.text.toString().replace(UNNAMED_ROAD, "")
+                    removeUnnamedRoad(street!!.text.toString())
                 }
             }
             if (city != null && !city!!.text.toString().isEmpty()) {
@@ -855,7 +856,7 @@ class LocationPickerActivity : AppCompatActivity(),
         if (isUnnamedRoadVisible) {
             street!!.text = address.getAddressLine(0)
         } else {
-            street!!.text = address.getAddressLine(0).replace(UNNAMED_ROAD, "")
+            street!!.text = removeUnnamedRoad(address.getAddressLine(0))
         }
         city!!.text = if (isStreetEqualsCity(address)) "" else address.locality
         zipCode!!.text = address.postalCode
@@ -1172,6 +1173,11 @@ class LocationPickerActivity : AppCompatActivity(),
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
+    }
+
+    private fun removeUnnamedRoad(str: String): String {
+        return str.replace(UNNAMED_ROAD_WITH_COMMA, "")
+                .replace(UNNAMED_ROAD_WITH_HYPHEN, "")
     }
 
     class Builder {
