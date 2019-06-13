@@ -50,24 +50,24 @@ class GeocoderPresenter @JvmOverloads constructor(
         @SuppressLint("MissingPermission")
         val disposable = locationProvider.lastKnownLocation
                 .retry(RETRY_COUNT.toLong())
-                .subscribe({ view!!.showLastLocation(it) },
-                        { _ -> },
-                        { view!!.didGetLastLocation() })
+                .subscribe({ view?.showLastLocation(it) },
+                        { },
+                        { view?.didGetLastLocation() })
         compositeDisposable.add(disposable)
     }
 
     fun getFromLocationName(query: String) {
-        view!!.willLoadLocation()
+        view?.willLoadLocation()
         val disposable = geocoderRepository.getFromLocationName(query)
                 .observeOn(scheduler)
-                .subscribe({ view!!.showLocations(it) },
-                        { _ -> view!!.showLoadLocationError() },
-                        { view!!.didLoadLocation() })
+                .subscribe({ view?.showLocations(it) },
+                        { view?.showLoadLocationError() },
+                        { view?.didLoadLocation() })
         compositeDisposable.add(disposable)
     }
 
     fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng) {
-        view!!.willLoadLocation()
+        view?.willLoadLocation()
         val disposable = Observable.zip<List<Address>, List<Address>, List<Address>>(
                 geocoderRepository.getFromLocationName(query, lowerLeft, upperRight),
                 getPlacesFromLocationName(query, lowerLeft, upperRight),
@@ -77,25 +77,25 @@ class GeocoderPresenter @JvmOverloads constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(scheduler)
                 .retry(RETRY_COUNT.toLong())
-                .subscribe({ view!!.showLocations(it) },
-                        { _ -> view!!.showLoadLocationError() },
-                        { view!!.didLoadLocation() })
+                .subscribe({ view?.showLocations(it) },
+                        { view?.showLoadLocationError() },
+                        { view?.didLoadLocation() })
         compositeDisposable.add(disposable)
     }
 
     fun getDebouncedFromLocationName(query: String, debounceTime: Int) {
-        view!!.willLoadLocation()
+        view?.willLoadLocation()
         val disposable = geocoderRepository.getFromLocationName(query)
                 .debounce(debounceTime.toLong(), TimeUnit.MILLISECONDS, Schedulers.io())
                 .observeOn(scheduler)
-                .subscribe({ view!!.showDebouncedLocations(it) },
-                        { _ -> view!!.showLoadLocationError() },
-                        { view!!.didLoadLocation() })
+                .subscribe({ view?.showDebouncedLocations(it) },
+                        { view?.showLoadLocationError() },
+                        { view?.didLoadLocation() })
         compositeDisposable.add(disposable)
     }
 
     fun getDebouncedFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng, debounceTime: Int) {
-        view!!.willLoadLocation()
+        view?.willLoadLocation()
         val disposable = Observable.zip<List<Address>, List<Address>, List<Address>>(
                 geocoderRepository.getFromLocationName(query, lowerLeft, upperRight),
                 getPlacesFromLocationName(query, lowerLeft, upperRight),
@@ -104,23 +104,23 @@ class GeocoderPresenter @JvmOverloads constructor(
                 .subscribeOn(Schedulers.io())
                 .debounce(debounceTime.toLong(), TimeUnit.MILLISECONDS, Schedulers.io())
                 .observeOn(scheduler)
-                .subscribe({ view!!.showDebouncedLocations(it) },
-                        { _ -> view!!.showLoadLocationError() },
-                        { view!!.didLoadLocation() })
+                .subscribe({ view?.showDebouncedLocations(it) },
+                        { view?.showLoadLocationError() },
+                        { view?.didLoadLocation() })
         compositeDisposable.add(disposable)
     }
 
     fun getInfoFromLocation(latLng: LatLng) {
-        view!!.willGetLocationInfo(latLng)
+        view?.willGetLocationInfo(latLng)
         val disposable = geocoderRepository.getFromLocation(latLng)
                 .observeOn(scheduler)
                 .retry(RETRY_COUNT.toLong())
-                .filter { addresses -> !addresses.isEmpty() }
+                .filter { addresses -> addresses.isNotEmpty() }
                 .map { addresses -> addresses[0] }
                 .flatMap { address -> returnTimeZone(address) }
-                .subscribe({ pair: Pair<Address, TimeZone?> -> view!!.showLocationInfo(pair) },
-                        { _ -> view!!.showGetLocationInfoError() },
-                        { view!!.didGetLocationInfo() })
+                .subscribe({ pair: Pair<Address, TimeZone?> -> view?.showLocationInfo(pair) },
+                        { view?.showGetLocationInfoError() },
+                        { view?.didGetLocationInfo() })
         compositeDisposable.add(disposable)
     }
 
