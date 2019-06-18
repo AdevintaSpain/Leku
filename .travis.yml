@@ -61,17 +61,17 @@ before_install:
 before_script:
   - echo "y" | android update sdk -a --no-ui --filter android-$EMULATOR_API
   - echo "y" | android update sdk -a --no-ui --filter sys-img-armeabi-v7a-android-$EMULATOR_API
-  - android list targets | grep -E '^id:' | awk -F '"' '{$1=""; print $2}' # list all targets
-  - echo no | android create avd --force -n test -t android-$EMULATOR_API --abi armeabi-v7a
-  - emulator -avd test -no-skin -no-window &
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
+  #- android list targets | grep -E '^id:' | awk -F '"' '{$1=""; print $2}' # list all targets
+  #- echo no | android create avd --force -n test -t android-$EMULATOR_API --abi armeabi-v7a
+  #- emulator -avd test -no-skin -no-window &
+  #- android-wait-for-emulator
+  #- adb shell input keyevent 82 &
 
 script:
   - ./gradlew detektCheck
   - ./gradlew ktlintCheck
   - ./gradlew build --continue
-  - ./gradlew connectedCheck -PdisablePreDex -Dorg.gradle.parallel=false -Pandroid.testInstrumentationRunnerArguments.notAnnotation=androidx.test.filters.FlakyTest
+  #- ./gradlew connectedCheck -PdisablePreDex -Dorg.gradle.parallel=false -Pandroid.testInstrumentationRunnerArguments.notAnnotation=androidx.test.filters.FlakyTest
 
 deploy:
   - provider: script
