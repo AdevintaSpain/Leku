@@ -31,17 +31,19 @@ class AddressBuilder {
         var street: String? = ""
 
         for (component in components) {
-            if (component.types!!.contains("postal_code")) {
-                postalCode = component.name
-            }
-            if (component.types!!.contains("locality")) {
-                city = component.name
-            }
-            if (component.types!!.contains("street_number")) {
-                number = component.name
-            }
-            if (component.types!!.contains("route")) {
-                street = component.name
+            component.types?.let {
+                if (it.contains("postal_code")) {
+                    postalCode = component.name
+                }
+                if (it.contains("locality")) {
+                    city = component.name
+                }
+                if (it.contains("street_number")) {
+                    number = component.name
+                }
+                if (it.contains("route")) {
+                    street = component.name
+                }
             }
         }
 
@@ -78,7 +80,7 @@ class AddressBuilder {
     private fun getFullAddress(street: String?, number: String?): StringBuilder {
         val fullAddress = StringBuilder()
         fullAddress.append(street)
-        if (!street!!.isEmpty() && !number!!.isEmpty()) {
+        if (!street.isNullOrEmpty() && !number.isNullOrEmpty()) {
             fullAddress.append(", ").append(number)
         }
         return fullAddress
