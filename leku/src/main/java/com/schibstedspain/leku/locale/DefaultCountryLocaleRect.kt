@@ -51,6 +51,10 @@ internal object DefaultCountryLocaleRect {
     private val BRAZIL_UPPER_RIGHT = LatLng(10.236344, -30.084353) // Brazil
     private const val BRAZIL_COUNTRY_CODE = "pt_BR"
 
+    private val IRELAND_LOWER_LEFT = LatLng(51.527021, -10.237684)
+    private val IRELAND_UPPER_RIGHT = LatLng(55.367338, -6.294837)
+    private const val IRELAND_COUNTRY_CODE = "en_IE"
+
     val defaultLowerLeft: LatLng?
         get() = getLowerLeftFromZone(Locale.getDefault())
 
@@ -72,6 +76,7 @@ internal object DefaultCountryLocaleRect {
             locale.toString().equals(VIETNAM_COUNTRY_CODE, ignoreCase = true) -> VIETNAM_LOWER_LEFT
             locale.toString().equals(HK_COUNTRY_CODE, ignoreCase = true) -> HK_LOWER_LEFT
             locale.toString().equals(BRAZIL_COUNTRY_CODE, ignoreCase = true) -> BRAZIL_LOWER_LEFT
+            locale.toString().equals(IRELAND_COUNTRY_CODE, ignoreCase = true) -> IRELAND_LOWER_LEFT
             else -> null
         }
     }
@@ -91,6 +96,7 @@ internal object DefaultCountryLocaleRect {
             locale.toString().equals(VIETNAM_COUNTRY_CODE, ignoreCase = true) -> VIETNAM_UPPER_RIGHT
             locale.toString().equals(HK_COUNTRY_CODE, ignoreCase = true) -> HK_UPPER_RIGHT
             locale.toString().equals(BRAZIL_COUNTRY_CODE, ignoreCase = true) -> BRAZIL_UPPER_RIGHT
+            locale.toString().equals(IRELAND_COUNTRY_CODE, ignoreCase = true) -> IRELAND_UPPER_RIGHT
             else -> null
         }
     }
