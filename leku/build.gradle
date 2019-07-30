@@ -18,6 +18,7 @@ android {
 
   defaultConfig {
     minSdkVersion 16
+    //noinspection OldTargetApi
     targetSdkVersion 28
     versionName version
     multiDexEnabled true
@@ -74,7 +75,7 @@ dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
   implementation "androidx.appcompat:appcompat:1.1.0-rc01"
-  implementation "com.google.android.material:material:1.1.0-alpha08"
+  implementation "com.google.android.material:material:1.1.0-alpha09"
 
   def playServicesVersion = '16.0.0'
   implementation ("com.google.android.gms:play-services-maps:$playServicesVersion") {

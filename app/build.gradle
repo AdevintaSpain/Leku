@@ -8,6 +8,7 @@ android {
   defaultConfig {
     applicationId "com.schibsted.mappicker"
     minSdkVersion 16
+    //noinspection OldTargetApi
     targetSdkVersion 28
     versionCode 1
     versionName "1.0"
