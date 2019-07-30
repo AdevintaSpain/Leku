@@ -83,14 +83,14 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.schibstedspain.android:leku:6.2.1'
+    implementation 'com.schibstedspain.android:leku:6.3.0'
 }
 ```
 
 Alternatively, if you are using a different version of Google Play Services and AndroidX use this instead:
 
 ```groovy
-implementation ('com.schibstedspain.android:leku:6.2.1') {
+implementation ('com.schibstedspain.android:leku:6.3.0') {
     exclude group: 'com.google.android.gms'
     exclude group: 'androidx.appcompat'
 }
@@ -440,10 +440,14 @@ Available tracking events are:
 
 |TAG|Message|
 |---|---|
-|didLoadLocationPicker|Location Picker|
-|didSearchLocations |Click on search for locations|
-|didLocalizeMe|Click on localize me|
-|didLocalizeByPoi|Long click on map|
+|GOOGLE_API_CONNECTION_FAILED|Connection Failed|
+|START_VOICE_RECOGNITION_ACTIVITY_FAILED|Start Voice Recognition Activity Failed|
+|ON_LOAD_LOCATION_PICKER|Location Picker|
+|ON_SEARCH_LOCATIONS|Click on search for locations|
+|ON_LOCALIZED_ME|Click on localize me|
+|ON_LOCALIZED_BY_POI|Long click on map|
+|SIMPLE_ON_LOCALIZE_BY_POI|Click on map|
+|SIMPLE_ON_LOCALIZE_BY_LEKU_POI|Click on POI|
 |RESULT_OK|Return location|
 |CANCEL|Return without location|
 
