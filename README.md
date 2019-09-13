@@ -1,16 +1,16 @@
 <!--
   Title: Leku - Map location picker for Android
   Description: Google Maps based library for Android that returns a latitude, longitude and an address based on the location picked with the Activity provided.
-  Author: SchibstedSpain
+  Author: AdevintaSpain
   -->
 
-<img src="media/leku_logo.png" align="left" height="128px" />
+<img src="docs/images/leku_logo.png" align="left" height="128px" />
 <img align="left" width="0" height="128px" hspace="10" />
 
 <div style="display:block; height: 168px;">
 * <i>The location Picker for Android</i> *
 
-[![Build Status](https://travis-ci.org/SchibstedSpain/Leku.svg?branch=master)](https://travis-ci.org/SchibstedSpain/Leku) [ ![Bintray](https://api.bintray.com/packages/schibstedspain/maven/leku/images/download.svg) ](https://bintray.com/schibstedspain/maven/leku/_latestVersion)
+[![Build Status](https://travis-ci.org/AdevintaSpain/Leku.svg?branch=master)](https://travis-ci.org/AdevintaSpain/Leku) [ ![Bintray](https://api.bintray.com/packages/AdevintaSpain/maven/leku/images/download.svg) ](https://bintray.com/AdevintaSpain/maven/leku/_latestVersion)
 
 Component library for Android that uses Google Maps and returns a latitude, longitude and an address based on the location picked with the Activity provided.
 </div>
@@ -48,7 +48,7 @@ Component library for Android that uses Google Maps and returns a latitude, long
 ### Features
 
 <img align="right" width="0" height="368px" hspace="20"/>
-<img src="media/screenshot.gif" height="368px" align="right" />
+<img src="docs/images/screenshot.gif" height="368px" align="right" />
 
 * Search by voice
 * Search by text
@@ -566,7 +566,7 @@ The following is a list of some of the public apps using Leku and are published 
 
 Want to add your app? Found an app that no longer works or no longer uses Leku? Please submit a pull request on GitHub to update this page!
 
-| <a href="https://play.google.com/store/apps/details?id=com.anuntis.segundamano"><img src="media/vibbo_logo.png" align="left" width="68px" height="68px"/></a> | <a href="https://play.google.com/store/apps/details?id=com.scmspain.worksi"><img src="media/worksi_logo.png" align="left" width="68px" height="68px"/></a> | <a href="https://play.google.com/store/apps/details?id=nl.hnogames.domoticz"><img src="media/domoticz_logo.png" align="left" width="68px" height="68px"/></a>
+| <a href="https://play.google.com/store/apps/details?id=com.anuntis.segundamano"><img src="docs/images/vibbo_logo.png" align="left" width="68px" height="68px"/></a> | <a href="https://play.google.com/store/apps/details?id=com.scmspain.worksi"><img src="docs/images/worksi_logo.png" align="left" width="68px" height="68px"/></a> | <a href="https://play.google.com/store/apps/details?id=nl.hnogames.domoticz"><img src="docs/images/domoticz_logo.png" align="left" width="68px" height="68px"/></a>
 |---|---|---
 | [vibbo](https://play.google.com/store/apps/details?id=com.anuntis.segundamano) | [Worksi](https://play.google.com/store/apps/details?id=com.scmspain.worksi) | [Domoticz](https://play.google.com/store/apps/details?id=nl.hnogames.domoticz)
 
