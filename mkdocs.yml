@@ -1,0 +1,66 @@
+# Project information
+site_name: 'Leku'
+site_description: ':Map location picker component for Android. Based on Google Maps. An alternative to Google Place Picker.'
+site_author: '2019 Adevinta Spain'
+site_url: 'https://adevintaspain.github.io/Leku/'
+remote_branch: gh-pages
+
+# Repository
+repo_name: 'Leku'
+repo_url: 'https://github.com/AdevintaSpain/Leku'
+
+# Copyright
+copyright: 'Copyright &copy; 2016 - 2019 Adevinta Spain'
+
+# Configuration
+theme:
+  name: 'material'
+  language: 'en'
+  favicon: 'images/leku_logo.ico'
+  logo: 'images/leku_logo_icon.png'
+  palette:
+    primary: 'white'
+    accent: 'white'
+  font:
+    text: 'Roboto'
+    code: 'Roboto Mono'
+
+# Customization
+extra:
+  social:
+    - type: 'github'
+      link: 'https://github.com/AdevintaSpain/Leku'
+
+# Navigation
+nav:
+  - 'Overview': index.md
+  - 'Getting Started': getting_started.md
+  - 'Permissions': permissions.md
+  - 'Localization': localization.md
+  - 'Customization': customization.md
+  - 'Tracking': tracking.md
+  - 'Extra': extra.md
+  - 'Who Made This': who_made_this.md
+  - 'Apps Using Leku': apps_using_leku.md
+  - 'Contributing': contributing.md
+  - 'Bugs and Feedback': bugs_and_feedback.md
+  - 'License': license.md
+
+# CSS
+extra_css:
+  - 'css/site.css'
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - footnotes
+  - toc:
+      permalink: true
+
+# Plugins
+plugins:
+  - search
+  - minify:
+      minify_html: true

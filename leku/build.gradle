@@ -187,7 +187,7 @@ bintray {
     dryRun = false
     publicDownloadNumbers = true
     licenses = ['Apache-2.0']
-    vcsUrl = 'https://github.com/SchibstedSpain/Leku.git'
+    vcsUrl = 'https://github.com/AdevintaSpain/Leku.git'
     version {
       name = "${versionMajor}.${versionMinor}.${versionPatch}"
       desc = "Location picker component for Android. It returns a latitude,longitude and an address based on the location picked in the LocationPickerActivity provided."
