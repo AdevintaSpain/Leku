@@ -4,6 +4,7 @@ import android.location.Address
 import com.google.android.gms.maps.model.LatLng
 import com.schibstedspain.leku.geocoder.api.AddressBuilder
 import com.schibstedspain.leku.geocoder.api.NetworkClient
+import com.schibstedspain.leku.geocoder.api.NetworkException
 import io.reactivex.Observable
 import java.util.Locale
 import org.json.JSONException
@@ -39,6 +40,8 @@ class GoogleGeocoderDataSource(
                 subscriber.onComplete()
             } catch (e: JSONException) {
                 subscriber.onError(e)
+            } catch (e: NetworkException) {
+                subscriber.onError(e)
             }
         }
     }
@@ -59,6 +62,8 @@ class GoogleGeocoderDataSource(
                 subscriber.onComplete()
             } catch (e: JSONException) {
                 subscriber.onError(e)
+            } catch (e: NetworkException) {
+                subscriber.onError(e)
             }
         }
     }
@@ -77,6 +82,8 @@ class GoogleGeocoderDataSource(
                 }
                 subscriber.onComplete()
             } catch (e: JSONException) {
+                subscriber.onError(e)
+            } catch (e: NetworkException) {
                 subscriber.onError(e)
             }
         }
