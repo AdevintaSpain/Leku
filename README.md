@@ -10,7 +10,7 @@
 <div style="display:block; height: 168px;">
 * <i>The location Picker for Android</i> *
 
-[![Build Status](https://travis-ci.org/AdevintaSpain/Leku.svg?branch=master)](https://travis-ci.org/AdevintaSpain/Leku) [ ![Bintray](https://api.bintray.com/packages/AdevintaSpain/maven/leku/images/download.svg) ](https://bintray.com/AdevintaSpain/maven/leku/_latestVersion)
+[![Build Status](https://travis-ci.org/AdevintaSpain/Leku.svg?branch=master)](https://travis-ci.org/AdevintaSpain/Leku) [ ![Bintray](https://api.bintray.com/packages/AdevintaSpain/maven/leku/images/download.svg) ](https://bintray.com/schibstedspain/maven/leku/_latestVersion)
 
 Component library for Android that uses Google Maps and returns a latitude, longitude and an address based on the location picked with the Activity provided.
 </div>
