@@ -58,7 +58,7 @@ Component library for Android that uses Google Maps and returns a latitude, long
 * Pick locations using "touch" gestures on the map
 * Customization (Theme and layout)
 * Events Tracking
-* Multi-language support (English and Spanish supported by default)
+* Multi-language support (English, Spanish and Vietnamese supported by default)
 * RTL (Right-To-Left) layout support
 <br><br><br>
 
@@ -83,14 +83,14 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.schibstedspain.android:leku:6.3.0'
+    implementation 'com.schibstedspain.android:leku:6.4.0'
 }
 ```
 
 Alternatively, if you are using a different version of Google Play Services and AndroidX use this instead:
 
 ```groovy
-implementation ('com.schibstedspain.android:leku:6.3.0') {
+implementation ('com.schibstedspain.android:leku:6.4.0') {
     exclude group: 'com.google.android.gms'
     exclude group: 'androidx.appcompat'
 }
