@@ -13,13 +13,13 @@ group = 'com.schibstedspain.android'
 version = "${versionMajor}.${versionMinor}.${versionPatch}"
 
 android {
-  compileSdkVersion 28
+  compileSdkVersion 29
   resourcePrefix 'leku_'
 
   defaultConfig {
     minSdkVersion 16
     //noinspection OldTargetApi
-    targetSdkVersion 28
+    targetSdkVersion 29
     versionName version
     multiDexEnabled true
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -75,9 +75,9 @@ dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
   implementation "androidx.appcompat:appcompat:1.1.0"
-  implementation "com.google.android.material:material:1.2.0-alpha01"
+  implementation "com.google.android.material:material:1.2.0-alpha04"
 
-  def playServicesVersion = '16.0.0'
+  def playServicesVersion = '17.0.0'
   implementation ("com.google.android.gms:play-services-maps:$playServicesVersion") {
 	  exclude group: "com.android.support"
   }
