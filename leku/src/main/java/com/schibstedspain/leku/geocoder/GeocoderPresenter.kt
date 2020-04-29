@@ -9,13 +9,16 @@ import com.schibstedspain.leku.geocoder.timezone.GoogleTimeZoneDataSource
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.android.schedulers.AndroidSchedulers
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
-import java.util.TimeZone
 import java.util.concurrent.TimeUnit
+import java.util.TimeZone
+import kotlin.collections.ArrayList
+import kotlin.collections.List
+import kotlin.collections.isNotEmpty
 
 private const val RETRY_COUNT = 3
 private const val MAX_PLACES_RESULTS = 3

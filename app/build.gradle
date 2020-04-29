@@ -47,7 +47,10 @@ detekt {
 }
 
 ktlint {
-  reporters = ["PLAIN", "CHECKSTYLE"]
+  reporters {
+	reporter "plain"
+	reporter "checkstyle"
+  }
 }
 
 dependencies {

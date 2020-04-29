@@ -7,25 +7,27 @@ import android.location.Address
 import android.location.Location
 import android.os.Bundle
 import android.os.StrictMode
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import com.schibstedspain.leku.LATITUDE
-import com.schibstedspain.leku.LONGITUDE
-import com.schibstedspain.leku.LOCATION_ADDRESS
+import androidx.appcompat.app.AppCompatActivity
 import com.schibstedspain.leku.ADDRESS
-import com.schibstedspain.leku.ZIPCODE
-import com.schibstedspain.leku.TRANSITION_BUNDLE
+import com.schibstedspain.leku.LATITUDE
 import com.schibstedspain.leku.LEKU_POI
-import com.schibstedspain.leku.TIME_ZONE_ID
-import com.schibstedspain.leku.TIME_ZONE_DISPLAY_NAME
+import com.schibstedspain.leku.LOCATION_ADDRESS
+import com.schibstedspain.leku.LONGITUDE
 import com.schibstedspain.leku.LekuPoi
-import com.schibstedspain.leku.LocationPickerActivity
 import com.schibstedspain.leku.LocationPicker
+import com.schibstedspain.leku.LocationPickerActivity
+import com.schibstedspain.leku.TIME_ZONE_DISPLAY_NAME
+import com.schibstedspain.leku.TIME_ZONE_ID
+import com.schibstedspain.leku.TRANSITION_BUNDLE
+import com.schibstedspain.leku.ZIPCODE
 import com.schibstedspain.leku.tracker.LocationPickerTracker
 import com.schibstedspain.leku.tracker.TrackEvents
 import java.util.UUID
+import kotlin.collections.ArrayList
+import kotlin.collections.List
 
 private const val MAP_BUTTON_REQUEST_CODE = 1
 private const val MAP_POIS_BUTTON_REQUEST_CODE = 2
@@ -62,29 +64,29 @@ class MainActivity : AppCompatActivity() {
         mapButton.setOnClickListener {
             val locationPickerIntent = LocationPickerActivity.Builder()
                     .withLocation(41.4036299, 2.1743558)
-                    //.withGeolocApiKey("<PUT API KEY HERE>")
-                    //.withSearchZone("es_ES")
-                    //.withSearchZone(SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
+                    // .withGeolocApiKey("<PUT API KEY HERE>")
+                    // .withSearchZone("es_ES")
+                    // .withSearchZone(SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
                     .withDefaultLocaleSearchZone()
-                    //.shouldReturnOkOnBackPressed()
-                    //.withStreetHidden()
-                    //.withCityHidden()
-                    //.withZipCodeHidden()
-                    //.withSatelliteViewHidden()
-                    //.withGooglePlacesEnabled()
+                    // .shouldReturnOkOnBackPressed()
+                    // .withStreetHidden()
+                    // .withCityHidden()
+                    // .withZipCodeHidden()
+                    // .withSatelliteViewHidden()
+                    // .withGooglePlacesEnabled()
                     .withGoogleTimeZoneEnabled()
-                    //.withVoiceSearchHidden()
+                    // .withVoiceSearchHidden()
                     .withUnnamedRoadHidden()
                     .build(applicationContext)
 
-            //this is optional if you want to return RESULT_OK if you don't set the latitude/longitude and click back button
+            // this is optional if you want to return RESULT_OK if you don't set the latitude/longitude and click back button
             locationPickerIntent.putExtra("test", "this is a test")
 
             startActivityForResult(locationPickerIntent, MAP_BUTTON_REQUEST_CODE)
         }
 
         val mapPoisButton = findViewById<View>(R.id.map_button_with_pois)
-        mapPoisButton.setOnClickListener { _ ->
+        mapPoisButton.setOnClickListener {
             val locationPickerIntent = LocationPickerActivity.Builder()
                     .withLocation(41.4036299, 2.1743558)
                     .withPois(lekuPois)

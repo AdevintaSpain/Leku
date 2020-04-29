@@ -20,10 +20,10 @@ internal object DefaultCountryLocaleRect {
     private val GERMANY_LOWER_LEFT = LatLng(47.103880, 5.556203)
     private val GERMANY_UPPER_RIGHT = LatLng(55.204320, 15.453816)
 
-    private val GERMAN_LOWER_LEFT = LatLng(45.875834, 6.235783)   // DACH Region
+    private val GERMAN_LOWER_LEFT = LatLng(45.875834, 6.235783) // DACH Region
     private val GERMAN_UPPER_RIGHT = LatLng(55.130976, 16.922589) // DACH Region
 
-    private val UAE_LOWER_LEFT = LatLng(22.523123, 51.513718)  // United Arab Emirates
+    private val UAE_LOWER_LEFT = LatLng(22.523123, 51.513718) // United Arab Emirates
     private val UAE_UPPER_RIGHT = LatLng(26.188523, 56.568692) // United Arab Emirates
     private const val UAE_COUNTRY_CODE = "ar_ae"
 
@@ -43,8 +43,8 @@ internal object DefaultCountryLocaleRect {
     private val VIETNAM_UPPER_RIGHT = LatLng(24.151926, 110.665524)
     private const val VIETNAM_COUNTRY_CODE = "vi_VN"
 
-    private val HK_LOWER_LEFT = LatLng(22.153611, 113.835000)   // Hong Kong
-    private val HK_UPPER_RIGHT = LatLng(22.563333, 114.441389)  // Hong Kong
+    private val HK_LOWER_LEFT = LatLng(22.153611, 113.835000) // Hong Kong
+    private val HK_UPPER_RIGHT = LatLng(22.563333, 114.441389) // Hong Kong
     private const val HK_COUNTRY_CODE = "zh_HK"
 
     private val BRAZIL_LOWER_LEFT = LatLng(-34.990322, -75.004705) // Brazil

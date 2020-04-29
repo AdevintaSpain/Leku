@@ -1,13 +1,13 @@
 package com.schibstedspain.leku.geocoder.timezone
 
 import android.content.Context
+import android.content.pm.PackageManager
 import com.google.maps.GeoApiContext
 import com.google.maps.TimeZoneApi
 import com.google.maps.errors.ApiException
 import com.google.maps.model.LatLng
 import java.io.IOException
 import java.util.TimeZone
-import android.content.pm.PackageManager
 
 class GoogleTimeZoneDataSource(private val geoApiContext: GeoApiContext) {
 

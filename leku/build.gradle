@@ -61,7 +61,10 @@ detekt {
 }
 
 ktlint {
-  reporters = ["PLAIN", "CHECKSTYLE"]
+  reporters {
+	reporter "plain"
+	reporter "checkstyle"
+  }
 }
 
 configurations.all {
@@ -75,7 +78,7 @@ dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
   implementation "androidx.appcompat:appcompat:1.1.0"
-  implementation "com.google.android.material:material:1.2.0-alpha04"
+  implementation "com.google.android.material:material:1.2.0-alpha06"
 
   def playServicesVersion = '17.0.0'
   implementation ("com.google.android.gms:play-services-maps:$playServicesVersion") {
@@ -85,7 +88,7 @@ dependencies {
 	  exclude group: "com.android.support"
   }
 
-  implementation ("com.google.android.libraries.places:places-compat:2.0.0") {
+  implementation ("com.google.android.libraries.places:places-compat:2.2.0") {
     exclude group: "com.android.support"
   }
 
@@ -93,7 +96,7 @@ dependencies {
 
   implementation 'pl.charmas.android:android-reactive-location2:2.1@aar'
 
-  implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
+  implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
   implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
   implementation 'nl.littlerobots.rxlint:rxlint:1.7.4'
 
