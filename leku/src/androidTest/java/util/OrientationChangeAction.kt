@@ -2,13 +2,12 @@ package util
 
 import android.app.Activity
 import android.content.pm.ActivityInfo
-import androidx.test.espresso.UiController
-import androidx.test.espresso.ViewAction
 import android.util.Log
 import android.view.View
-import org.hamcrest.Matcher
-
+import androidx.test.espresso.UiController
+import androidx.test.espresso.ViewAction
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
+import org.hamcrest.Matcher
 
 class OrientationChangeAction private constructor(private val orientation: Int) : ViewAction {
 

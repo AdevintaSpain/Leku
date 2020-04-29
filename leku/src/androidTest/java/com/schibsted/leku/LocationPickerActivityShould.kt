@@ -5,25 +5,9 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.provider.Settings
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.filters.FlakyTest
-import androidx.test.rule.ActivityTestRule
-import androidx.test.rule.GrantPermissionRule
 import android.util.Log
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
-import com.schibstedspain.leku.LocationPickerActivity
-import com.schibstedspain.leku.LATITUDE
-import com.schibstedspain.leku.LONGITUDE
-import com.schibstedspain.leku.LAYOUTS_TO_HIDE
-import com.schibstedspain.leku.SEARCH_ZONE
-import com.schibstedspain.leku.R
-import org.junit.Before
-import org.junit.Ignore
-import org.junit.Rule
-import org.junit.Test
-import util.PermissionGranter
-
 import androidx.test.InstrumentationRegistry.getInstrumentation
 import androidx.test.InstrumentationRegistry.getTargetContext
 import androidx.test.espresso.Espresso.onView
@@ -31,10 +15,25 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.pressImeActionButton
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.hasImeAction
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.filters.FlakyTest
+import androidx.test.rule.ActivityTestRule
+import androidx.test.rule.GrantPermissionRule
+import com.schibstedspain.leku.LATITUDE
+import com.schibstedspain.leku.LAYOUTS_TO_HIDE
+import com.schibstedspain.leku.LONGITUDE
+import com.schibstedspain.leku.LocationPickerActivity
+import com.schibstedspain.leku.R
+import com.schibstedspain.leku.SEARCH_ZONE
+import org.junit.Before
+import org.junit.Ignore
+import org.junit.Rule
+import org.junit.Test
+import util.PermissionGranter
 
 class LocationPickerActivityShould {
     private var permissionGranter: PermissionGranter? = null

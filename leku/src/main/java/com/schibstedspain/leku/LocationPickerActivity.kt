@@ -10,9 +10,6 @@ import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.speech.RecognizerIntent
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
@@ -29,6 +26,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RawRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
@@ -37,36 +36,34 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.places.Places
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
+import com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.schibstedspain.leku.geocoder.GoogleGeocoderDataSource
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.maps.GeoApiContext
 import com.schibstedspain.leku.geocoder.AndroidGeocoderDataSource
 import com.schibstedspain.leku.geocoder.GeocoderPresenter
 import com.schibstedspain.leku.geocoder.GeocoderRepository
 import com.schibstedspain.leku.geocoder.GeocoderViewInterface
+import com.schibstedspain.leku.geocoder.GoogleGeocoderDataSource
 import com.schibstedspain.leku.geocoder.api.AddressBuilder
 import com.schibstedspain.leku.geocoder.api.NetworkClient
 import com.schibstedspain.leku.geocoder.places.GooglePlacesDataSource
-import com.schibstedspain.leku.permissions.PermissionUtils
-import com.schibstedspain.leku.tracker.TrackEvents
-import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
-
-import com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
-import com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE
-import com.google.maps.GeoApiContext
 import com.schibstedspain.leku.geocoder.timezone.GoogleTimeZoneDataSource
 import com.schibstedspain.leku.locale.DefaultCountryLocaleRect
 import com.schibstedspain.leku.locale.SearchZoneRect
-import java.util.ArrayList
-import java.util.HashMap
-import java.util.Locale
+import com.schibstedspain.leku.permissions.PermissionUtils
+import com.schibstedspain.leku.tracker.TrackEvents
+import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import java.util.TimeZone
+import java.util.Locale
 
 const val LATITUDE = "latitude"
 const val LONGITUDE = "longitude"

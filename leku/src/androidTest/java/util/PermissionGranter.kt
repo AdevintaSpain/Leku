@@ -3,13 +3,12 @@ package util
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
+import androidx.core.content.ContextCompat
+import androidx.test.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObjectNotFoundException
 import androidx.test.uiautomator.UiSelector
-import androidx.core.content.ContextCompat
-import android.util.Log
-
-import androidx.test.InstrumentationRegistry.getInstrumentation
 
 private const val PERMISSIONS_DIALOG_DELAY = 3000
 private const val GRANT_BUTTON_INDEX = 1

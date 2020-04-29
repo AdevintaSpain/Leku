@@ -73,5 +73,6 @@
       android:textSize="12sp"
       android:textStyle="bold"
       android:textColor="@color/leku_app_strong_blue"
+      tools:ignore="RtlCompat"
       />
 </merge>
