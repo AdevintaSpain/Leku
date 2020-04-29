@@ -78,7 +78,7 @@ dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
   implementation "androidx.appcompat:appcompat:1.1.0"
-  implementation "com.google.android.material:material:1.2.0-alpha05"
+  implementation "com.google.android.material:material:1.2.0-alpha06"
 
   def playServicesVersion = '17.0.0'
   implementation ("com.google.android.gms:play-services-maps:$playServicesVersion") {
@@ -96,7 +96,7 @@ dependencies {
 
   implementation 'pl.charmas.android:android-reactive-location2:2.1@aar'
 
-  implementation 'io.reactivex.rxjava2:rxjava:2.2.17'
+  implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
   implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
   implementation 'nl.littlerobots.rxlint:rxlint:1.7.4'
 
