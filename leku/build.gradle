@@ -98,6 +98,10 @@ dependencies {
 
   implementation 'io.reactivex.rxjava3:rxjava:3.0.3'
   implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+  implementation 'com.github.akarnokd:rxjava3-bridge:3.0.0'
+  implementation('io.reactivex.rxjava2:rxjava:2.2.19') {
+    because("pl.charmas.android:android-reactive-location needs it")
+  }
   implementation 'nl.littlerobots.rxlint:rxlint:1.7.4'
 
 

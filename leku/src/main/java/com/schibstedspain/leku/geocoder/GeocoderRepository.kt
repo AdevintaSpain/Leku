@@ -16,20 +16,20 @@ class GeocoderRepository(
         return androidGeocoder.getFromLocationName(query)
                 .subscribeOn(Schedulers.newThread())
                 .retry(RETRY_COUNT.toLong())
-                .onErrorResumeNext(googleGeocoder.getFromLocationName(query))
+                .onErrorResumeWith(googleGeocoder.getFromLocationName(query))
     }
 
     fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): Observable<List<Address>> {
         return androidGeocoder.getFromLocationName(query, lowerLeft, upperRight)
                 .subscribeOn(Schedulers.newThread())
                 .retry(RETRY_COUNT.toLong())
-                .onErrorResumeNext(googleGeocoder.getFromLocationName(query, lowerLeft, upperRight))
+                .onErrorResumeWith(googleGeocoder.getFromLocationName(query, lowerLeft, upperRight))
     }
 
     fun getFromLocation(latLng: LatLng): Observable<List<Address>> {
         return androidGeocoder.getFromLocation(latLng.latitude, latLng.longitude)
                 .subscribeOn(Schedulers.newThread())
                 .retry(RETRY_COUNT.toLong())
-                .onErrorResumeNext(googleGeocoder.getFromLocation(latLng.latitude, latLng.longitude))
+                .onErrorResumeWith(googleGeocoder.getFromLocation(latLng.latitude, latLng.longitude))
     }
 }
