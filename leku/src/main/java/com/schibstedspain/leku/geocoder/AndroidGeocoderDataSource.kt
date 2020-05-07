@@ -3,7 +3,7 @@ package com.schibstedspain.leku.geocoder
 import android.location.Address
 import android.location.Geocoder
 import com.google.android.gms.maps.model.LatLng
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import java.io.IOException
 
 private const val MAX_RESULTS = 5

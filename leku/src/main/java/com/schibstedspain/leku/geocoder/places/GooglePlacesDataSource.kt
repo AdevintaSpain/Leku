@@ -9,8 +9,8 @@ import com.google.android.gms.location.places.Place
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.tasks.RuntimeExecutionException
 import com.google.android.gms.tasks.Tasks
-import io.reactivex.Observable
-import io.reactivex.Observable.defer
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Observable.defer
 import java.util.ArrayList
 import java.util.Locale
 import java.util.concurrent.ExecutionException

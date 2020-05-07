@@ -2,8 +2,8 @@ package com.schibstedspain.leku.geocoder
 
 import android.location.Address
 import com.google.android.gms.maps.model.LatLng
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 private const val RETRY_COUNT = 3
 
