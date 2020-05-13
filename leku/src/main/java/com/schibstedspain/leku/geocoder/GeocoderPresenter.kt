@@ -54,7 +54,6 @@ class GeocoderPresenter @JvmOverloads constructor(
         val disposable = locationProvider.lastKnownLocation
                 .retry(RETRY_COUNT.toLong())
                 .subscribe({ view?.showLastLocation(it) },
-                        { },
                         { view?.didGetLastLocation() })
         compositeDisposable.add(disposable)
     }

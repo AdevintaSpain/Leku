@@ -33,7 +33,6 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.places.Places
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
@@ -46,6 +45,8 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.maps.GeoApiContext
 import com.schibstedspain.leku.geocoder.AndroidGeocoderDataSource
@@ -247,7 +248,11 @@ class LocationPickerActivity : AppCompatActivity(),
     }
 
     private fun setUpMainVariables() {
-        val placesDataSource = GooglePlacesDataSource(Places.getGeoDataClient(this))
+        var placesDataSource: GooglePlacesDataSource? = null
+        if (!Places.isInitialized() && getString(R.string.leku_google_places_key).isNotEmpty()) {
+            Places.initialize(applicationContext, getString(R.string.leku_google_places_key))
+            placesDataSource = GooglePlacesDataSource(Places.createClient(this))
+        }
         val geocoder = Geocoder(this, Locale.getDefault())
         apiInteractor = GoogleGeocoderDataSource(NetworkClient(), AddressBuilder())
         val geocoderRepository = GeocoderRepository(AndroidGeocoderDataSource(geocoder), apiInteractor!!)
@@ -1156,7 +1161,7 @@ class LocationPickerActivity : AppCompatActivity(),
                 .addApi(LocationServices.API)
 
         if (isGooglePlacesEnabled) {
-            googleApiClientBuilder.addApi(Places.GEO_DATA_API)
+            //googleApiClientBuilder.addApi(Places.GEO_DATA_API)
         }
 
         googleApiClient = googleApiClientBuilder.build()

@@ -1,18 +1,17 @@
 package com.schibstedspain.leku.geocoder.places
 
-import android.annotation.SuppressLint
 import android.location.Address
-import com.google.android.gms.common.data.DataBufferUtils
-import com.google.android.gms.location.places.AutocompletePrediction
-import com.google.android.gms.location.places.GeoDataClient
-import com.google.android.gms.location.places.Place
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.tasks.RuntimeExecutionException
 import com.google.android.gms.tasks.Tasks
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
+import com.google.android.libraries.places.api.net.PlacesClient
 import io.reactivex.Observable
 import io.reactivex.Observable.defer
-import java.util.ArrayList
-import java.util.Locale
+import java.util.*
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
@@ -20,11 +19,15 @@ import java.util.concurrent.TimeoutException
 private const val PREDICTIONS_WAITING_TIME: Long = 6
 private const val PLACE_BY_ID_WAITING_TIME: Long = 3
 
-class GooglePlacesDataSource(private val geoDataClient: GeoDataClient) {
+class GooglePlacesDataSource(private val geoDataClient: PlacesClient) {
 
     fun getFromLocationName(query: String, latLngBounds: LatLngBounds): Observable<List<Address>> {
         return defer {
-            val results = geoDataClient.getAutocompletePredictions(query, latLngBounds, null)
+            val findAutocompletePredictionsRequest = FindAutocompletePredictionsRequest
+                    .builder()
+                    .setQuery(query)
+                    .build()
+            val results = geoDataClient.findAutocompletePredictions(findAutocompletePredictionsRequest)
             try {
                 Tasks.await(results, PREDICTIONS_WAITING_TIME, TimeUnit.SECONDS)
             } catch (ignored: ExecutionException) {
@@ -33,9 +36,7 @@ class GooglePlacesDataSource(private val geoDataClient: GeoDataClient) {
             }
 
             try {
-                val autocompletePredictions = results.result
-                val predictionList = DataBufferUtils.freezeAndClose(autocompletePredictions)
-                val addressList = getAddressListFromPrediction(predictionList)
+                val addressList = getAddressListFromPrediction(results.result)
                 return@defer Observable.just(addressList)
             } catch (e: RuntimeExecutionException) {
                 return@defer Observable.just(ArrayList<Address>())
@@ -43,29 +44,37 @@ class GooglePlacesDataSource(private val geoDataClient: GeoDataClient) {
         }
     }
 
-    private fun getAddressListFromPrediction(predictionList: List<AutocompletePrediction>): List<Address> {
+    private fun getAddressListFromPrediction(result: FindAutocompletePredictionsResponse?): List<Address> {
         val addressList = ArrayList<Address>()
-        for (prediction in predictionList) {
-            val placeBufferResponseTask = geoDataClient.getPlaceById(prediction.placeId!!)
-            try {
-                Tasks.await(placeBufferResponseTask, PLACE_BY_ID_WAITING_TIME, TimeUnit.SECONDS)
-            } catch (ignored: ExecutionException) {
-            } catch (ignored: InterruptedException) {
-            } catch (ignored: TimeoutException) {
-            }
+        result?.let { result ->
+            for (prediction in result.autocompletePredictions) {
+                val placeFields = listOf(Place.Field.ID, Place.Field.NAME)
+                val fetchPlaceRequest = FetchPlaceRequest.builder(prediction.placeId, placeFields).build()
+                val placeBufferResponseTask = geoDataClient.fetchPlace(fetchPlaceRequest)
+                try {
+                    Tasks.await(placeBufferResponseTask, PLACE_BY_ID_WAITING_TIME, TimeUnit.SECONDS)
+                } catch (ignored: ExecutionException) {
+                } catch (ignored: InterruptedException) {
+                } catch (ignored: TimeoutException) {
+                }
 
-            val placeBufferResponse = placeBufferResponseTask.result
-            @SuppressLint("RestrictedApi") val place = placeBufferResponse!!.get(0)
-            addressList.add(mapPlaceToAddress(place))
+                val placeBufferResponse = placeBufferResponseTask.result
+                val place = placeBufferResponse?.place
+                place?.let {
+                    addressList.add(mapPlaceToAddress(it))
+                }
+            }
         }
         return addressList
     }
 
     private fun mapPlaceToAddress(place: Place): Address {
         val address = Address(Locale.getDefault())
-        address.latitude = place.latLng.latitude
-        address.longitude = place.latLng.longitude
-        val addressName = place.name.toString() + " - " + place.address!!.toString()
+        place.latLng?.let {
+            address.latitude = it.latitude
+            address.longitude = it.longitude
+        }
+        val addressName = place.name.toString() + " - " + place.address.toString()
         address.setAddressLine(0, addressName)
         address.featureName = addressName
         return address
