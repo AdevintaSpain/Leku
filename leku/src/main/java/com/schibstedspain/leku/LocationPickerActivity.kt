@@ -46,7 +46,6 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.maps.GeoApiContext
 import com.schibstedspain.leku.geocoder.AndroidGeocoderDataSource
@@ -89,6 +88,7 @@ const val TIME_ZONE_DISPLAY_NAME = "time_zone_display_name"
 const val MAP_STYLE = "map_style"
 const val UNNAMED_ROAD_VISIBILITY = "unnamed_road_visibility"
 private const val GEOLOC_API_KEY = "geoloc_api_key"
+private const val PLACES_API_KEY = "places_api_key"
 private const val LOCATION_KEY = "location_key"
 private const val LAST_LOCATION_QUERY = "last_location_query"
 private const val OPTIONS_HIDE_STREET = "street"
@@ -144,7 +144,7 @@ class LocationPickerActivity : AppCompatActivity(),
     private var shouldReturnOkOnBackPressed = false
     private var enableSatelliteView = true
     private var enableLocationPermissionRequest = true
-    private var isGooglePlacesEnabled = false
+    private var googlePlacesApiKey: String? = null
     private var isGoogleTimeZoneEnabled = false
     private var searchZone: String? = null
     private var searchZoneRect: SearchZoneRect? = null
@@ -249,8 +249,10 @@ class LocationPickerActivity : AppCompatActivity(),
 
     private fun setUpMainVariables() {
         var placesDataSource: GooglePlacesDataSource? = null
-        if (!Places.isInitialized() && getString(R.string.leku_google_places_key).isNotEmpty()) {
-            Places.initialize(applicationContext, getString(R.string.leku_google_places_key))
+        if (!Places.isInitialized() && !googlePlacesApiKey.isNullOrEmpty()) {
+            googlePlacesApiKey?.let {
+                Places.initialize(applicationContext, it)
+            }
             placesDataSource = GooglePlacesDataSource(Places.createClient(this))
         }
         val geocoder = Geocoder(this, Locale.getDefault())
@@ -357,7 +359,7 @@ class LocationPickerActivity : AppCompatActivity(),
         updateAddressLayoutVisibility()
         updateVoiceSearchVisibility()
 
-        if (isGooglePlacesEnabled) {
+        if (!googlePlacesApiKey.isNullOrEmpty()) {
             geocoderPresenter?.enableGooglePlaces()
         }
     }
@@ -715,8 +717,8 @@ class LocationPickerActivity : AppCompatActivity(),
         if (savedInstanceState.keySet().contains(GEOLOC_API_KEY)) {
             apiInteractor?.setApiKey(savedInstanceState.getString(GEOLOC_API_KEY, ""))
         }
-        if (savedInstanceState.keySet().contains(ENABLE_GOOGLE_PLACES)) {
-            isGooglePlacesEnabled = savedInstanceState.getBoolean(ENABLE_GOOGLE_PLACES, false)
+        if (savedInstanceState.keySet().contains(PLACES_API_KEY)) {
+            googlePlacesApiKey = savedInstanceState.getString(PLACES_API_KEY, "")
         }
         if (savedInstanceState.keySet().contains(ENABLE_GOOGLE_TIME_ZONE)) {
             isGoogleTimeZoneEnabled = savedInstanceState.getBoolean(ENABLE_GOOGLE_TIME_ZONE, false)
@@ -783,8 +785,8 @@ class LocationPickerActivity : AppCompatActivity(),
         if (transitionBundle.keySet().contains(GEOLOC_API_KEY)) {
             apiInteractor!!.setApiKey(transitionBundle.getString(GEOLOC_API_KEY, ""))
         }
-        if (transitionBundle.keySet().contains(ENABLE_GOOGLE_PLACES)) {
-            isGooglePlacesEnabled = transitionBundle.getBoolean(ENABLE_GOOGLE_PLACES, false)
+        if (transitionBundle.keySet().contains(PLACES_API_KEY)) {
+            googlePlacesApiKey = transitionBundle.getString(PLACES_API_KEY, "")
         }
         if (transitionBundle.keySet().contains(ENABLE_GOOGLE_TIME_ZONE)) {
             isGoogleTimeZoneEnabled = transitionBundle.getBoolean(ENABLE_GOOGLE_TIME_ZONE, false)
@@ -1216,7 +1218,7 @@ class LocationPickerActivity : AppCompatActivity(),
         private var shouldReturnOkOnBackPressed = false
         private var lekuPois: List<LekuPoi>? = null
         private var geolocApiKey: String? = null
-        private var googlePlacesEnabled = false
+        private var googlePlacesApiKey: String? = null
         private var googleTimeZoneEnabled = false
         private var voiceSearchEnabled = true
         private var mapStyle: Int? = null
@@ -1286,8 +1288,8 @@ class LocationPickerActivity : AppCompatActivity(),
             return this
         }
 
-        fun withGooglePlacesEnabled(): Builder {
-            this.googlePlacesEnabled = true
+        fun withGooglePlacesApiKey(apiKey: String): Builder {
+            this.googlePlacesApiKey = apiKey
             return this
         }
 
@@ -1340,8 +1342,10 @@ class LocationPickerActivity : AppCompatActivity(),
             geolocApiKey?.let {
                 intent.putExtra(GEOLOC_API_KEY, geolocApiKey)
             }
+            googlePlacesApiKey?.let {
+                intent.putExtra(PLACES_API_KEY, googlePlacesApiKey)
+            }
             mapStyle?.let { style -> intent.putExtra(MAP_STYLE, style) }
-            intent.putExtra(ENABLE_GOOGLE_PLACES, googlePlacesEnabled)
             intent.putExtra(ENABLE_GOOGLE_TIME_ZONE, googleTimeZoneEnabled)
             intent.putExtra(ENABLE_VOICE_SEARCH, voiceSearchEnabled)
             intent.putExtra(UNNAMED_ROAD_VISIBILITY, unnamedRoadVisible)

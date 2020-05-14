@@ -1,6 +1,5 @@
 <resources
   xmlns:tools="http://schemas.android.com/tools">
-  <string name="leku_google_places_key" translatable="false" tools:ignore="UnusedResources"></string>
   <string name="leku_app_name" translatable="false" tools:ignore="UnusedResources">Leku</string>
   <string name="leku_title_activity_location_picker" tools:ignore="UnusedResources">Location Picker</string>
   <string name="leku_no_geocoder_available">Service not available</string>
