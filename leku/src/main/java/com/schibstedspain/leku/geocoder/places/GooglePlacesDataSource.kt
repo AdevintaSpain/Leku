@@ -4,18 +4,19 @@ import android.location.Address
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.tasks.RuntimeExecutionException
 import com.google.android.gms.tasks.Tasks
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Observable.defer
-import java.util.ArrayList
-import java.util.Locale
 import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.model.RectangularBounds
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import com.google.android.libraries.places.api.net.PlacesClient
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Observable.defer
+import java.util.*
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
+
 
 private const val PREDICTIONS_WAITING_TIME: Long = 6
 private const val PLACE_BY_ID_WAITING_TIME: Long = 3
@@ -23,11 +24,15 @@ private const val PLACE_BY_ID_WAITING_TIME: Long = 3
 class GooglePlacesDataSource(private val geoDataClient: PlacesClient) {
 
     fun getFromLocationName(query: String, latLngBounds: LatLngBounds): Observable<List<Address>> {
+        val locationBias = RectangularBounds.newInstance(
+            latLngBounds.southwest,
+            latLngBounds.northeast)
         return defer {
             val findAutocompletePredictionsRequest = FindAutocompletePredictionsRequest
-                    .builder()
-                    .setQuery(query)
-                    .build()
+                .builder()
+                .setQuery(query)
+                .setLocationBias(locationBias)
+                .build()
             val results = geoDataClient.findAutocompletePredictions(findAutocompletePredictionsRequest)
             try {
                 Tasks.await(results, PREDICTIONS_WAITING_TIME, TimeUnit.SECONDS)
