@@ -71,10 +71,10 @@ class GeocoderPresenter @JvmOverloads constructor(
 
     fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng) {
         view?.willLoadLocation()
-        val disposable = Observable.zip<List<Address>, List<Address>, List<Address>>(
+        val disposable = Observable.zip(
                 geocoderRepository.getFromLocationName(query, lowerLeft, upperRight),
                 getPlacesFromLocationName(query, lowerLeft, upperRight),
-                BiFunction<List<Address>, List<Address>, List<Address>> {
+                BiFunction {
                     geocoderList, placesList -> this.getMergedList(geocoderList, placesList)
                 })
                 .subscribeOn(Schedulers.io())
@@ -99,10 +99,10 @@ class GeocoderPresenter @JvmOverloads constructor(
 
     fun getDebouncedFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng, debounceTime: Int) {
         view?.willLoadLocation()
-        val disposable = Observable.zip<List<Address>, List<Address>, List<Address>>(
+        val disposable = Observable.zip(
                 geocoderRepository.getFromLocationName(query, lowerLeft, upperRight),
                 getPlacesFromLocationName(query, lowerLeft, upperRight),
-                BiFunction<List<Address>, List<Address>, List<Address>> {
+                BiFunction {
                     geocoderList, placesList -> this.getMergedList(geocoderList, placesList) })
                 .subscribeOn(Schedulers.io())
                 .debounce(debounceTime.toLong(), TimeUnit.MILLISECONDS, Schedulers.io())
