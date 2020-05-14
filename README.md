@@ -260,29 +260,13 @@ That's all folks!
 
 Leku now supports Google Places queries using the search box. If you want to enable it these are the steps you need to follow:
 
-1. You need to replace your old `com.google.android.maps.v2.API_KEY` meta-data for the `com.google.android.geo.API_KEY`
+1. Enable Google Places API for Android on your [google developer console](https://console.developers.google.com/).
 
-```xml
-<!-- Use this if only using Maps and not Places
-    <meta-data
-        android:name="com.google.android.maps.v2.API_KEY"
-        android:value="@string/google_maps_key"
-        />
--->
-
-    <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="@string/google_maps_key"/>
-```
-
-2. Enable Google Places API for Android on your [google developer console](https://console.developers.google.com/).
-
-3. Enable it when instantiating LocationPickerActivity by adding `.withGooglePlacesEnabled()`:
+2. Add the key to the location picker builder
 
 ```kotlin
 val locationPickerIntent = LocationPickerActivity.Builder()
-    **.withGooglePlacesEnabled()**
-    .build(applicationContext)
+      .withGooglePlacesApiKey("<PUT API KEY HERE>")
 ```
 
 And you are good to go. :)

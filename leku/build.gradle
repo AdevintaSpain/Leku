@@ -88,13 +88,13 @@ dependencies {
 	  exclude group: "com.android.support"
   }
 
-  implementation ("com.google.android.libraries.places:places-compat:2.2.0") {
+  implementation ("com.google.android.libraries.places:places:2.2.0") {
     exclude group: "com.android.support"
   }
 
   implementation "com.google.maps:google-maps-services:0.2.9"
 
-  implementation 'pl.charmas.android:android-reactive-location2:2.1@aar'
+  implementation 'com.github.MarsXan:Android-ReactiveLocation:2.1.0'
 
   implementation 'io.reactivex.rxjava3:rxjava:3.0.3'
   implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'

@@ -52,10 +52,9 @@ class GeocoderPresenter @JvmOverloads constructor(
 
     fun getLastKnownLocation() {
         @SuppressLint("MissingPermission")
-        val disposable = RxJavaBridge.toV3Observable(locationProvider.lastKnownLocation)
+        val disposable = RxJavaBridge.toV3Single(locationProvider.lastKnownLocation)
                 .retry(RETRY_COUNT.toLong())
                 .subscribe({ view?.showLastLocation(it) },
-                        { },
                         { view?.didGetLastLocation() })
         compositeDisposable.add(disposable)
     }
