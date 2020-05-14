@@ -5,7 +5,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.schibstedspain.leku.geocoder.api.AddressBuilder
 import com.schibstedspain.leku.geocoder.api.NetworkClient
 import com.schibstedspain.leku.geocoder.api.NetworkException
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import java.util.Locale
 import org.json.JSONException
 

@@ -4,6 +4,10 @@ import android.location.Address
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.tasks.RuntimeExecutionException
 import com.google.android.gms.tasks.Tasks
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Observable.defer
+import java.util.ArrayList
+import java.util.Locale
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
@@ -11,7 +15,6 @@ import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRe
 import com.google.android.libraries.places.api.net.PlacesClient
 import io.reactivex.Observable
 import io.reactivex.Observable.defer
-import java.util.*
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
