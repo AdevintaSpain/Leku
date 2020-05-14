@@ -51,8 +51,8 @@ class GooglePlacesDataSource(private val geoDataClient: PlacesClient) {
 
     private fun getAddressListFromPrediction(result: FindAutocompletePredictionsResponse?): List<Address> {
         val addressList = ArrayList<Address>()
-        result?.let { result ->
-            for (prediction in result.autocompletePredictions) {
+        result?.let { predictionsResults ->
+            for (prediction in predictionsResults.autocompletePredictions) {
                 val placeFields = listOf(Place.Field.ID, Place.Field.NAME)
                 val fetchPlaceRequest = FetchPlaceRequest.builder(prediction.placeId, placeFields).build()
                 val placeBufferResponseTask = geoDataClient.fetchPlace(fetchPlaceRequest)
