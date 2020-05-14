@@ -12,11 +12,10 @@ import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRe
 import com.google.android.libraries.places.api.net.PlacesClient
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observable.defer
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
-
 
 private const val PREDICTIONS_WAITING_TIME: Long = 6
 private const val PLACE_BY_ID_WAITING_TIME: Long = 3
