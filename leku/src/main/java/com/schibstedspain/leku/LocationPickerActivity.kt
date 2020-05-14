@@ -1160,10 +1160,6 @@ class LocationPickerActivity : AppCompatActivity(),
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
 
-        if (isGooglePlacesEnabled) {
-            //googleApiClientBuilder.addApi(Places.GEO_DATA_API)
-        }
-
         googleApiClient = googleApiClientBuilder.build()
         googleApiClient?.connect()
     }
