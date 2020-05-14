@@ -87,6 +87,7 @@ const val TIME_ZONE_ID = "time_zone_id"
 const val TIME_ZONE_DISPLAY_NAME = "time_zone_display_name"
 const val MAP_STYLE = "map_style"
 const val UNNAMED_ROAD_VISIBILITY = "unnamed_road_visibility"
+const val WITH_LEGACY_LAYOUT = "with_legacy_layout"
 private const val GEOLOC_API_KEY = "geoloc_api_key"
 private const val PLACES_API_KEY = "places_api_key"
 private const val LOCATION_KEY = "location_key"
@@ -157,6 +158,7 @@ class LocationPickerActivity : AppCompatActivity(),
     private var isVoiceSearchEnabled = true
     private var isUnnamedRoadVisible = true
     private var mapStyle: Int? = null
+    private var isLegacyLayoutEnabled = false
     private lateinit var toolbar: Toolbar
     private lateinit var timeZone: TimeZone
 
@@ -223,11 +225,15 @@ class LocationPickerActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.leku_activity_location_picker)
+        updateValuesFromBundle(savedInstanceState)
+        if (isLegacyLayoutEnabled) {
+            setContentView(R.layout.leku_activity_location_picker_legacy)
+        } else {
+            setContentView(R.layout.leku_activity_location_picker)
+        }
         setUpMainVariables()
         setUpResultsList()
         setUpToolBar()
-        updateValuesFromBundle(savedInstanceState)
         checkLocationPermission()
         setUpSearchView()
         setUpMapIfNeeded()
@@ -750,6 +756,9 @@ class LocationPickerActivity : AppCompatActivity(),
         if (savedInstanceState.keySet().contains(MAP_STYLE)) {
             mapStyle = savedInstanceState.getInt(MAP_STYLE)
         }
+        if (savedInstanceState.keySet().contains(WITH_LEGACY_LAYOUT)) {
+            isLegacyLayoutEnabled = savedInstanceState.getBoolean(WITH_LEGACY_LAYOUT, false)
+        }
     }
 
     private fun getTransitionBundleParams(transitionBundle: Bundle) {
@@ -799,6 +808,9 @@ class LocationPickerActivity : AppCompatActivity(),
         }
         if (transitionBundle.keySet().contains(MAP_STYLE)) {
             mapStyle = transitionBundle.getInt(MAP_STYLE)
+        }
+        if (transitionBundle.keySet().contains(WITH_LEGACY_LAYOUT)) {
+            isLegacyLayoutEnabled = transitionBundle.getBoolean(WITH_LEGACY_LAYOUT, false)
         }
     }
 
@@ -1223,6 +1235,7 @@ class LocationPickerActivity : AppCompatActivity(),
         private var voiceSearchEnabled = true
         private var mapStyle: Int? = null
         private var unnamedRoadVisible = true
+        private var isLegacyLayoutEnabled = false
 
         fun withLocation(latitude: Double, longitude: Double): Builder {
             this.locationLatitude = latitude
@@ -1313,6 +1326,11 @@ class LocationPickerActivity : AppCompatActivity(),
             return this
         }
 
+        fun withLegacyLayout(): Builder {
+            this.isLegacyLayoutEnabled = true
+            return this
+        }
+
         fun build(context: Context): Intent {
             val intent = Intent(context, LocationPickerActivity::class.java)
 
@@ -1349,6 +1367,7 @@ class LocationPickerActivity : AppCompatActivity(),
             intent.putExtra(ENABLE_GOOGLE_TIME_ZONE, googleTimeZoneEnabled)
             intent.putExtra(ENABLE_VOICE_SEARCH, voiceSearchEnabled)
             intent.putExtra(UNNAMED_ROAD_VISIBILITY, unnamedRoadVisible)
+            intent.putExtra(WITH_LEGACY_LAYOUT, isLegacyLayoutEnabled)
 
             return intent
         }
