@@ -18,6 +18,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -337,8 +338,14 @@ class LocationPickerActivity : AppCompatActivity(),
             geocoderPresenter?.getLastKnownLocation()
             track(TrackEvents.ON_LOCALIZED_ME)
         }
-        val btnAcceptLocation = findViewById<FloatingActionButton>(R.id.btnAccept)
+
+        val btnAcceptLocation = if (isLegacyLayoutEnabled) {
+            findViewById<FloatingActionButton>(R.id.btnAccept)
+        } else {
+            findViewById<Button>(R.id.btnAccept)
+        }
         btnAcceptLocation.setOnClickListener { returnCurrentPosition() }
+
 
         val btnSatellite = findViewById<FloatingActionButton>(R.id.btnSatellite)
         btnSatellite?.setOnClickListener {

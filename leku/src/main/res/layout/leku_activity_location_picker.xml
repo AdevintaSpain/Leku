@@ -120,21 +120,20 @@
           <include layout="@layout/leku_layout_coordinates" />
           <include layout="@layout/leku_layout_address" />
 
-        </LinearLayout>
+          <Button
+              android:id="@+id/btnAccept"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="top|end"
+              android:text="Select"
+              app:backgroundTint="?colorPrimary"
+              app:rippleColor="?colorPrimaryDark"
+              app:elevation="2dp"
+              tools:background="?colorPrimary"
+              tools:ignore="elevation"
+              />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnAccept"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top|end"
-            android:src="@drawable/leku_ic_check_light"
-            app:fabSize="normal"
-            app:backgroundTint="?colorPrimary"
-            app:rippleColor="?colorPrimaryDark"
-            app:elevation="2dp"
-            tools:background="?colorPrimary"
-            tools:ignore="elevation"
-            />
+        </LinearLayout>
 
       </LinearLayout>
     </FrameLayout>
