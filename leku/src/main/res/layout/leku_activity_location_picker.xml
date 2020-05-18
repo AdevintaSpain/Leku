@@ -48,7 +48,6 @@
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:paddingBottom="@dimen/leku_information_bottom_margin"
       android:orientation="vertical"
       android:layout_gravity="bottom|end"
       android:animateLayoutChanges="true"
@@ -92,13 +91,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:paddingBottom="8dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
         android:id="@+id/location_info"
         android:visibility="gone"
-        tools:visibility="visible"
-        >
+        tools:visibility="visible">
 
       <LinearLayout
           android:layout_width="match_parent"
@@ -107,6 +102,8 @@
           android:background="@drawable/leku_adress_custom_background"
           android:orientation="horizontal"
           tools:ignore="UselessParent"
+          android:baselineAligned="false"
+          android:paddingBottom="48dp"
           >
 
 
@@ -126,7 +123,6 @@
               android:layout_height="wrap_content"
               android:layout_gravity="center_horizontal"
               android:paddingTop="16dp"
-              android:paddingBottom="16dp"
               android:text="@string/leku_use_this_location"
               app:backgroundTint="?colorPrimary"
               app:rippleColor="?colorPrimaryDark"

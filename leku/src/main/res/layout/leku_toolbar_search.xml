@@ -1,27 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.Toolbar
+<com.google.android.material.appbar.AppBarLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map_search_toolbar"
-    android:layout_height="?attr/actionBarSize"
     android:layout_width="match_parent"
-    android:layout_marginTop="26dp"
-    android:layout_marginLeft="@dimen/leku_gap"
-    android:layout_marginRight="@dimen/leku_gap"
-    android:elevation="2dp"
-    android:background="@drawable/leku_toolbar_custom_background"
-    app:theme="@style/ThemeOverlay.AppCompat.Light"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    tools:ignore="UnusedAttribute,elevation"
+    android:layout_height="wrap_content"
+    app:elevation="0dp"
+    android:background="@android:color/transparent"
+    tools:ignore="UnusedAttribute"
     >
+
+  <androidx.appcompat.widget.Toolbar
+      android:id="@+id/map_search_toolbar"
+      android:layout_height="?attr/actionBarSize"
+      android:layout_width="match_parent"
+      android:layout_marginTop="26dp"
+      android:layout_marginLeft="@dimen/leku_gap"
+      app:elevation="0dp"
+      android:layout_marginRight="@dimen/leku_gap"
+      tools:ignore="UnusedAttribute,elevation"
+      />
 
   <LinearLayout
       android:id="@+id/leku_search_touch_zone"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="40dp"
+      android:layout_marginStart="16dp"
+      android:layout_marginEnd="16dp"
+      android:paddingStart="16dp"
+      android:paddingEnd="16dp"
       android:layout_gravity="center_vertical"
       android:orientation="horizontal"
+      android:background="@drawable/leku_toolbar_custom_background"
       >
 
     <EditText
@@ -48,4 +58,4 @@
         android:visibility="invisible"
         />
   </LinearLayout>
-</androidx.appcompat.widget.Toolbar>
+</com.google.android.material.appbar.AppBarLayout>
