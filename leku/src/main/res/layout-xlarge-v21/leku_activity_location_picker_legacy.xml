@@ -106,7 +106,7 @@
           android:layout_gravity="bottom|end"
           android:paddingStart="16dp"
           android:paddingEnd="16dp"
-          android:background="@drawable/leku_adress_custom_background"
+          android:background="@drawable/leku_adress_custom_background_legacy"
           android:orientation="horizontal"
           tools:ignore="UselessParent"
           >
@@ -145,5 +145,5 @@
     </FrameLayout>
   </LinearLayout>
 
-  <include layout="@layout/leku_toolbar_search" />
+  <include layout="@layout/leku_toolbar_search_legacy" />
 </merge>

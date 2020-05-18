@@ -13,4 +13,5 @@
   <string name="leku_longitude">Longitud</string>
   <string name="leku_latitude">Latitud</string>
   <string name="leku_coordinates">Coordenadas</string>
+  <string name="leku_use_this_location">Usar esta ubicación</string>
 </resources>

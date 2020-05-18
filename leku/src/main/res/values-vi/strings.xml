@@ -13,4 +13,5 @@
     <string name="leku_toolbar_action_voice_title">Âm thanh</string>
     <string name="leku_voice_search_promp">Tìm kiếm bằng giọng nói...</string>
     <string name="leku_voice_search_extra_language">vi-VN</string>
+    <string name="leku_use_this_location">Sử dụng vị trí này</string>
 </resources>

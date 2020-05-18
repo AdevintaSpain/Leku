@@ -122,10 +122,12 @@
 
           <Button
               android:id="@+id/btnAccept"
-              android:layout_width="wrap_content"
+              android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:layout_gravity="top|end"
-              android:text="Select"
+              android:layout_gravity="center_horizontal"
+              android:paddingTop="16dp"
+              android:paddingBottom="16dp"
+              android:text="@string/leku_use_this_location"
               app:backgroundTint="?colorPrimary"
               app:rippleColor="?colorPrimaryDark"
               app:elevation="2dp"

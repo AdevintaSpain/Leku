@@ -8,6 +8,7 @@ import android.content.IntentSender
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.text.Editable
@@ -15,6 +16,7 @@ import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
@@ -63,8 +65,14 @@ import com.schibstedspain.leku.locale.SearchZoneRect
 import com.schibstedspain.leku.permissions.PermissionUtils
 import com.schibstedspain.leku.tracker.TrackEvents
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
-import java.util.TimeZone
-import java.util.Locale
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.collections.List
+import kotlin.collections.MutableList
+import kotlin.collections.MutableMap
+import kotlin.collections.isNotEmpty
+import kotlin.collections.set
 
 const val LATITUDE = "latitude"
 const val LONGITUDE = "longitude"
@@ -230,6 +238,9 @@ class LocationPickerActivity : AppCompatActivity(),
         if (isLegacyLayoutEnabled) {
             setContentView(R.layout.leku_activity_location_picker_legacy)
         } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+            }
             setContentView(R.layout.leku_activity_location_picker)
         }
         setUpMainVariables()
