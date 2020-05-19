@@ -58,8 +58,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
         app:srcCompat="@drawable/leku_ic_satellite_on"
         app:fabSize="normal"
         android:tint="?colorPrimary"
@@ -74,8 +75,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         android:src="@drawable/leku_ic_gps_lime"
         app:fabSize="normal"
@@ -104,8 +105,8 @@
           tools:ignore="UselessParent"
           android:baselineAligned="false"
           android:paddingBottom="48dp"
-          android:paddingStart="16dp"
-          android:paddingEnd="16dp"
+          android:paddingStart="24dp"
+          android:paddingEnd="24dp"
           >
 
         <LinearLayout
@@ -120,7 +121,11 @@
               android:layout_height="wrap_content"
               app:srcCompat="@drawable/leku_ic_close"
               android:layout_gravity="top|end"
-            />
+              android:background="@null"
+              android:layout_marginTop="16dp"
+              android:layout_marginBottom="-16dp"
+              android:contentDescription="@string/leku_accessibility_remove_current_location"
+              />
 
           <include layout="@layout/leku_layout_coordinates" />
           <include layout="@layout/leku_layout_address" />
@@ -128,20 +133,22 @@
           <Button
               android:id="@+id/btnAccept"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              android:layout_height="48dp"
               android:layout_gravity="center_horizontal"
-              android:paddingTop="16dp"
-              android:paddingStart="16dp"
-              android:paddingEnd="16dp"
+              android:layout_marginTop="16dp"
               android:text="@string/leku_use_this_location"
+              android:textColor="@color/leku_white"
+              android:textSize="16sp"
+              android:textAllCaps="false"
+              android:stateListAnimator="@null"
               app:backgroundTint="?colorPrimary"
               app:rippleColor="?colorPrimaryDark"
               app:elevation="0dp"
+              android:background="?colorPrimary"
               tools:background="?colorPrimary"
+              tools:ignore="UnusedAttribute"
               />
-
         </LinearLayout>
-
       </LinearLayout>
     </FrameLayout>
   </LinearLayout>

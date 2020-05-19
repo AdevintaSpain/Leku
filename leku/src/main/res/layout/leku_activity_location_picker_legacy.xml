@@ -109,12 +109,15 @@
           tools:ignore="UselessParent"
           >
 
-
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_weight="1"
+            android:paddingTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             >
 
           <include layout="@layout/leku_layout_coordinates" />

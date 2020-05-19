@@ -14,4 +14,5 @@
   <string name="leku_latitude">Latitud</string>
   <string name="leku_coordinates">Coordenadas</string>
   <string name="leku_use_this_location">Usar esta ubicación</string>
+  <string name="leku_accessibility_remove_current_location">Deseleccionar la ubicación actual</string>
 </resources>

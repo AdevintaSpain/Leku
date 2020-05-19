@@ -116,6 +116,9 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_weight="1"
+            android:paddingTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
             >
 
           <include layout="@layout/leku_layout_coordinates" />

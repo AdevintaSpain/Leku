@@ -3,7 +3,8 @@
   <color name="leku_white">#FFFFFF</color>
   <color name="leku_white_alpha">#F2FFFFFF</color>
   <color name="leku_soft_grey">#ECEEEF</color>
-  <color name="leku_mid_grey">#9199A1</color>
+  <color name="leku_mid_grey">#85969f</color>
   <color name="leku_strong_grey">#50545A</color>
   <color name="leku_search_background">#0000</color>
+  <color name="leku_blackish">#171d20</color>
 </resources>

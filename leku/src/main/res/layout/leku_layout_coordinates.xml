@@ -5,18 +5,15 @@
     android:layout_height="wrap_content"
     android:layout_weight="1"
     android:orientation="vertical"
-    android:layout_marginStart="16dp"
-    android:layout_marginLeft="16dp"
     >
     <TextView
         android:id="@+id/coordinates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="@string/leku_coordinates"
-        android:textColor="@color/leku_strong_grey"
+        android:textColor="@color/leku_blackish"
         android:textSize="18sp"
-        android:textStyle="normal"
+        android:textStyle="bold"
         />
 
     <TextView
@@ -24,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/leku_mid_grey"
-        android:textSize="14sp"
+        android:textSize="16sp"
         tools:text="15.184845"
         />
 
@@ -33,9 +30,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/leku_mid_grey"
-        android:layout_marginBottom="16dp"
         android:layout_marginTop="4dp"
-        android:textSize="14sp"
+        android:textSize="16sp"
         tools:text="4.1518484"
         />
 </LinearLayout>
