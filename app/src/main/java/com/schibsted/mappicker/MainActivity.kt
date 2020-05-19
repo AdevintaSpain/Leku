@@ -85,6 +85,16 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(locationPickerIntent, MAP_BUTTON_REQUEST_CODE)
         }
 
+        val mapLegacyButton = findViewById<View>(R.id.map_button_legacy)
+        mapLegacyButton.setOnClickListener {
+            val locationPickerIntent = LocationPickerActivity.Builder()
+                .withLocation(41.4036299, 2.1743558)
+                .withUnnamedRoadHidden()
+                .withLegacyLayout()
+                .build(applicationContext)
+            startActivityForResult(locationPickerIntent, MAP_BUTTON_REQUEST_CODE)
+        }
+
         val mapPoisButton = findViewById<View>(R.id.map_button_with_pois)
         mapPoisButton.setOnClickListener {
             val locationPickerIntent = LocationPickerActivity.Builder()

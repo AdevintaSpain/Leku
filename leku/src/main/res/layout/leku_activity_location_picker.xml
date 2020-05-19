@@ -104,8 +104,9 @@
           tools:ignore="UselessParent"
           android:baselineAligned="false"
           android:paddingBottom="48dp"
+          android:paddingStart="16dp"
+          android:paddingEnd="16dp"
           >
-
 
         <LinearLayout
             android:layout_width="0dp"
@@ -113,6 +114,13 @@
             android:orientation="vertical"
             android:layout_weight="1"
             >
+
+          <ImageButton
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              app:srcCompat="@drawable/leku_ic_close"
+              android:layout_gravity="top|end"
+            />
 
           <include layout="@layout/leku_layout_coordinates" />
           <include layout="@layout/leku_layout_address" />
@@ -123,12 +131,13 @@
               android:layout_height="wrap_content"
               android:layout_gravity="center_horizontal"
               android:paddingTop="16dp"
+              android:paddingStart="16dp"
+              android:paddingEnd="16dp"
               android:text="@string/leku_use_this_location"
               app:backgroundTint="?colorPrimary"
               app:rippleColor="?colorPrimaryDark"
-              app:elevation="2dp"
+              app:elevation="0dp"
               tools:background="?colorPrimary"
-              tools:ignore="elevation"
               />
 
         </LinearLayout>
