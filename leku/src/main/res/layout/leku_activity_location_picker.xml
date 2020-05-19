@@ -66,7 +66,7 @@
         android:tint="?colorPrimary"
         app:backgroundTint="@color/leku_white"
         app:rippleColor="@color/leku_soft_grey"
-        app:elevation="2dp"
+        app:elevation="12dp"
         tools:background="@color/leku_white"
         />
 
@@ -83,7 +83,7 @@
         android:tint="?colorPrimary"
         app:backgroundTint="@color/leku_white"
         app:rippleColor="@color/leku_soft_grey"
-        app:elevation="2dp"
+        app:elevation="12dp"
         tools:background="@color/leku_white"
         tools:ignore="elevation"
         />
@@ -144,7 +144,7 @@
               app:backgroundTint="?colorPrimary"
               app:rippleColor="?colorPrimaryDark"
               app:elevation="0dp"
-              android:background="?colorPrimary"
+              android:background="@drawable/leku_select_location_button_background"
               tools:background="?colorPrimary"
               tools:ignore="UnusedAttribute"
               />
