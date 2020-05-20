@@ -1,5 +1,6 @@
 package com.schibstedspain.leku
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -264,6 +265,7 @@ class LocationPickerActivity : AppCompatActivity(),
         }
     }
 
+    @SuppressLint("InlinedApi")
     private fun moveGoogleLogoToTopRight() {
         val contentView: View = findViewById(android.R.id.content)
         val googleLogo: View = contentView.findViewWithTag("GoogleWatermark")
