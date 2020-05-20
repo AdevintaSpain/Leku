@@ -181,7 +181,7 @@ class LocationPickerActivity : AppCompatActivity(),
                     }
                     showLocationInfoLayout()
                     clearSearchButton?.visibility = View.INVISIBLE
-                    searchOption?.setIcon(R.drawable.leku_ic_mic)
+                    searchOption?.setIcon(R.drawable.leku_ic_mic_legacy)
                     updateVoiceSearchVisibility()
                 } else {
                     if (charSequence.length > MIN_CHARACTERS) {
@@ -367,9 +367,9 @@ class LocationPickerActivity : AppCompatActivity(),
                 it.mapType = if (it.mapType == MAP_TYPE_SATELLITE) MAP_TYPE_NORMAL else MAP_TYPE_SATELLITE
                 btnSatellite.setImageResource(
                         if (it.mapType == MAP_TYPE_SATELLITE)
-                            R.drawable.leku_ic_satellite_off
+                            R.drawable.leku_ic_satellite_off_legacy
                         else
-                            R.drawable.leku_ic_satellite_on)
+                            R.drawable.leku_ic_satellite_on_legacy)
             }
         }
         if (enableSatelliteView) btnSatellite.show() else btnSatellite.hide()
@@ -398,10 +398,12 @@ class LocationPickerActivity : AppCompatActivity(),
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.leku_toolbar_menu, menu)
-        searchOption = menu.findItem(R.id.action_voice)
-        updateVoiceSearchVisibility()
+        if (isLegacyLayoutEnabled) {
+            val inflater = menuInflater
+            inflater.inflate(R.menu.leku_toolbar_menu, menu)
+            searchOption = menu.findItem(R.id.action_voice)
+            updateVoiceSearchVisibility()
+        }
         return true
     }
 
