@@ -35,6 +35,7 @@ import android.widget.Toast
 import androidx.annotation.RawRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
@@ -69,7 +70,8 @@ import com.schibstedspain.leku.locale.SearchZoneRect
 import com.schibstedspain.leku.permissions.PermissionUtils
 import com.schibstedspain.leku.tracker.TrackEvents
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
-import java.util.*
+import java.util.TimeZone
+import java.util.Locale
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.set
@@ -139,6 +141,7 @@ class LocationPickerActivity : AppCompatActivity(),
     private var locationInfoLayout: FrameLayout? = null
     private var progressBar: ProgressBar? = null
     private var listResult: ListView? = null
+    private var searchResultsList: RecyclerView? = null
     private var clearSearchButton: ImageView? = null
     private var searchOption: MenuItem? = null
     private var clearLocationButton: ImageButton? = null
@@ -332,15 +335,19 @@ class LocationPickerActivity : AppCompatActivity(),
     }
 
     private fun setUpResultsList() {
-        listResult = findViewById(R.id.resultlist)
-        adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, locationNameList)
-        listResult?.let {
-            it.adapter = adapter
-            it.setOnItemClickListener { _, _, i, _ ->
-                setNewLocation(locationList[i])
-                changeListResultVisibility(View.GONE)
-                closeKeyboard()
+        if (isLegacyLayoutEnabled) {
+            listResult = findViewById(R.id.resultlist)
+            adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, locationNameList)
+            listResult?.let {
+                it.adapter = adapter
+                it.setOnItemClickListener { _, _, i, _ ->
+                    setNewLocation(locationList[i])
+                    changeListResultVisibility(View.GONE)
+                    closeKeyboard()
+                }
             }
+        } else {
+            searchResultsList = findViewById(R.id.search_result_list)
         }
     }
 
