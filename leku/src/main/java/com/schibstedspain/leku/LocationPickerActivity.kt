@@ -69,8 +69,7 @@ import com.schibstedspain.leku.locale.SearchZoneRect
 import com.schibstedspain.leku.permissions.PermissionUtils
 import com.schibstedspain.leku.tracker.TrackEvents
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
-import java.util.TimeZone
-import java.util.Locale
+import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.set
@@ -349,9 +348,24 @@ class LocationPickerActivity : AppCompatActivity(),
         toolbar = findViewById(R.id.map_search_toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.let {
+            if (!isLegacyLayoutEnabled){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    val drawable = resources.getDrawable(R.drawable.leku_ic_close, theme)
+                    drawable.setTint(getThemeColorPrimary())
+                    it.setHomeAsUpIndicator(drawable)
+                } else {
+                    it.setHomeAsUpIndicator(R.drawable.leku_ic_close)
+                }
+            }
             it.setDisplayHomeAsUpEnabled(true)
             it.setDisplayShowTitleEnabled(false)
         }
+    }
+
+    private fun getThemeColorPrimary(): Int {
+        val value = TypedValue()
+        theme.resolveAttribute(R.attr.colorPrimary, value, true)
+        return value.data
     }
 
     private fun switchToolbarVisibility() {
