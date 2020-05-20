@@ -10,16 +10,31 @@
     tools:ignore="UnusedAttribute"
     >
 
-  <androidx.appcompat.widget.Toolbar
-      android:id="@+id/map_search_toolbar"
-      android:layout_height="?attr/actionBarSize"
+  <FrameLayout
       android:layout_width="match_parent"
-      android:layout_marginTop="26dp"
-      android:layout_marginLeft="@dimen/leku_gap"
-      app:elevation="0dp"
-      android:layout_marginRight="@dimen/leku_gap"
-      tools:ignore="UnusedAttribute,elevation"
-      />
+      android:layout_height="wrap_content"
+      android:layout_marginTop="26dp">
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        app:elevation="12dp"
+        android:src="@drawable/leku_adress_custom_background"
+        android:importantForAccessibility="no"
+        />
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/map_search_toolbar"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/leku_gap"
+        android:layout_marginRight="@dimen/leku_gap"
+        tools:ignore="UnusedAttribute,elevation"
+        />
+  </FrameLayout>
 
   <LinearLayout
       android:id="@+id/leku_search_touch_zone"
