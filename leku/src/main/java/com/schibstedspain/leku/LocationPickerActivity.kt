@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -26,6 +27,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RawRes
@@ -232,6 +234,19 @@ class LocationPickerActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         updateValuesFromBundle(savedInstanceState)
+        setUpContentView()
+        setUpMainVariables()
+        setUpResultsList()
+        setUpToolBar()
+        checkLocationPermission()
+        setUpSearchView()
+        setUpMapIfNeeded()
+        setUpFloatingButtons()
+        buildGoogleApiClient()
+        track(TrackEvents.ON_LOAD_LOCATION_PICKER)
+    }
+
+    private fun setUpContentView() {
         if (isLegacyLayoutEnabled) {
             setContentView(R.layout.leku_activity_location_picker_legacy)
         } else {
@@ -245,16 +260,22 @@ class LocationPickerActivity : AppCompatActivity(),
             }
 
             setContentView(R.layout.leku_activity_location_picker)
+            moveGoogleLogoToTopRight()
         }
-        setUpMainVariables()
-        setUpResultsList()
-        setUpToolBar()
-        checkLocationPermission()
-        setUpSearchView()
-        setUpMapIfNeeded()
-        setUpFloatingButtons()
-        buildGoogleApiClient()
-        track(TrackEvents.ON_LOAD_LOCATION_PICKER)
+    }
+
+    private fun moveGoogleLogoToTopRight() {
+        val contentView: View = findViewById(android.R.id.content)
+        val googleLogo: View = contentView.findViewWithTag("GoogleWatermark")
+        val glLayoutParams: RelativeLayout.LayoutParams = googleLogo.layoutParams as RelativeLayout.LayoutParams
+        glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0)
+        glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0)
+        glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_START, 0)
+        glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE)
+        glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_END, RelativeLayout.TRUE)
+        val paddingTopInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24.0f, resources.displayMetrics).toInt()
+        googleLogo.setPadding(0, paddingTopInPixels, 0, 0)
+        googleLogo.layoutParams = glLayoutParams
     }
 
     private fun checkLocationPermission() {
