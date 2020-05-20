@@ -117,6 +117,7 @@
             >
 
           <ImageButton
+              android:id="@+id/btnClearSelectedLocation"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               app:srcCompat="@drawable/leku_ic_close"
@@ -125,6 +126,9 @@
               android:layout_marginTop="16dp"
               android:layout_marginBottom="-16dp"
               android:contentDescription="@string/leku_accessibility_remove_current_location"
+              android:foreground="?attr/selectableItemBackground"
+              android:clickable="true"
+              android:focusable="true"
               />
 
           <include layout="@layout/leku_layout_coordinates" />

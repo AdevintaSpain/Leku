@@ -25,6 +25,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.ProgressBar
@@ -141,6 +142,7 @@ class LocationPickerActivity : AppCompatActivity(),
     private var listResult: ListView? = null
     private var clearSearchButton: ImageView? = null
     private var searchOption: MenuItem? = null
+    private var clearLocationButton: ImageButton? = null
 
     private val locationList = ArrayList<Address>()
     private var locationNameList: MutableList<String> = ArrayList()
@@ -321,6 +323,13 @@ class LocationPickerActivity : AppCompatActivity(),
             searchView?.setText("")
         }
         locationNameList = ArrayList()
+        clearLocationButton = findViewById(R.id.btnClearSelectedLocation)
+        clearLocationButton?.setOnClickListener {
+            currentLocation = null
+            currentLekuPoi = null
+            currentMarker?.remove()
+            changeLocationInfoLayoutVisibility(View.GONE)
+        }
     }
 
     private fun setUpResultsList() {
