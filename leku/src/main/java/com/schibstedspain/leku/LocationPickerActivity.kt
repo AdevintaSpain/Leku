@@ -32,6 +32,7 @@ import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.LinearLayout
 import androidx.annotation.RawRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -149,6 +150,8 @@ class LocationPickerActivity : AppCompatActivity(),
     private var clearSearchButton: ImageView? = null
     private var searchOption: MenuItem? = null
     private var clearLocationButton: ImageButton? = null
+    private var searchEditLayout: LinearLayout? = null
+    private var searchFrameLayout: FrameLayout? = null
 
     private val locationList = ArrayList<Address>()
     private var locationNameList: MutableList<String> = ArrayList()
@@ -343,6 +346,8 @@ class LocationPickerActivity : AppCompatActivity(),
             currentMarker?.remove()
             changeLocationInfoLayoutVisibility(View.GONE)
         }
+        searchEditLayout = findViewById(R.id.leku_search_touch_zone)
+        searchFrameLayout = findViewById(R.id.search_frame_layout)
     }
 
     private fun setUpResultsList() {
@@ -364,6 +369,9 @@ class LocationPickerActivity : AppCompatActivity(),
                     setNewLocation(locationList[position])
                     changeListResultVisibility(View.GONE)
                     closeKeyboard()
+                    searchFrameLayout?.setBackgroundResource(android.R.color.transparent)
+                    searchEditLayout?.setBackgroundResource(R.drawable.leku_search_text_background)
+                    searchView?.clearFocus()
                 }
             })
             searchResultsList = findViewById<RecyclerView>(R.id.search_result_list).apply {
@@ -415,11 +423,24 @@ class LocationPickerActivity : AppCompatActivity(),
                 retrieveLocationFrom(v.text.toString())
                 closeKeyboard()
                 handled = true
+                if (!isLegacyLayoutEnabled) {
+                    searchEditLayout?.setBackgroundResource(R.drawable.leku_search_text_background)
+                    searchFrameLayout?.setBackgroundResource(android.R.color.transparent)
+                }
             }
             handled
         }
         textWatcher = searchTextWatcher
         searchView?.addTextChangedListener(textWatcher)
+        if (!isLegacyLayoutEnabled) {
+            searchView?.setOnFocusChangeListener { _: View?, hasFocus: Boolean ->
+                if (hasFocus) {
+                    searchFrameLayout?.setBackgroundResource(R.color.leku_white)
+                    searchEditLayout?.setBackgroundResource(R.drawable.leku_search_text_with_border_background)
+                }
+            }
+
+        }
     }
 
     private fun setUpFloatingButtons() {

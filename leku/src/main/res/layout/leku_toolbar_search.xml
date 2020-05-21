@@ -10,6 +10,7 @@
     tools:ignore="UnusedAttribute">
 
     <FrameLayout
+        android:id="@+id/search_frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -53,7 +54,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginTop="82dp"
             android:layout_marginBottom="26dp"
-            android:background="@drawable/leku_toolbar_custom_background"
+            android:background="@drawable/leku_search_text_background"
             android:elevation="12dp"
             android:orientation="horizontal"
             android:paddingStart="16dp"
