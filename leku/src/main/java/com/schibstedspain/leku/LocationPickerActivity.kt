@@ -35,6 +35,8 @@ import android.widget.Toast
 import androidx.annotation.RawRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -142,6 +144,8 @@ class LocationPickerActivity : AppCompatActivity(),
     private var progressBar: ProgressBar? = null
     private var listResult: ListView? = null
     private var searchResultsList: RecyclerView? = null
+    private var searchAdapter: RecyclerView.Adapter<*>? = null
+    private lateinit var linearLayoutManager: RecyclerView.LayoutManager
     private var clearSearchButton: ImageView? = null
     private var searchOption: MenuItem? = null
     private var clearLocationButton: ImageButton? = null
@@ -182,9 +186,16 @@ class LocationPickerActivity : AppCompatActivity(),
 
             override fun onTextChanged(charSequence: CharSequence, start: Int, count: Int, after: Int) {
                 if ("" == charSequence.toString()) {
-                    adapter?.let {
-                        it.clear()
-                        it.notifyDataSetChanged()
+                    if (isLegacyLayoutEnabled) {
+                        adapter?.let {
+                            it.clear()
+                            it.notifyDataSetChanged()
+                        }
+                    } else {
+                        searchAdapter?.let {
+                            //it.clear()
+                            it.notifyDataSetChanged()
+                        }
                     }
                     showLocationInfoLayout()
                     clearSearchButton?.visibility = View.INVISIBLE
@@ -347,7 +358,14 @@ class LocationPickerActivity : AppCompatActivity(),
                 }
             }
         } else {
-            searchResultsList = findViewById(R.id.search_result_list)
+            linearLayoutManager = LinearLayoutManager(this)
+            searchAdapter = LocationSearchAdapter(locationNameList)
+            searchResultsList = findViewById<RecyclerView>(R.id.search_result_list).apply {
+                setHasFixedSize(true)
+                layoutManager = linearLayoutManager
+                adapter = searchAdapter
+                addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            }
         }
     }
 
@@ -655,7 +673,11 @@ class LocationPickerActivity : AppCompatActivity(),
             if (addresses.size == 1) {
                 setNewLocation(addresses[0])
             }
-            adapter?.notifyDataSetChanged()
+            if (isLegacyLayoutEnabled) {
+                adapter?.notifyDataSetChanged()
+            } else {
+                searchAdapter?.notifyDataSetChanged()
+            }
         }
     }
 
@@ -663,7 +685,11 @@ class LocationPickerActivity : AppCompatActivity(),
         fillLocationList(addresses)
         if (addresses.isNotEmpty()) {
             updateLocationNameList(addresses)
-            adapter?.notifyDataSetChanged()
+            if (isLegacyLayoutEnabled) {
+                adapter?.notifyDataSetChanged()
+            } else {
+                searchAdapter?.notifyDataSetChanged()
+            }
         }
     }
 
