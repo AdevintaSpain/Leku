@@ -77,6 +77,7 @@
                 android:layout_width="24dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
+                android:paddingTop="8dp"
                 android:contentDescription="@string/leku_search_hint"
                 android:src="@drawable/leku_ic_clean"
                 android:tint="@color/leku_strong_grey"
