@@ -359,7 +359,13 @@ class LocationPickerActivity : AppCompatActivity(),
             }
         } else {
             linearLayoutManager = LinearLayoutManager(this)
-            searchAdapter = LocationSearchAdapter(locationNameList)
+            searchAdapter = LocationSearchAdapter(locationNameList, object: LocationSearchAdapter.SearchItemClickListener {
+                override fun onItemClick(position: Int) {
+                    setNewLocation(locationList[position])
+                    changeListResultVisibility(View.GONE)
+                    closeKeyboard()
+                }
+            })
             searchResultsList = findViewById<RecyclerView>(R.id.search_result_list).apply {
                 setHasFixedSize(true)
                 layoutManager = linearLayoutManager
@@ -707,7 +713,11 @@ class LocationPickerActivity : AppCompatActivity(),
     }
 
     private fun changeListResultVisibility(visibility: Int) {
-        listResult?.visibility = visibility
+        if (isLegacyLayoutEnabled) {
+            listResult?.visibility = visibility
+        } else {
+            searchResultsList?.visibility = visibility
+        }
     }
 
     private fun changeLocationInfoLayoutVisibility(visibility: Int) {
