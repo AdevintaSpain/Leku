@@ -437,16 +437,23 @@ class LocationPickerActivity : AppCompatActivity(),
         }
         btnAcceptLocation.setOnClickListener { returnCurrentPosition() }
 
-
         val btnSatellite = findViewById<FloatingActionButton>(R.id.btnSatellite)
         btnSatellite?.setOnClickListener {
             map?.let {
                 it.mapType = if (it.mapType == MAP_TYPE_SATELLITE) MAP_TYPE_NORMAL else MAP_TYPE_SATELLITE
-                btnSatellite.setImageResource(
-                        if (it.mapType == MAP_TYPE_SATELLITE)
-                            R.drawable.leku_ic_satellite_off_legacy
-                        else
-                            R.drawable.leku_ic_satellite_on_legacy)
+                if (isLegacyLayoutEnabled) {
+                    btnSatellite.setImageResource(
+                            if (it.mapType == MAP_TYPE_SATELLITE)
+                                R.drawable.leku_ic_satellite_off_legacy
+                            else
+                                R.drawable.leku_ic_satellite_on_legacy)
+                } else {
+                    btnSatellite.setImageResource(
+                            if (it.mapType == MAP_TYPE_SATELLITE)
+                                R.drawable.leku_ic_maps
+                            else
+                                R.drawable.leku_ic_satellite)
+                }
             }
         }
         if (enableSatelliteView) btnSatellite.show() else btnSatellite.hide()

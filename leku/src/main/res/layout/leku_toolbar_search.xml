@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="132dp"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <FrameLayout
             android:layout_width="match_parent"
