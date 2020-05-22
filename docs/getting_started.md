@@ -18,14 +18,14 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.schibstedspain.android:leku:6.4.0'
+    implementation 'com.schibstedspain.android:leku:7.0.0'
 }
 ```
 
 Alternatively, if you are using a different version of Google Play Services and AndroidX use this instead:
 
 ```groovy
-implementation ('com.schibstedspain.android:leku:6.4.0') {
+implementation ('com.schibstedspain.android:leku:7.0.0') {
     exclude group: 'com.google.android.gms'
     exclude group: 'androidx.appcompat'
 }

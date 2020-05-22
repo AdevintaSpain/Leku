@@ -29,6 +29,17 @@ Using tha bundle parameter **LocationPickerActivity.LAYOUTS_TO_HIDE** you can ch
 intent.putExtra(LocationPickerActivity.LAYOUTS_TO_HIDE, "street|city|zipcode")
 ```
 
+##### Legacy Layout
+
+<img src="docs/images/screenshot.gif" height="368px" align="right" />
+
+If you want to use the old Leku layout design you need to add this line to the builder:
+
+```kotlin
+val locationPickerIntent = LocationPickerActivity.Builder()
+    .withLegacyLayout()
+```
+
 ##### Search Zone
 
 By default the search will be restricted to a zone determined by your default locale. If you want to force the search zone you can do it by adding this line with the locale preferred:
