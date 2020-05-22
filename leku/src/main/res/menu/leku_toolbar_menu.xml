@@ -5,7 +5,7 @@
 
   <item
       android:id="@+id/action_voice"
-      android:icon="@drawable/leku_ic_mic"
+      android:icon="@drawable/leku_ic_mic_legacy"
       android:title="@string/leku_toolbar_action_voice_title"
       app:showAsAction="ifRoom"
       />

@@ -1,0 +1,147 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical"
+    >
+
+  <fragment android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/map"
+            tools:context="com.schibstedspain.leku.LocationPickerActivity"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+      />
+
+  <ProgressBar
+      android:id="@+id/loading_progress_bar"
+      style="@android:style/Widget.ProgressBar.Small"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="top|start"
+      android:gravity="top|start"
+      android:layout_marginTop="80dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginLeft="8dp"
+      android:visibility="gone"
+      />
+
+  <ListView
+      android:id="@+id/resultlist"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="72dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginEnd="8dp"
+      android:layout_marginRight="8dp"
+      android:fadingEdgeLength="16dp"
+      android:footerDividersEnabled="true"
+      android:headerDividersEnabled="true"
+      android:elevation="2dp"
+      android:minWidth="296dp"
+      android:background="@drawable/leku_toolbar_custom_background"
+      tools:visibility="gone"
+      tools:ignore="UnusedAttribute"
+      />
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:paddingBottom="@dimen/leku_information_bottom_margin"
+      android:orientation="vertical"
+      android:layout_gravity="bottom|end"
+      android:animateLayoutChanges="true"
+      >
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnSatellite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:srcCompat="@drawable/leku_ic_satellite_on_legacy"
+        app:fabSize="normal"
+        android:tint="?colorPrimary"
+        app:backgroundTint="@color/leku_white"
+        app:rippleColor="@color/leku_soft_grey"
+        app:elevation="2dp"
+        tools:background="@color/leku_white"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnFloatingAction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/leku_ic_gps_lime_legacy"
+        app:fabSize="normal"
+        android:tint="?colorPrimary"
+        app:backgroundTint="@color/leku_white"
+        app:rippleColor="@color/leku_soft_grey"
+        app:elevation="2dp"
+        tools:background="@color/leku_white"
+        tools:ignore="elevation"
+        />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:paddingBottom="8dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:id="@+id/location_info"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_gravity="bottom|end"
+          android:background="@drawable/leku_adress_custom_background_legacy"
+          android:orientation="horizontal"
+          tools:ignore="UselessParent"
+          >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:paddingTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            >
+
+          <include layout="@layout/leku_layout_coordinates" />
+          <include layout="@layout/leku_layout_address" />
+
+        </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnAccept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:src="@drawable/leku_ic_check_light"
+            app:fabSize="normal"
+            app:backgroundTint="?colorPrimary"
+            app:rippleColor="?colorPrimaryDark"
+            app:elevation="2dp"
+            tools:background="?colorPrimary"
+            tools:ignore="elevation"
+            />
+
+      </LinearLayout>
+    </FrameLayout>
+  </LinearLayout>
+
+  <include layout="@layout/leku_toolbar_search_legacy" />
+</merge>

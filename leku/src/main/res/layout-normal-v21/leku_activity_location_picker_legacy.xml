@@ -24,6 +24,7 @@
       android:layout_marginStart="8dp"
       android:layout_marginLeft="8dp"
       android:visibility="gone"
+      tools:ignore="RtlHardcoded"
       />
 
   <ListView
@@ -42,7 +43,6 @@
       android:minWidth="296dp"
       android:background="@drawable/leku_toolbar_custom_background"
       tools:visibility="gone"
-      tools:ignore="UnusedAttribute,elevation"
       />
 
   <LinearLayout
@@ -59,15 +59,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        app:srcCompat="@drawable/leku_ic_satellite_on"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="8dp"
+        app:srcCompat="@drawable/leku_ic_satellite_on_legacy"
         app:fabSize="normal"
         android:tint="?colorPrimary"
         app:backgroundTint="@color/leku_white"
         app:rippleColor="@color/leku_soft_grey"
         app:elevation="2dp"
         tools:background="@color/leku_white"
+        tools:ignore="RtlHardcoded"
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -75,24 +77,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:src="@drawable/leku_ic_gps_lime"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/leku_ic_gps_lime_legacy"
         app:fabSize="normal"
         android:tint="?colorPrimary"
         app:backgroundTint="@color/leku_white"
         app:rippleColor="@color/leku_soft_grey"
         app:elevation="2dp"
         tools:background="@color/leku_white"
+        tools:ignore="RtlHardcoded"
         />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:paddingBottom="8dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
+        android:padding="8dp"
         android:id="@+id/location_info"
         android:visibility="gone"
         tools:visibility="visible"
@@ -102,7 +104,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_gravity="bottom|end"
-          android:background="@drawable/leku_adress_custom_background"
+          android:background="@drawable/leku_adress_custom_background_legacy"
           android:orientation="horizontal"
           tools:ignore="UselessParent"
           >
@@ -111,6 +113,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:paddingLeft="24dp"
+            android:paddingStart="24dp"
+            android:paddingRight="24dp"
+            android:paddingEnd="24dp"
             android:layout_weight="1"
             >
 
@@ -123,6 +131,11 @@
             android:id="@+id/btnAccept"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
             android:layout_gravity="top|end"
             android:src="@drawable/leku_ic_check_light"
             app:fabSize="normal"
@@ -136,5 +149,5 @@
     </FrameLayout>
   </LinearLayout>
 
-  <include layout="@layout/leku_toolbar_search" />
+  <include layout="@layout/leku_toolbar_search_legacy" />
 </merge>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/map_search_toolbar"
+    android:layout_height="?attr/actionBarSize"
+    android:layout_width="match_parent"
+    android:layout_marginTop="@dimen/leku_gap"
+    android:layout_marginLeft="@dimen/leku_gap"
+    android:layout_marginRight="@dimen/leku_gap"
+    android:elevation="2dp"
+    android:background="@drawable/leku_toolbar_custom_background"
+    app:theme="@style/ThemeOverlay.AppCompat.Light"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    tools:ignore="UnusedAttribute,elevation"
+    >
+
+  <LinearLayout
+      android:id="@+id/leku_search_touch_zone"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"
+      android:orientation="horizontal"
+      >
+
+    <EditText
+        android:id="@+id/leku_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:imeOptions="actionSearch"
+        android:background="@color/leku_search_background"
+        android:hint="@string/leku_search_hint"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
+        tools:ignore="Autofill"
+        />
+
+    <ImageView
+        android:id="@+id/leku_clear_search_image"
+        android:layout_width="24dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/leku_ic_clean"
+        android:tint="@color/leku_strong_grey"
+        android:contentDescription="@string/leku_search_hint"
+        android:layout_weight="0"
+        android:visibility="invisible"
+        />
+  </LinearLayout>
+</androidx.appcompat.widget.Toolbar>

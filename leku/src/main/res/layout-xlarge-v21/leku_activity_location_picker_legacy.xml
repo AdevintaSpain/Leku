@@ -62,7 +62,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp"
-        app:srcCompat="@drawable/leku_ic_satellite_on"
+        app:srcCompat="@drawable/leku_ic_satellite_on_legacy"
         app:fabSize="normal"
         android:tint="?colorPrimary"
         app:backgroundTint="@color/leku_white"
@@ -80,7 +80,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="8dp"
-        android:src="@drawable/leku_ic_gps_lime"
+        android:src="@drawable/leku_ic_gps_lime_legacy"
         app:fabSize="normal"
         android:tint="?colorPrimary"
         app:backgroundTint="@color/leku_white"
@@ -106,7 +106,7 @@
           android:layout_gravity="bottom|end"
           android:paddingStart="16dp"
           android:paddingEnd="16dp"
-          android:background="@drawable/leku_adress_custom_background"
+          android:background="@drawable/leku_adress_custom_background_legacy"
           android:orientation="horizontal"
           tools:ignore="UselessParent"
           >
@@ -116,6 +116,9 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_weight="1"
+            android:paddingTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
             >
 
           <include layout="@layout/leku_layout_coordinates" />
@@ -145,5 +148,5 @@
     </FrameLayout>
   </LinearLayout>
 
-  <include layout="@layout/leku_toolbar_search" />
+  <include layout="@layout/leku_toolbar_search_legacy" />
 </merge>

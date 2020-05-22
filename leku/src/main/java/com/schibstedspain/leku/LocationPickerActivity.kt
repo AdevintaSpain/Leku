@@ -1,5 +1,6 @@
 package com.schibstedspain.leku
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -8,26 +9,36 @@ import android.content.IntentSender
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ListView
 import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.LinearLayout
 import androidx.annotation.RawRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
@@ -64,6 +75,9 @@ import com.schibstedspain.leku.tracker.TrackEvents
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import java.util.TimeZone
 import java.util.Locale
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.collections.set
 
 const val LATITUDE = "latitude"
 const val LONGITUDE = "longitude"
@@ -87,6 +101,7 @@ const val TIME_ZONE_ID = "time_zone_id"
 const val TIME_ZONE_DISPLAY_NAME = "time_zone_display_name"
 const val MAP_STYLE = "map_style"
 const val UNNAMED_ROAD_VISIBILITY = "unnamed_road_visibility"
+const val WITH_LEGACY_LAYOUT = "with_legacy_layout"
 private const val GEOLOC_API_KEY = "geoloc_api_key"
 private const val PLACES_API_KEY = "places_api_key"
 private const val LOCATION_KEY = "location_key"
@@ -129,8 +144,14 @@ class LocationPickerActivity : AppCompatActivity(),
     private var locationInfoLayout: FrameLayout? = null
     private var progressBar: ProgressBar? = null
     private var listResult: ListView? = null
+    private var searchResultsList: RecyclerView? = null
+    private var searchAdapter: RecyclerView.Adapter<*>? = null
+    private lateinit var linearLayoutManager: RecyclerView.LayoutManager
     private var clearSearchButton: ImageView? = null
     private var searchOption: MenuItem? = null
+    private var clearLocationButton: ImageButton? = null
+    private var searchEditLayout: LinearLayout? = null
+    private var searchFrameLayout: FrameLayout? = null
 
     private val locationList = ArrayList<Address>()
     private var locationNameList: MutableList<String> = ArrayList()
@@ -157,6 +178,8 @@ class LocationPickerActivity : AppCompatActivity(),
     private var isVoiceSearchEnabled = true
     private var isUnnamedRoadVisible = true
     private var mapStyle: Int? = null
+    private var isLegacyLayoutEnabled = false
+    private var isSearchLayoutShown = false
     private lateinit var toolbar: Toolbar
     private lateinit var timeZone: TimeZone
 
@@ -167,13 +190,19 @@ class LocationPickerActivity : AppCompatActivity(),
 
             override fun onTextChanged(charSequence: CharSequence, start: Int, count: Int, after: Int) {
                 if ("" == charSequence.toString()) {
-                    adapter?.let {
-                        it.clear()
-                        it.notifyDataSetChanged()
+                    if (isLegacyLayoutEnabled) {
+                        adapter?.let {
+                            it.clear()
+                            it.notifyDataSetChanged()
+                        }
+                    } else {
+                        searchAdapter?.let {
+                            it.notifyDataSetChanged()
+                        }
                     }
                     showLocationInfoLayout()
                     clearSearchButton?.visibility = View.INVISIBLE
-                    searchOption?.setIcon(R.drawable.leku_ic_mic)
+                    searchOption?.setIcon(R.drawable.leku_ic_mic_legacy)
                     updateVoiceSearchVisibility()
                 } else {
                     if (charSequence.length > MIN_CHARACTERS) {
@@ -223,17 +252,50 @@ class LocationPickerActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.leku_activity_location_picker)
+        updateValuesFromBundle(savedInstanceState)
+        setUpContentView()
         setUpMainVariables()
         setUpResultsList()
         setUpToolBar()
-        updateValuesFromBundle(savedInstanceState)
         checkLocationPermission()
         setUpSearchView()
         setUpMapIfNeeded()
         setUpFloatingButtons()
         buildGoogleApiClient()
         track(TrackEvents.ON_LOAD_LOCATION_PICKER)
+    }
+
+    private fun setUpContentView() {
+        if (isLegacyLayoutEnabled) {
+            setContentView(R.layout.leku_activity_location_picker_legacy)
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                var flags: Int = window.decorView.systemUiVisibility
+                flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+                window.decorView.systemUiVisibility = flags
+            }
+
+            setContentView(R.layout.leku_activity_location_picker)
+            moveGoogleLogoToTopRight()
+        }
+    }
+
+    @SuppressLint("InlinedApi")
+    private fun moveGoogleLogoToTopRight() {
+        val contentView: View = findViewById(android.R.id.content)
+        val googleLogo: View = contentView.findViewWithTag("GoogleWatermark")
+        val glLayoutParams: RelativeLayout.LayoutParams = googleLogo.layoutParams as RelativeLayout.LayoutParams
+        glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0)
+        glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0)
+        glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_START, 0)
+        glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE)
+        glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_END, RelativeLayout.TRUE)
+        val paddingTopInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24.0f, resources.displayMetrics).toInt()
+        googleLogo.setPadding(0, paddingTopInPixels, 0, 0)
+        googleLogo.layoutParams = glLayoutParams
     }
 
     private fun checkLocationPermission() {
@@ -277,17 +339,44 @@ class LocationPickerActivity : AppCompatActivity(),
             searchView?.setText("")
         }
         locationNameList = ArrayList()
+        clearLocationButton = findViewById(R.id.btnClearSelectedLocation)
+        clearLocationButton?.setOnClickListener {
+            currentLocation = null
+            currentLekuPoi = null
+            currentMarker?.remove()
+            changeLocationInfoLayoutVisibility(View.GONE)
+        }
+        searchEditLayout = findViewById(R.id.leku_search_touch_zone)
+        searchFrameLayout = findViewById(R.id.search_frame_layout)
     }
 
     private fun setUpResultsList() {
-        listResult = findViewById(R.id.resultlist)
-        adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, locationNameList)
-        listResult?.let {
-            it.adapter = adapter
-            it.setOnItemClickListener { _, _, i, _ ->
-                setNewLocation(locationList[i])
-                changeListResultVisibility(View.GONE)
-                closeKeyboard()
+        if (isLegacyLayoutEnabled) {
+            listResult = findViewById(R.id.resultlist)
+            adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, locationNameList)
+            listResult?.let {
+                it.adapter = adapter
+                it.setOnItemClickListener { _, _, i, _ ->
+                    setNewLocation(locationList[i])
+                    changeListResultVisibility(View.GONE)
+                    closeKeyboard()
+                }
+            }
+        } else {
+            linearLayoutManager = LinearLayoutManager(this)
+            searchAdapter = LocationSearchAdapter(locationNameList, object : LocationSearchAdapter.SearchItemClickListener {
+                override fun onItemClick(position: Int) {
+                    setNewLocation(locationList[position])
+                    changeListResultVisibility(View.GONE)
+                    closeKeyboard()
+                    hideSearchLayout()
+                }
+            })
+            searchResultsList = findViewById<RecyclerView>(R.id.search_result_list).apply {
+                setHasFixedSize(true)
+                layoutManager = linearLayoutManager
+                adapter = searchAdapter
+                addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             }
         }
     }
@@ -296,9 +385,24 @@ class LocationPickerActivity : AppCompatActivity(),
         toolbar = findViewById(R.id.map_search_toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.let {
+            if (!isLegacyLayoutEnabled) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    val drawable = resources.getDrawable(R.drawable.leku_ic_close, theme)
+                    drawable.setTint(getThemeColorPrimary())
+                    it.setHomeAsUpIndicator(drawable)
+                } else {
+                    it.setHomeAsUpIndicator(R.drawable.leku_ic_close)
+                }
+            }
             it.setDisplayHomeAsUpEnabled(true)
             it.setDisplayShowTitleEnabled(false)
         }
+    }
+
+    private fun getThemeColorPrimary(): Int {
+        val value = TypedValue()
+        theme.resolveAttribute(R.attr.colorPrimary, value, true)
+        return value.data
     }
 
     private fun switchToolbarVisibility() {
@@ -317,11 +421,54 @@ class LocationPickerActivity : AppCompatActivity(),
                 retrieveLocationFrom(v.text.toString())
                 closeKeyboard()
                 handled = true
+                if (!isLegacyLayoutEnabled) {
+                    hideSearchLayout()
+                }
             }
             handled
         }
         textWatcher = searchTextWatcher
         searchView?.addTextChangedListener(textWatcher)
+        if (!isLegacyLayoutEnabled) {
+            searchView?.setOnFocusChangeListener { _: View?, hasFocus: Boolean ->
+                if (hasFocus) {
+                    showSearchLayout()
+                }
+            }
+        }
+    }
+
+    private fun showSearchLayout() {
+        supportActionBar?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val drawable = resources.getDrawable(R.drawable.leku_ic_back, theme)
+                drawable.setTint(getThemeColorPrimary())
+                it.setHomeAsUpIndicator(drawable)
+            } else {
+                it.setHomeAsUpIndicator(R.drawable.leku_ic_back)
+            }
+        }
+        searchFrameLayout?.setBackgroundResource(R.color.leku_white)
+        searchEditLayout?.setBackgroundResource(R.drawable.leku_search_text_with_border_background)
+        searchResultsList?.visibility = View.VISIBLE
+        isSearchLayoutShown = true
+    }
+
+    private fun hideSearchLayout() {
+        supportActionBar?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val drawable = resources.getDrawable(R.drawable.leku_ic_close, theme)
+                drawable.setTint(getThemeColorPrimary())
+                it.setHomeAsUpIndicator(drawable)
+            } else {
+                it.setHomeAsUpIndicator(R.drawable.leku_ic_close)
+            }
+        }
+        searchFrameLayout?.setBackgroundResource(android.R.color.transparent)
+        searchEditLayout?.setBackgroundResource(R.drawable.leku_search_text_background)
+        searchResultsList?.visibility = View.GONE
+        searchView?.clearFocus()
+        isSearchLayoutShown = false
     }
 
     private fun setUpFloatingButtons() {
@@ -331,18 +478,31 @@ class LocationPickerActivity : AppCompatActivity(),
             geocoderPresenter?.getLastKnownLocation()
             track(TrackEvents.ON_LOCALIZED_ME)
         }
-        val btnAcceptLocation = findViewById<FloatingActionButton>(R.id.btnAccept)
+
+        val btnAcceptLocation = if (isLegacyLayoutEnabled) {
+            findViewById<FloatingActionButton>(R.id.btnAccept)
+        } else {
+            findViewById<Button>(R.id.btnAccept)
+        }
         btnAcceptLocation.setOnClickListener { returnCurrentPosition() }
 
         val btnSatellite = findViewById<FloatingActionButton>(R.id.btnSatellite)
         btnSatellite?.setOnClickListener {
             map?.let {
                 it.mapType = if (it.mapType == MAP_TYPE_SATELLITE) MAP_TYPE_NORMAL else MAP_TYPE_SATELLITE
-                btnSatellite.setImageResource(
-                        if (it.mapType == MAP_TYPE_SATELLITE)
-                            R.drawable.leku_ic_satellite_off
-                        else
-                            R.drawable.leku_ic_satellite_on)
+                if (isLegacyLayoutEnabled) {
+                    btnSatellite.setImageResource(
+                            if (it.mapType == MAP_TYPE_SATELLITE)
+                                R.drawable.leku_ic_satellite_off_legacy
+                            else
+                                R.drawable.leku_ic_satellite_on_legacy)
+                } else {
+                    btnSatellite.setImageResource(
+                            if (it.mapType == MAP_TYPE_SATELLITE)
+                                R.drawable.leku_ic_maps
+                            else
+                                R.drawable.leku_ic_satellite)
+                }
             }
         }
         if (enableSatelliteView) btnSatellite.show() else btnSatellite.hide()
@@ -371,17 +531,23 @@ class LocationPickerActivity : AppCompatActivity(),
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.leku_toolbar_menu, menu)
-        searchOption = menu.findItem(R.id.action_voice)
-        updateVoiceSearchVisibility()
+        if (isLegacyLayoutEnabled) {
+            val inflater = menuInflater
+            inflater.inflate(R.menu.leku_toolbar_menu, menu)
+            searchOption = menu.findItem(R.id.action_voice)
+            updateVoiceSearchVisibility()
+        }
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            onBackPressed()
+            if (!isLegacyLayoutEnabled && isSearchLayoutShown) {
+                hideSearchLayout()
+            } else {
+                onBackPressed()
+            }
             return true
         } else if (id == R.id.action_voice) {
             searchView?.let {
@@ -573,7 +739,11 @@ class LocationPickerActivity : AppCompatActivity(),
             if (addresses.size == 1) {
                 setNewLocation(addresses[0])
             }
-            adapter?.notifyDataSetChanged()
+            if (isLegacyLayoutEnabled) {
+                adapter?.notifyDataSetChanged()
+            } else {
+                searchAdapter?.notifyDataSetChanged()
+            }
         }
     }
 
@@ -581,7 +751,11 @@ class LocationPickerActivity : AppCompatActivity(),
         fillLocationList(addresses)
         if (addresses.isNotEmpty()) {
             updateLocationNameList(addresses)
-            adapter?.notifyDataSetChanged()
+            if (isLegacyLayoutEnabled) {
+                adapter?.notifyDataSetChanged()
+            } else {
+                searchAdapter?.notifyDataSetChanged()
+            }
         }
     }
 
@@ -599,7 +773,11 @@ class LocationPickerActivity : AppCompatActivity(),
     }
 
     private fun changeListResultVisibility(visibility: Int) {
-        listResult?.visibility = visibility
+        if (isLegacyLayoutEnabled) {
+            listResult?.visibility = visibility
+        } else {
+            searchResultsList?.visibility = visibility
+        }
     }
 
     private fun changeLocationInfoLayoutVisibility(visibility: Int) {
@@ -750,6 +928,9 @@ class LocationPickerActivity : AppCompatActivity(),
         if (savedInstanceState.keySet().contains(MAP_STYLE)) {
             mapStyle = savedInstanceState.getInt(MAP_STYLE)
         }
+        if (savedInstanceState.keySet().contains(WITH_LEGACY_LAYOUT)) {
+            isLegacyLayoutEnabled = savedInstanceState.getBoolean(WITH_LEGACY_LAYOUT, false)
+        }
     }
 
     private fun getTransitionBundleParams(transitionBundle: Bundle) {
@@ -799,6 +980,9 @@ class LocationPickerActivity : AppCompatActivity(),
         }
         if (transitionBundle.keySet().contains(MAP_STYLE)) {
             mapStyle = transitionBundle.getInt(MAP_STYLE)
+        }
+        if (transitionBundle.keySet().contains(WITH_LEGACY_LAYOUT)) {
+            isLegacyLayoutEnabled = transitionBundle.getBoolean(WITH_LEGACY_LAYOUT, false)
         }
     }
 
@@ -1223,6 +1407,7 @@ class LocationPickerActivity : AppCompatActivity(),
         private var voiceSearchEnabled = true
         private var mapStyle: Int? = null
         private var unnamedRoadVisible = true
+        private var isLegacyLayoutEnabled = false
 
         fun withLocation(latitude: Double, longitude: Double): Builder {
             this.locationLatitude = latitude
@@ -1313,6 +1498,11 @@ class LocationPickerActivity : AppCompatActivity(),
             return this
         }
 
+        fun withLegacyLayout(): Builder {
+            this.isLegacyLayoutEnabled = true
+            return this
+        }
+
         fun build(context: Context): Intent {
             val intent = Intent(context, LocationPickerActivity::class.java)
 
@@ -1349,6 +1539,7 @@ class LocationPickerActivity : AppCompatActivity(),
             intent.putExtra(ENABLE_GOOGLE_TIME_ZONE, googleTimeZoneEnabled)
             intent.putExtra(ENABLE_VOICE_SEARCH, voiceSearchEnabled)
             intent.putExtra(UNNAMED_ROAD_VISIBILITY, unnamedRoadVisible)
+            intent.putExtra(WITH_LEGACY_LAYOUT, isLegacyLayoutEnabled)
 
             return intent
         }
