@@ -100,7 +100,7 @@
           android:orientation="horizontal"
           tools:ignore="UselessParent"
           android:baselineAligned="false"
-          android:paddingBottom="48dp"
+          android:paddingBottom="62dp"
           android:paddingStart="24dp"
           android:paddingEnd="24dp"
           >
@@ -150,6 +150,14 @@
               />
         </LinearLayout>
       </LinearLayout>
+
+      <ImageView
+          android:layout_width="match_parent"
+          android:layout_height="48dp"
+          android:layout_gravity="bottom|end"
+          android:src="@color/leku_black_20_transparent"
+          android:importantForAccessibility="no"
+          />
     </FrameLayout>
   </LinearLayout>
 
