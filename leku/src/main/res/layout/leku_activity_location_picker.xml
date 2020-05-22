@@ -13,6 +13,13 @@
       android:name="com.google.android.gms.maps.SupportMapFragment"
       />
 
+  <ImageView
+      android:layout_width="match_parent"
+      android:layout_height="200dp"
+      android:src="@drawable/leku_top_screen_gradient_background"
+      android:importantForAccessibility="no"
+      />
+
   <ProgressBar
       android:id="@+id/loading_progress_bar"
       style="@android:style/Widget.ProgressBar.Small"
@@ -76,6 +83,14 @@
         android:id="@+id/location_info"
         android:visibility="gone"
         tools:visibility="visible">
+
+      <ImageView
+          android:layout_width="match_parent"
+          android:layout_height="250dp"
+          android:layout_gravity="bottom|end"
+          android:src="@drawable/leku_bottom_screen_gradient_background"
+          android:importantForAccessibility="no"
+          />
 
       <LinearLayout
           android:layout_width="match_parent"
