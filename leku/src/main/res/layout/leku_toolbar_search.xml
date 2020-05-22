@@ -12,7 +12,8 @@
     <FrameLayout
         android:id="@+id/search_frame_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/search_result_list"
@@ -55,7 +56,7 @@
             android:layout_marginTop="82dp"
             android:layout_marginBottom="26dp"
             android:background="@drawable/leku_search_text_background"
-            android:elevation="12dp"
+            android:elevation="0dp"
             android:orientation="horizontal"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"

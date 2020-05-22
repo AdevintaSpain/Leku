@@ -179,6 +179,7 @@ class LocationPickerActivity : AppCompatActivity(),
     private var isUnnamedRoadVisible = true
     private var mapStyle: Int? = null
     private var isLegacyLayoutEnabled = false
+    private var isSearchLayoutShown = false
     private lateinit var toolbar: Toolbar
     private lateinit var timeZone: TimeZone
 
@@ -369,9 +370,7 @@ class LocationPickerActivity : AppCompatActivity(),
                     setNewLocation(locationList[position])
                     changeListResultVisibility(View.GONE)
                     closeKeyboard()
-                    searchFrameLayout?.setBackgroundResource(android.R.color.transparent)
-                    searchEditLayout?.setBackgroundResource(R.drawable.leku_search_text_background)
-                    searchView?.clearFocus()
+                    hideSearchLayout()
                 }
             })
             searchResultsList = findViewById<RecyclerView>(R.id.search_result_list).apply {
@@ -424,8 +423,7 @@ class LocationPickerActivity : AppCompatActivity(),
                 closeKeyboard()
                 handled = true
                 if (!isLegacyLayoutEnabled) {
-                    searchEditLayout?.setBackgroundResource(R.drawable.leku_search_text_background)
-                    searchFrameLayout?.setBackgroundResource(android.R.color.transparent)
+                    hideSearchLayout()
                 }
             }
             handled
@@ -435,12 +433,44 @@ class LocationPickerActivity : AppCompatActivity(),
         if (!isLegacyLayoutEnabled) {
             searchView?.setOnFocusChangeListener { _: View?, hasFocus: Boolean ->
                 if (hasFocus) {
-                    searchFrameLayout?.setBackgroundResource(R.color.leku_white)
-                    searchEditLayout?.setBackgroundResource(R.drawable.leku_search_text_with_border_background)
+                    showSearchLayout()
                 }
             }
 
         }
+    }
+
+    private fun showSearchLayout() {
+        supportActionBar?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val drawable = resources.getDrawable(R.drawable.leku_ic_back, theme)
+                drawable.setTint(getThemeColorPrimary())
+                it.setHomeAsUpIndicator(drawable)
+            } else {
+                it.setHomeAsUpIndicator(R.drawable.leku_ic_back)
+            }
+        }
+        searchFrameLayout?.setBackgroundResource(R.color.leku_white)
+        searchEditLayout?.setBackgroundResource(R.drawable.leku_search_text_with_border_background)
+        searchResultsList?.visibility = View.VISIBLE
+        isSearchLayoutShown = true
+    }
+
+    private fun hideSearchLayout() {
+        supportActionBar?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val drawable = resources.getDrawable(R.drawable.leku_ic_close, theme)
+                drawable.setTint(getThemeColorPrimary())
+                it.setHomeAsUpIndicator(drawable)
+            } else {
+                it.setHomeAsUpIndicator(R.drawable.leku_ic_close)
+            }
+        }
+        searchFrameLayout?.setBackgroundResource(android.R.color.transparent)
+        searchEditLayout?.setBackgroundResource(R.drawable.leku_search_text_background)
+        searchResultsList?.visibility = View.GONE
+        searchView?.clearFocus()
+        isSearchLayoutShown = false
     }
 
     private fun setUpFloatingButtons() {
@@ -515,7 +545,11 @@ class LocationPickerActivity : AppCompatActivity(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == android.R.id.home) {
-            onBackPressed()
+            if (!isLegacyLayoutEnabled && isSearchLayoutShown) {
+                hideSearchLayout()
+            } else {
+                onBackPressed()
+            }
             return true
         } else if (id == R.id.action_voice) {
             searchView?.let {
