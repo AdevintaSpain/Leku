@@ -48,7 +48,7 @@ Component library for Android that uses Google Maps and returns a latitude, long
 ### Features
 
 <img align="right" width="0" height="368px" hspace="20"/>
-<img src="docs/images/screenshot.gif" height="368px" align="right" />
+<img src="docs/images/new_design_screenshot.png" height="368px" align="right" />
 
 * Search by voice
 * Search by text
@@ -66,7 +66,7 @@ Component library for Android that uses Google Maps and returns a latitude, long
 ### Prerequisites
 
 minSdkVersion >= 15<br/>
-Google Play Services = 16.0.0<br/>
+Google Play Services = 17.0.0<br/>
 AndroidX
 
 ### Download
@@ -83,14 +83,14 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.schibstedspain.android:leku:6.4.0'
+    implementation 'com.schibstedspain.android:leku:7.0.0'
 }
 ```
 
 Alternatively, if you are using a different version of Google Play Services and AndroidX use this instead:
 
 ```groovy
-implementation ('com.schibstedspain.android:leku:6.4.0') {
+implementation ('com.schibstedspain.android:leku:7.0.0') {
     exclude group: 'com.google.android.gms'
     exclude group: 'androidx.appcompat'
 }
@@ -102,7 +102,7 @@ Note that Places on Google Play services is deprecated and this library currentl
 For the <b>legacy versions of Leku</b> that does not use AndroidX and want to use the latest Places SDK, you could use it in this way:
 
 ```groovy
-implementation ("com.google.android.libraries.places:places-compat:1.0.0")
+implementation ("com.google.android.libraries.places:places-compat:2.2.0")
 implementation ("com.schibstedspain.android:leku:5.0.0") {
     exclude group: 'com.google.android.gms'
     exclude module: "play-services-places"
@@ -345,6 +345,17 @@ Using tha bundle parameter **LocationPickerActivity.LAYOUTS_TO_HIDE** you can ch
 
 ```kotlin
 intent.putExtra(LocationPickerActivity.LAYOUTS_TO_HIDE, "street|city|zipcode")
+```
+
+##### Legacy Layout
+
+<img src="docs/images/screenshot.gif" height="368px" align="right" />
+
+If you want to use the old Leku layout design you need to add this line to the builder:
+
+```kotlin
+val locationPickerIntent = LocationPickerActivity.Builder()
+    .withLegacyLayout()
 ```
 
 ##### Search Zone
