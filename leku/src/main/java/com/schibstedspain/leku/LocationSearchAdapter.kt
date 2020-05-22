@@ -6,14 +6,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-
 class LocationSearchAdapter(
         private val locations: MutableList<String>?,
-        private val clickListener: SearchItemClickListener
-) : RecyclerView.Adapter<LocationSearchAdapter.SearchViewHolder>()
+        private val clickListener: SearchItemClickListener) : RecyclerView.Adapter<LocationSearchAdapter.SearchViewHolder>()
 {
     class SearchViewHolder(val textView: TextView, private val clickListener: SearchItemClickListener) : RecyclerView.ViewHolder(textView), View.OnClickListener {
-
         init {
             textView.setOnClickListener(this)
         }

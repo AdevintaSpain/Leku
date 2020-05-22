@@ -125,7 +125,7 @@
               android:foreground="?attr/selectableItemBackground"
               android:clickable="true"
               android:focusable="true"
-              />
+              tools:ignore="UnusedAttribute" />
 
           <include layout="@layout/leku_layout_coordinates" />
           <include layout="@layout/leku_layout_address" />

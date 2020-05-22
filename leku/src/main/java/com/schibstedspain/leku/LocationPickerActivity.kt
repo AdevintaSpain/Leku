@@ -197,7 +197,6 @@ class LocationPickerActivity : AppCompatActivity(),
                         }
                     } else {
                         searchAdapter?.let {
-                            //it.clear()
                             it.notifyDataSetChanged()
                         }
                     }
@@ -365,7 +364,7 @@ class LocationPickerActivity : AppCompatActivity(),
             }
         } else {
             linearLayoutManager = LinearLayoutManager(this)
-            searchAdapter = LocationSearchAdapter(locationNameList, object: LocationSearchAdapter.SearchItemClickListener {
+            searchAdapter = LocationSearchAdapter(locationNameList, object : LocationSearchAdapter.SearchItemClickListener {
                 override fun onItemClick(position: Int) {
                     setNewLocation(locationList[position])
                     changeListResultVisibility(View.GONE)
@@ -386,7 +385,7 @@ class LocationPickerActivity : AppCompatActivity(),
         toolbar = findViewById(R.id.map_search_toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.let {
-            if (!isLegacyLayoutEnabled){
+            if (!isLegacyLayoutEnabled) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     val drawable = resources.getDrawable(R.drawable.leku_ic_close, theme)
                     drawable.setTint(getThemeColorPrimary())
@@ -436,7 +435,6 @@ class LocationPickerActivity : AppCompatActivity(),
                     showSearchLayout()
                 }
             }
-
         }
     }
 
