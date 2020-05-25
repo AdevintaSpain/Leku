@@ -13,6 +13,7 @@
         android:id="@+id/search_frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/transparent"
         android:animateLayoutChanges="true">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -60,6 +61,8 @@
             android:orientation="horizontal"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:elevation="12dp">
 
             <EditText
