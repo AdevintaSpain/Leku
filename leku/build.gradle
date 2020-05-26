@@ -94,8 +94,6 @@ dependencies {
 
   implementation "com.google.maps:google-maps-services:0.2.9"
 
-  implementation 'com.github.MarsXan:Android-ReactiveLocation:2.1.0'
-
   implementation 'io.reactivex.rxjava3:rxjava:3.0.3'
   implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
   implementation 'com.github.akarnokd:rxjava3-bridge:3.0.0'

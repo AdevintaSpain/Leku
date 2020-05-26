@@ -72,11 +72,9 @@ import com.schibstedspain.leku.locale.DefaultCountryLocaleRect
 import com.schibstedspain.leku.locale.SearchZoneRect
 import com.schibstedspain.leku.permissions.PermissionUtils
 import com.schibstedspain.leku.tracker.TrackEvents
-import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
-import java.util.TimeZone
+import com.schibstedspain.leku.utils.ReactiveLocationProvider
 import java.util.Locale
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
+import java.util.TimeZone
 import kotlin.collections.set
 
 const val LATITUDE = "latitude"

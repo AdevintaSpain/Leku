@@ -6,20 +6,18 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.schibstedspain.leku.geocoder.places.GooglePlacesDataSource
 import com.schibstedspain.leku.geocoder.timezone.GoogleTimeZoneDataSource
+import com.schibstedspain.leku.utils.ReactiveLocationProvider
 import hu.akarnokd.rxjava3.bridge.RxJavaBridge
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.ObservableSource
 import io.reactivex.rxjava3.core.Scheduler
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.functions.BiFunction
 import io.reactivex.rxjava3.schedulers.Schedulers
-import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import java.util.concurrent.TimeUnit
 import java.util.TimeZone
 import kotlin.collections.ArrayList
-import kotlin.collections.List
-import kotlin.collections.isNotEmpty
 
 private const val RETRY_COUNT = 3
 private const val MAX_PLACES_RESULTS = 3
@@ -52,7 +50,7 @@ class GeocoderPresenter @JvmOverloads constructor(
 
     fun getLastKnownLocation() {
         @SuppressLint("MissingPermission")
-        val disposable = RxJavaBridge.toV3Single(locationProvider.lastKnownLocation)
+        val disposable = RxJavaBridge.toV3Single(locationProvider.getLastKnownLocation())
                 .retry(RETRY_COUNT.toLong())
                 .subscribe({ view?.showLastLocation(it) },
                         { view?.didGetLastLocation() })
