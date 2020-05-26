@@ -7,7 +7,6 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.schibstedspain.leku.geocoder.places.GooglePlacesDataSource
 import com.schibstedspain.leku.geocoder.timezone.GoogleTimeZoneDataSource
 import com.schibstedspain.leku.utils.ReactiveLocationProvider
-import hu.akarnokd.rxjava3.bridge.RxJavaBridge
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.ObservableSource
@@ -50,7 +49,7 @@ class GeocoderPresenter @JvmOverloads constructor(
 
     fun getLastKnownLocation() {
         @SuppressLint("MissingPermission")
-        val disposable = RxJavaBridge.toV3Single(locationProvider.getLastKnownLocation())
+        val disposable = locationProvider.getLastKnownLocation()
                 .retry(RETRY_COUNT.toLong())
                 .subscribe({ view?.showLastLocation(it) },
                         { view?.didGetLastLocation() })

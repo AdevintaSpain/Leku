@@ -3,7 +3,7 @@ package com.schibstedspain.leku.utils
 import android.content.Context
 import android.location.Location
 import androidx.annotation.RequiresPermission
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Single
 
 class ReactiveLocationProvider(val context: Context) {
 

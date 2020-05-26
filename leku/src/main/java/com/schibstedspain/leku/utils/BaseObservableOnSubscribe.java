@@ -12,10 +12,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import java.util.Arrays;
 import java.util.List;
 
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.disposables.Disposables;
-import io.reactivex.functions.Action;
+import io.reactivex.rxjava3.core.ObservableEmitter;
+import io.reactivex.rxjava3.core.ObservableOnSubscribe;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Action;
 
 public abstract class BaseObservableOnSubscribe<T> implements ObservableOnSubscribe<T> {
     private final Context ctx;
@@ -38,7 +38,7 @@ public abstract class BaseObservableOnSubscribe<T> implements ObservableOnSubscr
             }
         }
 
-        emitter.setDisposable(Disposables.fromAction(new Action() {
+        emitter.setDisposable(Disposable.fromAction(new Action() {
             @Override
             public void run() throws Exception {
                 onDisposed();

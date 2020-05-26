@@ -6,7 +6,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
-import io.reactivex.ObservableEmitter;
+import io.reactivex.rxjava3.core.ObservableEmitter;
 
 public abstract class BaseLocationObservableOnSubscribe<T> extends BaseObservableOnSubscribe<T> {
 
