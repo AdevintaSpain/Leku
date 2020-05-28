@@ -83,21 +83,18 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.schibstedspain.android:leku:7.0.1'
+    implementation 'com.schibstedspain.android:leku:7.1.0'
 }
 ```
 
 Alternatively, if you are using a different version of Google Play Services and AndroidX use this instead:
 
 ```groovy
-implementation ('com.schibstedspain.android:leku:7.0.1') {
+implementation ('com.schibstedspain.android:leku:7.1.0') {
     exclude group: 'com.google.android.gms'
     exclude group: 'androidx.appcompat'
 }
 ```
-
-Note that Places on Google Play services is deprecated and this library currently uses the Compat Places SDK, that is a transition version.
-
 
 For the <b>legacy versions of Leku</b> that does not use AndroidX and want to use the latest Places SDK, you could use it in this way:
 
