@@ -154,7 +154,7 @@ class LocationPickerActivityShould {
         launchActivityWithoutLocationAndPermissions()
         wait300millis()
 
-        onView(withId(R.id.btnFloatingAction)).perform(click())
+        onView(withId(R.id.btnMyLocation)).perform(click())
     }
 
     @Test
@@ -182,7 +182,7 @@ class LocationPickerActivityShould {
     private fun assertLocationInfoIsShown() {
         onView(withId(R.id.location_info)).check(matches(isDisplayed()))
         onView(withId(R.id.btnAccept)).check(matches(isDisplayed()))
-        onView(withId(R.id.btnFloatingAction)).check(matches(isDisplayed()))
+        onView(withId(R.id.btnMyLocation)).check(matches(isDisplayed()))
     }
 
     private fun launchActivity() {

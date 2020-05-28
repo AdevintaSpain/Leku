@@ -469,7 +469,7 @@ class LocationPickerActivity : AppCompatActivity(),
     }
 
     private fun setUpFloatingButtons() {
-        val btnMyLocation = findViewById<FloatingActionButton>(R.id.btnFloatingAction)
+        val btnMyLocation = findViewById<FloatingActionButton>(R.id.btnMyLocation)
         btnMyLocation.setOnClickListener {
             checkLocationPermission()
             geocoderPresenter?.getLastKnownLocation()
@@ -834,6 +834,7 @@ class LocationPickerActivity : AppCompatActivity(),
 
     override fun showLastLocation(location: Location) {
         currentLocation = location
+        didGetLastLocation()
     }
 
     override fun didGetLastLocation() {
