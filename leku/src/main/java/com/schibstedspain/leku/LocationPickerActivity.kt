@@ -284,16 +284,18 @@ class LocationPickerActivity : AppCompatActivity(),
     @SuppressLint("InlinedApi")
     private fun moveGoogleLogoToTopRight() {
         val contentView: View = findViewById(android.R.id.content)
-        val googleLogo: View = contentView.findViewWithTag("GoogleWatermark")
-        val glLayoutParams: RelativeLayout.LayoutParams = googleLogo.layoutParams as RelativeLayout.LayoutParams
-        glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0)
-        glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0)
-        glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_START, 0)
-        glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE)
-        glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_END, RelativeLayout.TRUE)
-        val paddingTopInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24.0f, resources.displayMetrics).toInt()
-        googleLogo.setPadding(0, paddingTopInPixels, 0, 0)
-        googleLogo.layoutParams = glLayoutParams
+        val googleLogo: View? = contentView.findViewWithTag("GoogleWatermark")
+        googleLogo?.let {
+            val glLayoutParams: RelativeLayout.LayoutParams = it.layoutParams as RelativeLayout.LayoutParams
+            glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0)
+            glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0)
+            glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_START, 0)
+            glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE)
+            glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_END, RelativeLayout.TRUE)
+            val paddingTopInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24.0f, resources.displayMetrics).toInt()
+            it.setPadding(0, paddingTopInPixels, 0, 0)
+            it.layoutParams = glLayoutParams
+        }
     }
 
     private fun checkLocationPermission() {
@@ -415,13 +417,10 @@ class LocationPickerActivity : AppCompatActivity(),
         searchView = findViewById(R.id.leku_search)
         searchView?.setOnEditorActionListener { v, actionId, _ ->
             var handled = false
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH && v.text.toString().isNotEmpty()) {
                 retrieveLocationFrom(v.text.toString())
                 closeKeyboard()
                 handled = true
-                if (!isLegacyLayoutEnabled) {
-                    hideSearchLayout()
-                }
             }
             handled
         }

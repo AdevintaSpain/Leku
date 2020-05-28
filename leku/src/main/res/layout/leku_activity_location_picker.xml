@@ -102,7 +102,9 @@
           android:baselineAligned="false"
           android:paddingBottom="62dp"
           android:paddingStart="24dp"
+          android:paddingLeft="24dp"
           android:paddingEnd="24dp"
+          android:paddingRight="24dp"
           >
 
         <LinearLayout
@@ -128,7 +130,12 @@
               tools:ignore="UnusedAttribute" />
 
           <include layout="@layout/leku_layout_coordinates" />
-          <include layout="@layout/leku_layout_address" />
+          <include layout="@layout/leku_layout_address"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_marginEnd="22dp"
+              android:layout_marginRight="22dp"
+              />
 
           <Button
               android:id="@+id/btnAccept"
