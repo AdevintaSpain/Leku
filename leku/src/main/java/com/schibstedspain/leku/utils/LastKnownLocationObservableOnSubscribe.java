@@ -1,5 +1,6 @@
 package com.schibstedspain.leku.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
 
@@ -22,6 +23,7 @@ public class LastKnownLocationObservableOnSubscribe extends BaseLocationObservab
         super(ctx);
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onLocationProviderClientReady(FusedLocationProviderClient locationProviderClient,
                                                  final ObservableEmitter<? super Location> emitter) {
