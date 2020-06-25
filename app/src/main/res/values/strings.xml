@@ -5,5 +5,5 @@
   <string name="launch_legacy_map_picker" translatable="false">LAUNCH LEGACY MAP LOCATION ACTIVITY</string>
   <string name="launch_map_picker_with_pois" translatable="false">LAUNCH MAP WITH POIS</string>
   <string name="launch_map_picker_with_style" translatable="false">LAUNCH MAP WITH STYLE</string>
-  <string name="leku_lib_version" translatable="false">version 7.1.0</string>
+  <string name="leku_lib_version" translatable="false">version 7.2.0</string>
 </resources>
