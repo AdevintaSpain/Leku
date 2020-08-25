@@ -85,7 +85,7 @@
                 android:paddingTop="8dp"
                 android:contentDescription="@string/leku_search_hint"
                 android:src="@drawable/leku_ic_clean"
-                android:tint="@color/leku_strong_grey"
+                app:tint="@color/leku_strong_grey"
                 android:visibility="invisible" />
         </LinearLayout>
     </FrameLayout>
