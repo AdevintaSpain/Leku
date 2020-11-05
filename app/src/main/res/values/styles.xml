@@ -1,7 +1,7 @@
 <resources>
 
   <style name="AppTheme"
-         parent="Theme.MaterialComponents.DayNight.NoActionBar">
+         parent="Theme.MaterialComponents.Light.NoActionBar">
     <item name="colorPrimary">#009688</item>
     <item name="colorPrimaryDark">#00695C</item>
     <item name="colorAccent">#2979FF</item>
