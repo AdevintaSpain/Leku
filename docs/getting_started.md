@@ -104,7 +104,7 @@ To use the LocationPickerActivity first you need to add these lines to your Andr
 <activity
     android:name="com.schibstedspain.leku.LocationPickerActivity"
     android:label="@string/leku_title_activity_location_picker"
-    android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+    android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
     android:windowSoftInputMode="adjustPan"
     android:parentActivityName=".MainActivity">
     <intent-filter>
