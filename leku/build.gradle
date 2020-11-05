@@ -17,7 +17,7 @@ android {
   resourcePrefix 'leku_'
 
   defaultConfig {
-    minSdkVersion 16
+    minSdkVersion 21
     //noinspection OldTargetApi
     targetSdkVersion 29
     versionName version

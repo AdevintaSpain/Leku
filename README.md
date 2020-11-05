@@ -65,7 +65,7 @@ Component library for Android that uses Google Maps and returns a latitude, long
 
 ### Prerequisites
 
-minSdkVersion >= 15<br/>
+minSdkVersion >= 21<br/>
 Google Play Services = 17.0.0<br/>
 AndroidX
 
