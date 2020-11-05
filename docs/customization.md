@@ -1,6 +1,6 @@
 ##### Theming
 
-This library uses AppCompat, so should use Theme.AppCompat or descendant in manifest.
+This library uses material components, so should use Theme.MaterialComponents or descendant in manifest.
 
 ```xml
 <item name="colorPrimary">#E91E63</item>

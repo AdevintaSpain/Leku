@@ -38,11 +38,12 @@
                 android:src="@drawable/leku_ic_home_background"
                 app:elevation="12dp" />
 
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/map_search_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_marginLeft="@dimen/leku_gap"
+                app:navigationIcon="@drawable/leku_ic_close"
                 android:layout_marginRight="@dimen/leku_gap"
                 tools:ignore="UnusedAttribute,elevation" />
         </FrameLayout>

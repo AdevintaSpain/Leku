@@ -35,7 +35,6 @@ import android.widget.Toast
 import android.widget.LinearLayout
 import androidx.annotation.RawRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -57,6 +56,7 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.maps.GeoApiContext
 import com.schibstedspain.leku.geocoder.AndroidGeocoderDataSource
@@ -178,7 +178,7 @@ class LocationPickerActivity : AppCompatActivity(),
     private var mapStyle: Int? = null
     private var isLegacyLayoutEnabled = false
     private var isSearchLayoutShown = false
-    private lateinit var toolbar: Toolbar
+    private lateinit var toolbar: MaterialToolbar
     private lateinit var timeZone: TimeZone
 
     private val searchTextWatcher: TextWatcher
@@ -387,24 +387,9 @@ class LocationPickerActivity : AppCompatActivity(),
         toolbar = findViewById(R.id.map_search_toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.let {
-            if (!isLegacyLayoutEnabled) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    val drawable = resources.getDrawable(R.drawable.leku_ic_close, theme)
-                    drawable.setTint(getThemeColorPrimary())
-                    it.setHomeAsUpIndicator(drawable)
-                } else {
-                    it.setHomeAsUpIndicator(R.drawable.leku_ic_close)
-                }
-            }
             it.setDisplayHomeAsUpEnabled(true)
             it.setDisplayShowTitleEnabled(false)
         }
-    }
-
-    private fun getThemeColorPrimary(): Int {
-        val value = TypedValue()
-        theme.resolveAttribute(R.attr.colorPrimary, value, true)
-        return value.data
     }
 
     private fun switchToolbarVisibility() {
@@ -438,15 +423,6 @@ class LocationPickerActivity : AppCompatActivity(),
     }
 
     private fun showSearchLayout() {
-        supportActionBar?.let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val drawable = resources.getDrawable(R.drawable.leku_ic_back, theme)
-                drawable.setTint(getThemeColorPrimary())
-                it.setHomeAsUpIndicator(drawable)
-            } else {
-                it.setHomeAsUpIndicator(R.drawable.leku_ic_back)
-            }
-        }
         searchFrameLayout?.setBackgroundResource(R.color.leku_white)
         searchEditLayout?.setBackgroundResource(R.drawable.leku_search_text_with_border_background)
         searchResultsList?.visibility = View.VISIBLE
@@ -454,15 +430,6 @@ class LocationPickerActivity : AppCompatActivity(),
     }
 
     private fun hideSearchLayout() {
-        supportActionBar?.let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val drawable = resources.getDrawable(R.drawable.leku_ic_close, theme)
-                drawable.setTint(getThemeColorPrimary())
-                it.setHomeAsUpIndicator(drawable)
-            } else {
-                it.setHomeAsUpIndicator(R.drawable.leku_ic_close)
-            }
-        }
         searchFrameLayout?.setBackgroundResource(android.R.color.transparent)
         searchEditLayout?.setBackgroundResource(R.drawable.leku_search_text_background)
         searchResultsList?.visibility = View.GONE
