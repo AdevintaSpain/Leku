@@ -35,7 +35,6 @@ import android.widget.Toast
 import android.widget.LinearLayout
 import androidx.annotation.RawRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -57,6 +56,7 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.maps.GeoApiContext
 import com.schibstedspain.leku.geocoder.AndroidGeocoderDataSource
@@ -178,7 +178,7 @@ class LocationPickerActivity : AppCompatActivity(),
     private var mapStyle: Int? = null
     private var isLegacyLayoutEnabled = false
     private var isSearchLayoutShown = false
-    private lateinit var toolbar: Toolbar
+    private lateinit var toolbar: MaterialToolbar
     private lateinit var timeZone: TimeZone
 
     private val searchTextWatcher: TextWatcher
