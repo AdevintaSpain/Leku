@@ -387,24 +387,9 @@ class LocationPickerActivity : AppCompatActivity(),
         toolbar = findViewById(R.id.map_search_toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.let {
-            if (!isLegacyLayoutEnabled) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    val drawable = resources.getDrawable(R.drawable.leku_ic_close, theme)
-                    drawable.setTint(getThemeColorPrimary())
-                    it.setHomeAsUpIndicator(drawable)
-                } else {
-                    it.setHomeAsUpIndicator(R.drawable.leku_ic_close)
-                }
-            }
             it.setDisplayHomeAsUpEnabled(true)
             it.setDisplayShowTitleEnabled(false)
         }
-    }
-
-    private fun getThemeColorPrimary(): Int {
-        val value = TypedValue()
-        theme.resolveAttribute(R.attr.colorPrimary, value, true)
-        return value.data
     }
 
     private fun switchToolbarVisibility() {
@@ -438,15 +423,6 @@ class LocationPickerActivity : AppCompatActivity(),
     }
 
     private fun showSearchLayout() {
-        supportActionBar?.let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val drawable = resources.getDrawable(R.drawable.leku_ic_back, theme)
-                drawable.setTint(getThemeColorPrimary())
-                it.setHomeAsUpIndicator(drawable)
-            } else {
-                it.setHomeAsUpIndicator(R.drawable.leku_ic_back)
-            }
-        }
         searchFrameLayout?.setBackgroundResource(R.color.leku_white)
         searchEditLayout?.setBackgroundResource(R.drawable.leku_search_text_with_border_background)
         searchResultsList?.visibility = View.VISIBLE
@@ -454,15 +430,6 @@ class LocationPickerActivity : AppCompatActivity(),
     }
 
     private fun hideSearchLayout() {
-        supportActionBar?.let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val drawable = resources.getDrawable(R.drawable.leku_ic_close, theme)
-                drawable.setTint(getThemeColorPrimary())
-                it.setHomeAsUpIndicator(drawable)
-            } else {
-                it.setHomeAsUpIndicator(R.drawable.leku_ic_close)
-            }
-        }
         searchFrameLayout?.setBackgroundResource(android.R.color.transparent)
         searchEditLayout?.setBackgroundResource(R.drawable.leku_search_text_background)
         searchResultsList?.visibility = View.GONE
