@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Location"
+        android:textColor="@color/leku_blackish"
+        android:textSize="20sp" />
+
+
+    <TextView
+
+        android:id="@+id/tvUserDesciption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="0.25dp"
+        android:background="@color/leku_mid_grey" />
+
+    <EditText
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:background="@drawable/leku_edittext_round"
+        android:drawableStart="@drawable/leku_ic_search_24"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:drawablePadding="4dp"
+        android:hint="Search Delivery Location"
+        android:iconifiedByDefault="false"
+        android:imeOptions="actionSearch"
+        android:maxLines="1"
+        android:queryHint="Search...."
+        android:singleLine="true"
+        android:textColorHighlight="@color/leku_mid_grey"
+        android:textColorHint="@color/leku_mid_grey"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_marginTop="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="0.25dp"
+        android:background="@color/leku_mid_grey" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvList"
+        android:layout_width="match_parent"
+        android:minHeight="150dp"
+        android:layout_height="280dp"
+        android:orientation="vertical"
+        android:paddingTop="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:gravity="center"
+        android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:textColor="@color/leku_white"
+        android:layout_height="50dp"
+        android:background="@color/design_default_color_primary"
+        android:text="Cancel" />
+
+    <ImageView
+        android:id="@+id/footerImageView"
+        android:layout_width="140dp"
+        android:layout_height="40dp"
+        android:layout_gravity="end"
+        android:paddingTop="2dp"
+        android:paddingEnd="8dp"
+        android:src="@drawable/powered_by_google"
+         />
+
+
+</LinearLayout>

@@ -8,7 +8,6 @@
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_gravity="center"
       android:gravity="center"
       android:orientation="vertical"
       >
@@ -17,7 +16,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/leku_img_logo"
-        android:layout_marginBottom="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:contentDescription="@string/leku_app_name"
         />
 
@@ -64,6 +64,20 @@
     <Button
         android:text="@string/launch_map_picker_with_pois"
         android:id="@+id/map_button_with_pois"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="18dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/leku_app_button_border"
+        android:textColor="@color/leku_app_strong_blue"
+        tools:targetApi="lollipop"
+        />
+
+    <Button
+        android:text="GOOGLE PLACE AUTOCOMPLETE IN DIALOG"
+        android:id="@+id/map_button_with_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="18dp"

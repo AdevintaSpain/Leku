@@ -5,6 +5,8 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: 'twitter-gradle-plugin'
 apply plugin: "org.jlleitschuh.gradle.ktlint"
 
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 def versionMajor = getVersionMajor()
 def versionMinor = getVersionMinor()
 def versionPatch = getVersionPatch()

@@ -16,4 +16,10 @@
   <string name="leku_coordinates">Coordinates</string>
   <string name="leku_use_this_location">Use this location</string>
   <string name="leku_accessibility_remove_current_location">Remove current location</string>
+
+  <string name="leku_error_processing_places_api" translatable="false">Error processing Places API URL</string>
+  <string name="leku_error_connecting_to_places_api" translatable="false">Error connecting to Places API</string>
+  <string name="leku_error_cannot_process_json_results" translatable="false">Cannot process JSON results</string>
+  <string name="leku_error_lib_not_initialized" translatable="false">Please initialize the api before using it</string>
+  <string name="leku_key_maps" translatable="false">""</string>
 </resources>

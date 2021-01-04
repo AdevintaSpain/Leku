@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.location.Address
 import android.location.Location
+import android.net.TrafficStats
 import android.os.Bundle
 import android.os.StrictMode
 import android.util.Log
@@ -23,6 +24,10 @@ import com.schibstedspain.leku.TIME_ZONE_DISPLAY_NAME
 import com.schibstedspain.leku.TIME_ZONE_ID
 import com.schibstedspain.leku.TRANSITION_BUNDLE
 import com.schibstedspain.leku.ZIPCODE
+import com.schibstedspain.leku.placesautocomplete.PlaceAPI
+import com.schibstedspain.leku.placesautocomplete.PlaceAutoCompleteDialog
+import com.schibstedspain.leku.placesautocomplete.adapter.PlacesAutoCompleteAdapter
+import com.schibstedspain.leku.placesautocomplete.model.Place
 import com.schibstedspain.leku.tracker.LocationPickerTracker
 import com.schibstedspain.leku.tracker.TrackEvents
 import java.util.UUID
@@ -32,8 +37,8 @@ import kotlin.collections.List
 private const val MAP_BUTTON_REQUEST_CODE = 1
 private const val MAP_POIS_BUTTON_REQUEST_CODE = 2
 
-class MainActivity : AppCompatActivity() {
-
+class MainActivity : AppCompatActivity() , PlacesAutoCompleteAdapter.LocationListner {
+    lateinit var locationDialog :PlaceAutoCompleteDialog
     private val lekuPois: List<LekuPoi>
         get() {
             val pois = ArrayList<LekuPoi>()
@@ -113,7 +118,15 @@ class MainActivity : AppCompatActivity() {
                     .build(applicationContext)
             startActivityForResult(locationPickerIntent, MAP_POIS_BUTTON_REQUEST_CODE)
         }
-
+val googleplaceAutocompleteDialogButtom= findViewById<View>(R.id.map_button_with_dialog)
+        googleplaceAutocompleteDialogButtom.setOnClickListener{
+            locationDialog = PlaceAutoCompleteDialog()
+            locationDialog.setListner(this)
+            locationDialog.show(
+                    supportFragmentManager,
+                    PlaceAutoCompleteDialog::class.java.simpleName
+            )
+        }
         initializeLocationPickerTracker()
     }
 
@@ -169,4 +182,15 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(context, "Event: " + event.eventName, Toast.LENGTH_SHORT).show()
         }
     }
+    override fun dialogDismiss() {
+        if(::locationDialog.isInitialized){
+            locationDialog.dismiss()
+        }
+    }
+
+    override fun dialogSave(place: PlaceAPI, place1: Place) {
+        Toast.makeText(this,place1.description,Toast.LENGTH_LONG).show()
+    }
+
+
 }
