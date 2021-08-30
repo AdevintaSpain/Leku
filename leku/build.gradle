@@ -1,8 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'twitter-gradle-plugin'
 apply plugin: "org.jlleitschuh.gradle.ktlint"
 
 def versionMajor = getVersionMajor()
@@ -20,7 +18,6 @@ android {
     minSdkVersion 21
     //noinspection OldTargetApi
     targetSdkVersion 29
-    versionName version
     multiDexEnabled true
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     consumerProguardFiles 'lib-proguard-rules.txt'
@@ -80,13 +77,13 @@ configurations.all {
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-  implementation "com.google.android.material:material:1.3.0-alpha02"
+  implementation "com.google.android.material:material:1.5.0-alpha02"
 
-  def playServicesVersion = '17.0.0'
+  def playServicesVersion = '17.0.1'
   implementation ("com.google.android.gms:play-services-maps:$playServicesVersion") {
 	  exclude group: "com.android.support"
   }
-  implementation ("com.google.android.gms:play-services-location:17.1.0") {
+  implementation ("com.google.android.gms:play-services-location:18.0.0") {
 	  exclude group: "com.android.support"
   }
 
@@ -96,16 +93,16 @@ dependencies {
 
   implementation "com.google.maps:google-maps-services:0.2.9"
 
-  implementation 'io.reactivex.rxjava3:rxjava:3.0.5'
+  implementation 'io.reactivex.rxjava3:rxjava:3.0.7'
   implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
   implementation 'nl.littlerobots.rxlint:rxlint:1.7.4'
 
 
-  def espressoVersion = '3.3.0'
+  def espressoVersion = '3.4.0'
   androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
   androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
 
-  def supportTestVersion = '1.3.0'
+  def supportTestVersion = '1.4.0'
   androidTestImplementation "androidx.test:runner:$supportTestVersion"
   androidTestImplementation "androidx.test:rules:$supportTestVersion"
   androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
@@ -175,38 +172,13 @@ publishing {
   }
 }
 
-bintray {
-  user = project.hasProperty('BINTRAY_USER') ? project.property('BINTRAY_USER') : System.getenv('BINTRAY_USER')
-  key = project.hasProperty('BINTRAY_KEY') ? project.property('BINTRAY_KEY') : System.getenv('BINTRAY_KEY')
-  publications = ['Production']
-  configurations = ['archives']
-
-  pkg {
-    repo = 'maven'
-    name = 'leku'
-    userOrg = 'schibstedspain'
-    description = "Location picker component for Android. It returns a latitude,longitude and an address based on the location picked in the LocationPickerActivity provided."
-    publish = true
-    dryRun = false
-    publicDownloadNumbers = true
-    licenses = ['Apache-2.0']
-    vcsUrl = 'https://github.com/AdevintaSpain/Leku.git'
-    version {
-      name = "${versionMajor}.${versionMinor}.${versionPatch}"
-      desc = "Location picker component for Android. It returns a latitude,longitude and an address based on the location picked in the LocationPickerActivity provided."
-      released = new Date()
-      vcsTag = "${versionMajor}.${versionMinor}.${versionPatch}"
-    }
-  }
-}
-
-twitterPlugin {
+/*twitterPlugin {
   consumerKey = System.getenv()['TWITTER_API_KEY']
   consumerSecret = System.getenv()['TWITTER_API_SECRET']
   accessToken = System.getenv()['TWITTER_ACCESS_TOKEN']
   accessTokenSecret = System.getenv()['TWITTER_ACCESS_TOKEN_SECRET']
   message = "New Leku version ${versionMajor}.${versionMinor}.${versionPatch} available for download. Check out the details at https://github.com/AdevintaSpain/Leku @AdevintaEng #Android #library #AndroidDev"
-}
+}*/
 
 task sourcesJar(type: Jar) {
 	from android.sourceSets.main.java.srcDirs
