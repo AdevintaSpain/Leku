@@ -13,9 +13,9 @@ buildscript {
   dependencies {
     classpath 'com.android.tools.build:gradle:7.0.1'
 
-    //classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.9.0"
-    //classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+    // Remove comment when the library is on mavenCentral
     //classpath 'com.ferranpons:twitter-gradle-plugin:1.1.0'
+
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
 }
