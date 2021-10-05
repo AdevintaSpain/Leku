@@ -48,6 +48,19 @@ android {
   }
 }
 
+detekt {
+  buildUponDefaultConfig = true
+  allRules = false
+  config = files("$rootDir/config/detekt/detekt-config.yml")
+
+  reports {
+    html.enabled = true
+    xml.enabled = true
+    txt.enabled = true
+    sarif.enabled = true
+  }
+}
+
 ktlint {
   reporters {
 	reporter "plain"

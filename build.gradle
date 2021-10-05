@@ -25,19 +25,6 @@ plugins {
   id "org.jlleitschuh.gradle.ktlint" version "9.2.1"
 }
 
-detekt {
-  buildUponDefaultConfig = true
-  allRules = false
-  config = files("$projectDir/config/detekt/detekt-config.yml")
-
-  reports {
-    html.enabled = true
-    xml.enabled = true
-    txt.enabled = true
-    sarif.enabled = true
-  }
-}
-
 allprojects {
   repositories {
     maven { url 'https://jitpack.io' }
