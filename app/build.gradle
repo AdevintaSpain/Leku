@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: "org.jlleitschuh.gradle.ktlint"
+apply plugin: "io.gitlab.arturbosch.detekt"
 
 android {
   compileSdkVersion 31
@@ -34,16 +35,6 @@ configurations.all {
 	// this is a workaround for the issue:
 	// https://stackoverflow.com/questions/52521302/how-to-solve-program-type-already-present-com-google-common-util-concurrent-lis
 	exclude group: 'com.google.guava', module: 'listenablefuture'
-}
-
-detekt {
-  version = "1.0.0.RC7-3"
-  profile("main") {
-    input = "$projectDir/src/main/java"
-    config = "config/detekt/detekt-config.yml"
-    output = "$projectDir/build/reports/detekt/detekt.xml"
-    filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
-  }
 }
 
 ktlint {

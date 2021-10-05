@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 apply plugin: "org.jlleitschuh.gradle.ktlint"
+apply plugin: "io.gitlab.arturbosch.detekt"
 
 def versionMajor = getVersionMajor()
 def versionMinor = getVersionMinor()
@@ -39,24 +40,11 @@ android {
   kotlinOptions {
     jvmTarget = JavaVersion.VERSION_1_8.toString()
   }
-  dexOptions {
-    preDexLibraries "true" != System.getenv("TRAVIS")
-  }
   packagingOptions {
     exclude 'protobuf.meta'
   }
   lintOptions {
     disable 'ObsoleteLintCustomCheck'
-  }
-}
-
-detekt {
-  version = "1.0.0.RC7-3"
-  profile("main") {
-    input = "$projectDir/src/main/java"
-    config = "config/detekt/detekt-config.yml"
-    output = "$projectDir/build/reports/detekt/detekt.xml"
-    filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
   }
 }
 
@@ -113,28 +101,11 @@ dependencies {
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
-/*
-task androidJavadocs(type: Javadoc) {
-	source = android.sourceSets.main.java.srcDirs
-	classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-	android.libraryVariants.all { variant ->
-		if (variant.name == 'release') {
-			owner.classpath += variant.javaCompile.classpath
-		}
-	}*/
-	//exclude '**/R.html', '**/R.*.html', '**/index.html', '**/*.kt'
-/*}
-
-task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
-	classifier = 'javadoc'
-	from androidJavadocs.destinationDir
-}*/
 
 task androidSourcesJar(type: Jar) {
 	classifier = 'sources'
 	from android.sourceSets.main.java.srcDirs
 }
-
 
 publishing {
   publications {
@@ -169,41 +140,10 @@ publishing {
       }
 
 	  artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
-	  //artifact androidJavadocsJar
 	  artifact androidSourcesJar
     }
   }
 }
-
-/* Plugin needs to be migrated to mavenCentral in order to be able to use it
-twitterPlugin {
-  consumerKey = System.getenv()['TWITTER_API_KEY']
-  consumerSecret = System.getenv()['TWITTER_API_SECRET']
-  accessToken = System.getenv()['TWITTER_ACCESS_TOKEN']
-  accessTokenSecret = System.getenv()['TWITTER_ACCESS_TOKEN_SECRET']
-  message = "New Leku version ${versionMajor}.${versionMinor}.${versionPatch} available for download. Check out the details at https://github.com/AdevintaSpain/Leku @AdevintaEng #Android #library #AndroidDev"
-}
-
-task sourcesJar(type: Jar) {
-	from android.sourceSets.main.java.srcDirs
-	classifier = 'sources'
-}*/
-
-//task javadoc(type: Javadoc) {
-	//excludes = ['**/*.kt']
-/*	source = android.sourceSets.main.java.srcDirs
-	classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-	classifier = 'javadoc'
-	from javadoc.destinationDir
-}
-
-artifacts {
-	archives javadocJar
-	archives sourcesJar
-}*/
 
 def getVersionMajor() {
   def content = file('../version.properties')

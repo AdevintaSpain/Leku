@@ -31,6 +31,12 @@ import kotlin.collections.List
 
 private const val MAP_BUTTON_REQUEST_CODE = 1
 private const val MAP_POIS_BUTTON_REQUEST_CODE = 2
+private const val DEMO_LATITUDE = 41.4036299
+private const val DEMO_LONGITUDE = 2.1743558
+private const val POI1_LATITUDE = 41.4036339
+private const val POI1_LONGITUDE = 2.1721618
+private const val POI2_LATITUDE = 41.4023265
+private const val POI2_LONGITUDE = 2.1741417
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,14 +45,14 @@ class MainActivity : AppCompatActivity() {
             val pois = ArrayList<LekuPoi>()
 
             val locationPoi1 = Location("leku")
-            locationPoi1.latitude = 41.4036339
-            locationPoi1.longitude = 2.1721618
+            locationPoi1.latitude = POI1_LATITUDE
+            locationPoi1.longitude = POI1_LONGITUDE
             val poi1 = LekuPoi(UUID.randomUUID().toString(), "Los bellota", locationPoi1)
             pois.add(poi1)
 
             val locationPoi2 = Location("leku")
-            locationPoi2.latitude = 41.4023265
-            locationPoi2.longitude = 2.1741417
+            locationPoi2.latitude = POI2_LATITUDE
+            locationPoi2.longitude = POI2_LONGITUDE
             val poi2 = LekuPoi(UUID.randomUUID().toString(), "Starbucks", locationPoi2)
             poi2.address = "Plaça de la Sagrada Família, 19, 08013 Barcelona"
             pois.add(poi2)
@@ -63,7 +69,7 @@ class MainActivity : AppCompatActivity() {
         val mapButton = findViewById<View>(R.id.map_button)
         mapButton.setOnClickListener {
             val locationPickerIntent = LocationPickerActivity.Builder()
-                    .withLocation(41.4036299, 2.1743558)
+                    .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
                     // .withGeolocApiKey("<PUT API KEY HERE>")
                     // .withGooglePlacesApiKey("<PUT API KEY HERE>")
                     // .withSearchZone("es_ES")
@@ -79,7 +85,8 @@ class MainActivity : AppCompatActivity() {
                     .withUnnamedRoadHidden()
                     .build(applicationContext)
 
-            // this is optional if you want to return RESULT_OK if you don't set the latitude/longitude and click back button
+            // this is optional if you want to return RESULT_OK if you don't set the
+            // latitude/longitude and click back button
             locationPickerIntent.putExtra("test", "this is a test")
 
             startActivityForResult(locationPickerIntent, MAP_BUTTON_REQUEST_CODE)
@@ -88,7 +95,7 @@ class MainActivity : AppCompatActivity() {
         val mapLegacyButton = findViewById<View>(R.id.map_button_legacy)
         mapLegacyButton.setOnClickListener {
             val locationPickerIntent = LocationPickerActivity.Builder()
-                .withLocation(41.4036299, 2.1743558)
+                .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
                 .withUnnamedRoadHidden()
                 .withLegacyLayout()
                 .build(applicationContext)
@@ -98,7 +105,7 @@ class MainActivity : AppCompatActivity() {
         val mapPoisButton = findViewById<View>(R.id.map_button_with_pois)
         mapPoisButton.setOnClickListener {
             val locationPickerIntent = LocationPickerActivity.Builder()
-                    .withLocation(41.4036299, 2.1743558)
+                    .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
                     .withPois(lekuPois)
                     .build(applicationContext)
 
@@ -108,7 +115,7 @@ class MainActivity : AppCompatActivity() {
         val mapStyleButton = findViewById<View>(R.id.map_button_with_style)
         mapStyleButton.setOnClickListener {
             val locationPickerIntent = LocationPickerActivity.Builder()
-                    .withLocation(41.4036299, 2.1743558)
+                    .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
                     .withMapStyle(R.raw.map_style_retro)
                     .build(applicationContext)
             startActivityForResult(locationPickerIntent, MAP_POIS_BUTTON_REQUEST_CODE)
