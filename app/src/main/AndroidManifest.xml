@@ -43,6 +43,7 @@
     <activity
         android:name=".MainActivity"
         android:label="@string/leku_app_name"
+        android:exported="true"
         >
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -56,6 +57,7 @@
         android:label="@string/leku_title_activity_location_picker"
         android:windowSoftInputMode="adjustPan"
         android:theme="@style/AppTheme.Map"
+        android:exported="true"
         >
       <intent-filter>
         <action android:name="android.intent.action.SEARCH"/>
