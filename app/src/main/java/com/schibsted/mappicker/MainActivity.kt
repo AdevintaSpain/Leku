@@ -131,7 +131,7 @@ class MainActivity : AppCompatActivity() {
                 val postalcode = data.getStringExtra(ZIPCODE)
                 Log.d("POSTALCODE****", postalcode.toString())
                 val bundle = data.getBundleExtra(TRANSITION_BUNDLE)
-                Log.d("BUNDLE TEXT****", bundle.getString("test"))
+                Log.d("BUNDLE TEXT****", bundle?.getString("test").toString())
                 val fullAddress = data.getParcelableExtra<Address>(ADDRESS)
                 if (fullAddress != null) {
                     Log.d("FULL ADDRESS****", fullAddress.toString())
