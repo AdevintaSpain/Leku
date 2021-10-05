@@ -96,9 +96,9 @@ dependencies {
 
   implementation "com.google.maps:google-maps-services:0.2.9"
 
-  implementation 'io.reactivex.rxjava3:rxjava:3.0.7'
+  implementation 'io.reactivex.rxjava3:rxjava:3.1.1'
   implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
-  implementation 'nl.littlerobots.rxlint:rxlint:1.7.4'
+  implementation 'nl.littlerobots.rxlint:rxlint:1.7.7'
 
 
   def espressoVersion = '3.4.0'
@@ -109,7 +109,7 @@ dependencies {
   androidTestImplementation "androidx.test:runner:$supportTestVersion"
   androidTestImplementation "androidx.test:rules:$supportTestVersion"
   androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
-  androidTestImplementation 'org.mockito:mockito-core:2.28.2'
+  androidTestImplementation 'org.mockito:mockito-core:3.6.28'
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
