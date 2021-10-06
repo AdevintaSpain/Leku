@@ -1,31 +1,5 @@
-autoCorrect: true
-failFast: false
-
-test-pattern: # Configure exclusions for test sources
-  active: true
-  patterns: # Test file regexes
-    - '.*/test/.*'
-    - '.*Test.kt'
-    - '.*Spec.kt'
-  exclude-rule-sets:
-    - 'comments'
-  exclude-rules:
-    - 'NamingRules'
-    - 'WildcardImport'
-    - 'MagicNumber'
-    - 'MaxLineLength'
-    - 'LateinitUsage'
-    - 'StringLiteralDuplication'
-    - 'SpreadOperator'
-    - 'TooManyFunctions'
-
 build:
   maxIssues: 60
-  weights:
-    # complexity: 2
-    # LongParameterList: 1
-    # style: 1
-    # comments: 1
 
 processors:
   active: true
@@ -262,6 +236,8 @@ potential-bugs:
     active: true
   InvalidRange:
     active: false
+  ImplicitDefaultLocale:
+    active: false
   IteratorHasNextCallsNextMethod:
     active: false
   IteratorNotThrowingNoSuchElementException:
@@ -352,9 +328,6 @@ style:
     active: false
   SpacingBetweenPackageAndImports:
     active: false
-  ThrowsCount:
-    active: true
-    max: 2
   TrailingWhitespace:
     active: false
   UnnecessaryAbstractClass:

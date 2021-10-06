@@ -10,7 +10,10 @@ class LocationSearchAdapter(
     private val locations: MutableList<String>?,
     private val clickListener: SearchItemClickListener
 ) : RecyclerView.Adapter<LocationSearchAdapter.SearchViewHolder>() {
-    class SearchViewHolder(val textView: TextView, private val clickListener: SearchItemClickListener) : RecyclerView.ViewHolder(textView), View.OnClickListener {
+    class SearchViewHolder(
+        val textView: TextView,
+        private val clickListener: SearchItemClickListener
+    ) : RecyclerView.ViewHolder(textView), View.OnClickListener {
         init {
             textView.setOnClickListener(this)
         }

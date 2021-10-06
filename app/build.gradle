@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: "org.jlleitschuh.gradle.ktlint"
+apply plugin: "io.gitlab.arturbosch.detekt"
 
 android {
   compileSdkVersion 31
@@ -37,12 +38,15 @@ configurations.all {
 }
 
 detekt {
-  version = "1.0.0.RC7-3"
-  profile("main") {
-    input = "$projectDir/src/main/java"
-    config = "config/detekt/detekt-config.yml"
-    output = "$projectDir/build/reports/detekt/detekt.xml"
-    filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+  buildUponDefaultConfig = true
+  allRules = false
+  config = files("$rootDir/config/detekt/detekt-config.yml")
+
+  reports {
+    html.enabled = true
+    xml.enabled = true
+    txt.enabled = true
+    sarif.enabled = true
   }
 }
 

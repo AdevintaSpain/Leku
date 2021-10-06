@@ -27,7 +27,7 @@ class LekuPoi : Parcelable {
         dest.writeString(this.address)
     }
 
-    protected constructor(`in`: Parcel) {
+    private constructor(`in`: Parcel) {
         this.id = `in`.readString()!!
         this.location = `in`.readParcelable(Location::class.java.classLoader)!!
         this.title = `in`.readString()!!

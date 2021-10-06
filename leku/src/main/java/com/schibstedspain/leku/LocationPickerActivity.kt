@@ -115,6 +115,7 @@ private const val DEFAULT_ZOOM = 16
 private const val WIDER_ZOOM = 6
 private const val MIN_CHARACTERS = 2
 private const val DEBOUNCE_TIME = 400
+private const val PADDING_GOOGLE_LOGO_TOP_RIGHT = 24.0f
 
 class LocationPickerActivity : AppCompatActivity(),
         OnMapReadyCallback,
@@ -186,6 +187,7 @@ class LocationPickerActivity : AppCompatActivity(),
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
             }
 
+            @SuppressLint("NotifyDataSetChanged")
             override fun onTextChanged(charSequence: CharSequence, start: Int, count: Int, after: Int) {
                 if ("" == charSequence.toString()) {
                     if (isLegacyLayoutEnabled) {
@@ -267,9 +269,10 @@ class LocationPickerActivity : AppCompatActivity(),
         if (isLegacyLayoutEnabled) {
             setContentView(R.layout.leku_activity_location_picker_legacy)
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
-            }
+            window.setFlags(
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            )
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 var flags: Int = window.decorView.systemUiVisibility
                 flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
@@ -292,7 +295,12 @@ class LocationPickerActivity : AppCompatActivity(),
             glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_START, 0)
             glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE)
             glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_END, RelativeLayout.TRUE)
-            val paddingTopInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24.0f, resources.displayMetrics).toInt()
+            val paddingTopInPixels =
+                    TypedValue.applyDimension(
+                            TypedValue.COMPLEX_UNIT_DIP,
+                            PADDING_GOOGLE_LOGO_TOP_RIGHT,
+                            resources.displayMetrics
+                    ).toInt()
             it.setPadding(0, paddingTopInPixels, 0, 0)
             it.layoutParams = glLayoutParams
         }
@@ -366,14 +374,16 @@ class LocationPickerActivity : AppCompatActivity(),
             }
         } else {
             linearLayoutManager = LinearLayoutManager(this)
-            searchAdapter = LocationSearchAdapter(locationNameList, object : LocationSearchAdapter.SearchItemClickListener {
+            searchAdapter = LocationSearchAdapter(
+                    locationNameList, object : LocationSearchAdapter.SearchItemClickListener {
                 override fun onItemClick(position: Int) {
                     setNewLocation(locationList[position])
                     changeListResultVisibility(View.GONE)
                     closeKeyboard()
                     hideSearchLayout()
                 }
-            })
+            }
+            )
             searchResultsList = findViewById<RecyclerView>(R.id.search_result_list).apply {
                 setHasFixedSize(true)
                 layoutManager = linearLayoutManager
@@ -507,26 +517,30 @@ class LocationPickerActivity : AppCompatActivity(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        if (id == android.R.id.home) {
-            if (!isLegacyLayoutEnabled && isSearchLayoutShown) {
-                hideSearchLayout()
-            } else {
-                onBackPressed()
-            }
-            return true
-        } else if (id == R.id.action_voice) {
-            searchView?.let {
-                if (it.text.toString().isEmpty()) {
-                    startVoiceRecognitionActivity()
+        return when (item.itemId) {
+            android.R.id.home -> {
+                if (!isLegacyLayoutEnabled && isSearchLayoutShown) {
+                    hideSearchLayout()
                 } else {
-                    retrieveLocationFrom(it.text.toString())
-                    closeKeyboard()
+                    onBackPressed()
                 }
+                true
             }
-            return true
+            R.id.action_voice -> {
+                searchView?.let {
+                    if (it.text.toString().isEmpty()) {
+                        startVoiceRecognitionActivity()
+                    } else {
+                        retrieveLocationFrom(it.text.toString())
+                        closeKeyboard()
+                    }
+                }
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
         }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
