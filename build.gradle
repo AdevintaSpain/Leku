@@ -11,12 +11,14 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:7.0.2'
+    classpath 'com.android.tools.build:gradle:7.0.3'
 
     // Remove comment when the library is on mavenCentral
     //classpath 'com.ferranpons:twitter-gradle-plugin:1.1.0'
 
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    classpath "io.github.gradle-nexus:publish-plugin:1.1.0"
+    classpath("io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.22.0")
   }
 }
 
@@ -32,3 +34,6 @@ allprojects {
     mavenCentral()
   }
 }
+
+apply plugin: 'io.github.gradle-nexus.publish-plugin'
+apply from: "${rootDir}/scripts/publish-root.gradle"

@@ -4,6 +4,10 @@ apply plugin: 'maven-publish'
 apply plugin: "org.jlleitschuh.gradle.ktlint"
 apply plugin: "io.gitlab.arturbosch.detekt"
 
+ext["PUBLISH_ARTIFACT_ID"] = "leku"
+
+apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
+
 def versionMajor = getVersionMajor()
 def versionMinor = getVersionMinor()
 def versionPatch = getVersionPatch()
@@ -113,11 +117,6 @@ dependencies {
   androidTestImplementation 'org.mockito:mockito-core:3.6.28'
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-}
-
-task androidSourcesJar(type: Jar) {
-	classifier = 'sources'
-	from android.sourceSets.main.java.srcDirs
 }
 
 publishing {
