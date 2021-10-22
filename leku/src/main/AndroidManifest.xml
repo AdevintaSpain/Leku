@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.schibstedspain.leku"
+          package="com.adevinta.leku"
     >
 
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
