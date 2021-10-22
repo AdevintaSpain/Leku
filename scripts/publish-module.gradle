@@ -1,0 +1,82 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+task androidSourcesJar(type: Jar) {
+  archiveClassifier.set('sources')
+  if (project.plugins.findPlugin("com.android.library")) {
+    from android.sourceSets.main.java.srcDirs
+    from android.sourceSets.main.kotlin.srcDirs
+  } else {
+    from sourceSets.main.java.srcDirs
+    from sourceSets.main.kotlin.srcDirs
+  }
+}
+
+task javadocJar(type: Jar) {
+  archiveClassifier.set('javadoc')
+}
+
+artifacts {
+  archives androidSourcesJar
+  archives javadocJar
+}
+
+group = project.property("libGroup")
+version = project.property("libVersion")
+
+afterEvaluate {
+  publishing {
+    publications {
+      release(MavenPublication) {
+        groupId project.property("libGroup")
+        artifactId PUBLISH_ARTIFACT_ID
+        version project.property("libVersion")
+
+        if (project.plugins.findPlugin("com.android.library")) {
+          from components.release
+        } else {
+          artifact("$buildDir/libs/${project.getName()}-${version}.jar")
+        }
+
+        artifact androidSourcesJar
+        artifact javadocJar
+
+        pom {
+          name = project.project.getName()
+          description = 'Map location picker component for Android. Based on Google Maps. An alternative to Google Place Picker.'
+          url = 'https://github.com/AdevintaSpain/Leku'
+          licenses {
+            license {
+              name = 'Stream License'
+              url = 'https://github.com/AdevintaSpain/Leku/blob/master/LICENSE.md'
+            }
+          }
+          developers {
+            developer {
+              id = 'AdevintaSpain'
+              name = 'Adevinta Spain'
+              email = 'engineers@adevinta.com'
+            }
+          }
+          organization {
+            name = "Adevinta Spain"
+            url = "https://github.com/AdevintaSpain"
+          }
+          scm {
+            connection = 'scm:git:github.com/AdevintaSpain/Leku.git'
+            developerConnection = 'scm:git:ssh://github.com/AdevintaSpain/Leku.git'
+            url = 'https://github.com/AdevintaSpain/Leku/tree/master'
+          }
+        }
+      }
+    }
+  }
+}
+
+ext["signing.keyId"] = rootProject.ext["signing.keyId"]
+ext["signing.password"] = rootProject.ext["signing.password"]
+ext["signing.secretKeyRingFile"] = rootProject.ext["signing.secretKeyRingFile"]
+
+signing {
+  sign publishing.publications
+}
