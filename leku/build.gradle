@@ -8,13 +8,6 @@ ext["PUBLISH_ARTIFACT_ID"] = "leku"
 
 apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
 
-def versionMajor = getVersionMajor()
-def versionMinor = getVersionMinor()
-def versionPatch = getVersionPatch()
-
-group = 'com.schibstedspain.android'
-version = "${versionMajor}.${versionMinor}.${versionPatch}"
-
 android {
   compileSdkVersion 29
   resourcePrefix 'leku_'
@@ -117,72 +110,4 @@ dependencies {
   androidTestImplementation 'org.mockito:mockito-core:3.6.28'
 
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-}
-
-publishing {
-  publications {
-    Production(MavenPublication) {
-      groupId 'com.schibstedspain.android'
-      artifactId 'leku'
-      version "${versionMajor}.${versionMinor}.${versionPatch}"
-
-      pom.withXml {
-        def dependenciesNode = asNode().appendNode('dependencies')
-
-        configurations.implementation.allDependencies.each {
-          if (it.name != 'unspecified') {
-            def dependencyNode = dependenciesNode.appendNode('dependency')
-            dependencyNode.appendNode('groupId', it.group)
-            dependencyNode.appendNode('artifactId', it.name)
-            dependencyNode.appendNode('version', it.version)
-          }
-        }
-
-	    // List all "compile" dependencies (for old Gradle)
-	    configurations.compile.getDependencies().each { dep -> addDependency(dep, "compile") }
-	    // List all "api" dependencies (for new Gradle) as "compile" dependencies
-	    configurations.api.getDependencies().each { dep -> addDependency(dep, "compile") }
-	    // List all "implementation" dependencies (for new Gradle) as "runtime" dependencies
-	    configurations.implementation.getAllDependencies().each { dep ->
-		  try {
-		    addDependency(dep, "runtime")
-		  } catch(Exception ignored) {
-		  }
-		}
-      }
-
-	  artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
-	  artifact androidSourcesJar
-    }
-  }
-}
-
-def getVersionMajor() {
-  def content = file('../version.properties')
-
-  Properties properties = new Properties()
-  InputStream is = new ByteArrayInputStream(content.getBytes())
-  properties.load(is)
-
-  return properties['MAJOR'].toInteger()
-}
-
-def getVersionMinor() {
-  def content = file('../version.properties')
-
-  Properties properties = new Properties()
-  InputStream is = new ByteArrayInputStream(content.getBytes())
-  properties.load(is)
-
-  return properties['MINOR'].toInteger()
-}
-
-def getVersionPatch() {
-  def content = file('../version.properties')
-
-  Properties properties = new Properties()
-  InputStream is = new ByteArrayInputStream(content.getBytes())
-  properties.load(is)
-
-  return properties['PATCH'].toInteger()
 }
