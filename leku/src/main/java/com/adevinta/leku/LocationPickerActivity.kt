@@ -173,7 +173,7 @@ class LocationPickerActivity : AppCompatActivity(),
     private var lekuPoisMarkersMap: MutableMap<String, LekuPoi>? = null
     private var currentMarker: Marker? = null
     private var textWatcher: TextWatcher? = null
-    private var apiInteractor: GoogleGeocoderDataSource? = null
+    private var googleGeocoderDataSource: GoogleGeocoderDataSource? = null
     private var isVoiceSearchEnabled = true
     private var isUnnamedRoadVisible = true
     private var mapStyle: Int? = null
@@ -324,10 +324,10 @@ class LocationPickerActivity : AppCompatActivity(),
             placesDataSource = GooglePlacesDataSource(Places.createClient(this))
         }
         val geocoder = Geocoder(this, Locale.getDefault())
-        if (apiInteractor == null) {
-            apiInteractor = GoogleGeocoderDataSource(NetworkClient(), AddressBuilder())
+        if (googleGeocoderDataSource == null) {
+            googleGeocoderDataSource = GoogleGeocoderDataSource(NetworkClient(), AddressBuilder())
         }
-        val geocoderRepository = GeocoderRepository(AndroidGeocoderDataSource(geocoder), apiInteractor!!)
+        val geocoderRepository = GeocoderRepository(AndroidGeocoderDataSource(geocoder), googleGeocoderDataSource!!)
         val timeZoneDataSource = GoogleTimeZoneDataSource(
                 GeoApiContext.Builder().apiKey(GoogleTimeZoneDataSource.getApiKey(this)).build())
         geocoderPresenter = GeocoderPresenter(
@@ -874,8 +874,8 @@ class LocationPickerActivity : AppCompatActivity(),
             setLayoutVisibilityFromBundle(savedInstanceState)
         }
         if (savedInstanceState.keySet().contains(GEOLOC_API_KEY)) {
-            apiInteractor = GoogleGeocoderDataSource(NetworkClient(), AddressBuilder())
-            apiInteractor?.setApiKey(savedInstanceState.getString(GEOLOC_API_KEY, ""))
+            googleGeocoderDataSource = GoogleGeocoderDataSource(NetworkClient(), AddressBuilder())
+            googleGeocoderDataSource?.setApiKey(savedInstanceState.getString(GEOLOC_API_KEY, ""))
         }
         if (savedInstanceState.keySet().contains(PLACES_API_KEY)) {
             googlePlacesApiKey = savedInstanceState.getString(PLACES_API_KEY, "")
@@ -947,7 +947,7 @@ class LocationPickerActivity : AppCompatActivity(),
         }
         if (transitionBundle.keySet().contains(GEOLOC_API_KEY)) {
 
-            apiInteractor?.setApiKey(transitionBundle.getString(GEOLOC_API_KEY, ""))
+            googleGeocoderDataSource?.setApiKey(transitionBundle.getString(GEOLOC_API_KEY, ""))
         }
         if (transitionBundle.keySet().contains(PLACES_API_KEY)) {
             googlePlacesApiKey = transitionBundle.getString(PLACES_API_KEY, "")
