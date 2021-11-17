@@ -1293,7 +1293,9 @@ class LocationPickerActivity : AppCompatActivity(),
                     val marker = addPoiMarker(LatLng(location.latitude, location.longitude),
                             lekuPoi.title, lekuPoi.address)
                     lekuPoisMarkersMap?.let {
-                        it[marker.id] = lekuPoi
+                        marker?.let { marker ->
+                            it[marker.id] = lekuPoi
+                        }
                     }
                 }
 
@@ -1333,15 +1335,21 @@ class LocationPickerActivity : AppCompatActivity(),
         googleApiClient?.connect()
     }
 
-    private fun addMarker(latLng: LatLng): Marker {
-        return map!!.addMarker(MarkerOptions().position(latLng).draggable(true))
+    private fun addMarker(latLng: LatLng): Marker? {
+        map?.let {
+            return it.addMarker(MarkerOptions().position(latLng).draggable(true))
+        }
+        return null
     }
 
-    private fun addPoiMarker(latLng: LatLng, title: String, address: String): Marker {
-        return map!!.addMarker(MarkerOptions().position(latLng)
+    private fun addPoiMarker(latLng: LatLng, title: String, address: String): Marker? {
+        map?.let {
+            return it.addMarker(MarkerOptions().position(latLng)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
                 .title(title)
                 .snippet(address))
+        }
+        return null
     }
 
     private fun setNewLocation(address: Address) {
