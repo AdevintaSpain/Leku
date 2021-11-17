@@ -173,7 +173,7 @@ class LocationPickerActivity : AppCompatActivity(),
     private var lekuPoisMarkersMap: MutableMap<String, LekuPoi>? = null
     private var currentMarker: Marker? = null
     private var textWatcher: TextWatcher? = null
-    private var apiInteractor: GoogleGeocoderDataSource? = null
+    private var googleGeocoderDataSource: GoogleGeocoderDataSource? = null
     private var isVoiceSearchEnabled = true
     private var isUnnamedRoadVisible = true
     private var mapStyle: Int? = null
@@ -196,9 +196,7 @@ class LocationPickerActivity : AppCompatActivity(),
                             it.notifyDataSetChanged()
                         }
                     } else {
-                        searchAdapter?.let {
-                            it.notifyDataSetChanged()
-                        }
+                        searchAdapter?.notifyDataSetChanged()
                     }
                     showLocationInfoLayout()
                     clearSearchButton?.visibility = View.INVISIBLE
@@ -326,10 +324,10 @@ class LocationPickerActivity : AppCompatActivity(),
             placesDataSource = GooglePlacesDataSource(Places.createClient(this))
         }
         val geocoder = Geocoder(this, Locale.getDefault())
-        if (apiInteractor == null) {
-            apiInteractor = GoogleGeocoderDataSource(NetworkClient(), AddressBuilder())
+        if (googleGeocoderDataSource == null) {
+            googleGeocoderDataSource = GoogleGeocoderDataSource(NetworkClient(), AddressBuilder())
         }
-        val geocoderRepository = GeocoderRepository(AndroidGeocoderDataSource(geocoder), apiInteractor!!)
+        val geocoderRepository = GeocoderRepository(AndroidGeocoderDataSource(geocoder), googleGeocoderDataSource!!)
         val timeZoneDataSource = GoogleTimeZoneDataSource(
                 GeoApiContext.Builder().apiKey(GoogleTimeZoneDataSource.getApiKey(this)).build())
         geocoderPresenter = GeocoderPresenter(
@@ -556,7 +554,9 @@ class LocationPickerActivity : AppCompatActivity(),
             REQUEST_PLACE_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
                 val matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                 searchView = findViewById(R.id.leku_search)
-                retrieveLocationFrom(matches[0])
+                matches?.let {
+                    retrieveLocationFrom(it[0])
+                }
             }
             else -> {
             }
@@ -874,8 +874,8 @@ class LocationPickerActivity : AppCompatActivity(),
             setLayoutVisibilityFromBundle(savedInstanceState)
         }
         if (savedInstanceState.keySet().contains(GEOLOC_API_KEY)) {
-            apiInteractor = GoogleGeocoderDataSource(NetworkClient(), AddressBuilder())
-            apiInteractor?.setApiKey(savedInstanceState.getString(GEOLOC_API_KEY, ""))
+            googleGeocoderDataSource = GoogleGeocoderDataSource(NetworkClient(), AddressBuilder())
+            googleGeocoderDataSource?.setApiKey(savedInstanceState.getString(GEOLOC_API_KEY, ""))
         }
         if (savedInstanceState.keySet().contains(PLACES_API_KEY)) {
             googlePlacesApiKey = savedInstanceState.getString(PLACES_API_KEY, "")
@@ -947,7 +947,7 @@ class LocationPickerActivity : AppCompatActivity(),
         }
         if (transitionBundle.keySet().contains(GEOLOC_API_KEY)) {
 
-            apiInteractor?.setApiKey(transitionBundle.getString(GEOLOC_API_KEY, ""))
+            googleGeocoderDataSource?.setApiKey(transitionBundle.getString(GEOLOC_API_KEY, ""))
         }
         if (transitionBundle.keySet().contains(PLACES_API_KEY)) {
             googlePlacesApiKey = transitionBundle.getString(PLACES_API_KEY, "")
@@ -1014,7 +1014,7 @@ class LocationPickerActivity : AppCompatActivity(),
         val result = googleAPI.isGooglePlayServicesAvailable(applicationContext)
         if (result != ConnectionResult.SUCCESS) {
             if (googleAPI.isUserResolvableError(result)) {
-                googleAPI.getErrorDialog(this, result, CONNECTION_FAILURE_RESOLUTION_REQUEST).show()
+                googleAPI.getErrorDialog(this, result, CONNECTION_FAILURE_RESOLUTION_REQUEST)?.show()
             }
             return false
         }
@@ -1035,15 +1035,24 @@ class LocationPickerActivity : AppCompatActivity(),
 
     private fun setLocationInfo(address: Address) {
         street?.let {
+            val formattedAddress = getFormattedAddress(address)
             if (isUnnamedRoadVisible) {
-                it.text = address.getAddressLine(0)
+                it.text = formattedAddress
             } else {
-                it.text = removeUnnamedRoad(address.getAddressLine(0))
+                it.text = removeUnnamedRoad(formattedAddress)
             }
         }
         city?.text = if (isStreetEqualsCity(address)) "" else address.locality
         zipCode?.text = address.postalCode
         showAddressLayout()
+    }
+
+    private fun getFormattedAddress(address: Address): String {
+        return if (address.subThoroughfare.isNullOrEmpty()) {
+            address.thoroughfare
+        } else {
+            getString(R.string.leku_formatted_address, address.thoroughfare, address.subThoroughfare)
+        }
     }
 
     private fun setLocationInfo(poi: LekuPoi) {
@@ -1293,7 +1302,9 @@ class LocationPickerActivity : AppCompatActivity(),
                     val marker = addPoiMarker(LatLng(location.latitude, location.longitude),
                             lekuPoi.title, lekuPoi.address)
                     lekuPoisMarkersMap?.let {
-                        it[marker.id] = lekuPoi
+                        marker?.let { marker ->
+                            it[marker.id] = lekuPoi
+                        }
                     }
                 }
 
@@ -1333,15 +1344,21 @@ class LocationPickerActivity : AppCompatActivity(),
         googleApiClient?.connect()
     }
 
-    private fun addMarker(latLng: LatLng): Marker {
-        return map!!.addMarker(MarkerOptions().position(latLng).draggable(true))
+    private fun addMarker(latLng: LatLng): Marker? {
+        map?.let {
+            return it.addMarker(MarkerOptions().position(latLng).draggable(true))
+        }
+        return null
     }
 
-    private fun addPoiMarker(latLng: LatLng, title: String, address: String): Marker {
-        return map!!.addMarker(MarkerOptions().position(latLng)
+    private fun addPoiMarker(latLng: LatLng, title: String, address: String): Marker? {
+        map?.let {
+            return it.addMarker(MarkerOptions().position(latLng)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
                 .title(title)
                 .snippet(address))
+        }
+        return null
     }
 
     private fun setNewLocation(address: Address) {

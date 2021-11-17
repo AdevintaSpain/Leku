@@ -9,10 +9,12 @@
   <string name="leku_voice_search_promp">Búsqueda por voz…</string>
   <string name="leku_voice_search_extra_language">es-ES</string>
   <string name="leku_toolbar_action_voice_title">Voz</string>
-  <string name="leku_search_hint">Buscar</string>
+  <string name="leku_search_hint">Buscar una dirección</string>
   <string name="leku_longitude">Longitud</string>
   <string name="leku_latitude">Latitud</string>
   <string name="leku_coordinates">Coordenadas</string>
   <string name="leku_use_this_location">Usar esta ubicación</string>
   <string name="leku_accessibility_remove_current_location">Deseleccionar la ubicación actual</string>
+  <string name="leku_accessibility_satellite_button_description">Cambiar a vista de Satélite/Calle</string>
+  <string name="leku_accessibility_my_location_button_description">Seleccionar mi ubicación actual</string>
 </resources>

@@ -6,7 +6,7 @@
     android:orientation="vertical"
     >
 
-  <fragment android:layout_width="match_parent"
+  <androidx.fragment.app.FragmentContainerView android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:id="@+id/map"
       tools:context="com.adevinta.leku.LocationPickerActivity"
@@ -29,7 +29,6 @@
       android:gravity="top|start"
       android:layout_marginTop="130dp"
       android:layout_marginStart="16dp"
-      android:layout_marginLeft="16dp"
       android:visibility="gone"
       />
 
@@ -47,7 +46,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         app:srcCompat="@drawable/leku_ic_satellite"
         app:fabSize="normal"
@@ -56,6 +54,7 @@
         app:rippleColor="@color/leku_soft_grey"
         app:elevation="12dp"
         tools:background="@color/leku_white"
+        android:contentDescription="@string/leku_accessibility_satellite_button_description"
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -64,7 +63,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginBottom="16dp"
         app:srcCompat="@drawable/leku_ic_gps_lime"
         app:fabSize="normal"
@@ -74,6 +72,7 @@
         app:elevation="12dp"
         tools:background="@color/leku_white"
         tools:ignore="elevation"
+        android:contentDescription="@string/leku_accessibility_my_location_button_description"
         />
 
     <FrameLayout
@@ -84,27 +83,20 @@
         android:visibility="gone"
         tools:visibility="visible">
 
-      <ImageView
-          android:layout_width="match_parent"
-          android:layout_height="250dp"
-          android:layout_gravity="bottom|end"
-          android:src="@drawable/leku_bottom_screen_gradient_background"
-          android:importantForAccessibility="no"
-          />
-
       <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_gravity="bottom|end"
-          android:background="@drawable/leku_adress_custom_background"
+          android:background="@drawable/leku_address_custom_background"
           android:orientation="horizontal"
           tools:ignore="UselessParent"
           android:baselineAligned="false"
-          android:paddingBottom="62dp"
+          android:paddingBottom="16dp"
           android:paddingStart="24dp"
           android:paddingLeft="24dp"
           android:paddingEnd="24dp"
           android:paddingRight="24dp"
+          android:layout_marginBottom="48dp"
           >
 
         <LinearLayout
@@ -134,7 +126,6 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:layout_marginEnd="22dp"
-              android:layout_marginRight="22dp"
               />
 
           <Button
@@ -162,7 +153,7 @@
           android:layout_width="match_parent"
           android:layout_height="48dp"
           android:layout_gravity="bottom|end"
-          android:src="@color/leku_black_20_transparent"
+          android:src="@drawable/leku_bottom_screen_gradient_background"
           android:importantForAccessibility="no"
           />
     </FrameLayout>
