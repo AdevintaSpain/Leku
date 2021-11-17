@@ -64,20 +64,13 @@ ktlint {
   }
 }
 
-configurations.all {
-  // This is a workaround for the issue (remove when androidx exits alpha libraries):
-  // https://stackoverflow.com/questions/37347326/errorconflict-with-dependency-com-google-code-findbugsjsr305
-  exclude group: 'com.google.code.findbugs', module: 'jsr305'
-  exclude group: 'com.google.guava', module: 'listenablefuture'
-}
-
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
   implementation "com.google.android.material:material:1.5.0-beta01"
   implementation 'androidx.fragment:fragment-ktx:1.3.6'
 
-  def playServicesVersion = '17.0.1'
+  def playServicesVersion = '18.0.0'
   implementation ("com.google.android.gms:play-services-maps:$playServicesVersion") {
 	  exclude group: "com.android.support"
   }
