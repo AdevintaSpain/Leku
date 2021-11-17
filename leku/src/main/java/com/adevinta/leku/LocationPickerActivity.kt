@@ -554,7 +554,9 @@ class LocationPickerActivity : AppCompatActivity(),
             REQUEST_PLACE_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
                 val matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                 searchView = findViewById(R.id.leku_search)
-                retrieveLocationFrom(matches[0])
+                matches?.let {
+                    retrieveLocationFrom(it[0])
+                }
             }
             else -> {
             }
