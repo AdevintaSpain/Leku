@@ -64,7 +64,7 @@ Component library for Android that uses Google Maps and returns a latitude, long
 ### Prerequisites
 
 minSdkVersion >= 21<br/>
-Google Play Services = 17.0.1<br/>
+Google Play Services = 18.0.0<br/>
 AndroidX
 
 ### Download
@@ -81,14 +81,14 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.adevinta.android:leku:9.0.0'
+    implementation 'com.adevinta.android:leku:9.1.0'
 }
 ```
 
 Alternatively, if you are using a different version of Google Play Services and AndroidX use this instead:
 
 ```groovy
-implementation ('com.adevinta.android:leku:9.0.0') {
+implementation ('com.adevinta.android:leku:9.1.0') {
     exclude group: 'com.google.android.gms'
     exclude group: 'androidx.appcompat'
 }
