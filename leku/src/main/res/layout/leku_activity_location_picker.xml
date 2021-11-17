@@ -83,27 +83,20 @@
         android:visibility="gone"
         tools:visibility="visible">
 
-      <ImageView
-          android:layout_width="match_parent"
-          android:layout_height="250dp"
-          android:layout_gravity="bottom|end"
-          android:src="@drawable/leku_bottom_screen_gradient_background"
-          android:importantForAccessibility="no"
-          />
-
       <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_gravity="bottom|end"
-          android:background="@drawable/leku_adress_custom_background"
+          android:background="@drawable/leku_address_custom_background"
           android:orientation="horizontal"
           tools:ignore="UselessParent"
           android:baselineAligned="false"
-          android:paddingBottom="62dp"
+          android:paddingBottom="16dp"
           android:paddingStart="24dp"
           android:paddingLeft="24dp"
           android:paddingEnd="24dp"
           android:paddingRight="24dp"
+          android:layout_marginBottom="48dp"
           >
 
         <LinearLayout
@@ -160,7 +153,7 @@
           android:layout_width="match_parent"
           android:layout_height="48dp"
           android:layout_gravity="bottom|end"
-          android:src="@color/leku_black_20_transparent"
+          android:src="@drawable/leku_bottom_screen_gradient_background"
           android:importantForAccessibility="no"
           />
     </FrameLayout>
