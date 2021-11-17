@@ -1035,15 +1035,24 @@ class LocationPickerActivity : AppCompatActivity(),
 
     private fun setLocationInfo(address: Address) {
         street?.let {
+            val formattedAddress = getFormattedAddress(address)
             if (isUnnamedRoadVisible) {
-                it.text = address.getAddressLine(0)
+                it.text = formattedAddress
             } else {
-                it.text = removeUnnamedRoad(address.getAddressLine(0))
+                it.text = removeUnnamedRoad(formattedAddress)
             }
         }
         city?.text = if (isStreetEqualsCity(address)) "" else address.locality
         zipCode?.text = address.postalCode
         showAddressLayout()
+    }
+
+    private fun getFormattedAddress(address: Address): String {
+        return if (address.subThoroughfare.isNullOrEmpty()) {
+            address.thoroughfare
+        } else {
+            getString(R.string.leku_formatted_address, address.thoroughfare, address.subThoroughfare)
+        }
     }
 
     private fun setLocationInfo(poi: LekuPoi) {
