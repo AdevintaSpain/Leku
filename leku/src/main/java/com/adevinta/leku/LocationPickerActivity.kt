@@ -196,9 +196,7 @@ class LocationPickerActivity : AppCompatActivity(),
                             it.notifyDataSetChanged()
                         }
                     } else {
-                        searchAdapter?.let {
-                            it.notifyDataSetChanged()
-                        }
+                        searchAdapter?.notifyDataSetChanged()
                     }
                     showLocationInfoLayout()
                     clearSearchButton?.visibility = View.INVISIBLE
@@ -1014,7 +1012,7 @@ class LocationPickerActivity : AppCompatActivity(),
         val result = googleAPI.isGooglePlayServicesAvailable(applicationContext)
         if (result != ConnectionResult.SUCCESS) {
             if (googleAPI.isUserResolvableError(result)) {
-                googleAPI.getErrorDialog(this, result, CONNECTION_FAILURE_RESOLUTION_REQUEST).show()
+                googleAPI.getErrorDialog(this, result, CONNECTION_FAILURE_RESOLUTION_REQUEST)?.show()
             }
             return false
         }
