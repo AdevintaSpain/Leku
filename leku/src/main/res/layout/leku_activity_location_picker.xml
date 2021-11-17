@@ -72,7 +72,7 @@
         app:elevation="12dp"
         tools:background="@color/leku_white"
         tools:ignore="elevation"
-        android:contentDescription="TODO"
+        android:contentDescription="@string/leku_accessibility_my_location_button_description"
         />
 
     <FrameLayout
