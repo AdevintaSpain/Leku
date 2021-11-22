@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                     .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
                     // .withGeolocApiKey("<PUT API KEY HERE>")
                     // .withGooglePlacesApiKey("<PUT API KEY HERE>")
-                    // .withSearchZone("es_ES")
+                    .withSearchZone("es_ES")
                     // .withSearchZone(SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
                     .withDefaultLocaleSearchZone()
                     // .shouldReturnOkOnBackPressed()
