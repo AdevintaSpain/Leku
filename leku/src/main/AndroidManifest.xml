@@ -20,8 +20,8 @@
         <intent-filter>
             <action android:name="android.intent.action.SEARCH" />
         </intent-filter>
-        <meta-data android:name="android.leku_searchableable"
-            android:resource="@leku_searchableable" />
+        <meta-data android:name="android.leku_searchable"
+            android:resource="@leku_searchable" />
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value=".MainActivity" />
