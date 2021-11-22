@@ -364,10 +364,12 @@ class LocationPickerActivity : AppCompatActivity(),
             adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, locationNameList)
             listResult?.let {
                 it.adapter = adapter
-                it.setOnItemClickListener { _, _, i, _ ->
-                    setNewLocation(locationList[i])
-                    changeListResultVisibility(View.GONE)
-                    closeKeyboard()
+                it.setOnItemClickListener { _, _, position, _ ->
+                    if (locationList[position].hasLatitude() && locationList[position].hasLongitude()) {
+                        setNewLocation(locationList[position])
+                        changeListResultVisibility(View.GONE)
+                        closeKeyboard()
+                    }
                 }
             }
         } else {
@@ -375,10 +377,12 @@ class LocationPickerActivity : AppCompatActivity(),
             searchAdapter = LocationSearchAdapter(
                     locationNameList, object : LocationSearchAdapter.SearchItemClickListener {
                 override fun onItemClick(position: Int) {
-                    setNewLocation(locationList[position])
-                    changeListResultVisibility(View.GONE)
-                    closeKeyboard()
-                    hideSearchLayout()
+                    if (locationList[position].hasLatitude() && locationList[position].hasLongitude()) {
+                        setNewLocation(locationList[position])
+                        changeListResultVisibility(View.GONE)
+                        closeKeyboard()
+                        hideSearchLayout()
+                    }
                 }
             }
             )
@@ -731,12 +735,22 @@ class LocationPickerActivity : AppCompatActivity(),
         fillLocationList(addresses)
         if (addresses.isNotEmpty()) {
             updateLocationNameList(addresses)
-            if (isLegacyLayoutEnabled) {
-                adapter?.notifyDataSetChanged()
-            } else {
-                searchAdapter?.notifyDataSetChanged()
-            }
+        } else {
+            setNoSearchResultsOnList()
         }
+
+        if (isLegacyLayoutEnabled) {
+            adapter?.notifyDataSetChanged()
+        } else {
+            searchAdapter?.notifyDataSetChanged()
+        }
+    }
+
+    private fun setNoSearchResultsOnList() {
+        val noResultsAddress = Address(Locale.getDefault())
+        locationList.add(noResultsAddress)
+        locationNameList.clear()
+        locationNameList.add(getString(R.string.leku_no_search_results))
     }
 
     override fun didLoadLocation() {

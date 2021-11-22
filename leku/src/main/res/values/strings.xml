@@ -4,7 +4,7 @@
   <string name="leku_title_activity_location_picker" tools:ignore="UnusedResources">Location Picker</string>
   <string name="leku_no_geocoder_available">Service not available</string>
   <string name="leku_load_location_error">Something went wrong. Please try again.</string>
-  <string name="leku_no_search_results">There are no results for your search</string>
+  <string name="leku_no_search_results">There are no search results</string>
   <string name="leku_network_resource">network</string>
   <string name="leku_unknown_location">unknown location</string>
   <string name="leku_voice_search_promp">Search by voice…</string>
