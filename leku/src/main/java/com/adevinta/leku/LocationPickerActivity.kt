@@ -1048,10 +1048,16 @@ class LocationPickerActivity : AppCompatActivity(),
     }
 
     private fun getFormattedAddress(address: Address): String {
-        return if (address.subThoroughfare.isNullOrEmpty()) {
-            address.thoroughfare
-        } else {
+        return if (!address.thoroughfare.isNullOrEmpty() && !address.subThoroughfare.isNullOrEmpty()) {
             getString(R.string.leku_formatted_address, address.thoroughfare, address.subThoroughfare)
+        } else {
+            if (address.subThoroughfare.isNullOrEmpty() && !address.thoroughfare.isNullOrEmpty()) {
+                address.thoroughfare
+            } else if (address.thoroughfare.isNullOrEmpty() && !address.subThoroughfare.isNullOrEmpty()) {
+                address.subThoroughfare
+            } else {
+                address.getAddressLine(0)
+            }
         }
     }
 
