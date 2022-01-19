@@ -7,6 +7,7 @@ import com.google.maps.TimeZoneApi
 import com.google.maps.errors.ApiException
 import com.google.maps.model.LatLng
 import java.io.IOException
+import java.lang.IllegalStateException
 import java.util.TimeZone
 
 class GoogleTimeZoneDataSource(private val geoApiContext: GeoApiContext) {
@@ -32,6 +33,7 @@ class GoogleTimeZoneDataSource(private val geoApiContext: GeoApiContext) {
         } catch (ignored: ApiException) {
         } catch (ignored: InterruptedException) {
         } catch (ignored: IOException) {
+        } catch (ignored: IllegalStateException) {
         }
         return null
     }
