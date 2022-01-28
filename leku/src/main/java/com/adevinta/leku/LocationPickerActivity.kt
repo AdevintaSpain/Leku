@@ -73,8 +73,12 @@ import com.adevinta.leku.locale.SearchZoneRect
 import com.adevinta.leku.permissions.PermissionUtils
 import com.adevinta.leku.tracker.TrackEvents
 import com.adevinta.leku.utils.ReactiveLocationProvider
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableEmitter
 import java.util.Locale
 import java.util.TimeZone
+import java.util.concurrent.TimeUnit
 import kotlin.collections.set
 
 const val LATITUDE = "latitude"
@@ -181,40 +185,6 @@ class LocationPickerActivity : AppCompatActivity(),
     private var isSearchLayoutShown = false
     private lateinit var toolbar: MaterialToolbar
     private lateinit var timeZone: TimeZone
-
-    private val searchTextWatcher: TextWatcher
-        get() = object : TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-            }
-
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onTextChanged(charSequence: CharSequence, start: Int, count: Int, after: Int) {
-                if ("" == charSequence.toString()) {
-                    if (isLegacyLayoutEnabled) {
-                        adapter?.let {
-                            it.clear()
-                            it.notifyDataSetChanged()
-                        }
-                    } else {
-                        searchAdapter?.notifyDataSetChanged()
-                    }
-                    showLocationInfoLayout()
-                    clearSearchButton?.visibility = View.INVISIBLE
-                    searchOption?.setIcon(R.drawable.leku_ic_mic_legacy)
-                    updateVoiceSearchVisibility()
-                } else {
-                    if (charSequence.length > MIN_CHARACTERS) {
-                        retrieveLocationWithDebounceTimeFrom(charSequence.toString())
-                    }
-                    clearSearchButton?.visibility = View.VISIBLE
-                    searchOption?.setIcon(R.drawable.leku_ic_search)
-                    searchOption?.isVisible = true
-                }
-            }
-
-            override fun afterTextChanged(editable: Editable) {
-            }
-        }
 
     private val defaultZoom: Int
         get() {
@@ -413,25 +383,70 @@ class LocationPickerActivity : AppCompatActivity(),
     }
 
     private fun setUpSearchView() {
-        searchView = findViewById(R.id.leku_search)
-        searchView?.setOnEditorActionListener { v, actionId, _ ->
-            var handled = false
-            if (actionId == EditorInfo.IME_ACTION_SEARCH && v.text.toString().isNotEmpty()) {
-                retrieveLocationFrom(v.text.toString())
-                closeKeyboard()
-                handled = true
-            }
-            handled
+      searchView = findViewById(R.id.leku_search)
+      searchView?.setOnEditorActionListener { v, actionId, _ ->
+        var handled = false
+        if (actionId == EditorInfo.IME_ACTION_SEARCH && v.text.toString().isNotEmpty()) {
+          retrieveLocationFrom(v.text.toString())
+          closeKeyboard()
+          handled = true
         }
-        textWatcher = searchTextWatcher
-        searchView?.addTextChangedListener(textWatcher)
-        if (!isLegacyLayoutEnabled) {
-            searchView?.setOnFocusChangeListener { _: View?, hasFocus: Boolean ->
-                if (hasFocus) {
-                    showSearchLayout()
-                }
-            }
+        handled
+      }
+      createSearchTextChangeObserver()
+      if (!isLegacyLayoutEnabled) {
+        searchView?.setOnFocusChangeListener { _: View?, hasFocus: Boolean ->
+          if (hasFocus) {
+            showSearchLayout()
+          }
         }
+      }
+    }
+
+    private fun createSearchViewTextChangeObservable(): Observable<String> = Observable.create { subscriber: ObservableEmitter<String> ->
+      searchView?.addTextChangedListener(object : TextWatcher {
+        override fun afterTextChanged(s: Editable) {}
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+          subscriber.onNext(s.toString())
+        }
+      })
+    }.debounce(DEBOUNCE_TIME.toLong(), TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+
+    private fun createSearchTextChangeObserver() {
+      val searchTextChangeObservable = createSearchViewTextChangeObservable()
+      val disposable = searchTextChangeObservable
+        .observeOn(AndroidSchedulers.mainThread())
+        .doOnNext { willLoadLocation() }
+        .subscribe({ term ->
+          onSearchTextChanged(term)
+        }, {
+          // onError just do nothing, do not execute search
+        })
+    }
+
+    private fun onSearchTextChanged(term: String) {
+      if (term.isEmpty()) {
+        if (isLegacyLayoutEnabled) {
+          adapter?.let {
+            it.clear()
+            it.notifyDataSetChanged()
+          }
+        } else {
+          searchAdapter?.notifyDataSetChanged()
+        }
+        showLocationInfoLayout()
+        clearSearchButton?.visibility = View.INVISIBLE
+        searchOption?.setIcon(R.drawable.leku_ic_mic_legacy)
+        updateVoiceSearchVisibility()
+      } else {
+        if (term.length > MIN_CHARACTERS) {
+          retrieveLocationWithDebounceTimeFrom(term)
+        }
+        clearSearchButton?.visibility = View.VISIBLE
+        searchOption?.setIcon(R.drawable.leku_ic_search)
+        searchOption?.isVisible = true
+      }
     }
 
     private fun showSearchLayout() {
