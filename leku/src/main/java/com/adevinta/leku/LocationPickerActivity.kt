@@ -76,6 +76,7 @@ import com.adevinta.leku.utils.ReactiveLocationProvider
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.ObservableEmitter
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import java.util.Locale
 import java.util.TimeZone
 import java.util.concurrent.TimeUnit
@@ -185,6 +186,7 @@ class LocationPickerActivity : AppCompatActivity(),
     private var isSearchLayoutShown = false
     private lateinit var toolbar: MaterialToolbar
     private lateinit var timeZone: TimeZone
+    private val compositeDisposable = CompositeDisposable()
 
     private val defaultZoom: Int
         get() {
@@ -417,12 +419,12 @@ class LocationPickerActivity : AppCompatActivity(),
       val searchTextChangeObservable = createSearchViewTextChangeObservable()
       val disposable = searchTextChangeObservable
         .observeOn(AndroidSchedulers.mainThread())
-        .doOnNext { willLoadLocation() }
         .subscribe({ term ->
           onSearchTextChanged(term)
         }, {
           // onError just do nothing, do not execute search
         })
+      compositeDisposable.add(disposable)
     }
 
     private fun onSearchTextChanged(term: String) {
@@ -610,6 +612,7 @@ class LocationPickerActivity : AppCompatActivity(),
             searchView?.removeTextChangedListener(it)
         }
         googleApiClient?.unregisterConnectionCallbacks(this)
+        compositeDisposable.dispose()
         super.onDestroy()
     }
 
