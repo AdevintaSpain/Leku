@@ -1259,18 +1259,21 @@ class LocationPickerActivity : AppCompatActivity(),
     }
 
     private fun getFullAddressString(address: Address): String {
-        var fullAddress = ""
-        address.featureName?.let {
-            fullAddress += it
-        }
-        if (address.subLocality != null && address.subLocality.isNotEmpty()) {
-            fullAddress += ", " + address.subLocality
-        }
-        if (address.locality != null && address.locality.isNotEmpty()) {
-            fullAddress += ", " + address.locality
-        }
-        if (address.countryName != null && address.countryName.isNotEmpty()) {
-            fullAddress += ", " + address.countryName
+        var fullAddress = address.getAddressLine(0)
+        if (fullAddress.isNullOrEmpty()) {
+            fullAddress = ""
+            address.featureName?.let {
+                fullAddress += it
+            }
+            if (address.subLocality != null && address.subLocality.isNotEmpty()) {
+                fullAddress += ", " + address.subLocality
+            }
+            if (address.locality != null && address.locality.isNotEmpty()) {
+                fullAddress += ", " + address.locality
+            }
+            if (address.countryName != null && address.countryName.isNotEmpty()) {
+                fullAddress += ", " + address.countryName
+            }
         }
         return fullAddress
     }
