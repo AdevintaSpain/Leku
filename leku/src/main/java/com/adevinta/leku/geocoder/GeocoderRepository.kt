@@ -7,25 +7,25 @@ import io.reactivex.rxjava3.core.Single
 private const val RETRY_COUNT = 3
 
 class GeocoderRepository(
-    private val androidGeocoderInterface: GeocoderDataSourceInterface,
-    private val googleGeocoderInterface: GeocoderDataSourceInterface
+    private val androidGeocoder: GeocoderDataSourceInterface,
+    private val googleGeocoder: GeocoderDataSourceInterface
 ) {
 
     fun getFromLocationName(query: String): Single<List<Address>> {
-        return androidGeocoderInterface.getFromLocationName(query)
+        return androidGeocoder.getFromLocationName(query)
                 .retry(RETRY_COUNT.toLong())
-                .onErrorResumeWith(googleGeocoderInterface.getFromLocationName(query))
+                .onErrorResumeWith(googleGeocoder.getFromLocationName(query))
     }
 
     fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): Single<List<Address>> {
-        return androidGeocoderInterface.getFromLocationName(query, lowerLeft, upperRight)
+        return androidGeocoder.getFromLocationName(query, lowerLeft, upperRight)
                 .retry(RETRY_COUNT.toLong())
-                .onErrorResumeWith(googleGeocoderInterface.getFromLocationName(query, lowerLeft, upperRight))
+                .onErrorResumeWith(googleGeocoder.getFromLocationName(query, lowerLeft, upperRight))
     }
 
     fun getFromLocation(latLng: LatLng): Single<List<Address>> {
-        return androidGeocoderInterface.getFromLocation(latLng.latitude, latLng.longitude)
+        return androidGeocoder.getFromLocation(latLng.latitude, latLng.longitude)
                 .retry(RETRY_COUNT.toLong())
-                .onErrorResumeWith(googleGeocoderInterface.getFromLocation(latLng.latitude, latLng.longitude))
+                .onErrorResumeWith(googleGeocoder.getFromLocation(latLng.latitude, latLng.longitude))
     }
 }
