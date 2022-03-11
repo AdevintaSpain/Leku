@@ -7,7 +7,7 @@ import io.reactivex.rxjava3.core.Single
 
 private const val MAX_RESULTS = 5
 
-class AndroidGeocoderDataSourceInterface(private val geocoder: Geocoder) : GeocoderDataSourceInterface {
+class AndroidGeocoderDataSource(private val geocoder: Geocoder) : GeocoderDataSourceInterface {
 
     override fun getFromLocationName(query: String): Single<List<Address>> {
         return Single.fromCallable {

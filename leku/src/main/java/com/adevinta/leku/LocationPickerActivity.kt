@@ -59,7 +59,7 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.maps.GeoApiContext
-import com.adevinta.leku.geocoder.AndroidGeocoderDataSourceInterface
+import com.adevinta.leku.geocoder.AndroidGeocoderDataSource
 import com.adevinta.leku.geocoder.GeocoderPresenter
 import com.adevinta.leku.geocoder.GeocoderRepository
 import com.adevinta.leku.geocoder.GeocoderViewInterface
@@ -299,7 +299,7 @@ class LocationPickerActivity : AppCompatActivity(),
         if (googleGeocoderDataSource == null) {
             googleGeocoderDataSource = GoogleGeocoderDataSource(NetworkClient(), AddressBuilder())
         }
-        val geocoderRepository = GeocoderRepository(AndroidGeocoderDataSourceInterface(geocoder), googleGeocoderDataSource!!)
+        val geocoderRepository = GeocoderRepository(AndroidGeocoderDataSource(geocoder), googleGeocoderDataSource!!)
         val timeZoneDataSource = GoogleTimeZoneDataSource(
                 GeoApiContext.Builder().apiKey(GoogleTimeZoneDataSource.getApiKey(this)).build())
         geocoderPresenter = GeocoderPresenter(
