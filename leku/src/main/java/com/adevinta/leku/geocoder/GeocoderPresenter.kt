@@ -61,7 +61,7 @@ class GeocoderPresenter @JvmOverloads constructor(
         val disposable = geocoderRepository.getFromLocationName(query)
                 .subscribeOn(Schedulers.io())
                 .observeOn(scheduler)
-                .doFinally {view?.didLoadLocation() }
+                .doFinally { view?.didLoadLocation() }
                 .subscribe({ view?.showLocations(it) },
                         { view?.showLoadLocationError() })
         compositeDisposable.add(disposable)
