@@ -9,7 +9,7 @@ import java.util.TimeZone
 interface GeocoderViewInterface {
     fun willLoadLocation()
     fun showLocations(addresses: List<Address>)
-    fun showDebouncedLocations(addresses: List<Address>)
+    fun showDebouncedLocations(address: Address)
     fun didLoadLocation()
     fun showLoadLocationError()
     fun showLastLocation(location: Location)
@@ -22,7 +22,7 @@ interface GeocoderViewInterface {
     class NullView : GeocoderViewInterface {
         override fun willLoadLocation() {}
         override fun showLocations(addresses: List<Address>) {}
-        override fun showDebouncedLocations(addresses: List<Address>) {}
+        override fun showDebouncedLocations(address: Address) {}
         override fun didLoadLocation() {}
         override fun showLoadLocationError() {}
         override fun showLastLocation(location: Location) {}

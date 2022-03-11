@@ -59,7 +59,7 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.maps.GeoApiContext
-import com.adevinta.leku.geocoder.AndroidGeocoderDataSource
+import com.adevinta.leku.geocoder.AndroidGeocoderDataSourceInterface
 import com.adevinta.leku.geocoder.GeocoderPresenter
 import com.adevinta.leku.geocoder.GeocoderRepository
 import com.adevinta.leku.geocoder.GeocoderViewInterface
@@ -299,7 +299,7 @@ class LocationPickerActivity : AppCompatActivity(),
         if (googleGeocoderDataSource == null) {
             googleGeocoderDataSource = GoogleGeocoderDataSource(NetworkClient(), AddressBuilder())
         }
-        val geocoderRepository = GeocoderRepository(AndroidGeocoderDataSource(geocoder), googleGeocoderDataSource!!)
+        val geocoderRepository = GeocoderRepository(AndroidGeocoderDataSourceInterface(geocoder), googleGeocoderDataSource!!)
         val timeZoneDataSource = GoogleTimeZoneDataSource(
                 GeoApiContext.Builder().apiKey(GoogleTimeZoneDataSource.getApiKey(this)).build())
         geocoderPresenter = GeocoderPresenter(
@@ -749,18 +749,18 @@ class LocationPickerActivity : AppCompatActivity(),
         }
     }
 
-    override fun showDebouncedLocations(addresses: List<Address>) {
-        fillLocationList(addresses)
-        if (addresses.isNotEmpty()) {
-            updateLocationNameList(addresses)
+    override fun showDebouncedLocations(address: Address) {
+        locationList.add(address)
+        if (address.featureName == null) {
+            locationNameList.add(getString(R.string.leku_unknown_location))
         } else {
-            setNoSearchResultsOnList()
+            locationNameList.add(getFullAddressString(address))
         }
 
         if (isLegacyLayoutEnabled) {
             adapter?.notifyDataSetChanged()
         } else {
-            searchAdapter?.notifyDataSetChanged()
+            searchAdapter?.notifyItemInserted(locationList.size - 1)
         }
     }
 

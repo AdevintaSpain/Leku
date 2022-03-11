@@ -2,34 +2,30 @@ package com.adevinta.leku.geocoder
 
 import android.location.Address
 import com.google.android.gms.maps.model.LatLng
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Single
 
 private const val RETRY_COUNT = 3
 
 class GeocoderRepository(
-    private val androidGeocoder: GeocoderInteractorDataSource,
-    private val googleGeocoder: GeocoderInteractorDataSource
+    private val androidGeocoderInterface: GeocoderDataSourceInterface,
+    private val googleGeocoderInterface: GeocoderDataSourceInterface
 ) {
 
-    fun getFromLocationName(query: String): Observable<List<Address>> {
-        return androidGeocoder.getFromLocationName(query)
-                .subscribeOn(Schedulers.newThread())
+    fun getFromLocationName(query: String): Single<List<Address>> {
+        return androidGeocoderInterface.getFromLocationName(query)
                 .retry(RETRY_COUNT.toLong())
-                .onErrorResumeWith(googleGeocoder.getFromLocationName(query))
+                .onErrorResumeWith(googleGeocoderInterface.getFromLocationName(query))
     }
 
-    fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): Observable<List<Address>> {
-        return androidGeocoder.getFromLocationName(query, lowerLeft, upperRight)
-                .subscribeOn(Schedulers.newThread())
+    fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): Single<List<Address>> {
+        return androidGeocoderInterface.getFromLocationName(query, lowerLeft, upperRight)
                 .retry(RETRY_COUNT.toLong())
-                .onErrorResumeWith(googleGeocoder.getFromLocationName(query, lowerLeft, upperRight))
+                .onErrorResumeWith(googleGeocoderInterface.getFromLocationName(query, lowerLeft, upperRight))
     }
 
-    fun getFromLocation(latLng: LatLng): Observable<List<Address>> {
-        return androidGeocoder.getFromLocation(latLng.latitude, latLng.longitude)
-                .subscribeOn(Schedulers.newThread())
+    fun getFromLocation(latLng: LatLng): Single<List<Address>> {
+        return androidGeocoderInterface.getFromLocation(latLng.latitude, latLng.longitude)
                 .retry(RETRY_COUNT.toLong())
-                .onErrorResumeWith(googleGeocoder.getFromLocation(latLng.latitude, latLng.longitude))
+                .onErrorResumeWith(googleGeocoderInterface.getFromLocation(latLng.latitude, latLng.longitude))
     }
 }
