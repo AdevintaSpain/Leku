@@ -88,7 +88,7 @@ class GeocoderPresenter @JvmOverloads constructor(
         val disposable = geocoderRepository.getFromLocationName(query)
             .subscribeOn(Schedulers.io())
             .observeOn(scheduler)
-            .flattenAsObservable { it }
+            .toObservable()
             .debounce(debounceTime.toLong(), TimeUnit.MILLISECONDS, Schedulers.io())
             .doFinally { view?.didLoadLocation() }
             .subscribe({ view?.showDebouncedLocations(it) },
@@ -104,7 +104,7 @@ class GeocoderPresenter @JvmOverloads constructor(
         ) { geocoderList, placesList -> this.getMergedList(geocoderList, placesList) }
             .subscribeOn(Schedulers.io())
             .observeOn(scheduler)
-            .flattenAsObservable { it }
+            .toObservable()
             .debounce(debounceTime.toLong(), TimeUnit.MILLISECONDS, Schedulers.io())
             .subscribe({ view?.showDebouncedLocations(it) },
                     { view?.showLoadLocationError() },

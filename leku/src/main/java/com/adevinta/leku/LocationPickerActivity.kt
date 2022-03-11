@@ -749,18 +749,18 @@ class LocationPickerActivity : AppCompatActivity(),
         }
     }
 
-    override fun showDebouncedLocations(address: Address) {
-        locationList.add(address)
-        if (address.featureName == null) {
-            locationNameList.add(getString(R.string.leku_unknown_location))
+    override fun showDebouncedLocations(addresses: List<Address>) {
+        fillLocationList(addresses)
+        if (addresses.isNotEmpty()) {
+            updateLocationNameList(addresses)
         } else {
-            locationNameList.add(getFullAddressString(address))
+            setNoSearchResultsOnList()
         }
 
         if (isLegacyLayoutEnabled) {
             adapter?.notifyDataSetChanged()
         } else {
-            searchAdapter?.notifyItemInserted(locationList.size - 1)
+            searchAdapter?.notifyDataSetChanged()
         }
     }
 
