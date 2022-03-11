@@ -5,7 +5,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.adevinta.leku.geocoder.api.AddressBuilder
 import com.adevinta.leku.geocoder.api.NetworkClient
 import com.adevinta.leku.geocoder.api.NetworkException
-import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import java.util.Locale
 import org.json.JSONException
 
@@ -17,7 +17,7 @@ private const val QUERY_LAT_LONG = "https://maps.googleapis.com/maps/api/geocode
 class GoogleGeocoderDataSource(
     private val networkClient: NetworkClient,
     private val addressBuilder: AddressBuilder
-) : GeocoderInteractorDataSource {
+) : GeocoderDataSourceInterface {
 
     private var apiKey: String? = null
 
@@ -25,66 +25,66 @@ class GoogleGeocoderDataSource(
         this.apiKey = apiKey
     }
 
-    override fun getFromLocationName(query: String): Observable<List<Address>> {
-        return Observable.create { subscriber ->
+    override fun getFromLocationName(query: String): Single<List<Address>> {
+        return Single.fromCallable {
+            val addresses = mutableListOf<Address>()
             if (apiKey == null) {
-                subscriber.onComplete()
+                Single.just(addresses)
             }
             try {
                 val result = networkClient.requestFromLocationName(String.format(Locale.ENGLISH,
                         QUERY_REQUEST, query.trim { it <= ' ' }, apiKey))
                 if (result != null) {
-                    val addresses = addressBuilder.parseResult(result)
-                    subscriber.onNext(addresses)
+                    addresses.addAll(addressBuilder.parseResult(result))
                 }
-                subscriber.onComplete()
+                addresses
             } catch (e: JSONException) {
-                subscriber.onError(e)
+                addresses
             } catch (e: NetworkException) {
-                subscriber.onError(e)
+                addresses
             }
         }
     }
 
-    override fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): Observable<List<Address>> {
-        return Observable.create { subscriber ->
+    override fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): Single<List<Address>> {
+        return Single.fromCallable {
+            val addresses = mutableListOf<Address>()
             if (apiKey == null) {
-                subscriber.onComplete()
+                Single.just(addresses)
             }
             try {
                 val result = networkClient.requestFromLocationName(String.format(Locale.ENGLISH,
                         QUERY_REQUEST_WITH_RECTANGLE, query.trim { it <= ' ' }, apiKey, lowerLeft.latitude,
                         lowerLeft.longitude, upperRight.latitude, upperRight.longitude))
                 if (result != null) {
-                    val addresses = addressBuilder.parseResult(result)
-                    subscriber.onNext(addresses)
+                    addresses.addAll(addressBuilder.parseResult(result))
                 }
-                subscriber.onComplete()
+                addresses
             } catch (e: JSONException) {
-                subscriber.onError(e)
+                addresses
             } catch (e: NetworkException) {
-                subscriber.onError(e)
+                addresses
             }
         }
     }
 
-    override fun getFromLocation(latitude: Double, longitude: Double): Observable<List<Address>> {
-        return Observable.create { subscriber ->
+    override fun getFromLocation(latitude: Double, longitude: Double): Single<List<Address>> {
+        return Single.fromCallable {
+            val addresses = mutableListOf<Address>()
             if (apiKey == null) {
-                subscriber.onComplete()
+                Single.just(addresses)
             }
             try {
                 val result = networkClient.requestFromLocationName(String.format(Locale.ENGLISH,
                         QUERY_LAT_LONG, latitude, longitude, apiKey))
                 if (result != null) {
-                    val addresses = addressBuilder.parseResult(result)
-                    subscriber.onNext(addresses)
+                    addresses.addAll(addressBuilder.parseResult(result))
                 }
-                subscriber.onComplete()
+                addresses
             } catch (e: JSONException) {
-                subscriber.onError(e)
+                addresses
             } catch (e: NetworkException) {
-                subscriber.onError(e)
+                addresses
             }
         }
     }

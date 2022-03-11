@@ -10,8 +10,7 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import com.google.android.libraries.places.api.net.PlacesClient
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Observable.defer
+import io.reactivex.rxjava3.core.Single
 import java.util.Locale
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
@@ -22,11 +21,11 @@ private const val PLACE_BY_ID_WAITING_TIME: Long = 3
 
 class GooglePlacesDataSource(private val geoDataClient: PlacesClient) {
 
-    fun getFromLocationName(query: String, latLngBounds: LatLngBounds): Observable<List<Address>> {
+    fun getFromLocationName(query: String, latLngBounds: LatLngBounds): Single<List<Address>> {
         val locationBias = RectangularBounds.newInstance(
             latLngBounds.southwest,
             latLngBounds.northeast)
-        return defer {
+        return Single.defer {
             val findAutocompletePredictionsRequest = FindAutocompletePredictionsRequest
                 .builder()
                 .setQuery(query)
@@ -42,9 +41,9 @@ class GooglePlacesDataSource(private val geoDataClient: PlacesClient) {
 
             try {
                 val addressList = getAddressListFromPrediction(results.result)
-                return@defer Observable.just(addressList)
+                return@defer Single.just(addressList)
             } catch (e: RuntimeExecutionException) {
-                return@defer Observable.just(ArrayList<Address>())
+                return@defer Single.just(ArrayList<Address>())
             }
         }
     }
@@ -79,7 +78,7 @@ class GooglePlacesDataSource(private val geoDataClient: PlacesClient) {
             address.latitude = it.latitude
             address.longitude = it.longitude
         }
-        val addressName = place.name.toString() + " - " + place.address.toString()
+        val addressName = place.name?.toString() + " - " + place.address?.toString()
         address.setAddressLine(0, addressName)
         address.featureName = addressName
         return address
