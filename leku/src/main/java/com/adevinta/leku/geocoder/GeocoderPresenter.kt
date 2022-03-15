@@ -8,8 +8,6 @@ import com.adevinta.leku.geocoder.places.GooglePlacesDataSource
 import com.adevinta.leku.geocoder.timezone.GoogleTimeZoneDataSource
 import com.adevinta.leku.utils.ReactiveLocationProvider
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Maybe
-import io.reactivex.rxjava3.core.MaybeSource
 import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -117,20 +115,22 @@ class GeocoderPresenter @JvmOverloads constructor(
         val disposable = geocoderRepository.getFromLocation(latLng)
                 .subscribeOn(Schedulers.io())
                 .observeOn(scheduler)
-                .retry(RETRY_COUNT.toLong())
-                .filter { addresses -> addresses.isNotEmpty() }
-                .map { addresses -> addresses[0] }
-                .flatMap { address -> returnTimeZone(address) }
-                .subscribe({ pair: Pair<Address, TimeZone?> -> view?.showLocationInfo(pair) },
-                        { view?.showGetLocationInfoError() },
-                        { view?.didGetLocationInfo() })
+                .flatMap { addresses -> returnTimeZone(addresses.first()) }
+                .doFinally { view?.didGetLocationInfo() }
+                .subscribe(
+                    { pair: Pair<Address?, TimeZone?> -> view?.showLocationInfo(pair) },
+                    { view?.showGetLocationInfoError() }
+                )
         compositeDisposable.add(disposable)
     }
 
-    private fun returnTimeZone(address: Address): MaybeSource<out Pair<Address, TimeZone?>> {
-        return Maybe.just(
-                Pair(address, googleTimeZoneDataSource?.getTimeZone(address.latitude, address.longitude))
-        ).onErrorReturn { Pair(address, null) }
+    private fun returnTimeZone(address: Address?): Single<Pair<Address?, TimeZone?>> {
+        address?.let {
+            return Single.fromCallable {
+                Pair(it, googleTimeZoneDataSource?.getTimeZone(it.latitude, it.longitude))
+            }
+        }
+        return Single.just(Pair(null, null))
     }
 
     fun enableGooglePlaces() {
