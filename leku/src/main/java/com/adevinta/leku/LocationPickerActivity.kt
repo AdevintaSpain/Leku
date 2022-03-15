@@ -863,7 +863,7 @@ class LocationPickerActivity : AppCompatActivity(),
         setUpDefaultMapLocation()
     }
 
-    override fun showLocationInfo(address: Pair<Address, TimeZone?>) {
+    override fun showLocationInfo(address: Pair<Address?, TimeZone?>) {
         selectedAddress = address.first
         address.second?.let {
             timeZone = it
