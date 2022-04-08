@@ -7,17 +7,13 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.adevinta.leku.geocoder.places.GooglePlacesDataSource
 import com.adevinta.leku.geocoder.timezone.GoogleTimeZoneDataSource
 import com.adevinta.leku.utils.ReactiveLocationProvider
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.TimeZone
 import kotlin.collections.ArrayList
-
-private const val RETRY_COUNT = 3
-private const val MAX_PLACES_RESULTS = 3
 
 class GeocoderPresenter @JvmOverloads constructor(
     private val locationProvider: ReactiveLocationProvider,
@@ -29,7 +25,6 @@ class GeocoderPresenter @JvmOverloads constructor(
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private var view: GeocoderViewInterface? = null
     private val nullView = GeocoderViewInterface.NullView()
-    private val compositeDisposable = CompositeDisposable()
     private var isGooglePlacesEnabled = false
 
     init {
@@ -42,16 +37,18 @@ class GeocoderPresenter @JvmOverloads constructor(
 
     fun stop() {
         this.view = nullView
-        compositeDisposable.clear()
+        coroutineScope.cancel()
     }
 
+    @SuppressLint("MissingPermission")
     fun getLastKnownLocation() {
-        @SuppressLint("MissingPermission")
-        val disposable = locationProvider.getLastKnownLocation()
-                .retry(RETRY_COUNT.toLong())
-                .subscribe({ view?.showLastLocation(it) },
-                        { view?.didGetLastLocation() })
-        compositeDisposable.add(disposable)
+        coroutineScope.launch(Dispatchers.IO) {
+            val location = locationProvider.getLastKnownLocation()
+            withContext(Dispatchers.Main) {
+                view?.showLastLocation(location)
+                view?.didGetLastLocation()
+            }
+        }
     }
 
     fun getFromLocationName(query: String) {
@@ -69,7 +66,7 @@ class GeocoderPresenter @JvmOverloads constructor(
         view?.willLoadLocation()
         coroutineScope.launch(Dispatchers.IO) {
             val address = geocoderRepository.getFromLocationName(query, lowerLeft, upperRight)
-            val places = getPlacesFromLocationName(query, lowerLeft, upperRight).blockingGet()
+            val places = getPlacesFromLocationName(query, lowerLeft, upperRight)
             val mergedList = getMergedList(address, places)
             withContext(Dispatchers.Main) {
                 view?.showLocations(mergedList)
@@ -93,7 +90,7 @@ class GeocoderPresenter @JvmOverloads constructor(
         view?.willLoadLocation()
         coroutineScope.launch(Dispatchers.IO) {
             val address = geocoderRepository.getFromLocationName(query, lowerLeft, upperRight)
-            val places = getPlacesFromLocationName(query, lowerLeft, upperRight).blockingGet()
+            val places = getPlacesFromLocationName(query, lowerLeft, upperRight)
             val merged = getMergedList(address, places)
             withContext(Dispatchers.Main) {
                 view?.showDebouncedLocations(merged)
@@ -106,7 +103,7 @@ class GeocoderPresenter @JvmOverloads constructor(
         view?.willGetLocationInfo(latLng)
         coroutineScope.launch(Dispatchers.IO) {
             val addresses = geocoderRepository.getFromLocation(latLng)
-            val timeZone = returnTimeZone(addresses.first()).blockingGet()
+            val timeZone = returnTimeZone(addresses.first())
             withContext(Dispatchers.Main) {
                 view?.showLocationInfo(timeZone)
                 view?.didGetLocationInfo()
@@ -114,13 +111,11 @@ class GeocoderPresenter @JvmOverloads constructor(
         }
     }
 
-    private fun returnTimeZone(address: Address?): Single<Pair<Address?, TimeZone?>> {
+    private fun returnTimeZone(address: Address?): Pair<Address?, TimeZone?> {
         address?.let {
-            return Single.fromCallable {
-                Pair(it, googleTimeZoneDataSource?.getTimeZone(it.latitude, it.longitude))
-            }
+            return Pair(it, googleTimeZoneDataSource?.getTimeZone(it.latitude, it.longitude))
         }
-        return Single.just(Pair(null, null))
+        return Pair(null, null)
     }
 
     fun enableGooglePlaces() {
@@ -131,14 +126,13 @@ class GeocoderPresenter @JvmOverloads constructor(
         query: String,
         lowerLeft: LatLng,
         upperRight: LatLng
-    ): Single<List<Address>> {
-        return if (isGooglePlacesEnabled)
-            googlePlacesDataSource!!.getFromLocationName(query, LatLngBounds(lowerLeft, upperRight))
-                    .flattenAsObservable { it }
-                    .take(MAX_PLACES_RESULTS.toLong()).toList()
-                    .onErrorReturnItem(ArrayList())
-        else
-            Single.just(ArrayList())
+    ): List<Address> {
+        return if (isGooglePlacesEnabled && googlePlacesDataSource != null) {
+            googlePlacesDataSource.getFromLocationName(query, LatLngBounds(lowerLeft, upperRight))
+        }
+        else {
+            ArrayList()
+        }
     }
 
     private fun getMergedList(geocoderList: List<Address>, placesList: List<Address>): List<Address> {
