@@ -2,30 +2,45 @@ package com.adevinta.leku.geocoder
 
 import android.location.Address
 import com.google.android.gms.maps.model.LatLng
-import io.reactivex.rxjava3.core.Single
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
-private const val RETRY_COUNT = 3
 
 class GeocoderRepository(
     private val androidGeocoder: GeocoderDataSourceInterface,
     private val googleGeocoder: GeocoderDataSourceInterface
 ) {
 
-    fun getFromLocationName(query: String): Single<List<Address>> {
-        return androidGeocoder.getFromLocationName(query)
-                .retry(RETRY_COUNT.toLong())
-                .onErrorResumeWith(googleGeocoder.getFromLocationName(query))
+    suspend fun getFromLocationName(query: String): List<Address> {
+        return suspendCoroutine { continuation ->
+            val addressList = androidGeocoder.getFromLocationName(query)
+            if (addressList.isNullOrEmpty()) {
+                continuation.resume(googleGeocoder.getFromLocationName(query))
+            } else {
+                continuation.resume(addressList)
+            }
+        }
     }
 
-    fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): Single<List<Address>> {
-        return androidGeocoder.getFromLocationName(query, lowerLeft, upperRight)
-                .retry(RETRY_COUNT.toLong())
-                .onErrorResumeWith(googleGeocoder.getFromLocationName(query, lowerLeft, upperRight))
+    suspend fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): List<Address> {
+        return suspendCoroutine { continuation ->
+            val addressList = androidGeocoder.getFromLocationName(query, lowerLeft, upperRight)
+            if (addressList.isNullOrEmpty()) {
+                continuation.resume(googleGeocoder.getFromLocationName(query, lowerLeft, upperRight))
+            } else {
+                continuation.resume(addressList)
+            }
+        }
     }
 
-    fun getFromLocation(latLng: LatLng): Single<List<Address>> {
-        return androidGeocoder.getFromLocation(latLng.latitude, latLng.longitude)
-                .retry(RETRY_COUNT.toLong())
-                .onErrorResumeWith(googleGeocoder.getFromLocation(latLng.latitude, latLng.longitude))
+    suspend fun getFromLocation(latLng: LatLng): List<Address> {
+        return suspendCoroutine { continuation ->
+            val addressList = androidGeocoder.getFromLocation(latLng.latitude, latLng.longitude)
+            if (addressList.isNullOrEmpty()) {
+                continuation.resume(googleGeocoder.getFromLocation(latLng.latitude, latLng.longitude))
+            } else {
+                continuation.resume(addressList)
+            }
+        }
     }
 }

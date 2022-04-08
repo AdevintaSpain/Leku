@@ -5,7 +5,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.adevinta.leku.geocoder.api.AddressBuilder
 import com.adevinta.leku.geocoder.api.NetworkClient
 import com.adevinta.leku.geocoder.api.NetworkException
-import io.reactivex.rxjava3.core.Single
 import java.util.Locale
 import org.json.JSONException
 
@@ -25,67 +24,67 @@ class GoogleGeocoderDataSource(
         this.apiKey = apiKey
     }
 
-    override fun getFromLocationName(query: String): Single<List<Address>> {
-        return Single.fromCallable {
-            val addresses = mutableListOf<Address>()
-            if (apiKey == null) {
-                Single.just(addresses)
-            }
-            try {
-                val result = networkClient.requestFromLocationName(String.format(Locale.ENGLISH,
-                        QUERY_REQUEST, query.trim { it <= ' ' }, apiKey))
-                if (result != null) {
-                    addresses.addAll(addressBuilder.parseResult(result))
-                }
-                addresses
-            } catch (e: JSONException) {
-                addresses
-            } catch (e: NetworkException) {
-                addresses
-            }
+    override fun getFromLocationName(query: String): List<Address> {
+        val addresses = mutableListOf<Address>()
+        if (apiKey == null) {
+            return addresses
         }
+        try {
+            val result = networkClient.requestFromLocationName(String.format(Locale.ENGLISH,
+                QUERY_REQUEST, query.trim { it <= ' ' }, apiKey))
+            if (result != null) {
+                addresses.addAll(addressBuilder.parseResult(result))
+            }
+            addresses
+        } catch (e: JSONException) {
+            addresses
+        } catch (e: NetworkException) {
+            addresses
+        }
+
+        return addresses
     }
 
-    override fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): Single<List<Address>> {
-        return Single.fromCallable {
-            val addresses = mutableListOf<Address>()
-            if (apiKey == null) {
-                Single.just(addresses)
-            }
-            try {
-                val result = networkClient.requestFromLocationName(String.format(Locale.ENGLISH,
-                        QUERY_REQUEST_WITH_RECTANGLE, query.trim { it <= ' ' }, apiKey, lowerLeft.latitude,
-                        lowerLeft.longitude, upperRight.latitude, upperRight.longitude))
-                if (result != null) {
-                    addresses.addAll(addressBuilder.parseResult(result))
-                }
-                addresses
-            } catch (e: JSONException) {
-                addresses
-            } catch (e: NetworkException) {
-                addresses
-            }
+    override fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): List<Address> {
+        val addresses = mutableListOf<Address>()
+        if (apiKey == null) {
+            return addresses
         }
+        try {
+            val result = networkClient.requestFromLocationName(String.format(Locale.ENGLISH,
+                QUERY_REQUEST_WITH_RECTANGLE, query.trim { it <= ' ' }, apiKey, lowerLeft.latitude,
+                lowerLeft.longitude, upperRight.latitude, upperRight.longitude))
+            if (result != null) {
+                addresses.addAll(addressBuilder.parseResult(result))
+            }
+            addresses
+        } catch (e: JSONException) {
+            addresses
+        } catch (e: NetworkException) {
+            addresses
+        }
+
+        return addresses
     }
 
-    override fun getFromLocation(latitude: Double, longitude: Double): Single<List<Address>> {
-        return Single.fromCallable {
-            val addresses = mutableListOf<Address>()
-            if (apiKey == null) {
-                Single.just(addresses)
-            }
-            try {
-                val result = networkClient.requestFromLocationName(String.format(Locale.ENGLISH,
-                        QUERY_LAT_LONG, latitude, longitude, apiKey))
-                if (result != null) {
-                    addresses.addAll(addressBuilder.parseResult(result))
-                }
-                addresses
-            } catch (e: JSONException) {
-                addresses
-            } catch (e: NetworkException) {
-                addresses
-            }
+    override fun getFromLocation(latitude: Double, longitude: Double): List<Address> {
+        val addresses = mutableListOf<Address>()
+        if (apiKey == null) {
+            return addresses
         }
+        try {
+            val result = networkClient.requestFromLocationName(String.format(Locale.ENGLISH,
+                QUERY_LAT_LONG, latitude, longitude, apiKey))
+            if (result != null) {
+                addresses.addAll(addressBuilder.parseResult(result))
+            }
+            addresses
+        } catch (e: JSONException) {
+            addresses
+        } catch (e: NetworkException) {
+            addresses
+        }
+
+        return addresses
     }
 }
