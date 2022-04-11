@@ -20,7 +20,8 @@
         android:label="@string/leku_title_activity_location_picker"
         android:launchMode="singleTop"
         android:windowSoftInputMode="adjustPan"
-        android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
+        android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
+        android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.SEARCH" />
       </intent-filter>

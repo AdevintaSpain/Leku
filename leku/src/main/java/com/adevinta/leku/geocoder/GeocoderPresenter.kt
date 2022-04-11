@@ -7,29 +7,24 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.adevinta.leku.geocoder.places.GooglePlacesDataSource
 import com.adevinta.leku.geocoder.timezone.GoogleTimeZoneDataSource
 import com.adevinta.leku.utils.ReactiveLocationProvider
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Scheduler
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.TimeZone
 import kotlin.collections.ArrayList
-
-private const val RETRY_COUNT = 3
-private const val MAX_PLACES_RESULTS = 3
 
 class GeocoderPresenter @JvmOverloads constructor(
     private val locationProvider: ReactiveLocationProvider,
     private val geocoderRepository: GeocoderRepository,
     private val googlePlacesDataSource: GooglePlacesDataSource? = null,
-    private val googleTimeZoneDataSource: GoogleTimeZoneDataSource? = null,
-    private val scheduler: Scheduler = AndroidSchedulers.mainThread()
+    private val googleTimeZoneDataSource: GoogleTimeZoneDataSource? = null
 ) {
 
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private var view: GeocoderViewInterface? = null
     private val nullView = GeocoderViewInterface.NullView()
-    private val compositeDisposable = CompositeDisposable()
     private var isGooglePlacesEnabled = false
 
     init {
@@ -42,95 +37,85 @@ class GeocoderPresenter @JvmOverloads constructor(
 
     fun stop() {
         this.view = nullView
-        compositeDisposable.clear()
+        coroutineScope.cancel()
     }
 
+    @SuppressLint("MissingPermission")
     fun getLastKnownLocation() {
-        @SuppressLint("MissingPermission")
-        val disposable = locationProvider.getLastKnownLocation()
-                .retry(RETRY_COUNT.toLong())
-                .subscribe({ view?.showLastLocation(it) },
-                        { view?.didGetLastLocation() })
-        compositeDisposable.add(disposable)
+        coroutineScope.launch(Dispatchers.IO) {
+            val location = locationProvider.getLastKnownLocation()
+            withContext(Dispatchers.Main) {
+                view?.showLastLocation(location)
+                view?.didGetLastLocation()
+            }
+        }
     }
 
     fun getFromLocationName(query: String) {
         view?.willLoadLocation()
-        val disposable = geocoderRepository.getFromLocationName(query)
-                .subscribeOn(Schedulers.io())
-                .observeOn(scheduler)
-                .doFinally { view?.didLoadLocation() }
-                .subscribe({ view?.showLocations(it) },
-                        { view?.showLoadLocationError() })
-        compositeDisposable.add(disposable)
+        coroutineScope.launch(Dispatchers.IO) {
+            val location = geocoderRepository.getFromLocationName(query)
+            withContext(Dispatchers.Main) {
+                view?.didLoadLocation()
+                view?.showLocations(location)
+            }
+        }
     }
 
     fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng) {
         view?.willLoadLocation()
-        val disposable = Single.zip(
-                geocoderRepository.getFromLocationName(query, lowerLeft, upperRight),
-                getPlacesFromLocationName(query, lowerLeft, upperRight)
-        ) { geocoderList, placesList ->
-            this.getMergedList(geocoderList, placesList)
+        coroutineScope.launch(Dispatchers.IO) {
+            val address = geocoderRepository.getFromLocationName(query, lowerLeft, upperRight)
+            val places = getPlacesFromLocationName(query, lowerLeft, upperRight)
+            val mergedList = getMergedList(address, places)
+            withContext(Dispatchers.Main) {
+                view?.showLocations(mergedList)
+                view?.didLoadLocation()
+            }
         }
-            .subscribeOn(Schedulers.io())
-            .observeOn(scheduler)
-            .retry(RETRY_COUNT.toLong())
-            .doFinally { view?.didLoadLocation() }
-            .subscribe({ view?.showLocations(it) }, { view?.showLoadLocationError() })
-        compositeDisposable.add(disposable)
     }
 
     fun getDebouncedFromLocationName(query: String, debounceTime: Int) {
         view?.willLoadLocation()
-        val disposable = geocoderRepository.getFromLocationName(query)
-            .subscribeOn(Schedulers.io())
-            .observeOn(scheduler)
-            .toObservable()
-            .debounce(debounceTime.toLong(), TimeUnit.MILLISECONDS, Schedulers.io())
-            .doFinally { view?.didLoadLocation() }
-            .subscribe({ view?.showDebouncedLocations(it) },
-                { view?.showLoadLocationError() })
-        compositeDisposable.add(disposable)
+        coroutineScope.launch(Dispatchers.IO) {
+            val address = geocoderRepository.getFromLocationName(query)
+            withContext(Dispatchers.Main) {
+                view?.showDebouncedLocations(address)
+                view?.didLoadLocation()
+            }
+        }
     }
 
     fun getDebouncedFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng, debounceTime: Int) {
         view?.willLoadLocation()
-        val disposable = Single.zip(
-                geocoderRepository.getFromLocationName(query, lowerLeft, upperRight),
-                getPlacesFromLocationName(query, lowerLeft, upperRight)
-        ) { geocoderList, placesList -> this.getMergedList(geocoderList, placesList) }
-            .subscribeOn(Schedulers.io())
-            .observeOn(scheduler)
-            .toObservable()
-            .debounce(debounceTime.toLong(), TimeUnit.MILLISECONDS, Schedulers.io())
-            .subscribe({ view?.showDebouncedLocations(it) },
-                    { view?.showLoadLocationError() },
-                    { view?.didLoadLocation() })
-        compositeDisposable.add(disposable)
+        coroutineScope.launch(Dispatchers.IO) {
+            val address = geocoderRepository.getFromLocationName(query, lowerLeft, upperRight)
+            val places = getPlacesFromLocationName(query, lowerLeft, upperRight)
+            val merged = getMergedList(address, places)
+            withContext(Dispatchers.Main) {
+                view?.showDebouncedLocations(merged)
+                view?.didLoadLocation()
+            }
+        }
     }
 
     fun getInfoFromLocation(latLng: LatLng) {
         view?.willGetLocationInfo(latLng)
-        val disposable = geocoderRepository.getFromLocation(latLng)
-                .subscribeOn(Schedulers.io())
-                .observeOn(scheduler)
-                .flatMap { addresses -> returnTimeZone(addresses.first()) }
-                .doFinally { view?.didGetLocationInfo() }
-                .subscribe(
-                    { pair: Pair<Address?, TimeZone?> -> view?.showLocationInfo(pair) },
-                    { view?.showGetLocationInfoError() }
-                )
-        compositeDisposable.add(disposable)
-    }
-
-    private fun returnTimeZone(address: Address?): Single<Pair<Address?, TimeZone?>> {
-        address?.let {
-            return Single.fromCallable {
-                Pair(it, googleTimeZoneDataSource?.getTimeZone(it.latitude, it.longitude))
+        coroutineScope.launch(Dispatchers.IO) {
+            val addresses = geocoderRepository.getFromLocation(latLng)
+            val timeZone = returnTimeZone(addresses.first())
+            withContext(Dispatchers.Main) {
+                view?.showLocationInfo(timeZone)
+                view?.didGetLocationInfo()
             }
         }
-        return Single.just(Pair(null, null))
+    }
+
+    private fun returnTimeZone(address: Address?): Pair<Address?, TimeZone?> {
+        address?.let {
+            return Pair(it, googleTimeZoneDataSource?.getTimeZone(it.latitude, it.longitude))
+        }
+        return Pair(null, null)
     }
 
     fun enableGooglePlaces() {
@@ -141,14 +126,12 @@ class GeocoderPresenter @JvmOverloads constructor(
         query: String,
         lowerLeft: LatLng,
         upperRight: LatLng
-    ): Single<List<Address>> {
-        return if (isGooglePlacesEnabled)
-            googlePlacesDataSource!!.getFromLocationName(query, LatLngBounds(lowerLeft, upperRight))
-                    .flattenAsObservable { it }
-                    .take(MAX_PLACES_RESULTS.toLong()).toList()
-                    .onErrorReturnItem(ArrayList())
-        else
-            Single.just(ArrayList())
+    ): List<Address> {
+        return if (isGooglePlacesEnabled && googlePlacesDataSource != null) {
+            googlePlacesDataSource.getFromLocationName(query, LatLngBounds(lowerLeft, upperRight))
+        } else {
+            ArrayList()
+        }
     }
 
     private fun getMergedList(geocoderList: List<Address>, placesList: List<Address>): List<Address> {

@@ -36,12 +36,13 @@ class LekuPoi : Parcelable {
 
     override fun toString(): String {
         return "LekuPoi{" + "id='" + id + '\''.toString() + ", location=" + location + ", title='" +
-                title + '\''.toString() + ", address='" + address + '\''.toString() + '}'.toString()
+            title + '\''.toString() + ", address='" + address + '\''.toString() + '}'.toString()
     }
 
     companion object {
 
-        @JvmField val CREATOR: Parcelable.Creator<LekuPoi> = object : Parcelable.Creator<LekuPoi> {
+        @JvmField
+        val CREATOR: Parcelable.Creator<LekuPoi> = object : Parcelable.Creator<LekuPoi> {
             override fun createFromParcel(source: Parcel): LekuPoi {
                 return LekuPoi(source)
             }

@@ -24,8 +24,7 @@ class LocationSearchAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
-        val textView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.leku_search_list_item, parent, false) as TextView
+        val textView = LayoutInflater.from(parent.context).inflate(R.layout.leku_search_list_item, parent, false) as TextView
 
         return SearchViewHolder(textView, clickListener)
     }

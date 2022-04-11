@@ -32,35 +32,44 @@ import util.PermissionGranter
 class LocationPickerActivityShould {
     private var permissionGranter: PermissionGranter? = null
 
-    @Rule @JvmField
+    @Rule
+    @JvmField
     var activityRule = ActivityTestRule(LocationPickerActivity::class.java, true, false)
 
-    @Rule @JvmField
-    var runtimePermissionRule = GrantPermissionRule.grant(Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.WRITE_SECURE_SETTINGS)!!
+    @Rule
+    @JvmField
+    var runtimePermissionRule = GrantPermissionRule.grant(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.WRITE_SECURE_SETTINGS
+    )!!
 
     @Before
     fun setup() {
         permissionGranter = PermissionGranter()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getInstrumentation().uiAutomation.executeShellCommand(
-                    "pm grant " + getTargetContext().packageName + " android.permission.WRITE_SECURE_SETTINGS")
+                "pm grant " + getTargetContext().packageName + " android.permission.WRITE_SECURE_SETTINGS"
+            )
         }
     }
 
     private fun unlockScreen() {
         val activity = activityRule.activity
         activity.runOnUiThread {
-            activity.window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+            activity.window.addFlags(
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
                     or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                    or WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+                    or WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+            )
         }
     }
 
     private fun dissableAnimationsOnTravis() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Settings.Global.putFloat(activityRule.activity.contentResolver,
-                    Settings.Global.ANIMATOR_DURATION_SCALE, 0f)
+            Settings.Global.putFloat(
+                activityRule.activity.contentResolver,
+                Settings.Global.ANIMATOR_DURATION_SCALE, 0f
+            )
         }
     }
 
@@ -104,8 +113,8 @@ class LocationPickerActivityShould {
         wait300millis()
         onView(withId(R.id.leku_search)).perform(typeText("calle mallorca"))
         onView(withId(R.id.leku_search))
-                .check(matches(hasImeAction(EditorInfo.IME_ACTION_SEARCH)))
-                .perform(pressImeActionButton())
+            .check(matches(hasImeAction(EditorInfo.IME_ACTION_SEARCH)))
+            .perform(pressImeActionButton())
         wait300millis()
         wait300millis()
         wait300millis()
@@ -205,15 +214,19 @@ class LocationPickerActivityShould {
     private fun launchActivityWithPermissionsGranted() {
         launchActivity()
 
-        permissionGranter!!.allowPermissionsIfNeeded(activityRule.activity,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
+        permissionGranter!!.allowPermissionsIfNeeded(
+            activityRule.activity,
+            android.Manifest.permission.ACCESS_FINE_LOCATION
+        )
     }
 
     private fun launchActivityWithoutLocationAndPermissions() {
         launchActivityWithoutLocation()
 
-        permissionGranter!!.denyPermissionsIfNeeded(activityRule.activity,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
+        permissionGranter!!.denyPermissionsIfNeeded(
+            activityRule.activity,
+            android.Manifest.permission.ACCESS_FINE_LOCATION
+        )
     }
 
     private fun wait300millis() {

@@ -10,7 +10,6 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import com.google.android.libraries.places.api.net.PlacesClient
-import io.reactivex.rxjava3.core.Single
 import java.util.Locale
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
@@ -21,30 +20,28 @@ private const val PLACE_BY_ID_WAITING_TIME: Long = 3
 
 class GooglePlacesDataSource(private val geoDataClient: PlacesClient) {
 
-    fun getFromLocationName(query: String, latLngBounds: LatLngBounds): Single<List<Address>> {
+    fun getFromLocationName(query: String, latLngBounds: LatLngBounds): List<Address> {
         val locationBias = RectangularBounds.newInstance(
             latLngBounds.southwest,
-            latLngBounds.northeast)
-        return Single.defer {
-            val findAutocompletePredictionsRequest = FindAutocompletePredictionsRequest
-                .builder()
-                .setQuery(query)
-                .setLocationBias(locationBias)
-                .build()
-            val results = geoDataClient.findAutocompletePredictions(findAutocompletePredictionsRequest)
-            try {
-                Tasks.await(results, PREDICTIONS_WAITING_TIME, TimeUnit.SECONDS)
-            } catch (ignored: ExecutionException) {
-            } catch (ignored: InterruptedException) {
-            } catch (ignored: TimeoutException) {
-            }
+            latLngBounds.northeast
+        )
+        val findAutocompletePredictionsRequest = FindAutocompletePredictionsRequest
+            .builder()
+            .setQuery(query)
+            .setLocationBias(locationBias)
+            .build()
+        val results = geoDataClient.findAutocompletePredictions(findAutocompletePredictionsRequest)
+        try {
+            Tasks.await(results, PREDICTIONS_WAITING_TIME, TimeUnit.SECONDS)
+        } catch (ignored: ExecutionException) {
+        } catch (ignored: InterruptedException) {
+        } catch (ignored: TimeoutException) {
+        }
 
-            try {
-                val addressList = getAddressListFromPrediction(results.result)
-                return@defer Single.just(addressList)
-            } catch (e: RuntimeExecutionException) {
-                return@defer Single.just(ArrayList<Address>())
-            }
+        return try {
+            getAddressListFromPrediction(results.result)
+        } catch (e: RuntimeExecutionException) {
+            emptyList()
         }
     }
 

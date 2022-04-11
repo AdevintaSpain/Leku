@@ -6,8 +6,9 @@ import com.google.android.gms.maps.model.LatLng
 
 data class SearchZoneRect(val lowerLeft: LatLng, val upperRight: LatLng) : Parcelable {
     constructor(parcel: Parcel) : this(
-            parcel.readParcelable(LatLng::class.java.classLoader)!!,
-            parcel.readParcelable(LatLng::class.java.classLoader)!!)
+        parcel.readParcelable(LatLng::class.java.classLoader)!!,
+        parcel.readParcelable(LatLng::class.java.classLoader)!!
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeParcelable(lowerLeft, flags)
