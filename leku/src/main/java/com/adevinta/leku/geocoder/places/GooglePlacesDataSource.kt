@@ -23,7 +23,8 @@ class GooglePlacesDataSource(private val geoDataClient: PlacesClient) {
     fun getFromLocationName(query: String, latLngBounds: LatLngBounds): List<Address> {
         val locationBias = RectangularBounds.newInstance(
             latLngBounds.southwest,
-            latLngBounds.northeast)
+            latLngBounds.northeast
+        )
         val findAutocompletePredictionsRequest = FindAutocompletePredictionsRequest
             .builder()
             .setQuery(query)
