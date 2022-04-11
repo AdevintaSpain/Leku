@@ -130,8 +130,7 @@ class LocationPickerActivity :
     LocationListener,
     GoogleMap.OnMapLongClickListener,
     GeocoderViewInterface,
-    GoogleMap.OnMapClickListener
-{
+    GoogleMap.OnMapClickListener {
 
     private var map: GoogleMap? = null
     private var googleApiClient: GoogleApiClient? = null
@@ -352,7 +351,8 @@ class LocationPickerActivity :
         } else {
             linearLayoutManager = LinearLayoutManager(this)
             searchAdapter = LocationSearchAdapter(
-                locationNameList, object : LocationSearchAdapter.SearchItemClickListener {
+                locationNameList,
+                object : LocationSearchAdapter.SearchItemClickListener {
                     override fun onItemClick(position: Int) {
                         if (locationList[position].hasLatitude() && locationList[position].hasLongitude()) {
                             setNewLocation(locationList[position])
@@ -956,9 +956,7 @@ class LocationPickerActivity :
 
     private fun getTransitionBundleParams(transitionBundle: Bundle) {
         bundle.putBundle(TRANSITION_BUNDLE, transitionBundle)
-        if (transitionBundle.keySet().contains(LATITUDE) && transitionBundle.keySet()
-                .contains(LONGITUDE)
-        ) {
+        if (transitionBundle.keySet().contains(LATITUDE) && transitionBundle.keySet().contains(LONGITUDE)) {
             setLocationFromBundle(transitionBundle)
         }
         if (transitionBundle.keySet().contains(LAYOUTS_TO_HIDE)) {

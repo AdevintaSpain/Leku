@@ -14,8 +14,10 @@ object PermissionUtils {
     }
 
     fun isLocationPermissionGranted(context: Context): Boolean {
-        return ContextCompat.checkSelfPermission(context,
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        return ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestPermission(activity: Activity, permission: String, requestCode: Int) {
@@ -23,8 +25,9 @@ object PermissionUtils {
     }
 
     fun shouldRequestLocationStoragePermission(context: Context): Boolean {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && shouldRequestPermission(context,
-                Manifest.permission.ACCESS_FINE_LOCATION)
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && shouldRequestPermission(
+            context, Manifest.permission.ACCESS_FINE_LOCATION
+        )
     }
 
     fun requestLocationPermission(activity: Activity) {
