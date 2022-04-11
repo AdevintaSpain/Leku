@@ -5,7 +5,6 @@ import com.google.android.gms.maps.model.LatLng
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-
 class GeocoderRepository(
     private val androidGeocoder: GeocoderDataSourceInterface,
     private val googleGeocoder: GeocoderDataSourceInterface

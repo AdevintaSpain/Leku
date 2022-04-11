@@ -63,27 +63,28 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         StrictMode.setThreadPolicy(
-                StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().build())
+            StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().build()
+        )
         StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build())
         setContentView(R.layout.activity_main)
         val mapButton = findViewById<View>(R.id.map_button)
         mapButton.setOnClickListener {
             val locationPickerIntent = LocationPickerActivity.Builder()
-                    .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
-                    // .withGeolocApiKey("<PUT API KEY HERE>")
-                    // .withGooglePlacesApiKey("<PUT API KEY HERE>")
-                    .withSearchZone("es_ES")
-                    // .withSearchZone(SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
-                    .withDefaultLocaleSearchZone()
-                    // .shouldReturnOkOnBackPressed()
-                    // .withStreetHidden()
-                    // .withCityHidden()
-                    // .withZipCodeHidden()
-                    // .withSatelliteViewHidden()
-                    .withGoogleTimeZoneEnabled()
-                    // .withVoiceSearchHidden()
-                    .withUnnamedRoadHidden()
-                    .build(applicationContext)
+                .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
+                // .withGeolocApiKey("<PUT API KEY HERE>")
+                // .withGooglePlacesApiKey("<PUT API KEY HERE>")
+                .withSearchZone("es_ES")
+                // .withSearchZone(SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
+                .withDefaultLocaleSearchZone()
+                // .shouldReturnOkOnBackPressed()
+                // .withStreetHidden()
+                // .withCityHidden()
+                // .withZipCodeHidden()
+                // .withSatelliteViewHidden()
+                .withGoogleTimeZoneEnabled()
+                // .withVoiceSearchHidden()
+                .withUnnamedRoadHidden()
+                .build(applicationContext)
 
             // this is optional if you want to return RESULT_OK if you don't set the
             // latitude/longitude and click back button
@@ -105,9 +106,9 @@ class MainActivity : AppCompatActivity() {
         val mapPoisButton = findViewById<View>(R.id.map_button_with_pois)
         mapPoisButton.setOnClickListener {
             val locationPickerIntent = LocationPickerActivity.Builder()
-                    .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
-                    .withPois(lekuPois)
-                    .build(applicationContext)
+                .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
+                .withPois(lekuPois)
+                .build(applicationContext)
 
             startActivityForResult(locationPickerIntent, MAP_POIS_BUTTON_REQUEST_CODE)
         }
@@ -115,9 +116,9 @@ class MainActivity : AppCompatActivity() {
         val mapStyleButton = findViewById<View>(R.id.map_button_with_style)
         mapStyleButton.setOnClickListener {
             val locationPickerIntent = LocationPickerActivity.Builder()
-                    .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
-                    .withMapStyle(R.raw.map_style_retro)
-                    .build(applicationContext)
+                .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
+                .withMapStyle(R.raw.map_style_retro)
+                .build(applicationContext)
             startActivityForResult(locationPickerIntent, MAP_POIS_BUTTON_REQUEST_CODE)
         }
 

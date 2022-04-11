@@ -129,8 +129,7 @@ class GeocoderPresenter @JvmOverloads constructor(
     ): List<Address> {
         return if (isGooglePlacesEnabled && googlePlacesDataSource != null) {
             googlePlacesDataSource.getFromLocationName(query, LatLngBounds(lowerLeft, upperRight))
-        }
-        else {
+        } else {
             ArrayList()
         }
     }

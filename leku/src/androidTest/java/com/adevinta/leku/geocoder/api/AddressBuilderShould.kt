@@ -10,13 +10,15 @@ import org.mockito.junit.MockitoJUnit.rule
 
 class AddressBuilderShould {
 
-    @Rule @JvmField
+    @Rule
+    @JvmField
     var mockitoRule = rule()!!
 
     private var addressBuilder: AddressBuilder? = null
 
     private val json: String
-        get() = ("{\"results\": [{\"address_components\": [{\"long_name\": \"102\",\"short_name\": \"102\",\"types\": " +
+        get() = (
+            "{\"results\": [{\"address_components\": [{\"long_name\": \"102\",\"short_name\": \"102\",\"types\": " +
                 "[ \"street_number\"]},{\"long_name\": \"Carrer del Comte d'Urgell\",\"short_name\": \"Carrer del Comte d'Urgell\",\"types\": " +
                 "[ \"route\"]},{\"long_name\": \"Barcelona\",\"short_name\": \"Barcelona\",\"types\": [ \"locality\", \"political\"]}," +
                 "{\"long_name\": \"Barcelona\",\"short_name\": \"Barcelona\",\"types\": [ \"administrative_area_level_2\", \"political\"]}," +
@@ -28,10 +30,12 @@ class AddressBuilderShould {
                 "{\"lat\": 41.3838035,\"lng\": 2.1568617},\"location_type\": \"ROOFTOP\",\"viewport\": {\"northeast\": " +
                 "{ \"lat\": 41.3851524302915, \"lng\": 2.158210680291502},\"southwest\": { \"lat\": 41.3824544697085, " +
                 "\"lng\": 2.155512719708498}}},\"partial_match\": true,\"place_id\": \"ChIJdehx-YiipBIR8hitzOckUuo\",\"types\": [\"premise\"] } " +
-                "], \"status\": \"OK\"}")
+                "], \"status\": \"OK\"}"
+            )
 
     private val jsonForOnlyCity: String
-        get() = ("{\"results\": [{\"address_components\": [{\"long_name\": \"Barcelona\",\"short_name\": \"Barcelona\",\"types\": " +
+        get() = (
+            "{\"results\": [{\"address_components\": [{\"long_name\": \"Barcelona\",\"short_name\": \"Barcelona\",\"types\": " +
                 "[\"locality\",\"political\"]},{\"long_name\": \"Barcelona\",\"short_name\": \"Barcelona\",\"types\": " +
                 "[\"administrative_area_level_2\",\"political\"]},{\"long_name\": \"Catalonia\",\"short_name\": \"CT\",\"types\": " +
                 "[\"administrative_area_level_1\",\"political\"]},{\"long_name\": \"Spain\",\"short_name\": \"ES\",\"types\": " +
@@ -39,7 +43,8 @@ class AddressBuilderShould {
                 "{\"lat\": 41.4695761,\"lng\": 2.2280099},\"southwest\": {\"lat\": 41.320004,\"lng\": 2.0695258}},\"location\":" +
                 " {\"lat\": 41.3850639,\"lng\": 2.1734035},\"location_type\": \"APPROXIMATE\",\"viewport\": {\"northeast\": " +
                 "{\"lat\": 41.4695761,\"lng\": 2.2280099},\"southwest\": {\"lat\": 41.320004,\"lng\": 2.0695258}}},\"place_id\": " +
-                "\"ChIJ5TCOcRaYpBIRCmZHTz37sEQ\",\"types\": [\"locality\",\"political\"]}],\"status\": \"OK\"}")
+                "\"ChIJ5TCOcRaYpBIRCmZHTz37sEQ\",\"types\": [\"locality\",\"political\"]}],\"status\": \"OK\"}"
+            )
 
     @Before
     fun setUp() {
