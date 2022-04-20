@@ -18,14 +18,14 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.schibstedspain.android:leku:8.0.0'
+    implementation 'com.adevinta.android:leku:8.0.0'
 }
 ```
 
 Alternatively, if you are using a different version of Google Play Services and AndroidX use this instead:
 
 ```groovy
-implementation ('com.schibstedspain.android:leku:7.0.0') {
+implementation ('com.adevinta.android:leku:7.0.0') {
     exclude group: 'com.google.android.gms'
     exclude group: 'androidx.appcompat'
 }
@@ -35,7 +35,7 @@ For the <b>legacy versions of Leku</b> that does not use AndroidX and want to us
 
 ```groovy
 implementation ("com.google.android.libraries.places:places-compat:1.0.0")
-implementation ("com.schibstedspain.android:leku:5.0.0") {
+implementation ("com.adevinta.android:leku:5.0.0") {
     exclude group: 'com.google.android.gms'
     exclude module: "play-services-places"
 }
@@ -102,7 +102,7 @@ To use the LocationPickerActivity first you need to add these lines to your Andr
 
 ```xml
 <activity
-    android:name="com.schibstedspain.leku.LocationPickerActivity"
+    android:name="com.adevinta.leku.LocationPickerActivity"
     android:label="@string/leku_title_activity_location_picker"
     android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
     android:windowSoftInputMode="adjustPan"
