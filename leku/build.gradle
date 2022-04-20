@@ -84,11 +84,6 @@ dependencies {
 
   implementation "com.google.maps:google-maps-services:0.2.9"
 
-  implementation 'io.reactivex.rxjava3:rxjava:3.1.2'
-  implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
-  implementation 'nl.littlerobots.rxlint:rxlint:1.7.7'
-
-
   def espressoVersion = '3.4.0'
   androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
   androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"

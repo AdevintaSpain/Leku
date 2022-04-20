@@ -73,10 +73,6 @@ import com.adevinta.leku.locale.SearchZoneRect
 import com.adevinta.leku.permissions.PermissionUtils
 import com.adevinta.leku.tracker.TrackEvents
 import com.adevinta.leku.utils.ReactiveLocationProvider
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.ObservableEmitter
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 import java.util.Locale
 import java.util.TimeZone
 import java.util.concurrent.TimeUnit
@@ -187,7 +183,6 @@ class LocationPickerActivity :
     private var isSearchLayoutShown = false
     private lateinit var toolbar: MaterialToolbar
     private lateinit var timeZone: TimeZone
-    private val compositeDisposable = CompositeDisposable()
 
     private val defaultZoom: Int
         get() {
@@ -410,26 +405,14 @@ class LocationPickerActivity :
         }
     }
 
-    private fun createSearchViewTextChangeObservable(): Observable<String> = Observable.create { subscriber: ObservableEmitter<String> ->
+    private fun createSearchTextChangeObserver() {
         searchView?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                subscriber.onNext(s.toString())
+                onSearchTextChanged(s.toString())
             }
         })
-    }.debounce(DEBOUNCE_TIME.toLong(), TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-
-    private fun createSearchTextChangeObserver() {
-        val searchTextChangeObservable = createSearchViewTextChangeObservable()
-        val disposable = searchTextChangeObservable
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ term ->
-                onSearchTextChanged(term)
-            }, {
-                // onError just do nothing, do not execute search
-            })
-        compositeDisposable.add(disposable)
     }
 
     private fun onSearchTextChanged(term: String) {
@@ -619,7 +602,6 @@ class LocationPickerActivity :
             searchView?.removeTextChangedListener(it)
         }
         googleApiClient?.unregisterConnectionCallbacks(this)
-        compositeDisposable.dispose()
         super.onDestroy()
     }
 
