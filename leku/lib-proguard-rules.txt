@@ -1,23 +1,7 @@
 # Leku
--keep interface com.schibstedspain.** { *; }
--dontwarn com.schibstedspain.**
--keep class com.schibstedspain.** { *; }
-
-# RxJava
--dontwarn rx.**
--keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
-    long producerIndex;
-    long consumerIndex;
-}
--keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
-    rx.internal.util.atomic.LinkedQueueNode producerNode;
-}
--keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
-    rx.internal.util.atomic.LinkedQueueNode consumerNode;
-}
-
-# Retrolambda
--dontwarn java.lang.invoke.*
+-keep interface com.adevinta.** { *; }
+-dontwarn com.adevinta.**
+-keep class com.adevinta.** { *; }
 
 # Google Maps
 -keep class com.google.maps.** { *; }
