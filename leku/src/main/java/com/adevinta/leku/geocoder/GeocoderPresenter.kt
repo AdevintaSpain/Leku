@@ -45,7 +45,9 @@ class GeocoderPresenter @JvmOverloads constructor(
         coroutineScope.launch(Dispatchers.IO) {
             val location = locationProvider.getLastKnownLocation()
             withContext(Dispatchers.Main) {
-                view?.showLastLocation(location)
+                location?.let {
+                    view?.showLastLocation(it)
+                }
                 view?.didGetLastLocation()
             }
         }
