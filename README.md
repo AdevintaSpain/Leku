@@ -191,6 +191,7 @@ val locationPickerIntent = LocationPickerActivity.Builder()
     .withGoogleTimeZoneEnabled()
     .withVoiceSearchHidden()
     .withUnnamedRoadHidden()
+    .withSearchBarHidden()
     .build(applicationContext)
 
 startActivityForResult(locationPickerIntent, MAP_BUTTON_REQUEST_CODE)
@@ -407,6 +408,14 @@ Now you can hide or show the text returned by the google service with "Unnamed R
 
 ```kotlin
 intent.putExtra(LocationPickerActivity.UNNAMED_ROAD_VISIBILITY, false)
+```
+
+##### Hide/Show the Search Bar
+
+Now you can hide or show the search bar that helps you to search for locations
+
+```kotlin
+intent.putExtra(LocationPickerActivity.SEARCH_BAR_HIDDEN, false)
 ```
 
 #### Tracking

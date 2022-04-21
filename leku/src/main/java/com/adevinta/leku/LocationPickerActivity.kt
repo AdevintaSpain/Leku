@@ -18,6 +18,7 @@ import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.View.GONE
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -100,6 +101,7 @@ const val TIME_ZONE_DISPLAY_NAME = "time_zone_display_name"
 const val MAP_STYLE = "map_style"
 const val UNNAMED_ROAD_VISIBILITY = "unnamed_road_visibility"
 const val WITH_LEGACY_LAYOUT = "with_legacy_layout"
+const val SEARCH_BAR_HIDDEN = "search_view_hidden"
 private const val GEOLOC_API_KEY = "geoloc_api_key"
 private const val PLACES_API_KEY = "places_api_key"
 private const val LOCATION_KEY = "location_key"
@@ -180,6 +182,8 @@ class LocationPickerActivity :
     private var mapStyle: Int? = null
     private var isLegacyLayoutEnabled = false
     private var isSearchLayoutShown = false
+    private var isSearchBarHidden = false
+
     private lateinit var toolbar: MaterialToolbar
     private lateinit var timeZone: TimeZone
 
@@ -385,20 +389,24 @@ class LocationPickerActivity :
 
     private fun setUpSearchView() {
         searchView = findViewById(R.id.leku_search)
-        searchView?.setOnEditorActionListener { v, actionId, _ ->
-            var handled = false
-            if (actionId == EditorInfo.IME_ACTION_SEARCH && v.text.toString().isNotEmpty()) {
-                retrieveLocationFrom(v.text.toString())
-                closeKeyboard()
-                handled = true
+        if (isSearchBarHidden) {
+            searchEditLayout?.visibility = GONE
+        } else {
+            searchView?.setOnEditorActionListener { v, actionId, _ ->
+                var handled = false
+                if (actionId == EditorInfo.IME_ACTION_SEARCH && v.text.toString().isNotEmpty()) {
+                    retrieveLocationFrom(v.text.toString())
+                    closeKeyboard()
+                    handled = true
+                }
+                handled
             }
-            handled
-        }
-        createSearchTextChangeObserver()
-        if (!isLegacyLayoutEnabled) {
-            searchView?.setOnFocusChangeListener { _: View?, hasFocus: Boolean ->
-                if (hasFocus) {
-                    showSearchLayout()
+            createSearchTextChangeObserver()
+            if (!isLegacyLayoutEnabled) {
+                searchView?.setOnFocusChangeListener { _: View?, hasFocus: Boolean ->
+                    if (hasFocus) {
+                        showSearchLayout()
+                    }
                 }
             }
         }
@@ -933,6 +941,9 @@ class LocationPickerActivity :
         if (savedInstanceState.keySet().contains(WITH_LEGACY_LAYOUT)) {
             isLegacyLayoutEnabled = savedInstanceState.getBoolean(WITH_LEGACY_LAYOUT, false)
         }
+        if (savedInstanceState.keySet().contains(SEARCH_BAR_HIDDEN)) {
+            isSearchBarHidden = savedInstanceState.getBoolean(SEARCH_BAR_HIDDEN, false)
+        }
     }
 
     private fun getTransitionBundleParams(transitionBundle: Bundle) {
@@ -985,6 +996,9 @@ class LocationPickerActivity :
         }
         if (transitionBundle.keySet().contains(WITH_LEGACY_LAYOUT)) {
             isLegacyLayoutEnabled = transitionBundle.getBoolean(WITH_LEGACY_LAYOUT, false)
+        }
+        if (transitionBundle.keySet().contains(SEARCH_BAR_HIDDEN)) {
+            isSearchBarHidden = transitionBundle.getBoolean(SEARCH_BAR_HIDDEN, false)
         }
     }
 
@@ -1460,6 +1474,7 @@ class LocationPickerActivity :
         private var mapStyle: Int? = null
         private var unnamedRoadVisible = true
         private var isLegacyLayoutEnabled = false
+        private var isSearchBarHidden = false
 
         fun withLocation(latitude: Double, longitude: Double): Builder {
             this.locationLatitude = latitude
@@ -1555,6 +1570,11 @@ class LocationPickerActivity :
             return this
         }
 
+        fun withSearchBarHidden(): Builder {
+            this.isSearchBarHidden = true
+            return this
+        }
+
         fun build(context: Context): Intent {
             val intent = Intent(context, LocationPickerActivity::class.java)
 
@@ -1592,6 +1612,7 @@ class LocationPickerActivity :
             intent.putExtra(ENABLE_VOICE_SEARCH, voiceSearchEnabled)
             intent.putExtra(UNNAMED_ROAD_VISIBILITY, unnamedRoadVisible)
             intent.putExtra(WITH_LEGACY_LAYOUT, isLegacyLayoutEnabled)
+            intent.putExtra(SEARCH_BAR_HIDDEN, isSearchBarHidden)
 
             return intent
         }
