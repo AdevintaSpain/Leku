@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                 .withGoogleTimeZoneEnabled()
                 // .withVoiceSearchHidden()
                 .withUnnamedRoadHidden()
-                //.withSearchBarHidden()
+                // .withSearchBarHidden()
                 .build(applicationContext)
 
             // this is optional if you want to return RESULT_OK if you don't set the
