@@ -291,6 +291,5 @@ fun MainView() {
                 textAlign = TextAlign.Center
             )
         }
-
     }
 }
