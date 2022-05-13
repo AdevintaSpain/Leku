@@ -12,8 +12,10 @@ import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -21,6 +23,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -29,7 +32,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.toColor
 import com.adevinta.leku.ADDRESS
 import com.adevinta.leku.LATITUDE
 import com.adevinta.leku.LEKU_POI
@@ -208,7 +210,7 @@ private fun onMapWithStylesClicked(context: Context) {
 fun MainView() {
     val context = LocalContext.current
 
-    Column(Modifier.padding(16.dp, 0.dp, 16.dp, 0.dp).fillMaxWidth()) {
+    Column(Modifier.padding(16.dp, 0.dp, 16.dp, 0.dp).fillMaxSize()) {
         Spacer(modifier = Modifier.size(20.dp))
         Image(
             modifier = Modifier
@@ -217,6 +219,7 @@ fun MainView() {
             painter = painterResource(id = R.mipmap.leku_img_logo),
             contentDescription = null
         )
+        Spacer(modifier = Modifier.size(20.dp))
         Button(
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color(context.resources.getColor(R.color.leku_app_blue)),
@@ -281,10 +284,13 @@ fun MainView() {
             )
         }
         Spacer(modifier = Modifier.size(20.dp))
-        Text(
-            stringResource(id = R.string.leku_lib_version),
-            Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
+        Box(modifier = Modifier.fillMaxSize()) {
+            Text(
+                stringResource(id = R.string.leku_lib_version),
+                modifier = Modifier.align(Alignment.BottomCenter).padding(0.dp, 0.dp, 0.dp, 8.dp),
+                textAlign = TextAlign.Center
+            )
+        }
+
     }
 }
