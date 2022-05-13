@@ -9,12 +9,12 @@ ext["PUBLISH_ARTIFACT_ID"] = "leku"
 apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
 
 android {
-  compileSdkVersion 31
+  compileSdkVersion 32
   resourcePrefix 'leku_'
 
   defaultConfig {
     minSdkVersion 21
-    targetSdkVersion 31
+    targetSdkVersion 32
     multiDexEnabled true
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     consumerProguardFiles 'lib-proguard-rules.txt'
@@ -37,11 +37,14 @@ android {
     jvmTarget = JavaVersion.VERSION_1_8.toString()
   }
   packagingOptions {
-    exclude 'protobuf.meta'
+    resources {
+      excludes += ['protobuf.meta']
+    }
   }
-  lintOptions {
+  lint {
     disable 'ObsoleteLintCustomCheck'
   }
+  namespace 'com.adevinta.leku'
 }
 
 detekt {

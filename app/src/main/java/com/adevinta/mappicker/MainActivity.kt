@@ -8,9 +8,25 @@ import android.location.Location
 import android.os.Bundle
 import android.os.StrictMode
 import android.util.Log
-import android.view.View
 import android.widget.Toast
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.adevinta.leku.ADDRESS
 import com.adevinta.leku.LATITUDE
 import com.adevinta.leku.LEKU_POI
@@ -40,87 +56,15 @@ private const val POI2_LONGITUDE = 2.1741417
 
 class MainActivity : AppCompatActivity() {
 
-    private val lekuPois: List<LekuPoi>
-        get() {
-            val pois = ArrayList<LekuPoi>()
-
-            val locationPoi1 = Location("leku")
-            locationPoi1.latitude = POI1_LATITUDE
-            locationPoi1.longitude = POI1_LONGITUDE
-            val poi1 = LekuPoi(UUID.randomUUID().toString(), "Los bellota", locationPoi1)
-            pois.add(poi1)
-
-            val locationPoi2 = Location("leku")
-            locationPoi2.latitude = POI2_LATITUDE
-            locationPoi2.longitude = POI2_LONGITUDE
-            val poi2 = LekuPoi(UUID.randomUUID().toString(), "Starbucks", locationPoi2)
-            poi2.address = "Plaça de la Sagrada Família, 19, 08013 Barcelona"
-            pois.add(poi2)
-
-            return pois
-        }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         StrictMode.setThreadPolicy(
             StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().build()
         )
         StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build())
-        setContentView(R.layout.activity_main)
-        val mapButton = findViewById<View>(R.id.map_button)
-        mapButton.setOnClickListener {
-            val locationPickerIntent = LocationPickerActivity.Builder()
-                .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
-                // .withGeolocApiKey("<PUT API KEY HERE>")
-                // .withGooglePlacesApiKey("<PUT API KEY HERE>")
-                .withSearchZone("es_ES")
-                // .withSearchZone(SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
-                .withDefaultLocaleSearchZone()
-                // .shouldReturnOkOnBackPressed()
-                // .withStreetHidden()
-                // .withCityHidden()
-                // .withZipCodeHidden()
-                // .withSatelliteViewHidden()
-                .withGoogleTimeZoneEnabled()
-                // .withVoiceSearchHidden()
-                .withUnnamedRoadHidden()
-                // .withSearchBarHidden()
-                .build(applicationContext)
 
-            // this is optional if you want to return RESULT_OK if you don't set the
-            // latitude/longitude and click back button
-            locationPickerIntent.putExtra("test", "this is a test")
-
-            startActivityForResult(locationPickerIntent, MAP_BUTTON_REQUEST_CODE)
-        }
-
-        val mapLegacyButton = findViewById<View>(R.id.map_button_legacy)
-        mapLegacyButton.setOnClickListener {
-            val locationPickerIntent = LocationPickerActivity.Builder()
-                .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
-                .withUnnamedRoadHidden()
-                .withLegacyLayout()
-                .build(applicationContext)
-            startActivityForResult(locationPickerIntent, MAP_BUTTON_REQUEST_CODE)
-        }
-
-        val mapPoisButton = findViewById<View>(R.id.map_button_with_pois)
-        mapPoisButton.setOnClickListener {
-            val locationPickerIntent = LocationPickerActivity.Builder()
-                .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
-                .withPois(lekuPois)
-                .build(applicationContext)
-
-            startActivityForResult(locationPickerIntent, MAP_POIS_BUTTON_REQUEST_CODE)
-        }
-
-        val mapStyleButton = findViewById<View>(R.id.map_button_with_style)
-        mapStyleButton.setOnClickListener {
-            val locationPickerIntent = LocationPickerActivity.Builder()
-                .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
-                .withMapStyle(R.raw.map_style_retro)
-                .build(applicationContext)
-            startActivityForResult(locationPickerIntent, MAP_POIS_BUTTON_REQUEST_CODE)
+        setContent {
+            MainView()
         }
 
         initializeLocationPickerTracker()
@@ -177,5 +121,143 @@ class MainActivity : AppCompatActivity() {
         override fun onEventTracked(event: TrackEvents) {
             Toast.makeText(context, "Event: " + event.eventName, Toast.LENGTH_SHORT).show()
         }
+    }
+}
+
+private fun onLaunchMapPickerClicked(context: Context) {
+    val activity = context as Activity
+    val locationPickerIntent = LocationPickerActivity.Builder()
+        .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
+        // .withGeolocApiKey("<PUT API KEY HERE>")
+        // .withGooglePlacesApiKey("<PUT API KEY HERE>")
+        .withSearchZone("es_ES")
+        // .withSearchZone(SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
+        .withDefaultLocaleSearchZone()
+        // .shouldReturnOkOnBackPressed()
+        // .withStreetHidden()
+        // .withCityHidden()
+        // .withZipCodeHidden()
+        // .withSatelliteViewHidden()
+        .withGoogleTimeZoneEnabled()
+        // .withVoiceSearchHidden()
+        .withUnnamedRoadHidden()
+        // .withSearchBarHidden()
+        .build(activity)
+
+    // this is optional if you want to return RESULT_OK if you don't set the
+    // latitude/longitude and click back button
+    locationPickerIntent.putExtra("test", "this is a test")
+
+    activity.startActivityForResult(locationPickerIntent, MAP_BUTTON_REQUEST_CODE)
+}
+
+private fun onLegacyMapClicked(context: Context) {
+    val activity = context as Activity
+    val locationPickerIntent = LocationPickerActivity.Builder()
+        .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
+        .withUnnamedRoadHidden()
+        .withLegacyLayout()
+        .build(activity)
+    activity.startActivityForResult(locationPickerIntent, MAP_BUTTON_REQUEST_CODE)
+}
+
+private val lekuPois: List<LekuPoi>
+    get() {
+        val pois = ArrayList<LekuPoi>()
+
+        val locationPoi1 = Location("leku")
+        locationPoi1.latitude = POI1_LATITUDE
+        locationPoi1.longitude = POI1_LONGITUDE
+        val poi1 = LekuPoi(UUID.randomUUID().toString(), "Los bellota", locationPoi1)
+        pois.add(poi1)
+
+        val locationPoi2 = Location("leku")
+        locationPoi2.latitude = POI2_LATITUDE
+        locationPoi2.longitude = POI2_LONGITUDE
+        val poi2 = LekuPoi(UUID.randomUUID().toString(), "Starbucks", locationPoi2)
+        poi2.address = "Plaça de la Sagrada Família, 19, 08013 Barcelona"
+        pois.add(poi2)
+
+        return pois
+    }
+
+private fun onMapPoisClicked(context: Context) {
+    val activity = context as Activity
+    val locationPickerIntent = LocationPickerActivity.Builder()
+        .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
+        .withPois(lekuPois)
+        .build(activity)
+
+    activity.startActivityForResult(locationPickerIntent, MAP_POIS_BUTTON_REQUEST_CODE)
+}
+
+private fun onMapWithStylesClicked(context: Context) {
+    val activity = context as Activity
+    val locationPickerIntent = LocationPickerActivity.Builder()
+        .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
+        .withMapStyle(R.raw.map_style_retro)
+        .build(activity)
+    activity.startActivityForResult(locationPickerIntent, MAP_POIS_BUTTON_REQUEST_CODE)
+}
+
+@Composable
+@Preview(showBackground = true)
+fun MainView() {
+    val context = LocalContext.current
+
+    Column(Modifier.padding(16.dp, 0.dp, 16.dp, 0.dp).fillMaxWidth()) {
+        Spacer(modifier = Modifier.size(20.dp))
+        Image(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            painter = painterResource(id = R.mipmap.leku_img_logo),
+            contentDescription = null
+        )
+        Button(onClick = {
+            onLaunchMapPickerClicked(context)
+        }) {
+            Text(
+                stringResource(id = R.string.launch_map_picker),
+                Modifier.padding(8.dp).fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+        }
+        Spacer(modifier = Modifier.size(20.dp))
+        Button(onClick = {
+            onLegacyMapClicked(context)
+        }) {
+            Text(
+                stringResource(id = R.string.launch_legacy_map_picker),
+                Modifier.padding(8.dp).fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+        }
+        Spacer(modifier = Modifier.size(20.dp))
+        Button(onClick = {
+            onMapPoisClicked(context)
+        }) {
+            Text(
+                stringResource(id = R.string.launch_map_picker_with_style),
+                Modifier.padding(8.dp).fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+        }
+        Spacer(modifier = Modifier.size(20.dp))
+        Button(onClick = {
+            onMapWithStylesClicked(context)
+        }) {
+            Text(
+                stringResource(id = R.string.launch_map_picker_with_pois),
+                Modifier.padding(8.dp).fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+        }
+        Spacer(modifier = Modifier.size(20.dp))
+        Text(
+            stringResource(id = R.string.leku_lib_version),
+            Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
     }
 }

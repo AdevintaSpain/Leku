@@ -25,9 +25,6 @@ android {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
   }
-  lintOptions {
-    disable 'ObsoleteLintCustomCheck'
-  }
 
   buildFeatures {
     compose true
@@ -35,6 +32,10 @@ android {
   composeOptions {
     kotlinCompilerExtensionVersion '1.1.1'
   }
+  lint {
+    disable 'ObsoleteLintCustomCheck'
+  }
+  namespace 'com.adevinta.mappicker'
 }
 
 configurations.all {
