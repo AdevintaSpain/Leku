@@ -18,15 +18,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.toColor
 import com.adevinta.leku.ADDRESS
 import com.adevinta.leku.LATITUDE
 import com.adevinta.leku.LEKU_POI
@@ -214,9 +217,15 @@ fun MainView() {
             painter = painterResource(id = R.mipmap.leku_img_logo),
             contentDescription = null
         )
-        Button(onClick = {
-            onLaunchMapPickerClicked(context)
-        }) {
+        Button(
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(context.resources.getColor(R.color.leku_app_blue)),
+                contentColor = Color.White
+            ),
+            onClick = {
+                onLaunchMapPickerClicked(context)
+            }
+        ) {
             Text(
                 stringResource(id = R.string.launch_map_picker),
                 Modifier.padding(8.dp).fillMaxWidth(),
@@ -224,9 +233,15 @@ fun MainView() {
             )
         }
         Spacer(modifier = Modifier.size(20.dp))
-        Button(onClick = {
-            onLegacyMapClicked(context)
-        }) {
+        Button(
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(context.resources.getColor(R.color.leku_app_blue)),
+                contentColor = Color.White
+            ),
+            onClick = {
+                onLegacyMapClicked(context)
+            }
+        ) {
             Text(
                 stringResource(id = R.string.launch_legacy_map_picker),
                 Modifier.padding(8.dp).fillMaxWidth(),
@@ -234,9 +249,15 @@ fun MainView() {
             )
         }
         Spacer(modifier = Modifier.size(20.dp))
-        Button(onClick = {
-            onMapPoisClicked(context)
-        }) {
+        Button(
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(context.resources.getColor(R.color.leku_app_blue)),
+                contentColor = Color.White
+            ),
+            onClick = {
+                onMapPoisClicked(context)
+            }
+        ) {
             Text(
                 stringResource(id = R.string.launch_map_picker_with_style),
                 Modifier.padding(8.dp).fillMaxWidth(),
@@ -244,9 +265,15 @@ fun MainView() {
             )
         }
         Spacer(modifier = Modifier.size(20.dp))
-        Button(onClick = {
-            onMapWithStylesClicked(context)
-        }) {
+        Button(
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(context.resources.getColor(R.color.leku_app_blue)),
+                contentColor = Color.White
+            ),
+            onClick = {
+                onMapWithStylesClicked(context)
+            }
+        ) {
             Text(
                 stringResource(id = R.string.launch_map_picker_with_pois),
                 Modifier.padding(8.dp).fillMaxWidth(),
