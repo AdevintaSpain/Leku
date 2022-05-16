@@ -12,13 +12,12 @@ import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
@@ -210,8 +209,10 @@ private fun onMapWithStylesClicked(context: Context) {
 fun MainView() {
     val context = LocalContext.current
 
-    Column(Modifier.padding(16.dp, 0.dp, 16.dp, 0.dp).fillMaxSize()) {
-        Spacer(modifier = Modifier.size(20.dp))
+    Column(
+        Modifier.padding(16.dp, 40.dp, 16.dp, 0.dp).fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
         Image(
             modifier = Modifier
                 .fillMaxWidth()
@@ -219,7 +220,6 @@ fun MainView() {
             painter = painterResource(id = R.mipmap.leku_img_logo),
             contentDescription = null
         )
-        Spacer(modifier = Modifier.size(20.dp))
         Button(
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color(context.resources.getColor(R.color.leku_app_blue)),
@@ -235,7 +235,6 @@ fun MainView() {
                 textAlign = TextAlign.Center
             )
         }
-        Spacer(modifier = Modifier.size(20.dp))
         Button(
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color(context.resources.getColor(R.color.leku_app_blue)),
@@ -251,7 +250,6 @@ fun MainView() {
                 textAlign = TextAlign.Center
             )
         }
-        Spacer(modifier = Modifier.size(20.dp))
         Button(
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color(context.resources.getColor(R.color.leku_app_blue)),
@@ -267,7 +265,6 @@ fun MainView() {
                 textAlign = TextAlign.Center
             )
         }
-        Spacer(modifier = Modifier.size(20.dp))
         Button(
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = Color(context.resources.getColor(R.color.leku_app_blue)),
@@ -283,7 +280,6 @@ fun MainView() {
                 textAlign = TextAlign.Center
             )
         }
-        Spacer(modifier = Modifier.size(20.dp))
         Box(modifier = Modifier.fillMaxSize()) {
             Text(
                 stringResource(id = R.string.leku_lib_version),
