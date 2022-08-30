@@ -74,6 +74,7 @@ class MainActivity : AppCompatActivity() {
         initializeLocationPickerTracker()
     }
 
+    @Deprecated("this deprecation wont be inherited in the future release")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && data != null) {

@@ -567,6 +567,7 @@ class LocationPickerActivity :
         }
     }
 
+    @Deprecated("this deprecation wont be inherited in the future release")
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
             REQUEST_PLACE_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
