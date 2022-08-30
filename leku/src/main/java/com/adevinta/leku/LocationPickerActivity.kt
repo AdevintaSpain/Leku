@@ -34,6 +34,8 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.LinearLayout
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RawRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -111,7 +113,6 @@ private const val OPTIONS_HIDE_CITY = "city"
 private const val OPTIONS_HIDE_ZIPCODE = "zipcode"
 private const val UNNAMED_ROAD_WITH_COMMA = "Unnamed Road, "
 private const val UNNAMED_ROAD_WITH_HYPHEN = "Unnamed Road - "
-private const val REQUEST_PLACE_PICKER = 6655
 private const val CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000
 private const val DEFAULT_ZOOM = 16
 private const val WIDER_ZOOM = 6
@@ -186,6 +187,13 @@ class LocationPickerActivity :
 
     private lateinit var toolbar: MaterialToolbar
     private lateinit var timeZone: TimeZone
+
+    private val voiceRecognitionActivityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                onVoiceRecognitionActivityResult(result.data)
+            }
+        }
 
     private val defaultZoom: Int
         get() {
@@ -567,19 +575,14 @@ class LocationPickerActivity :
         }
     }
 
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (requestCode) {
-            REQUEST_PLACE_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
-                val matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                searchView = findViewById(R.id.leku_search)
-                matches?.let {
-                    retrieveLocationFrom(it[0])
-                }
-            }
-            else -> {
+    private fun onVoiceRecognitionActivityResult(data: Intent?) {
+        data?.let {
+            val matches = it.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            searchView = findViewById(R.id.leku_search)
+            matches?.let {
+                retrieveLocationFrom(it[0])
             }
         }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onStart() {
@@ -1039,7 +1042,7 @@ class LocationPickerActivity :
 
         if (isPlayServicesAvailable()) {
             try {
-                startActivityForResult(intent, REQUEST_PLACE_PICKER)
+                voiceRecognitionActivityResultLauncher.launch(intent)
             } catch (e: ActivityNotFoundException) {
                 track(TrackEvents.START_VOICE_RECOGNITION_ACTIVITY_FAILED)
             }

@@ -70,14 +70,14 @@ ktlint {
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-  implementation "com.google.android.material:material:1.6.0-beta01"
-  implementation 'androidx.fragment:fragment-ktx:1.4.1'
+  implementation "com.google.android.material:material:1.7.0-beta01"
+  implementation 'androidx.fragment:fragment-ktx:1.5.2'
 
-  def playServicesVersion = '18.0.2'
+  def playServicesVersion = '18.1.0'
   implementation ("com.google.android.gms:play-services-maps:$playServicesVersion") {
 	  exclude group: "com.android.support"
   }
-  implementation ("com.google.android.gms:play-services-location:19.0.1") {
+  implementation ("com.google.android.gms:play-services-location:20.0.0") {
 	  exclude group: "com.android.support"
   }
 
