@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
     val lekuActivityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
-                onResult(result.resultCode, result.data)
+                onResult(result.data)
             } else {
                 Log.d("RESULT****", "CANCELLED")
             }
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
     val mapPoisActivityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
-                onResultWithPois(result.resultCode, result.data)
+                onResultWithPois(result.data)
             } else {
                 Log.d("RESULT WITH POIS****", "CANCELLED")
             }
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
         initializeLocationPickerTracker()
     }
 
-    private fun onResult(requestCode: Int, data: Intent?) {
+    private fun onResult(data: Intent?) {
         Log.d("RESULT****", "OK")
         val latitude = data?.getDoubleExtra(LATITUDE, 0.0)
         Log.d("LATITUDE****", latitude.toString())
@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun onResultWithPois(requestCode: Int, data: Intent?) {
+    private fun onResultWithPois(data: Intent?) {
         Log.d("RESULT WITH POIS****", "OK")
         val latitude = data?.getDoubleExtra(LATITUDE, 0.0)
         Log.d("LATITUDE****", latitude.toString())
