@@ -1,16 +1,16 @@
 ### Prerequisites
 
-minSdkVersion >= 15<br/>
-Google Play Services = 16.0.0<br/>
+minSdkVersion >= 21<br/>
+Google Play Services = 18.0.0<br/>
 AndroidX
 
 ### Download
 
-Include the **jcenter** repository in your top `build.gradle`:
+Include the **mavenCentral** repository in your top `build.gradle`:
 > Enabled by default on AndroidStudio projects
 ```groovy
 allprojects {
-    jcenter()
+    mavenCentral()
 }
 ```
 
@@ -18,26 +18,16 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.adevinta.android:leku:8.0.0'
+    implementation 'com.adevinta.android:leku:9.1.4'
 }
 ```
 
 Alternatively, if you are using a different version of Google Play Services and AndroidX use this instead:
 
 ```groovy
-implementation ('com.adevinta.android:leku:7.0.0') {
+implementation ('com.adevinta.android:leku:9.1.4') {
     exclude group: 'com.google.android.gms'
     exclude group: 'androidx.appcompat'
-}
-```
-
-For the <b>legacy versions of Leku</b> that does not use AndroidX and want to use the latest Places SDK, you could use it in this way:
-
-```groovy
-implementation ("com.google.android.libraries.places:places-compat:1.0.0")
-implementation ("com.adevinta.android:leku:5.0.0") {
-    exclude group: 'com.google.android.gms'
-    exclude module: "play-services-places"
 }
 ```
 
@@ -138,6 +128,7 @@ val locationPickerIntent = LocationPickerActivity.Builder()
     .withGoogleTimeZoneEnabled()
     .withVoiceSearchHidden()
     .withUnnamedRoadHidden()
+    .withSearchBarHidden()
     .build(applicationContext)
 
 startActivityForResult(locationPickerIntent, MAP_BUTTON_REQUEST_CODE)
