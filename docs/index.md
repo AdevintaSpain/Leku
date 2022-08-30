@@ -13,8 +13,8 @@ Component library for Android that uses Google Maps and returns a latitude, long
 
 ### Features
 
-<img align="right" width="0" height="368px" hspace="20"/>
-<img src="images/new_design_screenshot.png" height="368px" align="right" />
+<img align="right" width="0" width="220px" hspace="20"/>
+<img src="images/new_design_screenshot.png" width="220px" align="right" />
 
 * Search by voice
 * Search by text

@@ -279,7 +279,7 @@ If you would like to add more language translations the only thing you have to d
 Note that you have the **voice_search_extra_language** that is used for the language of the voice recognition.
 Replace it with the allowed voice recognition locale for your language.
 
-I encourage you to add these languages to this component, please fork this project and submit new languages with a PR. Thanks!
+We encourage you to add these languages to this component, please fork this project and submit new languages with a PR. Thanks!
 
 
 #### Transition Bundle
