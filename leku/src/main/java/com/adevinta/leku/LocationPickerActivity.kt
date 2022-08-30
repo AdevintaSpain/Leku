@@ -34,6 +34,9 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.LinearLayout
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RawRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -111,7 +114,6 @@ private const val OPTIONS_HIDE_CITY = "city"
 private const val OPTIONS_HIDE_ZIPCODE = "zipcode"
 private const val UNNAMED_ROAD_WITH_COMMA = "Unnamed Road, "
 private const val UNNAMED_ROAD_WITH_HYPHEN = "Unnamed Road - "
-private const val REQUEST_PLACE_PICKER = 6655
 private const val CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000
 private const val DEFAULT_ZOOM = 16
 private const val WIDER_ZOOM = 6
@@ -187,6 +189,8 @@ class LocationPickerActivity :
     private lateinit var toolbar: MaterialToolbar
     private lateinit var timeZone: TimeZone
 
+    private lateinit var voiceRecognitionActivityResultLauncher: ActivityResultLauncher<Intent>
+
     private val defaultZoom: Int
         get() {
             return if (hasWiderZoom) {
@@ -232,6 +236,7 @@ class LocationPickerActivity :
         setUpFloatingButtons()
         buildGoogleApiClient()
         track(TrackEvents.ON_LOAD_LOCATION_PICKER)
+        setupVoiceRecognitionLauncher()
     }
 
     private fun setUpContentView() {
@@ -522,6 +527,15 @@ class LocationPickerActivity :
         }
     }
 
+    private fun setupVoiceRecognitionLauncher() {
+        voiceRecognitionActivityResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    onVoiceRecognitionActivityResult(result.data)
+                }
+            }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         if (isLegacyLayoutEnabled) {
             val inflater = menuInflater
@@ -567,20 +581,14 @@ class LocationPickerActivity :
         }
     }
 
-    @Deprecated("this deprecation wont be inherited in the future release")
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        when (requestCode) {
-            REQUEST_PLACE_PICKER -> if (resultCode == Activity.RESULT_OK && data != null) {
-                val matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                searchView = findViewById(R.id.leku_search)
-                matches?.let {
-                    retrieveLocationFrom(it[0])
-                }
-            }
-            else -> {
+    private fun onVoiceRecognitionActivityResult(data: Intent?) {
+        data?.let {
+            val matches = it.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            searchView = findViewById(R.id.leku_search)
+            matches?.let {
+                retrieveLocationFrom(it[0])
             }
         }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onStart() {
@@ -1040,7 +1048,7 @@ class LocationPickerActivity :
 
         if (isPlayServicesAvailable()) {
             try {
-                startActivityForResult(intent, REQUEST_PLACE_PICKER)
+                voiceRecognitionActivityResultLauncher.launch(intent)
             } catch (e: ActivityNotFoundException) {
                 track(TrackEvents.START_VOICE_RECOGNITION_ACTIVITY_FAILED)
             }
