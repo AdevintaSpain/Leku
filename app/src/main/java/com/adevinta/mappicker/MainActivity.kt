@@ -10,6 +10,9 @@ import android.os.StrictMode
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -49,8 +52,6 @@ import java.util.UUID
 import kotlin.collections.ArrayList
 import kotlin.collections.List
 
-private const val MAP_BUTTON_REQUEST_CODE = 1
-private const val MAP_POIS_BUTTON_REQUEST_CODE = 2
 private const val DEMO_LATITUDE = 41.4036299
 private const val DEMO_LONGITUDE = 2.1743558
 private const val POI1_LATITUDE = 41.4036339
@@ -59,6 +60,8 @@ private const val POI2_LATITUDE = 41.4023265
 private const val POI2_LONGITUDE = 2.1741417
 
 class MainActivity : AppCompatActivity() {
+    lateinit var lekuActivityResultLauncher: ActivityResultLauncher<Intent>
+    lateinit var mapPoisActivityResultLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,51 +74,63 @@ class MainActivity : AppCompatActivity() {
             MainView()
         }
 
+        lekuActivityResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    onResult(result.resultCode, result.data)
+                } else {
+                    Log.d("RESULT****", "CANCELLED")
+                }
+            }
+
+        mapPoisActivityResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    onResultWithPois(result.resultCode, result.data)
+                } else {
+                    Log.d("RESULT WITH POIS****", "CANCELLED")
+                }
+            }
+
         initializeLocationPickerTracker()
     }
 
-    @Deprecated("this deprecation wont be inherited in the future release")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && data != null) {
-            Log.d("RESULT****", "OK")
-            if (requestCode == 1) {
-                val latitude = data.getDoubleExtra(LATITUDE, 0.0)
-                Log.d("LATITUDE****", latitude.toString())
-                val longitude = data.getDoubleExtra(LONGITUDE, 0.0)
-                Log.d("LONGITUDE****", longitude.toString())
-                val address = data.getStringExtra(LOCATION_ADDRESS)
-                Log.d("ADDRESS****", address.toString())
-                val postalcode = data.getStringExtra(ZIPCODE)
-                Log.d("POSTALCODE****", postalcode.toString())
-                val bundle = data.getBundleExtra(TRANSITION_BUNDLE)
-                Log.d("BUNDLE TEXT****", bundle?.getString("test").toString())
-                val fullAddress = data.getParcelableExtra<Address>(ADDRESS)
-                if (fullAddress != null) {
-                    Log.d("FULL ADDRESS****", fullAddress.toString())
-                }
-                val timeZoneId = data.getStringExtra(TIME_ZONE_ID)
-                if (timeZoneId != null) {
-                    Log.d("TIME ZONE ID****", timeZoneId)
-                }
-                val timeZoneDisplayName = data.getStringExtra(TIME_ZONE_DISPLAY_NAME)
-                if (timeZoneDisplayName != null) {
-                    Log.d("TIME ZONE NAME****", timeZoneDisplayName)
-                }
-            } else if (requestCode == 2) {
-                val latitude = data.getDoubleExtra(LATITUDE, 0.0)
-                Log.d("LATITUDE****", latitude.toString())
-                val longitude = data.getDoubleExtra(LONGITUDE, 0.0)
-                Log.d("LONGITUDE****", longitude.toString())
-                val address = data.getStringExtra(LOCATION_ADDRESS)
-                Log.d("ADDRESS****", address.toString())
-                val lekuPoi = data.getParcelableExtra<LekuPoi>(LEKU_POI)
-                Log.d("LekuPoi****", lekuPoi.toString())
-            }
+    private fun onResult(requestCode: Int, data: Intent?) {
+        Log.d("RESULT****", "OK")
+        val latitude = data?.getDoubleExtra(LATITUDE, 0.0)
+        Log.d("LATITUDE****", latitude.toString())
+        val longitude = data?.getDoubleExtra(LONGITUDE, 0.0)
+        Log.d("LONGITUDE****", longitude.toString())
+        val address = data?.getStringExtra(LOCATION_ADDRESS)
+        Log.d("ADDRESS****", address.toString())
+        val postalcode = data?.getStringExtra(ZIPCODE)
+        Log.d("POSTALCODE****", postalcode.toString())
+        val bundle = data?.getBundleExtra(TRANSITION_BUNDLE)
+        Log.d("BUNDLE TEXT****", bundle?.getString("test").toString())
+        val fullAddress = data?.getParcelableExtra<Address>(ADDRESS)
+        if (fullAddress != null) {
+            Log.d("FULL ADDRESS****", fullAddress.toString())
         }
-        if (resultCode == Activity.RESULT_CANCELED) {
-            Log.d("RESULT****", "CANCELLED")
+        val timeZoneId = data?.getStringExtra(TIME_ZONE_ID)
+        if (timeZoneId != null) {
+            Log.d("TIME ZONE ID****", timeZoneId)
         }
+        val timeZoneDisplayName = data?.getStringExtra(TIME_ZONE_DISPLAY_NAME)
+        if (timeZoneDisplayName != null) {
+            Log.d("TIME ZONE NAME****", timeZoneDisplayName)
+        }
+    }
+
+    private fun onResultWithPois(requestCode: Int, data: Intent?) {
+        Log.d("RESULT WITH POIS****", "OK")
+        val latitude = data?.getDoubleExtra(LATITUDE, 0.0)
+        Log.d("LATITUDE****", latitude.toString())
+        val longitude = data?.getDoubleExtra(LONGITUDE, 0.0)
+        Log.d("LONGITUDE****", longitude.toString())
+        val address = data?.getStringExtra(LOCATION_ADDRESS)
+        Log.d("ADDRESS****", address.toString())
+        val lekuPoi = data?.getParcelableExtra<LekuPoi>(LEKU_POI)
+        Log.d("LekuPoi****", lekuPoi.toString())
     }
 
     private fun initializeLocationPickerTracker() {
@@ -130,7 +145,7 @@ class MainActivity : AppCompatActivity() {
 }
 
 private fun onLaunchMapPickerClicked(context: Context) {
-    val activity = context as Activity
+    val activity = context as MainActivity
     val locationPickerIntent = LocationPickerActivity.Builder()
         .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
         // .withGeolocApiKey("<PUT API KEY HERE>")
@@ -153,17 +168,17 @@ private fun onLaunchMapPickerClicked(context: Context) {
     // latitude/longitude and click back button
     locationPickerIntent.putExtra("test", "this is a test")
 
-    activity.startActivityForResult(locationPickerIntent, MAP_BUTTON_REQUEST_CODE)
+    activity.lekuActivityResultLauncher.launch(locationPickerIntent)
 }
 
 private fun onLegacyMapClicked(context: Context) {
-    val activity = context as Activity
+    val activity = context as MainActivity
     val locationPickerIntent = LocationPickerActivity.Builder()
         .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
         .withUnnamedRoadHidden()
         .withLegacyLayout()
         .build(activity)
-    activity.startActivityForResult(locationPickerIntent, MAP_BUTTON_REQUEST_CODE)
+    activity.lekuActivityResultLauncher.launch(locationPickerIntent)
 }
 
 private val lekuPois: List<LekuPoi>
@@ -187,22 +202,22 @@ private val lekuPois: List<LekuPoi>
     }
 
 private fun onMapPoisClicked(context: Context) {
-    val activity = context as Activity
+    val activity = context as MainActivity
     val locationPickerIntent = LocationPickerActivity.Builder()
         .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
         .withPois(lekuPois)
         .build(activity)
 
-    activity.startActivityForResult(locationPickerIntent, MAP_POIS_BUTTON_REQUEST_CODE)
+    activity.mapPoisActivityResultLauncher.launch(locationPickerIntent)
 }
 
 private fun onMapWithStylesClicked(context: Context) {
-    val activity = context as Activity
+    val activity = context as MainActivity
     val locationPickerIntent = LocationPickerActivity.Builder()
         .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
         .withMapStyle(R.raw.map_style_retro)
         .build(activity)
-    activity.startActivityForResult(locationPickerIntent, MAP_POIS_BUTTON_REQUEST_CODE)
+    activity.mapPoisActivityResultLauncher.launch(locationPickerIntent)
 }
 
 @Composable
