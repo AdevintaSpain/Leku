@@ -11,7 +11,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
@@ -60,8 +59,22 @@ private const val POI2_LATITUDE = 41.4023265
 private const val POI2_LONGITUDE = 2.1741417
 
 class MainActivity : AppCompatActivity() {
-    lateinit var lekuActivityResultLauncher: ActivityResultLauncher<Intent>
-    lateinit var mapPoisActivityResultLauncher: ActivityResultLauncher<Intent>
+    val lekuActivityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                onResult(result.resultCode, result.data)
+            } else {
+                Log.d("RESULT****", "CANCELLED")
+            }
+        }
+    val mapPoisActivityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                onResultWithPois(result.resultCode, result.data)
+            } else {
+                Log.d("RESULT WITH POIS****", "CANCELLED")
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,24 +86,6 @@ class MainActivity : AppCompatActivity() {
         setContent {
             MainView()
         }
-
-        lekuActivityResultLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    onResult(result.resultCode, result.data)
-                } else {
-                    Log.d("RESULT****", "CANCELLED")
-                }
-            }
-
-        mapPoisActivityResultLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    onResultWithPois(result.resultCode, result.data)
-                } else {
-                    Log.d("RESULT WITH POIS****", "CANCELLED")
-                }
-            }
 
         initializeLocationPickerTracker()
     }

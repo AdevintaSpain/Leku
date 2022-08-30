@@ -189,7 +189,12 @@ class LocationPickerActivity :
     private lateinit var toolbar: MaterialToolbar
     private lateinit var timeZone: TimeZone
 
-    private lateinit var voiceRecognitionActivityResultLauncher: ActivityResultLauncher<Intent>
+    private val voiceRecognitionActivityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                onVoiceRecognitionActivityResult(result.data)
+            }
+        }
 
     private val defaultZoom: Int
         get() {
@@ -236,7 +241,6 @@ class LocationPickerActivity :
         setUpFloatingButtons()
         buildGoogleApiClient()
         track(TrackEvents.ON_LOAD_LOCATION_PICKER)
-        setupVoiceRecognitionLauncher()
     }
 
     private fun setUpContentView() {
@@ -525,15 +529,6 @@ class LocationPickerActivity :
         if (map == null) {
             (supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment).getMapAsync(this)
         }
-    }
-
-    private fun setupVoiceRecognitionLauncher() {
-        voiceRecognitionActivityResultLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    onVoiceRecognitionActivityResult(result.data)
-                }
-            }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
