@@ -6,40 +6,53 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class GeocoderRepository(
+    private val customGeocoder: GeocoderDataSourceInterface?,
     private val androidGeocoder: GeocoderDataSourceInterface,
     private val googleGeocoder: GeocoderDataSourceInterface
 ) {
 
+    private val dataSources get() = listOf(customGeocoder, androidGeocoder, googleGeocoder)
+
     suspend fun getFromLocationName(query: String): List<Address> {
         return suspendCoroutine { continuation ->
-            val addressList = androidGeocoder.getFromLocationName(query)
-            if (addressList.isNullOrEmpty()) {
-                continuation.resume(googleGeocoder.getFromLocationName(query))
-            } else {
-                continuation.resume(addressList)
+            dataSources.forEach {
+                val data = it?.getFromLocationName(query) ?: emptyList()
+                if (data.isNotEmpty()) {
+                    continuation.resume(data)
+                    return@suspendCoroutine
+                }
             }
+            continuation.resume(emptyList())
         }
     }
 
-    suspend fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): List<Address> {
+    suspend fun getFromLocationName(
+        query: String,
+        lowerLeft: LatLng,
+        upperRight: LatLng
+    ): List<Address> {
         return suspendCoroutine { continuation ->
-            val addressList = androidGeocoder.getFromLocationName(query, lowerLeft, upperRight)
-            if (addressList.isNullOrEmpty()) {
-                continuation.resume(googleGeocoder.getFromLocationName(query, lowerLeft, upperRight))
-            } else {
-                continuation.resume(addressList)
+            dataSources.forEach {
+                val data = it?.getFromLocationName(query, lowerLeft, upperRight) ?: emptyList()
+                if (data.isNotEmpty()) {
+                    continuation.resume(data)
+                    return@suspendCoroutine
+                }
             }
+            continuation.resume(emptyList())
         }
     }
 
     suspend fun getFromLocation(latLng: LatLng): List<Address> {
         return suspendCoroutine { continuation ->
-            val addressList = androidGeocoder.getFromLocation(latLng.latitude, latLng.longitude)
-            if (addressList.isNullOrEmpty()) {
-                continuation.resume(googleGeocoder.getFromLocation(latLng.latitude, latLng.longitude))
-            } else {
-                continuation.resume(addressList)
+            dataSources.forEach {
+                val data = it?.getFromLocation(latLng.latitude, latLng.longitude) ?: emptyList()
+                if (data.isNotEmpty()) {
+                    continuation.resume(data)
+                    return@suspendCoroutine
+                }
             }
+            continuation.resume(emptyList())
         }
     }
 }

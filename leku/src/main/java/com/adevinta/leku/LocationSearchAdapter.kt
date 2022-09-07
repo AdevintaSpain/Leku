@@ -1,43 +1,15 @@
 package com.adevinta.leku
 
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
+import android.location.Address
 import androidx.recyclerview.widget.RecyclerView
 
-class LocationSearchAdapter(
-    private val locations: MutableList<String>?,
-    private val clickListener: SearchItemClickListener
-) : RecyclerView.Adapter<LocationSearchAdapter.SearchViewHolder>() {
-    class SearchViewHolder(
-        val textView: TextView,
-        private val clickListener: SearchItemClickListener
-    ) : RecyclerView.ViewHolder(textView), View.OnClickListener {
-        init {
-            textView.setOnClickListener(this)
-        }
+abstract class LocationSearchAdapter<T : LekuViewHolder> : RecyclerView.Adapter<T>() {
+    var locations: List<Address> = emptyList()
+    var onClick: (position: Int) -> Unit = {}
 
-        override fun onClick(v: View?) {
-            clickListener.onItemClick(adapterPosition)
-        }
-    }
+    override fun getItemCount() = locations.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
-        val textView = LayoutInflater.from(parent.context).inflate(R.layout.leku_search_list_item, parent, false) as TextView
-
-        return SearchViewHolder(textView, clickListener)
-    }
-
-    override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
-        if (!locations.isNullOrEmpty()) {
-            holder.textView.text = locations[position]
-        }
-    }
-
-    override fun getItemCount() = locations?.size ?: 0
-
-    interface SearchItemClickListener {
-        fun onItemClick(position: Int)
+    override fun onBindViewHolder(holder: T, position: Int) {
+        holder.itemView.setOnClickListener { onClick(position) }
     }
 }

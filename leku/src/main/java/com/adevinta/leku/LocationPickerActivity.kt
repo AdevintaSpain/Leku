@@ -67,6 +67,7 @@ import com.adevinta.leku.geocoder.GeocoderPresenter
 import com.adevinta.leku.geocoder.GeocoderRepository
 import com.adevinta.leku.geocoder.GeocoderViewInterface
 import com.adevinta.leku.geocoder.GoogleGeocoderDataSource
+import com.adevinta.leku.geocoder.GeocoderDataSourceInterface
 import com.adevinta.leku.geocoder.api.AddressBuilder
 import com.adevinta.leku.geocoder.api.NetworkClient
 import com.adevinta.leku.geocoder.places.GooglePlacesDataSource
@@ -130,6 +131,11 @@ class LocationPickerActivity :
     GeocoderViewInterface,
     GoogleMap.OnMapClickListener {
 
+    companion object {
+        var customDataSource: GeocoderDataSourceInterface? = null
+        var customAdapter: LocationSearchAdapter<*>? = null
+    }
+
     private var map: GoogleMap? = null
     private var googleApiClient: GoogleApiClient? = null
     private var currentLocation: Location? = null
@@ -148,7 +154,7 @@ class LocationPickerActivity :
     private var progressBar: ProgressBar? = null
     private var listResult: ListView? = null
     private var searchResultsList: RecyclerView? = null
-    private var searchAdapter: RecyclerView.Adapter<*>? = null
+    private var searchAdapter: LocationSearchAdapter<*>? = null
     private lateinit var linearLayoutManager: RecyclerView.LayoutManager
     private var clearSearchButton: ImageView? = null
     private var searchOption: MenuItem? = null
@@ -307,7 +313,11 @@ class LocationPickerActivity :
         if (googleGeocoderDataSource == null) {
             googleGeocoderDataSource = GoogleGeocoderDataSource(NetworkClient(), AddressBuilder())
         }
-        val geocoderRepository = GeocoderRepository(AndroidGeocoderDataSource(geocoder), googleGeocoderDataSource!!)
+        val geocoderRepository = GeocoderRepository(
+            customDataSource,
+            AndroidGeocoderDataSource(geocoder),
+            googleGeocoderDataSource!!
+        )
         val timeZoneDataSource = GoogleTimeZoneDataSource(
             GeoApiContext.Builder().apiKey(GoogleTimeZoneDataSource.getApiKey(this)).build()
         )
@@ -356,19 +366,18 @@ class LocationPickerActivity :
             }
         } else {
             linearLayoutManager = LinearLayoutManager(this)
-            searchAdapter = LocationSearchAdapter(
-                locationNameList,
-                object : LocationSearchAdapter.SearchItemClickListener {
-                    override fun onItemClick(position: Int) {
-                        if (locationList[position].hasLatitude() && locationList[position].hasLongitude()) {
-                            setNewLocation(locationList[position])
-                            changeListResultVisibility(View.GONE)
-                            closeKeyboard()
-                            hideSearchLayout()
-                        }
-                    }
-                }
+            searchAdapter = customAdapter ?: DefaultAdapter(
+                this,
             )
+            searchAdapter?.locations = locationList
+            searchAdapter?.onClick = {
+                if (locationList[it].hasLatitude() && locationList[it].hasLongitude()) {
+                    setNewLocation(locationList[it])
+                    changeListResultVisibility(View.GONE)
+                    closeKeyboard()
+                    hideSearchLayout()
+                }
+            }
             searchResultsList = findViewById<RecyclerView>(R.id.search_result_list).apply {
                 setHasFixedSize(true)
                 layoutManager = linearLayoutManager
@@ -1287,29 +1296,9 @@ class LocationPickerActivity :
             if (address.featureName == null) {
                 locationNameList.add(getString(R.string.leku_unknown_location))
             } else {
-                locationNameList.add(getFullAddressString(address))
+                locationNameList.add(address.getFullAddressString(this))
             }
         }
-    }
-
-    private fun getFullAddressString(address: Address): String {
-        var fullAddress = address.getAddressLine(0)
-        if (fullAddress.isNullOrEmpty()) {
-            fullAddress = ""
-            address.featureName?.let {
-                fullAddress += it
-            }
-            if (address.subLocality != null && address.subLocality.isNotEmpty()) {
-                fullAddress += ", " + address.subLocality
-            }
-            if (address.locality != null && address.locality.isNotEmpty()) {
-                fullAddress += ", " + address.locality
-            }
-            if (address.countryName != null && address.countryName.isNotEmpty()) {
-                fullAddress += ", " + address.countryName
-            }
-        }
-        return fullAddress
     }
 
     private fun setMapStyle() {
@@ -1465,6 +1454,8 @@ class LocationPickerActivity :
         private var locationLongitude: Double? = null
         private var searchZoneLocale: String? = null
         private var searchZoneRect: SearchZoneRect? = null
+        private var customDataSource: GeocoderDataSourceInterface? = null
+        private var customAdapter: LocationSearchAdapter<*>? = null
         private var searchZoneDefaultLocale = false
         private var layoutsToHide = ""
         private var enableSatelliteView = true
@@ -1490,6 +1481,18 @@ class LocationPickerActivity :
                 this.locationLatitude = latLng.latitude
                 this.locationLongitude = latLng.longitude
             }
+            return this
+        }
+
+        fun withDataSource(customDataSource: GeocoderDataSourceInterface?): Builder {
+            if (customDataSource != null) {
+                this.customDataSource = customDataSource
+            }
+            return this
+        }
+
+        fun withAdapter(customAdapter: LocationSearchAdapter<*>?): Builder {
+            this.customAdapter = customAdapter
             return this
         }
 
@@ -1616,6 +1619,9 @@ class LocationPickerActivity :
             intent.putExtra(UNNAMED_ROAD_VISIBILITY, unnamedRoadVisible)
             intent.putExtra(WITH_LEGACY_LAYOUT, isLegacyLayoutEnabled)
             intent.putExtra(SEARCH_BAR_HIDDEN, isSearchBarHidden)
+
+            LocationPickerActivity.customDataSource = customDataSource
+            LocationPickerActivity.customAdapter = customAdapter
 
             return intent
         }
