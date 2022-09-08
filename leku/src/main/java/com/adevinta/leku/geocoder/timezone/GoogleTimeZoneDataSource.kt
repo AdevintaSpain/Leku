@@ -13,7 +13,7 @@ import java.util.TimeZone
 class GoogleTimeZoneDataSource(private val geoApiContext: GeoApiContext) {
 
     companion object {
-        fun getApiKey(context: Context): String? {
+        fun getGeoApiKey(context: Context): String? {
             try {
                 val appInfo = context.packageManager.getApplicationInfo(
                     context.packageName,

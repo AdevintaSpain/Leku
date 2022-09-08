@@ -8,6 +8,13 @@ import java.io.IOException
 private const val MAX_RESULTS = 5
 
 class AndroidGeocoderDataSource(private val geocoder: Geocoder) : GeocoderDataSourceInterface {
+    override fun autoCompleteFromLocationName(query: String): List<PlaceSuggestion> {
+        return emptyList()
+    }
+
+    override fun getAddressFromPlaceId(placeId: String): Address? {
+        return null
+    }
 
     override fun getFromLocationName(query: String): List<Address> {
         return try {
@@ -17,10 +24,19 @@ class AndroidGeocoderDataSource(private val geocoder: Geocoder) : GeocoderDataSo
         }
     }
 
-    override fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): List<Address> {
+    override fun getFromLocationName(
+        query: String,
+        lowerLeft: LatLng,
+        upperRight: LatLng
+    ): List<Address> {
         return try {
             geocoder.getFromLocationName(
-                query, MAX_RESULTS, lowerLeft.latitude, lowerLeft.longitude, upperRight.latitude, upperRight.longitude
+                query,
+                MAX_RESULTS,
+                lowerLeft.latitude,
+                lowerLeft.longitude,
+                upperRight.latitude,
+                upperRight.longitude
             )
         } catch (exception: IOException) {
             emptyList()

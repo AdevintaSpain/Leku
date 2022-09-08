@@ -13,6 +13,32 @@ class GeocoderRepository(
 
     private val dataSources get() = listOf(customGeocoder, androidGeocoder, googleGeocoder)
 
+    suspend fun autoCompleteFromLocationName(query: String): List<PlaceSuggestion> {
+        return suspendCoroutine { continuation ->
+            dataSources.forEach {
+                val data = it?.autoCompleteFromLocationName(query) ?: emptyList()
+                if (data.isNotEmpty()) {
+                    continuation.resume(data)
+                    return@suspendCoroutine
+                }
+            }
+            continuation.resume(emptyList())
+        }
+    }
+
+    suspend fun getAddressFromPlaceId(placeId: String): Address? {
+        return suspendCoroutine { continuation ->
+            dataSources.forEach {
+                val data = it?.getAddressFromPlaceId(placeId)
+                if (data != null) {
+                    continuation.resume(data)
+                    return@suspendCoroutine
+                }
+            }
+            continuation.resume(null)
+        }
+    }
+
     suspend fun getFromLocationName(query: String): List<Address> {
         return suspendCoroutine { continuation ->
             dataSources.forEach {

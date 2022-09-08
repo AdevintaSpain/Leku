@@ -10,7 +10,7 @@ import kotlin.collections.ArrayList
 class AddressBuilder {
 
     @Throws(JSONException::class)
-    fun parseResult(json: String): List<Address> {
+    fun parseArrayResult(json: String): List<Address> {
         val addresses = ArrayList<Address>()
         val root = JSONObject(json)
         val results = root.getJSONArray("results")
@@ -18,6 +18,13 @@ class AddressBuilder {
             addresses.add(parseAddress(results.getJSONObject(i)))
         }
         return addresses
+    }
+
+    @Throws(JSONException::class)
+    fun parseResult(json: String): Address {
+        val root = JSONObject(json)
+        val result = root.getJSONObject("result")
+        return parseAddress(result)
     }
 
     @Throws(JSONException::class)

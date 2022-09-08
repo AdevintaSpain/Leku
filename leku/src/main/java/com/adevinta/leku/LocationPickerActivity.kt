@@ -18,7 +18,6 @@ import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.View.GONE
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -41,6 +40,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.adevinta.leku.geocoder.GeocoderDataSourceInterface
+import com.adevinta.leku.geocoder.GeocoderPresenter
+import com.adevinta.leku.geocoder.GeocoderViewInterface
+import com.adevinta.leku.geocoder.GoogleGeocoderDataSource
+import com.adevinta.leku.geocoder.GeocoderRepository
+import com.adevinta.leku.geocoder.AndroidGeocoderDataSource
+import com.adevinta.leku.geocoder.adapters.DefaultSuggestionAdapter
+import com.adevinta.leku.geocoder.PlaceSuggestion
+import com.adevinta.leku.geocoder.adapters.DefaultAddressAdapter
+import com.adevinta.leku.geocoder.adapters.SearchViewHolder
+import com.adevinta.leku.geocoder.adapters.SuggestionViewHolder
+import com.adevinta.leku.geocoder.adapters.base.LekuSearchAdapter
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.GoogleApiClient
@@ -62,14 +73,9 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.maps.GeoApiContext
-import com.adevinta.leku.geocoder.AndroidGeocoderDataSource
-import com.adevinta.leku.geocoder.GeocoderPresenter
-import com.adevinta.leku.geocoder.GeocoderRepository
-import com.adevinta.leku.geocoder.GeocoderViewInterface
-import com.adevinta.leku.geocoder.GoogleGeocoderDataSource
-import com.adevinta.leku.geocoder.GeocoderDataSourceInterface
 import com.adevinta.leku.geocoder.api.AddressBuilder
 import com.adevinta.leku.geocoder.api.NetworkClient
+import com.adevinta.leku.geocoder.api.SuggestionBuilder
 import com.adevinta.leku.geocoder.places.GooglePlacesDataSource
 import com.adevinta.leku.geocoder.timezone.GoogleTimeZoneDataSource
 import com.adevinta.leku.locale.DefaultCountryLocaleRect
@@ -94,7 +100,7 @@ const val SEARCH_ZONE_DEFAULT_LOCALE = "search_zone_default_locale"
 const val BACK_PRESSED_RETURN_OK = "back_pressed_return_ok"
 const val ENABLE_SATELLITE_VIEW = "enable_satellite_view"
 const val ENABLE_LOCATION_PERMISSION_REQUEST = "enable_location_permission_request"
-const val ENABLE_GOOGLE_PLACES = "enable_google_places"
+const val PLACE_RESOLUTION = "place_resolution"
 const val ENABLE_GOOGLE_TIME_ZONE = "enable_google_time_zone"
 const val POIS_LIST = "pois_list"
 const val LEKU_POI = "leku_poi"
@@ -133,7 +139,7 @@ class LocationPickerActivity :
 
     companion object {
         var customDataSource: GeocoderDataSourceInterface? = null
-        var customAdapter: LocationSearchAdapter<*>? = null
+        var customAdapter: LekuSearchAdapter<*, *>? = null
     }
 
     private var map: GoogleMap? = null
@@ -154,7 +160,7 @@ class LocationPickerActivity :
     private var progressBar: ProgressBar? = null
     private var listResult: ListView? = null
     private var searchResultsList: RecyclerView? = null
-    private var searchAdapter: LocationSearchAdapter<*>? = null
+    private var searchAdapter: LekuSearchAdapter<*, *>? = null
     private lateinit var linearLayoutManager: RecyclerView.LayoutManager
     private var clearSearchButton: ImageView? = null
     private var searchOption: MenuItem? = null
@@ -163,10 +169,12 @@ class LocationPickerActivity :
     private var searchFrameLayout: FrameLayout? = null
 
     private val locationList = ArrayList<Address>()
+    private val suggestionList = ArrayList<PlaceSuggestion>()
     private var locationNameList: MutableList<String> = ArrayList()
     private var hasWiderZoom = false
     private val bundle = Bundle()
     private var selectedAddress: Address? = null
+    private var selectedSuggestion: PlaceSuggestion? = null
     private var isLocationInformedFromBundle = false
     private var isStreetVisible = true
     private var isCityVisible = true
@@ -174,6 +182,7 @@ class LocationPickerActivity :
     private var shouldReturnOkOnBackPressed = false
     private var enableSatelliteView = true
     private var enableLocationPermissionRequest = true
+    private var geoApiKey: String? = null
     private var googlePlacesApiKey: String? = null
     private var isGoogleTimeZoneEnabled = false
     private var searchZone: String? = null
@@ -190,6 +199,7 @@ class LocationPickerActivity :
     private var isLegacyLayoutEnabled = false
     private var isSearchLayoutShown = false
     private var isSearchBarHidden = false
+    private var placeResolution = false
 
     private lateinit var toolbar: MaterialToolbar
     private lateinit var timeZone: TimeZone
@@ -272,7 +282,8 @@ class LocationPickerActivity :
         val contentView: View = findViewById(android.R.id.content)
         val googleLogo: View? = contentView.findViewWithTag("GoogleWatermark")
         googleLogo?.let {
-            val glLayoutParams: RelativeLayout.LayoutParams = it.layoutParams as RelativeLayout.LayoutParams
+            val glLayoutParams: RelativeLayout.LayoutParams =
+                it.layoutParams as RelativeLayout.LayoutParams
             glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0)
             glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0)
             glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_START, 0)
@@ -311,7 +322,11 @@ class LocationPickerActivity :
         }
         val geocoder = Geocoder(this, Locale.getDefault())
         if (googleGeocoderDataSource == null) {
-            googleGeocoderDataSource = GoogleGeocoderDataSource(NetworkClient(), AddressBuilder())
+            googleGeocoderDataSource = GoogleGeocoderDataSource(
+                NetworkClient(),
+                AddressBuilder(),
+                SuggestionBuilder()
+            )
         }
         val geocoderRepository = GeocoderRepository(
             customDataSource,
@@ -319,10 +334,13 @@ class LocationPickerActivity :
             googleGeocoderDataSource!!
         )
         val timeZoneDataSource = GoogleTimeZoneDataSource(
-            GeoApiContext.Builder().apiKey(GoogleTimeZoneDataSource.getApiKey(this)).build()
+            GeoApiContext.Builder().apiKey(GoogleTimeZoneDataSource.getGeoApiKey(this)).build()
         )
         geocoderPresenter = GeocoderPresenter(
-            ReactiveLocationProvider(applicationContext), geocoderRepository, placesDataSource, timeZoneDataSource
+            ReactiveLocationProvider(applicationContext),
+            geocoderRepository,
+            placesDataSource,
+            timeZoneDataSource
         )
         geocoderPresenter?.setUI(this)
         progressBar = findViewById(R.id.loading_progress_bar)
@@ -353,11 +371,14 @@ class LocationPickerActivity :
     private fun setUpResultsList() {
         if (isLegacyLayoutEnabled) {
             listResult = findViewById(R.id.resultlist)
-            adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, locationNameList)
+            adapter =
+                ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, locationNameList)
             listResult?.let {
                 it.adapter = adapter
                 it.setOnItemClickListener { _, _, position, _ ->
-                    if (locationList[position].hasLatitude() && locationList[position].hasLongitude()) {
+                    if (locationList[position].hasLatitude() &&
+                        locationList[position].hasLongitude()
+                    ) {
                         setNewLocation(locationList[position])
                         changeListResultVisibility(View.GONE)
                         closeKeyboard()
@@ -366,16 +387,30 @@ class LocationPickerActivity :
             }
         } else {
             linearLayoutManager = LinearLayoutManager(this)
-            searchAdapter = customAdapter ?: DefaultAdapter(
-                this,
-            )
-            searchAdapter?.locations = locationList
-            searchAdapter?.onClick = {
-                if (locationList[it].hasLatitude() && locationList[it].hasLongitude()) {
-                    setNewLocation(locationList[it])
-                    changeListResultVisibility(View.GONE)
-                    closeKeyboard()
-                    hideSearchLayout()
+            when {
+                placeResolution -> {
+                    searchAdapter = customAdapter ?: DefaultSuggestionAdapter(
+                        this,
+                    )
+                    searchAdapter?.onClick = {
+                        setNewSuggestion(suggestionList[it])
+                        changeListResultVisibility(View.GONE)
+                        closeKeyboard()
+                        hideSearchLayout()
+                    }
+                }
+                else -> {
+                    searchAdapter = customAdapter ?: DefaultAddressAdapter(
+                        this,
+                    )
+                    searchAdapter?.onClick = {
+                        if (locationList[it].hasLatitude() && locationList[it].hasLongitude()) {
+                            setNewLocation(locationList[it])
+                            changeListResultVisibility(View.GONE)
+                            closeKeyboard()
+                            hideSearchLayout()
+                        }
+                    }
                 }
             }
             searchResultsList = findViewById<RecyclerView>(R.id.search_result_list).apply {
@@ -407,7 +442,7 @@ class LocationPickerActivity :
     private fun setUpSearchView() {
         searchView = findViewById(R.id.leku_search)
         if (isSearchBarHidden) {
-            searchEditLayout?.visibility = GONE
+            searchEditLayout?.visibility = View.GONE
         } else {
             searchView?.setOnEditorActionListener { v, actionId, _ ->
                 var handled = false
@@ -455,7 +490,8 @@ class LocationPickerActivity :
             updateVoiceSearchVisibility()
         } else {
             if (term.length > MIN_CHARACTERS) {
-                retrieveLocationWithDebounceTimeFrom(term)
+                if (placeResolution) geocoderPresenter?.getSuggestionsFromLocationName(term)
+                else retrieveLocationWithDebounceTimeFrom(term)
             }
             clearSearchButton?.visibility = View.VISIBLE
             searchOption?.setIcon(R.drawable.leku_ic_search)
@@ -496,7 +532,8 @@ class LocationPickerActivity :
         val btnSatellite = findViewById<FloatingActionButton>(R.id.btnSatellite)
         btnSatellite?.setOnClickListener {
             map?.let {
-                it.mapType = if (it.mapType == MAP_TYPE_SATELLITE) MAP_TYPE_NORMAL else MAP_TYPE_SATELLITE
+                it.mapType =
+                    if (it.mapType == MAP_TYPE_SATELLITE) MAP_TYPE_NORMAL else MAP_TYPE_SATELLITE
                 if (isLegacyLayoutEnabled) {
                     btnSatellite.setImageResource(
                         if (it.mapType == MAP_TYPE_SATELLITE)
@@ -535,7 +572,9 @@ class LocationPickerActivity :
 
     private fun setUpMapIfNeeded() {
         if (map == null) {
-            (supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment).getMapAsync(this)
+            (supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment).getMapAsync(
+                this
+            )
         }
     }
 
@@ -576,7 +615,11 @@ class LocationPickerActivity :
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (PermissionUtils.isLocationPermissionGranted(applicationContext)) {
@@ -657,7 +700,10 @@ class LocationPickerActivity :
     override fun onConnectionFailed(connectionResult: ConnectionResult) {
         if (connectionResult.hasResolution()) {
             try {
-                connectionResult.startResolutionForResult(this, CONNECTION_FAILURE_RESOLUTION_REQUEST)
+                connectionResult.startResolutionForResult(
+                    this,
+                    CONNECTION_FAILURE_RESOLUTION_REQUEST
+                )
             } catch (e: IntentSender.SendIntentException) {
                 track(TrackEvents.GOOGLE_API_CONNECTION_FAILED)
             }
@@ -682,7 +728,14 @@ class LocationPickerActivity :
             savedInstanceState.putParcelableArrayList(POIS_LIST, ArrayList(it))
         }
         savedInstanceState.putBoolean(ENABLE_SATELLITE_VIEW, enableSatelliteView)
-        savedInstanceState.putBoolean(ENABLE_LOCATION_PERMISSION_REQUEST, enableLocationPermissionRequest)
+        savedInstanceState.putBoolean(
+            ENABLE_LOCATION_PERMISSION_REQUEST,
+            enableLocationPermissionRequest
+        )
+        savedInstanceState.putBoolean(
+            PLACE_RESOLUTION,
+            placeResolution
+        )
         super.onSaveInstanceState(savedInstanceState)
     }
 
@@ -706,7 +759,12 @@ class LocationPickerActivity :
             enableSatelliteView = savedInstanceState.getBoolean(ENABLE_SATELLITE_VIEW)
         }
         if (savedInstanceState.containsKey(ENABLE_LOCATION_PERMISSION_REQUEST)) {
-            enableLocationPermissionRequest = savedInstanceState.getBoolean(ENABLE_LOCATION_PERMISSION_REQUEST)
+            enableLocationPermissionRequest =
+                savedInstanceState.getBoolean(ENABLE_LOCATION_PERMISSION_REQUEST)
+        }
+        if (savedInstanceState.containsKey(PLACE_RESOLUTION)) {
+            placeResolution =
+                savedInstanceState.getBoolean(PLACE_RESOLUTION)
         }
     }
 
@@ -757,6 +815,31 @@ class LocationPickerActivity :
         }
     }
 
+    override fun showSuggestions(suggestions: List<PlaceSuggestion>) {
+        fillSuggestionList(suggestions)
+        if (suggestions.isEmpty()) {
+            Toast.makeText(applicationContext, R.string.leku_no_search_results, Toast.LENGTH_LONG)
+                .show()
+        } else {
+            updateSuggestionNameList(suggestions)
+            if (hasWiderZoom) {
+                searchView?.setText("")
+            }
+            searchAdapter?.notifyDataSetChanged()
+        }
+    }
+
+    override fun setAddressFromSuggestion(address: Address) {
+        selectedAddress = address
+        locationList.clear()
+        locationList.add(address)
+        currentLocation?.latitude = address.latitude
+        currentLocation?.longitude = address.longitude
+        setNewMapMarker(LatLng(address.latitude, address.longitude))
+        setLocationInfo(address)
+        searchView?.setText("")
+    }
+
     override fun showDebouncedLocations(addresses: List<Address>) {
         fillLocationList(addresses)
         if (addresses.isNotEmpty()) {
@@ -782,7 +865,12 @@ class LocationPickerActivity :
     override fun didLoadLocation() {
         progressBar?.visibility = View.GONE
 
-        changeListResultVisibility(if (locationList.size >= 1) View.VISIBLE else View.GONE)
+        changeListResultVisibility(
+            when {
+                locationList.size >= 1 || suggestionList.size >= 1 -> View.VISIBLE
+                else -> View.GONE
+            }
+        )
 
         if (locationList.size == 1) {
             changeLocationInfoLayoutVisibility(View.VISIBLE)
@@ -913,13 +1001,33 @@ class LocationPickerActivity :
         if (savedInstanceState.keySet().contains(LAYOUTS_TO_HIDE)) {
             setLayoutVisibilityFromBundle(savedInstanceState)
         }
-        if (savedInstanceState.keySet().contains(GEOLOC_API_KEY)) {
-            googleGeocoderDataSource = GoogleGeocoderDataSource(NetworkClient(), AddressBuilder())
-            googleGeocoderDataSource?.setApiKey(savedInstanceState.getString(GEOLOC_API_KEY, ""))
+
+        googleGeocoderDataSource = GoogleGeocoderDataSource(
+            NetworkClient(),
+            AddressBuilder(),
+            SuggestionBuilder()
+        )
+
+        geoApiKey = if (savedInstanceState.keySet().contains(GEOLOC_API_KEY)) {
+            savedInstanceState.getString(GEOLOC_API_KEY, "")
+        } else {
+            GoogleTimeZoneDataSource.getGeoApiKey(this)
         }
-        if (savedInstanceState.keySet().contains(PLACES_API_KEY)) {
-            googlePlacesApiKey = savedInstanceState.getString(PLACES_API_KEY, "")
+
+        if (geoApiKey.isNullOrEmpty().not()) {
+            googleGeocoderDataSource?.setGeolocationApiKey(geoApiKey!!)
         }
+
+        googlePlacesApiKey = if (savedInstanceState.keySet().contains(PLACES_API_KEY)) {
+            savedInstanceState.getString(PLACES_API_KEY, "")
+        } else {
+            GoogleTimeZoneDataSource.getGeoApiKey(this)
+        }
+
+        if (googlePlacesApiKey.isNullOrEmpty().not()) {
+            googleGeocoderDataSource?.setPlaceApiKey(googlePlacesApiKey!!)
+        }
+
         if (savedInstanceState.keySet().contains(ENABLE_GOOGLE_TIME_ZONE)) {
             isGoogleTimeZoneEnabled = savedInstanceState.getBoolean(ENABLE_GOOGLE_TIME_ZONE, false)
         }
@@ -930,7 +1038,8 @@ class LocationPickerActivity :
             searchZoneRect = savedInstanceState.getParcelable(SEARCH_ZONE_RECT)
         }
         if (savedInstanceState.keySet().contains(SEARCH_ZONE_DEFAULT_LOCALE)) {
-            isSearchZoneWithDefaultLocale = savedInstanceState.getBoolean(SEARCH_ZONE_DEFAULT_LOCALE, false)
+            isSearchZoneWithDefaultLocale =
+                savedInstanceState.getBoolean(SEARCH_ZONE_DEFAULT_LOCALE, false)
         }
         if (savedInstanceState.keySet().contains(ENABLE_SATELLITE_VIEW)) {
             enableSatelliteView = savedInstanceState.getBoolean(ENABLE_SATELLITE_VIEW)
@@ -939,7 +1048,8 @@ class LocationPickerActivity :
             poisList = savedInstanceState.getParcelableArrayList(POIS_LIST)
         }
         if (savedInstanceState.keySet().contains(ENABLE_LOCATION_PERMISSION_REQUEST)) {
-            enableLocationPermissionRequest = savedInstanceState.getBoolean(ENABLE_LOCATION_PERMISSION_REQUEST)
+            enableLocationPermissionRequest =
+                savedInstanceState.getBoolean(ENABLE_LOCATION_PERMISSION_REQUEST)
         }
         if (savedInstanceState.keySet().contains(ENABLE_VOICE_SEARCH)) {
             isVoiceSearchEnabled = savedInstanceState.getBoolean(ENABLE_VOICE_SEARCH, true)
@@ -956,11 +1066,16 @@ class LocationPickerActivity :
         if (savedInstanceState.keySet().contains(SEARCH_BAR_HIDDEN)) {
             isSearchBarHidden = savedInstanceState.getBoolean(SEARCH_BAR_HIDDEN, false)
         }
+        if (savedInstanceState.keySet().contains(PLACE_RESOLUTION)) {
+            placeResolution = savedInstanceState.getBoolean(PLACE_RESOLUTION, false)
+        }
     }
 
     private fun getTransitionBundleParams(transitionBundle: Bundle) {
         bundle.putBundle(TRANSITION_BUNDLE, transitionBundle)
-        if (transitionBundle.keySet().contains(LATITUDE) && transitionBundle.keySet().contains(LONGITUDE)) {
+        if (transitionBundle.keySet().contains(LATITUDE) && transitionBundle.keySet()
+            .contains(LONGITUDE)
+        ) {
             setLocationFromBundle(transitionBundle)
         }
         if (transitionBundle.keySet().contains(LAYOUTS_TO_HIDE)) {
@@ -973,7 +1088,8 @@ class LocationPickerActivity :
             searchZoneRect = transitionBundle.getParcelable(SEARCH_ZONE_RECT)
         }
         if (transitionBundle.keySet().contains(SEARCH_ZONE_DEFAULT_LOCALE)) {
-            isSearchZoneWithDefaultLocale = transitionBundle.getBoolean(SEARCH_ZONE_DEFAULT_LOCALE, false)
+            isSearchZoneWithDefaultLocale =
+                transitionBundle.getBoolean(SEARCH_ZONE_DEFAULT_LOCALE, false)
         }
         if (transitionBundle.keySet().contains(BACK_PRESSED_RETURN_OK)) {
             shouldReturnOkOnBackPressed = transitionBundle.getBoolean(BACK_PRESSED_RETURN_OK)
@@ -982,18 +1098,39 @@ class LocationPickerActivity :
             enableSatelliteView = transitionBundle.getBoolean(ENABLE_SATELLITE_VIEW)
         }
         if (transitionBundle.keySet().contains(ENABLE_LOCATION_PERMISSION_REQUEST)) {
-            enableLocationPermissionRequest = transitionBundle.getBoolean(ENABLE_LOCATION_PERMISSION_REQUEST)
+            enableLocationPermissionRequest =
+                transitionBundle.getBoolean(ENABLE_LOCATION_PERMISSION_REQUEST)
         }
         if (transitionBundle.keySet().contains(POIS_LIST)) {
             poisList = transitionBundle.getParcelableArrayList(POIS_LIST)
         }
-        if (transitionBundle.keySet().contains(GEOLOC_API_KEY)) {
 
-            googleGeocoderDataSource?.setApiKey(transitionBundle.getString(GEOLOC_API_KEY, ""))
+        googleGeocoderDataSource = GoogleGeocoderDataSource(
+            NetworkClient(),
+            AddressBuilder(),
+            SuggestionBuilder()
+        )
+
+        geoApiKey = if (transitionBundle.keySet().contains(GEOLOC_API_KEY)) {
+            transitionBundle.getString(GEOLOC_API_KEY, "")
+        } else {
+            GoogleTimeZoneDataSource.getGeoApiKey(this)
         }
-        if (transitionBundle.keySet().contains(PLACES_API_KEY)) {
-            googlePlacesApiKey = transitionBundle.getString(PLACES_API_KEY, "")
+
+        if (geoApiKey.isNullOrEmpty().not()) {
+            googleGeocoderDataSource?.setGeolocationApiKey(geoApiKey!!)
         }
+
+        googlePlacesApiKey = if (transitionBundle.keySet().contains(PLACES_API_KEY)) {
+            transitionBundle.getString(PLACES_API_KEY, "")
+        } else {
+            GoogleTimeZoneDataSource.getGeoApiKey(this)
+        }
+
+        if (googlePlacesApiKey.isNullOrEmpty().not()) {
+            googleGeocoderDataSource?.setPlaceApiKey(googlePlacesApiKey!!)
+        }
+
         if (transitionBundle.keySet().contains(ENABLE_GOOGLE_TIME_ZONE)) {
             isGoogleTimeZoneEnabled = transitionBundle.getBoolean(ENABLE_GOOGLE_TIME_ZONE, false)
         }
@@ -1011,6 +1148,9 @@ class LocationPickerActivity :
         }
         if (transitionBundle.keySet().contains(SEARCH_BAR_HIDDEN)) {
             isSearchBarHidden = transitionBundle.getBoolean(SEARCH_BAR_HIDDEN, false)
+        }
+        if (transitionBundle.keySet().contains(PLACE_RESOLUTION)) {
+            placeResolution = transitionBundle.getBoolean(PLACE_RESOLUTION, false)
         }
     }
 
@@ -1063,7 +1203,8 @@ class LocationPickerActivity :
         val result = googleAPI.isGooglePlayServicesAvailable(applicationContext)
         if (result != ConnectionResult.SUCCESS) {
             if (googleAPI.isUserResolvableError(result)) {
-                googleAPI.getErrorDialog(this, result, CONNECTION_FAILURE_RESOLUTION_REQUEST)?.show()
+                googleAPI.getErrorDialog(this, result, CONNECTION_FAILURE_RESOLUTION_REQUEST)
+                    ?.show()
             }
             return false
         }
@@ -1071,8 +1212,10 @@ class LocationPickerActivity :
     }
 
     private fun setCoordinatesInfo(latLng: LatLng) {
-        this.latitude?.text = String.format("%s: %s", getString(R.string.leku_latitude), latLng.latitude)
-        this.longitude?.text = String.format("%s: %s", getString(R.string.leku_longitude), latLng.longitude)
+        this.latitude?.text =
+            String.format("%s: %s", getString(R.string.leku_latitude), latLng.latitude)
+        this.longitude?.text =
+            String.format("%s: %s", getString(R.string.leku_longitude), latLng.longitude)
         showCoordinatesLayout()
     }
 
@@ -1098,7 +1241,11 @@ class LocationPickerActivity :
 
     private fun getFormattedAddress(address: Address): String {
         return if (!address.thoroughfare.isNullOrEmpty() && !address.subThoroughfare.isNullOrEmpty()) {
-            getString(R.string.leku_formatted_address, address.thoroughfare, address.subThoroughfare)
+            getString(
+                R.string.leku_formatted_address,
+                address.thoroughfare,
+                address.subThoroughfare
+            )
         } else {
             if (address.subThoroughfare.isNullOrEmpty() && !address.thoroughfare.isNullOrEmpty()) {
                 address.thoroughfare
@@ -1222,7 +1369,11 @@ class LocationPickerActivity :
         }
     }
 
-    private fun retrieveDebouncedLocationFromZone(query: String, zoneKey: String, debounceTime: Int) {
+    private fun retrieveDebouncedLocationFromZone(
+        query: String,
+        zoneKey: String,
+        debounceTime: Int
+    ) {
         geocoderPresenter?.let {
             val locale = Locale(zoneKey)
             if (DefaultCountryLocaleRect.getLowerLeftFromZone(locale) != null) {
@@ -1236,7 +1387,11 @@ class LocationPickerActivity :
         }
     }
 
-    private fun retrieveDebouncedLocationFromZone(query: String, zoneRect: SearchZoneRect, debounceTime: Int) {
+    private fun retrieveDebouncedLocationFromZone(
+        query: String,
+        zoneRect: SearchZoneRect,
+        debounceTime: Int
+    ) {
         geocoderPresenter?.getDebouncedFromLocationName(
             query,
             zoneRect.lowerLeft,
@@ -1298,6 +1453,13 @@ class LocationPickerActivity :
             } else {
                 locationNameList.add(address.getFullAddressString(this))
             }
+        }
+    }
+
+    private fun updateSuggestionNameList(suggestions: List<PlaceSuggestion>) {
+        locationNameList.clear()
+        for (suggestion in suggestions) {
+            locationNameList.add(suggestion.description)
         }
     }
 
@@ -1431,9 +1593,23 @@ class LocationPickerActivity :
         searchView?.setText("")
     }
 
+    private fun setNewSuggestion(suggestion: PlaceSuggestion) {
+        this.selectedSuggestion = suggestion
+        geocoderPresenter?.getAddressFromPlaceId(suggestion.placeId)
+    }
+
     private fun fillLocationList(addresses: List<Address>) {
         locationList.clear()
         locationList.addAll(addresses)
+        (searchAdapter as LekuSearchAdapter<SearchViewHolder, Address>)
+            .items = locationList.toList()
+    }
+
+    private fun fillSuggestionList(suggestions: List<PlaceSuggestion>) {
+        suggestionList.clear()
+        suggestionList.addAll(suggestions)
+        (searchAdapter as LekuSearchAdapter<SuggestionViewHolder, PlaceSuggestion>)
+            ?.items = suggestionList.toList()
     }
 
     private fun closeKeyboard() {
@@ -1455,7 +1631,7 @@ class LocationPickerActivity :
         private var searchZoneLocale: String? = null
         private var searchZoneRect: SearchZoneRect? = null
         private var customDataSource: GeocoderDataSourceInterface? = null
-        private var customAdapter: LocationSearchAdapter<*>? = null
+        private var customAdapter: LekuSearchAdapter<*, *>? = null
         private var searchZoneDefaultLocale = false
         private var layoutsToHide = ""
         private var enableSatelliteView = true
@@ -1464,6 +1640,7 @@ class LocationPickerActivity :
         private var geolocApiKey: String? = null
         private var googlePlacesApiKey: String? = null
         private var googleTimeZoneEnabled = false
+        private var placeResolution = false
         private var voiceSearchEnabled = true
         private var mapStyle: Int? = null
         private var unnamedRoadVisible = true
@@ -1491,8 +1668,13 @@ class LocationPickerActivity :
             return this
         }
 
-        fun withAdapter(customAdapter: LocationSearchAdapter<*>?): Builder {
+        fun withAdapter(customAdapter: LekuSearchAdapter<*, *>?): Builder {
             this.customAdapter = customAdapter
+            return this
+        }
+
+        fun withPlaceResolution(placeResolution: Boolean): Builder {
+            this.placeResolution = placeResolution
             return this
         }
 
@@ -1619,6 +1801,7 @@ class LocationPickerActivity :
             intent.putExtra(UNNAMED_ROAD_VISIBILITY, unnamedRoadVisible)
             intent.putExtra(WITH_LEGACY_LAYOUT, isLegacyLayoutEnabled)
             intent.putExtra(SEARCH_BAR_HIDDEN, isSearchBarHidden)
+            intent.putExtra(PLACE_RESOLUTION, placeResolution)
 
             LocationPickerActivity.customDataSource = customDataSource
             LocationPickerActivity.customAdapter = customAdapter

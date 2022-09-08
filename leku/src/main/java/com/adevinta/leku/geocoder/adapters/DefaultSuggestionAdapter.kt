@@ -1,21 +1,24 @@
-package com.adevinta.leku
+package com.adevinta.leku.geocoder.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import com.adevinta.leku.LekuViewHolder
+import com.adevinta.leku.R
+import com.adevinta.leku.geocoder.adapters.type.SuggestSearchAdapter
 
-class SearchViewHolder(
+class SuggestionViewHolder(
     val textView: TextView,
 ) : LekuViewHolder(textView)
 
-class DefaultAdapter(
+class DefaultSuggestionAdapter(
     val context: Context,
-) : LocationSearchAdapter<SearchViewHolder>() {
+) : SuggestSearchAdapter<SuggestionViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): SearchViewHolder {
+    ): SuggestionViewHolder {
         val view = LayoutInflater
             .from(parent.context)
             .inflate(
@@ -24,13 +27,13 @@ class DefaultAdapter(
                 false
             ) as TextView
 
-        return SearchViewHolder(view)
+        return SuggestionViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SuggestionViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
-        if (locations.isNotEmpty()) {
-            holder.textView.text = locations[position].getFullAddressString(context)
+        if (items.isNotEmpty()) {
+            holder.textView.text = items[position].description
         }
     }
 }
