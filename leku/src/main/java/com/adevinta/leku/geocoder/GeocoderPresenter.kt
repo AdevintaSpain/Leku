@@ -121,6 +121,7 @@ class GeocoderPresenter @JvmOverloads constructor(
         view?.willGetLocationInfo(latLng)
         coroutineScope.launch(Dispatchers.IO) {
             val addresses = geocoderRepository.getFromLocation(latLng)
+            if (addresses.isEmpty()) return@launch
             val timeZone = returnTimeZone(addresses.first())
             withContext(Dispatchers.Main) {
                 view?.showLocationInfo(timeZone)
