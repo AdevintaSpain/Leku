@@ -179,6 +179,7 @@ You only need to use the Builder setters like:
 val locationPickerIntent = LocationPickerActivity.Builder()
     .withLocation(41.4036299, 2.1743558)
     .withGeolocApiKey("<PUT API KEY HERE>")
+    .withGooglePlacesApiKey("<PUT API KEY HERE>")
     .withSearchZone("es_ES")
     .withSearchZone(SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
     .withDefaultLocaleSearchZone()
@@ -254,6 +255,8 @@ Leku now supports Google Places queries using the search box. If you want to ena
 val locationPickerIntent = LocationPickerActivity.Builder()
       .withGooglePlacesApiKey("<PUT API KEY HERE>")
 ```
+
+> If you set up the same credential for both APIs (Geo - Places) you don't need this step
 
 And you are good to go. :)
 
@@ -416,6 +419,90 @@ Now you can hide or show the search bar that helps you to search for locations
 
 ```kotlin
 intent.putExtra(LocationPickerActivity.SEARCH_BAR_HIDDEN, false)
+```
+
+##### Custom Autocomplete Results Adapter
+
+You can define your custom autocomplete results adapter.
+
+```kotlin
+class SearchViewHolder(
+  val textView: TextView,
+) : LekuViewHolder(textView)
+
+class CustomLocationsAdapter : SuggestSearchAdapter<SearchViewHolder>() {
+  override fun onCreateViewHolder(
+    parent: ViewGroup,
+    viewType: Int
+  ): SearchViewHolder {
+    val view = LayoutInflater
+      .from(parent.context)
+      .inflate(
+        R.layout.leku_search_list_item,
+        parent,
+        false
+      ) as TextView
+
+    return SearchViewHolder(view)
+  }
+
+  override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
+    super.onBindViewHolder(holder, position)
+    holder.textView.text = items[position].description
+  }
+}
+```
+
+```kotlin
+val locationPickerIntent = LocationPickerActivity.Builder()
+    ...
+    .withAdapter(CustomLocationsAdapter())
+    .build(requireContext())
+```
+
+##### Custom Data Source
+
+You can define your custom data source. By default there are 2 `DataSources` which ask for information based on the user input, but you can add a third one.
+
+Leku will priories your data source looking for information. If no result is provided, Leku data sources will complete the information.
+
+> This implementation shows how to only implement the Place API resolution. You can omit your repository from performing any query by returning `null` or `emptyList()`.
+```kotlin
+class LocationDataSource(val locationRepository: LocationRepository) : GeocoderDataSourceInterface {
+    
+  override fun autoCompleteFromLocationName(query: String): List<PlaceSuggestion> {
+    return locationRepository.autoComplete(query)
+  }
+
+  override fun getAddressFromPlaceId(placeId: String): Address? = try {
+    locationRepository.geocode(placeId)
+  } catch (e: Exception) {
+    null
+  }
+
+  override fun getFromLocation(latitude: Double, longitude: Double): List<Address> { 
+    return emptyList()
+  }
+
+  override fun getFromLocationName(query: String): List<Address> {
+    return emptyList()
+  }
+
+  override fun getFromLocationName(
+    query: String,
+    lowerLeft: LatLng,
+    upperRight: LatLng
+  ): List<Address> {
+    return emptyList() 
+  }
+}
+```
+
+```kotlin
+val locationPickerIntent = LocationPickerActivity.Builder()
+    ...
+    .withDataSource(LocationDataSource(myLocationRepository))
+    .build(requireContext())
 ```
 
 #### Tracking

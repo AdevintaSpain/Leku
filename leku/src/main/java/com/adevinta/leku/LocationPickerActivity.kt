@@ -100,7 +100,7 @@ const val SEARCH_ZONE_DEFAULT_LOCALE = "search_zone_default_locale"
 const val BACK_PRESSED_RETURN_OK = "back_pressed_return_ok"
 const val ENABLE_SATELLITE_VIEW = "enable_satellite_view"
 const val ENABLE_LOCATION_PERMISSION_REQUEST = "enable_location_permission_request"
-const val PLACE_RESOLUTION = "place_resolution"
+const val ENABLE_GOOGLE_PLACES = "enable_google_places"
 const val ENABLE_GOOGLE_TIME_ZONE = "enable_google_time_zone"
 const val POIS_LIST = "pois_list"
 const val LEKU_POI = "leku_poi"
@@ -733,7 +733,7 @@ class LocationPickerActivity :
             enableLocationPermissionRequest
         )
         savedInstanceState.putBoolean(
-            PLACE_RESOLUTION,
+            ENABLE_GOOGLE_PLACES,
             placeResolution
         )
         super.onSaveInstanceState(savedInstanceState)
@@ -762,9 +762,9 @@ class LocationPickerActivity :
             enableLocationPermissionRequest =
                 savedInstanceState.getBoolean(ENABLE_LOCATION_PERMISSION_REQUEST)
         }
-        if (savedInstanceState.containsKey(PLACE_RESOLUTION)) {
+        if (savedInstanceState.containsKey(ENABLE_GOOGLE_PLACES)) {
             placeResolution =
-                savedInstanceState.getBoolean(PLACE_RESOLUTION)
+                savedInstanceState.getBoolean(ENABLE_GOOGLE_PLACES)
         }
     }
 
@@ -1066,8 +1066,8 @@ class LocationPickerActivity :
         if (savedInstanceState.keySet().contains(SEARCH_BAR_HIDDEN)) {
             isSearchBarHidden = savedInstanceState.getBoolean(SEARCH_BAR_HIDDEN, false)
         }
-        if (savedInstanceState.keySet().contains(PLACE_RESOLUTION)) {
-            placeResolution = savedInstanceState.getBoolean(PLACE_RESOLUTION, false)
+        if (savedInstanceState.keySet().contains(ENABLE_GOOGLE_PLACES)) {
+            placeResolution = savedInstanceState.getBoolean(ENABLE_GOOGLE_PLACES, false)
         }
     }
 
@@ -1149,8 +1149,8 @@ class LocationPickerActivity :
         if (transitionBundle.keySet().contains(SEARCH_BAR_HIDDEN)) {
             isSearchBarHidden = transitionBundle.getBoolean(SEARCH_BAR_HIDDEN, false)
         }
-        if (transitionBundle.keySet().contains(PLACE_RESOLUTION)) {
-            placeResolution = transitionBundle.getBoolean(PLACE_RESOLUTION, false)
+        if (transitionBundle.keySet().contains(ENABLE_GOOGLE_PLACES)) {
+            placeResolution = transitionBundle.getBoolean(ENABLE_GOOGLE_PLACES, false)
         }
     }
 
@@ -1640,7 +1640,7 @@ class LocationPickerActivity :
         private var geolocApiKey: String? = null
         private var googlePlacesApiKey: String? = null
         private var googleTimeZoneEnabled = false
-        private var placeResolution = false
+        private var googlePlaceEnabled = false
         private var voiceSearchEnabled = true
         private var mapStyle: Int? = null
         private var unnamedRoadVisible = true
@@ -1673,8 +1673,8 @@ class LocationPickerActivity :
             return this
         }
 
-        fun withPlaceResolution(placeResolution: Boolean): Builder {
-            this.placeResolution = placeResolution
+        fun withGooglePlacesEnabled(): Builder {
+            this.googlePlaceEnabled = true
             return this
         }
 
@@ -1801,7 +1801,7 @@ class LocationPickerActivity :
             intent.putExtra(UNNAMED_ROAD_VISIBILITY, unnamedRoadVisible)
             intent.putExtra(WITH_LEGACY_LAYOUT, isLegacyLayoutEnabled)
             intent.putExtra(SEARCH_BAR_HIDDEN, isSearchBarHidden)
-            intent.putExtra(PLACE_RESOLUTION, placeResolution)
+            intent.putExtra(ENABLE_GOOGLE_PLACES, googlePlaceEnabled)
 
             LocationPickerActivity.customDataSource = customDataSource
             LocationPickerActivity.customAdapter = customAdapter
