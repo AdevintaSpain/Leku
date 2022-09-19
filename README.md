@@ -470,25 +470,25 @@ Leku will priories your data source looking for information. If no result is pro
 ```kotlin
 class LocationDataSource(val locationRepository: LocationRepository) : GeocoderDataSourceInterface {
     
-  override fun autoCompleteFromLocationName(query: String): List<PlaceSuggestion> {
+  override suspend fun autoCompleteFromLocationName(query: String): List<PlaceSuggestion> {
     return locationRepository.autoComplete(query)
   }
 
-  override fun getAddressFromPlaceId(placeId: String): Address? = try {
+  override suspend fun getAddressFromPlaceId(placeId: String): Address? = try {
     locationRepository.geocode(placeId)
   } catch (e: Exception) {
     null
   }
 
-  override fun getFromLocation(latitude: Double, longitude: Double): List<Address> { 
+  override suspend fun getFromLocation(latitude: Double, longitude: Double): List<Address> { 
     return emptyList()
   }
 
-  override fun getFromLocationName(query: String): List<Address> {
+  override suspend fun getFromLocationName(query: String): List<Address> {
     return emptyList()
   }
 
-  override fun getFromLocationName(
+  override suspend fun getFromLocationName(
     query: String,
     lowerLeft: LatLng,
     upperRight: LatLng
