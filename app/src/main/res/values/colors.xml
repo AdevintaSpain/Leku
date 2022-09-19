@@ -4,10 +4,12 @@
   <color name="leku_app_strong_blue">#053B58</color>
 
   <!-- Override to customize image colors: colorPrimary is used if not -->
+  <!--
   <color name="leku_ic_close">#000000</color>
   <color name="leku_ic_gps">#000000</color>
   <color name="leku_ic_satellite">#000000</color>
   <color name="leku_ic_maps">#000000</color>
   <color name="leku_location_accept_button_bg">#000000</color>
+  -->
 
 </resources>
