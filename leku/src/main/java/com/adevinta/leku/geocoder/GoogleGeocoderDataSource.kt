@@ -37,7 +37,7 @@ class GoogleGeocoderDataSource(
         this.placesApiKey = apiKey
     }
 
-    override fun autoCompleteFromLocationName(query: String): List<PlaceSuggestion> {
+    override suspend fun autoCompleteFromLocationName(query: String): List<PlaceSuggestion> {
         val suggestions = mutableListOf<PlaceSuggestion>()
         if (placesApiKey == null) {
             return suggestions
@@ -57,7 +57,7 @@ class GoogleGeocoderDataSource(
         }
     }
 
-    override fun getAddressFromPlaceId(placeId: String): Address? {
+    override suspend fun getAddressFromPlaceId(placeId: String): Address? {
         if (placesApiKey == null) {
             return null
         }
@@ -76,7 +76,7 @@ class GoogleGeocoderDataSource(
         }
     }
 
-    override fun getFromLocationName(query: String): List<Address> {
+    override suspend fun getFromLocationName(query: String): List<Address> {
         val addresses = mutableListOf<Address>()
         if (geolocationApiKey == null) {
             return addresses
@@ -96,7 +96,7 @@ class GoogleGeocoderDataSource(
         }
     }
 
-    override fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): List<Address> {
+    override suspend fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): List<Address> {
         val addresses = mutableListOf<Address>()
         if (geolocationApiKey == null) {
             return addresses
@@ -125,7 +125,7 @@ class GoogleGeocoderDataSource(
         }
     }
 
-    override fun getFromLocation(latitude: Double, longitude: Double): List<Address> {
+    override suspend fun getFromLocation(latitude: Double, longitude: Double): List<Address> {
         val addresses = mutableListOf<Address>()
         if (geolocationApiKey == null) {
             return addresses
