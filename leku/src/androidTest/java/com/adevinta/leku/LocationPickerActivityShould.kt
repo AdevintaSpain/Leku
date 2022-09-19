@@ -58,8 +58,8 @@ class LocationPickerActivityShould {
         activity.runOnUiThread {
             activity.window.addFlags(
                 WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-                    or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                    or WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                  or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                  or WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
             )
         }
     }
@@ -233,7 +233,7 @@ class LocationPickerActivityShould {
         try {
             Thread.sleep(300)
         } catch (e: InterruptedException) {
-            Log.d(LocationPickerActivityShould::class.java.name, e.message)
+            Log.d(LocationPickerActivityShould::class.java.name, e.message ?: "")
         }
     }
 }
