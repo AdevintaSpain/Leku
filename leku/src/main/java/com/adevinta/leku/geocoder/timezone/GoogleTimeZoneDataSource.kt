@@ -13,9 +13,12 @@ import java.util.TimeZone
 class GoogleTimeZoneDataSource(private val geoApiContext: GeoApiContext) {
 
     companion object {
-        fun getApiKey(context: Context): String? {
+        fun getGeoApiKey(context: Context): String? {
             try {
-                val appInfo = context.packageManager.getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+                val appInfo = context.packageManager.getApplicationInfo(
+                    context.packageName,
+                    PackageManager.GET_META_DATA
+                )
                 if (appInfo.metaData != null) {
                     return appInfo.metaData.getString("com.google.android.geo.API_KEY")
                 }

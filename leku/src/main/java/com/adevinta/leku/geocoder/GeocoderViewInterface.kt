@@ -9,6 +9,8 @@ import java.util.TimeZone
 interface GeocoderViewInterface {
     fun willLoadLocation()
     fun showLocations(addresses: List<Address>)
+    fun showSuggestions(suggestions: List<PlaceSuggestion>)
+    fun setAddressFromSuggestion(address: Address)
     fun showDebouncedLocations(addresses: List<Address>)
     fun didLoadLocation()
     fun showLoadLocationError()
@@ -22,6 +24,8 @@ interface GeocoderViewInterface {
     class NullView : GeocoderViewInterface {
         override fun willLoadLocation() {}
         override fun showLocations(addresses: List<Address>) {}
+        override fun showSuggestions(suggestions: List<PlaceSuggestion>) {}
+        override fun setAddressFromSuggestion(address: Address) {}
         override fun showDebouncedLocations(addresses: List<Address>) {}
         override fun didLoadLocation() {}
         override fun showLoadLocationError() {}

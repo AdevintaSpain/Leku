@@ -53,13 +53,24 @@ class GeocoderPresenter @JvmOverloads constructor(
         }
     }
 
+    fun getSuggestionsFromLocationName(query: String) {
+        view?.willLoadLocation()
+        coroutineScope.launch(Dispatchers.IO) {
+            val suggestions = geocoderRepository.autoCompleteFromLocationName(query)
+            withContext(Dispatchers.Main) {
+                view?.showSuggestions(suggestions)
+                view?.didLoadLocation()
+            }
+        }
+    }
+
     fun getFromLocationName(query: String) {
         view?.willLoadLocation()
         coroutineScope.launch(Dispatchers.IO) {
             val location = geocoderRepository.getFromLocationName(query)
             withContext(Dispatchers.Main) {
-                view?.didLoadLocation()
                 view?.showLocations(location)
+                view?.didLoadLocation()
             }
         }
     }
@@ -88,7 +99,12 @@ class GeocoderPresenter @JvmOverloads constructor(
         }
     }
 
-    fun getDebouncedFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng, debounceTime: Int) {
+    fun getDebouncedFromLocationName(
+        query: String,
+        lowerLeft: LatLng,
+        upperRight: LatLng,
+        debounceTime: Int
+    ) {
         view?.willLoadLocation()
         coroutineScope.launch(Dispatchers.IO) {
             val address = geocoderRepository.getFromLocationName(query, lowerLeft, upperRight)
@@ -105,9 +121,23 @@ class GeocoderPresenter @JvmOverloads constructor(
         view?.willGetLocationInfo(latLng)
         coroutineScope.launch(Dispatchers.IO) {
             val addresses = geocoderRepository.getFromLocation(latLng)
+            if (addresses.isEmpty()) return@launch
             val timeZone = returnTimeZone(addresses.first())
             withContext(Dispatchers.Main) {
                 view?.showLocationInfo(timeZone)
+                view?.didGetLocationInfo()
+            }
+        }
+    }
+
+    fun getAddressFromPlaceId(placeId: String) {
+        coroutineScope.launch(Dispatchers.IO) {
+            val address = geocoderRepository.getAddressFromPlaceId(placeId)
+            val timeZone = returnTimeZone(address)
+            withContext(Dispatchers.Main) {
+                if (address == null) return@withContext
+                view?.showLocationInfo(timeZone)
+                view?.setAddressFromSuggestion(address)
                 view?.didGetLocationInfo()
             }
         }
@@ -136,7 +166,10 @@ class GeocoderPresenter @JvmOverloads constructor(
         }
     }
 
-    private fun getMergedList(geocoderList: List<Address>, placesList: List<Address>): List<Address> {
+    private fun getMergedList(
+        geocoderList: List<Address>,
+        placesList: List<Address>
+    ): List<Address> {
         val mergedList = ArrayList<Address>()
         mergedList.addAll(geocoderList)
         mergedList.addAll(placesList)

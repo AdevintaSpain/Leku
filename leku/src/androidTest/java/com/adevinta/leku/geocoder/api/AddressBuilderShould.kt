@@ -56,7 +56,7 @@ class AddressBuilderShould {
     fun returnExpectedAddressWhenJsonProvided() {
         val json = json
 
-        val addresses = addressBuilder!!.parseResult(json)
+        val addresses = addressBuilder!!.parseArrayResult(json)
 
         assertEquals("Barcelona", addresses[0].locality)
         assertEquals("Carrer del Comte d'Urgell, 102", addresses[0].getAddressLine(0))
@@ -70,7 +70,7 @@ class AddressBuilderShould {
     fun returnExpectedAddressWhenJsonWithOnlyCityProvided() {
         val json = jsonForOnlyCity
 
-        val addresses = addressBuilder!!.parseResult(json)
+        val addresses = addressBuilder!!.parseArrayResult(json)
 
         assertEquals("Barcelona", addresses[0].locality)
         assertEquals("", addresses[0].getAddressLine(0))
