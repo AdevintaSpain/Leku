@@ -6,6 +6,8 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
+import android.content.res.Resources
+import android.graphics.PorterDuff
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -37,6 +39,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RawRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -542,12 +545,24 @@ class LocationPickerActivity :
                             R.drawable.leku_ic_satellite_on_legacy
                     )
                 } else {
-                    btnSatellite.setImageResource(
-                        if (it.mapType == MAP_TYPE_SATELLITE)
-                            R.drawable.leku_ic_maps
-                        else
-                            R.drawable.leku_ic_satellite
-                    )
+                    var image = 0
+                    var color = 0
+                    if (it.mapType == MAP_TYPE_SATELLITE) {
+                        image = R.drawable.leku_ic_maps
+                        color = R.color.leku_ic_maps
+                    } else {
+                        image = R.drawable.leku_ic_satellite
+                        color = R.color.leku_ic_satellite
+                    }
+
+                    val colorRes = try {
+                        ContextCompat.getColor(btnSatellite.context, color)
+                    } catch (ex: Resources.NotFoundException) {
+                        0
+                    }
+
+                    btnSatellite.setImageResource(image)
+                    btnSatellite.setColorFilter(colorRes, PorterDuff.Mode.SRC_ATOP)
                 }
             }
         }

@@ -43,6 +43,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:layout_marginLeft="@dimen/leku_gap"
                 app:navigationIcon="@drawable/leku_ic_close"
+                app:navigationIconTint="@color/leku_ic_close"
                 android:layout_marginRight="@dimen/leku_gap"
                 tools:ignore="UnusedAttribute,elevation" />
         </FrameLayout>

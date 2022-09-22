@@ -233,7 +233,7 @@ class LocationPickerActivityShould {
         try {
             Thread.sleep(300)
         } catch (e: InterruptedException) {
-            Log.d(LocationPickerActivityShould::class.java.name, e.message)
+            Log.d(LocationPickerActivityShould::class.java.name, e.message ?: "")
         }
     }
 }

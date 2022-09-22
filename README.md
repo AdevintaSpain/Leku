@@ -318,6 +318,17 @@ This library uses material components, so should use Theme.MaterialComponents or
 
 > `colorControlActivated` is used to colorize Street title, if not set, it uses colorAccent by default
 
+##### New activity images and button color customization
+
+If you need to change theme colors for new activity map, you can do it with the below keys:
+
+```xml
+<color name="leku_ic_close">#000000</color>
+<color name="leku_ic_gps">#000000</color>
+<color name="leku_ic_satellite">#000000</color>
+<color name="leku_ic_maps">#000000</color>
+<color name="leku_location_accept_button_bg">#000000</color>
+```
 
 To customize map, use:
 
