@@ -4,9 +4,13 @@ import android.location.Address
 import com.google.android.gms.maps.model.LatLng
 
 interface GeocoderDataSourceInterface {
-    fun getFromLocationName(query: String): List<Address>
+    suspend fun autoCompleteFromLocationName(query: String): List<PlaceSuggestion>
 
-    fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): List<Address>
+    suspend fun getAddressFromPlaceId(placeId: String): Address?
 
-    fun getFromLocation(latitude: Double, longitude: Double): List<Address>
+    suspend fun getFromLocationName(query: String): List<Address>
+
+    suspend fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): List<Address>
+
+    suspend fun getFromLocation(latitude: Double, longitude: Double): List<Address>
 }
