@@ -23,7 +23,7 @@ class OrientationChangeAction private constructor(private val orientation: Int) 
         try {
             Thread.sleep(500)
         } catch (e: InterruptedException) {
-            Log.d(OrientationChangeAction::class.java.name, e.message)
+            Log.d(OrientationChangeAction::class.java.name, e.message ?: "")
         }
 
         uiController.loopMainThreadUntilIdle()
