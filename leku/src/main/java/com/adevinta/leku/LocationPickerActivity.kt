@@ -1089,8 +1089,8 @@ class LocationPickerActivity :
 
     private fun getTransitionBundleParams(transitionBundle: Bundle) {
         bundle.putBundle(TRANSITION_BUNDLE, transitionBundle)
-        if (transitionBundle.keySet().contains(LATITUDE)
-            && transitionBundle.keySet().contains(LONGITUDE)
+        if (transitionBundle.keySet().contains(LATITUDE) &&
+            transitionBundle.keySet().contains(LONGITUDE)
         ) {
             setLocationFromBundle(transitionBundle)
         }
