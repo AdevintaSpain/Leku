@@ -396,10 +396,12 @@ class LocationPickerActivity :
                         this,
                     )
                     searchAdapter?.onClick = {
-                        setNewSuggestion(suggestionList[it])
-                        changeListResultVisibility(View.GONE)
-                        closeKeyboard()
-                        hideSearchLayout()
+                        if (suggestionList.size > it) {
+                            setNewSuggestion(suggestionList[it])
+                            changeListResultVisibility(View.GONE)
+                            closeKeyboard()
+                            hideSearchLayout()
+                        }
                     }
                 }
                 else -> {
@@ -493,8 +495,7 @@ class LocationPickerActivity :
             updateVoiceSearchVisibility()
         } else {
             if (term.length > MIN_CHARACTERS) {
-                if (placeResolution) geocoderPresenter?.getSuggestionsFromLocationName(term)
-                else retrieveLocationWithDebounceTimeFrom(term)
+                retrieveLocationWithDebounceTimeFrom(term)
             }
             clearSearchButton?.visibility = View.VISIBLE
             searchOption?.setIcon(R.drawable.leku_ic_search)
@@ -1088,8 +1089,8 @@ class LocationPickerActivity :
 
     private fun getTransitionBundleParams(transitionBundle: Bundle) {
         bundle.putBundle(TRANSITION_BUNDLE, transitionBundle)
-        if (transitionBundle.keySet().contains(LATITUDE) && transitionBundle.keySet()
-            .contains(LONGITUDE)
+        if (transitionBundle.keySet().contains(LATITUDE) &&
+            transitionBundle.keySet().contains(LONGITUDE)
         ) {
             setLocationFromBundle(transitionBundle)
         }
@@ -1313,26 +1314,38 @@ class LocationPickerActivity :
     }
 
     private fun retrieveLocationFrom(query: String) {
-        if (searchZone != null && searchZone!!.isNotEmpty()) {
-            retrieveLocationFromZone(query, searchZone!!)
-        } else if (searchZoneRect != null) {
-            retrieveLocationFromZone(query, searchZoneRect!!)
-        } else if (isSearchZoneWithDefaultLocale) {
-            retrieveLocationFromDefaultZone(query)
-        } else {
-            geocoderPresenter?.getFromLocationName(query)
+        when {
+            placeResolution -> geocoderPresenter?.getSuggestionsFromLocationName(query)
+            searchZone != null && searchZone!!.isNotEmpty() -> {
+                retrieveLocationFromZone(query, searchZone!!)
+            }
+            searchZoneRect != null -> {
+                retrieveLocationFromZone(query, searchZoneRect!!)
+            }
+            isSearchZoneWithDefaultLocale -> {
+                retrieveLocationFromDefaultZone(query)
+            }
+            else -> {
+                geocoderPresenter?.getFromLocationName(query)
+            }
         }
     }
 
     private fun retrieveLocationWithDebounceTimeFrom(query: String) {
-        if (searchZone != null && searchZone!!.isNotEmpty()) {
-            retrieveDebouncedLocationFromZone(query, searchZone!!, DEBOUNCE_TIME)
-        } else if (searchZoneRect != null) {
-            retrieveDebouncedLocationFromZone(query, searchZoneRect!!, DEBOUNCE_TIME)
-        } else if (isSearchZoneWithDefaultLocale) {
-            retrieveDebouncedLocationFromDefaultZone(query, DEBOUNCE_TIME)
-        } else {
-            geocoderPresenter?.getDebouncedFromLocationName(query, DEBOUNCE_TIME)
+        when {
+            placeResolution -> geocoderPresenter?.getSuggestionsFromLocationName(query)
+            searchZone != null && searchZone!!.isNotEmpty() -> {
+                retrieveDebouncedLocationFromZone(query, searchZone!!, DEBOUNCE_TIME)
+            }
+            searchZoneRect != null -> {
+                retrieveDebouncedLocationFromZone(query, searchZoneRect!!, DEBOUNCE_TIME)
+            }
+            isSearchZoneWithDefaultLocale -> {
+                retrieveDebouncedLocationFromDefaultZone(query, DEBOUNCE_TIME)
+            }
+            else -> {
+                geocoderPresenter?.getDebouncedFromLocationName(query, DEBOUNCE_TIME)
+            }
         }
     }
 
