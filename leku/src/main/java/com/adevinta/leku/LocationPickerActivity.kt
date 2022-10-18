@@ -680,6 +680,8 @@ class LocationPickerActivity :
             searchView?.removeTextChangedListener(it)
         }
         googleApiClient?.unregisterConnectionCallbacks(this)
+        customDataSource = null
+        customAdapter = null
         super.onDestroy()
     }
 
