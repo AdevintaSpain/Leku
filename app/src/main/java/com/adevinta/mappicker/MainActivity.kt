@@ -47,6 +47,8 @@ import com.adevinta.leku.TRANSITION_BUNDLE
 import com.adevinta.leku.ZIPCODE
 import com.adevinta.leku.tracker.LocationPickerTracker
 import com.adevinta.leku.tracker.TrackEvents
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import java.util.UUID
 import kotlin.collections.ArrayList
 import kotlin.collections.List
@@ -143,11 +145,13 @@ private fun onLaunchMapPickerClicked(context: Context) {
     val activity = context as MainActivity
     val locationPickerIntent = LocationPickerActivity.Builder()
         .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
-        // .withGeolocApiKey("<PUT API KEY HERE>")
+        .withGeolocApiKey("AIzaSyCVTSB6rlxzCelDVp6UmTEs1os-rPQJg5Q")
         // .withGooglePlacesApiKey("<PUT API KEY HERE>")
         .withSearchZone("es_ES")
         // .withSearchZone(SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
         .withDefaultLocaleSearchZone()
+        .setCurrentLocation(BitmapDescriptorFactory.fromResource(R.drawable.common_full_open_on_phone))
+        .setOtherLocation(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
         // .shouldReturnOkOnBackPressed()
         // .withStreetHidden()
         // .withCityHidden()
