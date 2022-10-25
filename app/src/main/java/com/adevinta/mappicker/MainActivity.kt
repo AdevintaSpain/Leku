@@ -145,7 +145,7 @@ private fun onLaunchMapPickerClicked(context: Context) {
     val activity = context as MainActivity
     val locationPickerIntent = LocationPickerActivity.Builder()
         .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
-        .withGeolocApiKey("AIzaSyCVTSB6rlxzCelDVp6UmTEs1os-rPQJg5Q")
+        //.withGeolocApiKey("<PUT API KEY HERE>")
         // .withGooglePlacesApiKey("<PUT API KEY HERE>")
         .withSearchZone("es_ES")
         // .withSearchZone(SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
