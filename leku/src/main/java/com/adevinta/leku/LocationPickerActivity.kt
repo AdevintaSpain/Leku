@@ -170,6 +170,8 @@ class LocationPickerActivity :
     private var clearLocationButton: ImageButton? = null
     private var searchEditLayout: LinearLayout? = null
     private var searchFrameLayout: FrameLayout? = null
+    private var suggestionsToast: Toast? = null
+    private var locationsToast: Toast? = null
 
     private val locationList = ArrayList<Address>()
     private val suggestionList = ArrayList<PlaceSuggestion>()
@@ -810,11 +812,15 @@ class LocationPickerActivity :
         changeListResultVisibility(View.GONE)
     }
 
+    private fun makeEmptyResultsToast(): Toast =
+        Toast.makeText(applicationContext, R.string.leku_no_search_results, Toast.LENGTH_LONG)
+
     override fun showLocations(addresses: List<Address>) {
         fillLocationList(addresses)
         if (addresses.isEmpty()) {
-            Toast.makeText(applicationContext, R.string.leku_no_search_results, Toast.LENGTH_LONG)
-                .show()
+            locationsToast?.cancel()
+            locationsToast = makeEmptyResultsToast()
+            locationsToast!!.show()
         } else {
             updateLocationNameList(addresses)
             if (hasWiderZoom) {
@@ -834,8 +840,9 @@ class LocationPickerActivity :
     override fun showSuggestions(suggestions: List<PlaceSuggestion>) {
         fillSuggestionList(suggestions)
         if (suggestions.isEmpty()) {
-            Toast.makeText(applicationContext, R.string.leku_no_search_results, Toast.LENGTH_LONG)
-                .show()
+            suggestionsToast?.cancel()
+            suggestionsToast = makeEmptyResultsToast()
+            suggestionsToast!!.show()
         } else {
             updateSuggestionNameList(suggestions)
             if (hasWiderZoom) {
