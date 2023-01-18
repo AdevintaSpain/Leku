@@ -22,7 +22,7 @@ class GeocoderPresenter @JvmOverloads constructor(
     private val googleTimeZoneDataSource: GoogleTimeZoneDataSource? = null
 ) {
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Main)
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private var view: GeocoderViewInterface? = null
     private val nullView = GeocoderViewInterface.NullView()
     private var isGooglePlacesEnabled = false
