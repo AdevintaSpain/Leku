@@ -7,11 +7,7 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.adevinta.leku.geocoder.places.GooglePlacesDataSource
 import com.adevinta.leku.geocoder.timezone.GoogleTimeZoneDataSource
 import com.adevinta.leku.utils.ReactiveLocationProvider
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.util.TimeZone
 import kotlin.collections.ArrayList
 
@@ -22,7 +18,7 @@ class GeocoderPresenter @JvmOverloads constructor(
     private val googleTimeZoneDataSource: GoogleTimeZoneDataSource? = null
 ) {
 
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+    private val coroutineScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private var view: GeocoderViewInterface? = null
     private val nullView = GeocoderViewInterface.NullView()
     private var isGooglePlacesEnabled = false
