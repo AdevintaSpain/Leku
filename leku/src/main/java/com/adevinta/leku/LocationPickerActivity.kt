@@ -80,7 +80,13 @@ import com.adevinta.leku.locale.SearchZoneRect
 import com.adevinta.leku.permissions.PermissionUtils
 import com.adevinta.leku.tracker.TrackEvents
 import com.adevinta.leku.utils.ReactiveLocationProvider
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.MarkerOptions
 import java.util.Locale
 import java.util.TimeZone
 import kotlin.collections.set
