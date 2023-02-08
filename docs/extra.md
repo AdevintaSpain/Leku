@@ -42,7 +42,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
           GeoApiContext.Builder().apiKey(GoogleTimeZoneDataSource.getApiKey(this)).build())
   geocoderPresenter = GeocoderPresenter(
           ReactiveLocationProvider(applicationContext), geocoderRepository, placesDataSource, timeZoneDataSource)
-  geocoderPresenter!!.setUI(this)
+  geocoderPresenter?.setUI(this)
   ***
 }
 ```
@@ -52,11 +52,11 @@ And besides filling the interface methods you have to add some things to your ac
 ```kotlin
 override fun onStart() {
     super.onStart()
-    geocoderPresenter!!.setUI(this)
+    geocoderPresenter?.setUI(this)
 }
 
 override fun onStop() {
-    geocoderPresenter!!.stop()
+    geocoderPresenter?.stop()
     super.onStop()
 }
 ```
@@ -67,9 +67,7 @@ If you need to send and receive a param through the LocationPickerActivity you c
 You only need to add an "Extra" param to the intent like:
 
 ```kotlin
-val locationPickerIntent = LocationPickerActivity.Builder().build(applicationContext)
 locationPickerIntent.putExtra("test", "this is a test")
-startActivityForResult(locationPickerIntent, MAP_BUTTON_REQUEST_CODE)
 ```
 
 And parse it on onActivityResult callback:

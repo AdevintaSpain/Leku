@@ -4,12 +4,12 @@ apply plugin: "org.jlleitschuh.gradle.ktlint"
 apply plugin: "io.gitlab.arturbosch.detekt"
 
 android {
-  compileSdkVersion 32
+  compileSdkVersion 33
 
   defaultConfig {
     applicationId "com.schibsted.mappicker"
     minSdkVersion 21
-    targetSdkVersion 32
+    targetSdkVersion 33
     versionCode 1
     versionName "1.0"
     vectorDrawables.useSupportLibrary = true
@@ -70,7 +70,7 @@ dependencies {
   implementation "com.google.android.material:material:1.7.0-beta01"
   implementation "com.google.android.gms:play-services-maps:18.1.0"
 
-  implementation 'androidx.activity:activity-compose:1.5.1'
+  implementation 'androidx.activity:activity-compose:1.6.0'
   implementation 'androidx.compose.material:material:1.2.1'
   implementation 'androidx.compose.animation:animation:1.2.1'
   implementation 'androidx.compose.ui:ui-tooling:1.2.1'
