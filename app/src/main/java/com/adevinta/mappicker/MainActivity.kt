@@ -47,7 +47,6 @@ import com.adevinta.leku.TRANSITION_BUNDLE
 import com.adevinta.leku.ZIPCODE
 import com.adevinta.leku.tracker.LocationPickerTracker
 import com.adevinta.leku.tracker.TrackEvents
-import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import java.util.UUID
 import kotlin.collections.ArrayList
@@ -145,7 +144,7 @@ private fun onLaunchMapPickerClicked(context: Context) {
     val activity = context as MainActivity
     val locationPickerIntent = LocationPickerActivity.Builder()
         .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
-        //.withGeolocApiKey("<PUT API KEY HERE>")
+        // .withGeolocApiKey("<PUT API KEY HERE>")
         // .withGooglePlacesApiKey("<PUT API KEY HERE>")
         .withSearchZone("es_ES")
         // .withSearchZone(SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
@@ -225,7 +224,9 @@ fun MainView() {
     val context = LocalContext.current
 
     Column(
-        Modifier.padding(16.dp, 40.dp, 16.dp, 0.dp).fillMaxSize(),
+        Modifier
+            .padding(16.dp, 40.dp, 16.dp, 0.dp)
+            .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         Image(
@@ -246,7 +247,9 @@ fun MainView() {
         ) {
             Text(
                 stringResource(id = R.string.launch_map_picker),
-                Modifier.padding(8.dp).fillMaxWidth(),
+                Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
         }
@@ -261,7 +264,9 @@ fun MainView() {
         ) {
             Text(
                 stringResource(id = R.string.launch_legacy_map_picker),
-                Modifier.padding(8.dp).fillMaxWidth(),
+                Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
         }
@@ -276,7 +281,9 @@ fun MainView() {
         ) {
             Text(
                 stringResource(id = R.string.launch_map_picker_with_style),
-                Modifier.padding(8.dp).fillMaxWidth(),
+                Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
         }
@@ -291,14 +298,18 @@ fun MainView() {
         ) {
             Text(
                 stringResource(id = R.string.launch_map_picker_with_pois),
-                Modifier.padding(8.dp).fillMaxWidth(),
+                Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
                 textAlign = TextAlign.Center
             )
         }
         Box(modifier = Modifier.fillMaxSize()) {
             Text(
                 stringResource(id = R.string.leku_lib_version),
-                modifier = Modifier.align(Alignment.BottomCenter).padding(0.dp, 0.dp, 0.dp, 8.dp),
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(0.dp, 0.dp, 0.dp, 8.dp),
                 textAlign = TextAlign.Center
             )
         }
