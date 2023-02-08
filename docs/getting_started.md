@@ -18,14 +18,14 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.adevinta.android:leku:9.1.4'
+    implementation 'com.adevinta.android:leku:10.1.0'
 }
 ```
 
 Alternatively, if you are using a different version of Google Play Services and AndroidX use this instead:
 
 ```groovy
-implementation ('com.adevinta.android:leku:9.1.4') {
+implementation ('com.adevinta.android:leku:10.1.0') {
     exclude group: 'com.google.android.gms'
     exclude group: 'androidx.appcompat'
 }
@@ -108,14 +108,47 @@ To use the LocationPickerActivity first you need to add these lines to your Andr
 </activity>
 ```
 
-Then you have setup the call to start this activity wherever you like, always as startActivityForResult.
+Then you have setup the call to start this activity wherever you like, always as a ActivityResultLauncher.
 You can set a default location, search zone and other customizable parameters to load when you start the activity.
 You only need to use the Builder setters like:
 
 ```kotlin
+val lekuActivityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                Log.d("RESULT****", "OK")
+                val latitude = data?.getDoubleExtra(LATITUDE, 0.0)
+                Log.d("LATITUDE****", latitude.toString())
+                val longitude = data?.getDoubleExtra(LONGITUDE, 0.0)
+                Log.d("LONGITUDE****", longitude.toString())
+                val address = data?.getStringExtra(LOCATION_ADDRESS)
+                Log.d("ADDRESS****", address.toString())
+                val postalcode = data?.getStringExtra(ZIPCODE)
+                Log.d("POSTALCODE****", postalcode.toString())
+                val bundle = data?.getBundleExtra(TRANSITION_BUNDLE)
+                Log.d("BUNDLE TEXT****", bundle?.getString("test").toString())
+                val fullAddress = data?.getParcelableExtra<Address>(ADDRESS)
+                if (fullAddress != null) {
+                    Log.d("FULL ADDRESS****", fullAddress.toString())
+                }
+                val timeZoneId = data?.getStringExtra(TIME_ZONE_ID)
+                if (timeZoneId != null) {
+                    Log.d("TIME ZONE ID****", timeZoneId)
+                }
+                val timeZoneDisplayName = data?.getStringExtra(TIME_ZONE_DISPLAY_NAME)
+                if (timeZoneDisplayName != null) {
+                    Log.d("TIME ZONE NAME****", timeZoneDisplayName)
+                }
+            } else {
+                Log.d("RESULT****", "CANCELLED")
+            }
+        }
+
+val activity = context as MainActivity
 val locationPickerIntent = LocationPickerActivity.Builder()
     .withLocation(41.4036299, 2.1743558)
     .withGeolocApiKey("<PUT API KEY HERE>")
+    .withGooglePlacesApiKey("<PUT API KEY HERE>")
     .withSearchZone("es_ES")
     .withSearchZone(SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
     .withDefaultLocaleSearchZone()
@@ -131,49 +164,7 @@ val locationPickerIntent = LocationPickerActivity.Builder()
     .withSearchBarHidden()
     .build(applicationContext)
 
-startActivityForResult(locationPickerIntent, MAP_BUTTON_REQUEST_CODE)
-```
-
-And add the response code from that activity:
-
-```kotlin
-override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    if (resultCode == Activity.RESULT_OK && data != null) {
-        Log.d("RESULT****", "OK")
-        if (requestCode == 1) {
-            val latitude = data.getDoubleExtra(LATITUDE, 0.0)
-            Log.d("LATITUDE****", latitude.toString())
-            val longitude = data.getDoubleExtra(LONGITUDE, 0.0)
-            Log.d("LONGITUDE****", longitude.toString())
-            val address = data.getStringExtra(LOCATION_ADDRESS)
-            Log.d("ADDRESS****", address.toString())
-            val postalcode = data.getStringExtra(ZIPCODE)
-            Log.d("POSTALCODE****", postalcode.toString())
-            val bundle = data.getBundleExtra(TRANSITION_BUNDLE)
-            Log.d("BUNDLE TEXT****", bundle.getString("test"))
-            val fullAddress = data.getParcelableExtra<Address>(ADDRESS)
-            if (fullAddress != null) {
-                Log.d("FULL ADDRESS****", fullAddress.toString())
-            }
-            val timeZoneId = data.getStringExtra(TIME_ZONE_ID)
-            Log.d("TIME ZONE ID****", timeZoneId)
-            val timeZoneDisplayName = data.getStringExtra(TIME_ZONE_DISPLAY_NAME)
-            Log.d("TIME ZONE NAME****", timeZoneDisplayName)
-        } else if (requestCode == 2) {
-            val latitude = data.getDoubleExtra(LATITUDE, 0.0)
-            Log.d("LATITUDE****", latitude.toString())
-            val longitude = data.getDoubleExtra(LONGITUDE, 0.0)
-            Log.d("LONGITUDE****", longitude.toString())
-            val address = data.getStringExtra(LOCATION_ADDRESS)
-            Log.d("ADDRESS****", address.toString())
-            val lekuPoi = data.getParcelableExtra<LekuPoi>(LEKU_POI)
-            Log.d("LekuPoi****", lekuPoi.toString())
-        }
-    }
-    if (resultCode == Activity.RESULT_CANCELED) {
-        Log.d("RESULT****", "CANCELLED")
-    }
-}
+activity.lekuActivityResultLauncher.launch(locationPickerIntent)
 ```
 
 That's all folks!

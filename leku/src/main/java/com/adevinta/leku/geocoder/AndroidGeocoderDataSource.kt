@@ -17,7 +17,7 @@ class AndroidGeocoderDataSource(private val geocoder: Geocoder) : GeocoderDataSo
         return null
     }
 
-    override suspend fun getFromLocationName(query: String): List<Address> = runInterruptible {
+    override suspend fun getFromLocationName(query: String): List<Address>? = runInterruptible {
         try {
             geocoder.getFromLocationName(query, MAX_RESULTS)
         } catch (exception: IOException) {
@@ -29,7 +29,7 @@ class AndroidGeocoderDataSource(private val geocoder: Geocoder) : GeocoderDataSo
         query: String,
         lowerLeft: LatLng,
         upperRight: LatLng
-    ): List<Address> = runInterruptible {
+    ): List<Address>? = runInterruptible {
         try {
             geocoder.getFromLocationName(
                 query,
@@ -44,7 +44,7 @@ class AndroidGeocoderDataSource(private val geocoder: Geocoder) : GeocoderDataSo
         }
     }
 
-    override suspend fun getFromLocation(latitude: Double, longitude: Double): List<Address> =
+    override suspend fun getFromLocation(latitude: Double, longitude: Double): List<Address>? =
         runInterruptible {
             try {
                 geocoder.getFromLocation(latitude, longitude, MAX_RESULTS)
