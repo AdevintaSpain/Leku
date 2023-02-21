@@ -144,10 +144,11 @@ class LocationPickerActivity :
     companion object {
         var customDataSource: GeocoderDataSourceInterface? = null
         var customAdapter: LekuSearchAdapter<*, *>? = null
-        var currentLocationBitmapMaker: BitmapDescriptor? = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
-        var otherLocationBitmapMaker: BitmapDescriptor? = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
+        var currentLocationBitmapMaker: BitmapDescriptor? =
+            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
+        var otherLocationBitmapMaker: BitmapDescriptor? =
+            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
     }
-
 
     private var map: GoogleMap? = null
     private var googleApiClient: GoogleApiClient? = null
@@ -1605,9 +1606,11 @@ class LocationPickerActivity :
 
     private fun addMarker(latLng: LatLng): Marker? {
         map?.let {
-            return it.addMarker(MarkerOptions().position(latLng)
-                .icon(currentLocationBitmapMaker)
-                .draggable(true))
+            return it.addMarker(
+                MarkerOptions().position(latLng)
+                    .icon(currentLocationBitmapMaker)
+                    .draggable(true)
+            )
         }
         return null
     }
@@ -1689,8 +1692,10 @@ class LocationPickerActivity :
         private var unnamedRoadVisible = true
         private var isLegacyLayoutEnabled = false
         private var isSearchBarHidden = false
-        private var currentLocationBitmapMaker: BitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
-        private var otherLocationBitmapMaker: BitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)
+        private var currentLocationBitmapMaker: BitmapDescriptor =
+            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
+        private var otherLocationBitmapMaker: BitmapDescriptor =
+            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)
 
         fun setCurrentLocation(currentLocation: BitmapDescriptor): Builder {
             this.currentLocationBitmapMaker = currentLocation
