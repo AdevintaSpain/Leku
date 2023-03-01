@@ -66,12 +66,6 @@ import com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
 import com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -86,6 +80,13 @@ import com.adevinta.leku.locale.SearchZoneRect
 import com.adevinta.leku.permissions.PermissionUtils
 import com.adevinta.leku.tracker.TrackEvents
 import com.adevinta.leku.utils.ReactiveLocationProvider
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.MarkerOptions
 import java.util.Locale
 import java.util.TimeZone
 import kotlin.collections.set
@@ -143,6 +144,10 @@ class LocationPickerActivity :
     companion object {
         var customDataSource: GeocoderDataSourceInterface? = null
         var customAdapter: LekuSearchAdapter<*, *>? = null
+        var currentLocationBitmapMaker: BitmapDescriptor? =
+            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
+        var otherLocationBitmapMaker: BitmapDescriptor? =
+            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
     }
 
     private var map: GoogleMap? = null
@@ -678,6 +683,8 @@ class LocationPickerActivity :
     }
 
     override fun onDestroy() {
+        currentLocationBitmapMaker = null
+        otherLocationBitmapMaker = null
         textWatcher?.let {
             searchView?.removeTextChangedListener(it)
         }
@@ -1599,7 +1606,11 @@ class LocationPickerActivity :
 
     private fun addMarker(latLng: LatLng): Marker? {
         map?.let {
-            return it.addMarker(MarkerOptions().position(latLng).draggable(true))
+            return it.addMarker(
+                MarkerOptions().position(latLng)
+                    .icon(currentLocationBitmapMaker)
+                    .draggable(true)
+            )
         }
         return null
     }
@@ -1608,7 +1619,7 @@ class LocationPickerActivity :
         map?.let {
             return it.addMarker(
                 MarkerOptions().position(latLng)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                    .icon(otherLocationBitmapMaker)
                     .title(title)
                     .snippet(address)
             )
@@ -1681,6 +1692,20 @@ class LocationPickerActivity :
         private var unnamedRoadVisible = true
         private var isLegacyLayoutEnabled = false
         private var isSearchBarHidden = false
+        private var currentLocationBitmapMaker: BitmapDescriptor =
+            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
+        private var otherLocationBitmapMaker: BitmapDescriptor =
+            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)
+
+        fun setCurrentLocation(currentLocation: BitmapDescriptor): Builder {
+            this.currentLocationBitmapMaker = currentLocation
+            return this
+        }
+
+        fun setOtherLocation(otherLocation: BitmapDescriptor): Builder {
+            this.otherLocationBitmapMaker = otherLocation
+            return this
+        }
 
         fun withLocation(latitude: Double, longitude: Double): Builder {
             this.locationLatitude = latitude
@@ -1840,7 +1865,8 @@ class LocationPickerActivity :
 
             LocationPickerActivity.customDataSource = customDataSource
             LocationPickerActivity.customAdapter = customAdapter
-
+            LocationPickerActivity.currentLocationBitmapMaker = currentLocationBitmapMaker
+            LocationPickerActivity.otherLocationBitmapMaker = otherLocationBitmapMaker
             return intent
         }
     }
