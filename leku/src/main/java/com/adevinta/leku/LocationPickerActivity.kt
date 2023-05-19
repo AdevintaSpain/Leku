@@ -1647,15 +1647,19 @@ class LocationPickerActivity :
     private fun fillLocationList(addresses: List<Address>) {
         locationList.clear()
         locationList.addAll(addresses)
-        (searchAdapter as LekuSearchAdapter<SearchViewHolder, Address>)
-            .items = locationList.toList()
+        searchAdapter?.let {
+            (searchAdapter as LekuSearchAdapter<SearchViewHolder, Address>)
+                .items = locationList.toList()
+        }
     }
 
     private fun fillSuggestionList(suggestions: List<PlaceSuggestion>) {
         suggestionList.clear()
         suggestionList.addAll(suggestions)
-        (searchAdapter as LekuSearchAdapter<SuggestionViewHolder, PlaceSuggestion>)
-            ?.items = suggestionList.toList()
+        searchAdapter?.let {
+            (searchAdapter as LekuSearchAdapter<SuggestionViewHolder, PlaceSuggestion>)
+                .items = suggestionList.toList()
+        }
     }
 
     private fun closeKeyboard() {
