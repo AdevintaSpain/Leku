@@ -9,11 +9,11 @@ ext["PUBLISH_ARTIFACT_ID"] = "leku"
 apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
 
 android {
-  compileSdkVersion 33
   resourcePrefix 'leku_'
 
   defaultConfig {
     minSdkVersion 21
+    compileSdk 34
     targetSdkVersion 33
     multiDexEnabled true
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -30,11 +30,11 @@ android {
     }
   }
   compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
   }
   kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_1_8.toString()
+    jvmTarget = JavaVersion.VERSION_17.toString()
   }
   packagingOptions {
     resources {
@@ -70,8 +70,8 @@ ktlint {
 dependencies {
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-  implementation "com.google.android.material:material:1.7.0-beta01"
-  implementation 'androidx.fragment:fragment-ktx:1.5.3'
+  implementation "com.google.android.material:material:1.11.0-alpha02"
+  implementation 'androidx.fragment:fragment-ktx:1.6.1'
 
   def playServicesVersion = '18.1.0'
   implementation ("com.google.android.gms:play-services-maps:$playServicesVersion") {
@@ -81,13 +81,13 @@ dependencies {
 	  exclude group: "com.android.support"
   }
 
-  implementation ("com.google.android.libraries.places:places:2.6.0") {
+  implementation ("com.google.android.libraries.places:places:3.2.0") {
     exclude group: "com.android.support"
   }
 
   implementation "com.google.maps:google-maps-services:0.2.9"
 
-  def espressoVersion = '3.4.0'
+  def espressoVersion = '3.5.1'
   androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
   androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
 
@@ -95,7 +95,5 @@ dependencies {
   androidTestImplementation "androidx.test:runner:$supportTestVersion"
   androidTestImplementation "androidx.test:rules:$supportTestVersion"
   androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
-  androidTestImplementation 'org.mockito:mockito-core:4.2.0'
-
-  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+  androidTestImplementation 'org.mockito:mockito-core:5.1.1'
 }
