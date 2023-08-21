@@ -276,7 +276,7 @@ fun MainView() {
                 contentColor = Color.White
             ),
             onClick = {
-                onMapPoisClicked(context)
+                onMapWithStylesClicked(context)
             }
         ) {
             Text(
@@ -293,7 +293,7 @@ fun MainView() {
                 contentColor = Color.White
             ),
             onClick = {
-                onMapWithStylesClicked(context)
+                onMapPoisClicked(context)
             }
         ) {
             Text(
