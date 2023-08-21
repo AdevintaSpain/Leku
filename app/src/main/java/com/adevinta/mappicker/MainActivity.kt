@@ -149,7 +149,7 @@ private fun onLaunchMapPickerClicked(context: Context) {
         .withSearchZone("es_ES")
         // .withSearchZone(SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
         .withDefaultLocaleSearchZone()
-        .setCurrentLocation(BitmapDescriptorFactory.fromResource(R.drawable.common_full_open_on_phone))
+        //.setCurrentLocation(BitmapDescriptorFactory.fromResource(R.drawable.common_full_open_on_phone))
         .setOtherLocation(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
         // .shouldReturnOkOnBackPressed()
         // .withStreetHidden()
