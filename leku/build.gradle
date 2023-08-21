@@ -72,6 +72,7 @@ dependencies {
 
   implementation "com.google.android.material:material:1.11.0-alpha02"
   implementation 'androidx.fragment:fragment-ktx:1.6.1'
+  implementation "org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.6.4"
 
   def playServicesVersion = '18.1.0'
   implementation ("com.google.android.gms:play-services-maps:$playServicesVersion") {
@@ -95,5 +96,5 @@ dependencies {
   androidTestImplementation "androidx.test:runner:$supportTestVersion"
   androidTestImplementation "androidx.test:rules:$supportTestVersion"
   androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
-  androidTestImplementation 'org.mockito:mockito-core:5.1.1'
+  androidTestImplementation 'org.mockito:mockito-core:5.4.0'
 }

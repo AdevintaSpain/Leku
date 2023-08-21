@@ -693,6 +693,7 @@ class LocationPickerActivity :
     }
 
     override fun onBackPressed() {
+        super.onBackPressed()
         if (!shouldReturnOkOnBackPressed || isLocationInformedFromBundle) {
             setResult(Activity.RESULT_CANCELED)
             track(TrackEvents.CANCEL)
