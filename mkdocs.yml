@@ -1,7 +1,7 @@
 # Project information
 site_name: 'Leku'
 site_description: ':Map location picker component for Android. Based on Google Maps. An alternative to Google Place Picker.'
-site_author: '2016-2022 Adevinta Spain'
+site_author: '2016-2023 Adevinta Spain'
 site_url: 'https://adevintaspain.github.io/Leku/'
 remote_branch: gh-pages
 
