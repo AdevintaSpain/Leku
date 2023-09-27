@@ -142,7 +142,7 @@ class MainActivity : AppCompatActivity() {
 
 private fun onLaunchMapPickerClicked(context: Context) {
     val activity = context as MainActivity
-    val locationPickerIntent = LocationPickerActivity.Builder()
+    val locationPickerIntent = LocationPickerActivity.Builder(activity)
         .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
         // .withGeolocApiKey("<PUT API KEY HERE>")
         // .withGooglePlacesApiKey("<PUT API KEY HERE>")
@@ -160,7 +160,7 @@ private fun onLaunchMapPickerClicked(context: Context) {
         // .withVoiceSearchHidden()
         .withUnnamedRoadHidden()
         // .withSearchBarHidden()
-        .build(activity)
+        .build()
 
     // this is optional if you want to return RESULT_OK if you don't set the
     // latitude/longitude and click back button
@@ -171,11 +171,11 @@ private fun onLaunchMapPickerClicked(context: Context) {
 
 private fun onLegacyMapClicked(context: Context) {
     val activity = context as MainActivity
-    val locationPickerIntent = LocationPickerActivity.Builder()
+    val locationPickerIntent = LocationPickerActivity.Builder(activity)
         .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
         .withUnnamedRoadHidden()
         .withLegacyLayout()
-        .build(activity)
+        .build()
     activity.lekuActivityResultLauncher.launch(locationPickerIntent)
 }
 
@@ -201,20 +201,20 @@ private val lekuPois: List<LekuPoi>
 
 private fun onMapPoisClicked(context: Context) {
     val activity = context as MainActivity
-    val locationPickerIntent = LocationPickerActivity.Builder()
+    val locationPickerIntent = LocationPickerActivity.Builder(activity)
         .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
         .withPois(lekuPois)
-        .build(activity)
+        .build()
 
     activity.mapPoisActivityResultLauncher.launch(locationPickerIntent)
 }
 
 private fun onMapWithStylesClicked(context: Context) {
     val activity = context as MainActivity
-    val locationPickerIntent = LocationPickerActivity.Builder()
+    val locationPickerIntent = LocationPickerActivity.Builder(activity)
         .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
         .withMapStyle(R.raw.map_style_retro)
-        .build(activity)
+        .build()
     activity.mapPoisActivityResultLauncher.launch(locationPickerIntent)
 }
 

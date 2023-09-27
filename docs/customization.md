@@ -36,7 +36,7 @@ intent.putExtra(LocationPickerActivity.LAYOUTS_TO_HIDE, "street|city|zipcode")
 If you want to use the old Leku layout design you need to add this line to the builder:
 
 ```kotlin
-val locationPickerIntent = LocationPickerActivity.Builder()
+val locationPickerIntent = LocationPickerActivity.Builder(context)
     .withLegacyLayout()
 ```
 

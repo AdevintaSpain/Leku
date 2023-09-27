@@ -18,14 +18,14 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.adevinta.android:leku:11.0.0'
+    implementation 'com.adevinta.android:leku:11.1.0'
 }
 ```
 
 Alternatively, if you are using a different version of Google Play Services and AndroidX use this instead:
 
 ```groovy
-implementation ('com.adevinta.android:leku:11.0.0') {
+implementation ('com.adevinta.android:leku:11.1.0') {
     exclude group: 'com.google.android.gms'
     exclude group: 'androidx.appcompat'
 }
@@ -144,8 +144,7 @@ val lekuActivityResultLauncher =
             }
         }
 
-val activity = context as MainActivity
-val locationPickerIntent = LocationPickerActivity.Builder()
+val locationPickerIntent = LocationPickerActivity.Builder(context)
     .withLocation(41.4036299, 2.1743558)
     .withGeolocApiKey("<PUT API KEY HERE>")
     .withGooglePlacesApiKey("<PUT API KEY HERE>")
@@ -162,7 +161,7 @@ val locationPickerIntent = LocationPickerActivity.Builder()
     .withVoiceSearchHidden()
     .withUnnamedRoadHidden()
     .withSearchBarHidden()
-    .build(applicationContext)
+    .build()
 
 activity.lekuActivityResultLauncher.launch(locationPickerIntent)
 ```

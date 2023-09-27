@@ -81,14 +81,14 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.adevinta.android:leku:11.0.0'
+    implementation 'com.adevinta.android:leku:11.1.0'
 }
 ```
 
 Alternatively, if you are using a different version of Google Play Services and AndroidX use this instead:
 
 ```groovy
-implementation ('com.adevinta.android:leku:11.0.0') {
+implementation ('com.adevinta.android:leku:11.1.0') {
     exclude group: 'com.google.android.gms'
     exclude group: 'androidx.appcompat'
 }
@@ -208,7 +208,7 @@ val lekuActivityResultLauncher =
         }
 
 val activity = context as MainActivity
-val locationPickerIntent = LocationPickerActivity.Builder()
+val locationPickerIntent = LocationPickerActivity.Builder(applicationContext)
     .withLocation(41.4036299, 2.1743558)
     .withGeolocApiKey("<PUT API KEY HERE>")
     .withGooglePlacesApiKey("<PUT API KEY HERE>")
@@ -225,7 +225,7 @@ val locationPickerIntent = LocationPickerActivity.Builder()
     .withVoiceSearchHidden()
     .withUnnamedRoadHidden()
     .withSearchBarHidden()
-    .build(applicationContext)
+    .build()
 
 activity.lekuActivityResultLauncher.launch(locationPickerIntent)
 ```
@@ -242,7 +242,7 @@ Leku now supports Google Places queries using the search box. If you want to ena
 2. Add the key to the location picker builder
 
 ```kotlin
-val locationPickerIntent = LocationPickerActivity.Builder()
+val locationPickerIntent = LocationPickerActivity.Builder(context)
       .withGooglePlacesApiKey("<PUT API KEY HERE>")
 ```
 
@@ -342,7 +342,7 @@ intent.putExtra(LocationPickerActivity.LAYOUTS_TO_HIDE, "street|city|zipcode")
 If you want to use the old Leku layout design you need to add this line to the builder:
 
 ```kotlin
-val locationPickerIntent = LocationPickerActivity.Builder()
+val locationPickerIntent = LocationPickerActivity.Builder(context)
     .withLegacyLayout()
 ```
 
@@ -453,7 +453,7 @@ class CustomLocationsAdapter : SuggestSearchAdapter<SearchViewHolder>() {
 ```
 
 ```kotlin
-val locationPickerIntent = LocationPickerActivity.Builder()
+val locationPickerIntent = LocationPickerActivity.Builder(context)
     ...
     .withAdapter(CustomLocationsAdapter())
     .build(requireContext())
@@ -498,7 +498,7 @@ class LocationDataSource(val locationRepository: LocationRepository) : GeocoderD
 ```
 
 ```kotlin
-val locationPickerIntent = LocationPickerActivity.Builder()
+val locationPickerIntent = LocationPickerActivity.Builder(context)
     ...
     .withDataSource(LocationDataSource(myLocationRepository))
     .build(requireContext())

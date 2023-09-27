@@ -80,6 +80,7 @@ import com.adevinta.leku.locale.SearchZoneRect
 import com.adevinta.leku.permissions.PermissionUtils
 import com.adevinta.leku.tracker.TrackEvents
 import com.adevinta.leku.utils.ReactiveLocationProvider
+import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
@@ -144,10 +145,8 @@ class LocationPickerActivity :
     companion object {
         var customDataSource: GeocoderDataSourceInterface? = null
         var customAdapter: LekuSearchAdapter<*, *>? = null
-        var currentLocationBitmapMaker: BitmapDescriptor? =
-            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
-        var otherLocationBitmapMaker: BitmapDescriptor? =
-            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
+        var currentLocationBitmapMaker: BitmapDescriptor? = null
+        var otherLocationBitmapMaker: BitmapDescriptor? = null
     }
 
     private var map: GoogleMap? = null
@@ -376,6 +375,9 @@ class LocationPickerActivity :
         }
         searchEditLayout = findViewById(R.id.leku_search_touch_zone)
         searchFrameLayout = findViewById(R.id.search_frame_layout)
+
+        currentLocationBitmapMaker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
+        otherLocationBitmapMaker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
     }
 
     private fun setUpResultsList() {
@@ -1676,7 +1678,7 @@ class LocationPickerActivity :
             .replace(UNNAMED_ROAD_WITH_HYPHEN, "")
     }
 
-    class Builder {
+    class Builder(val context: Context) {
         private var locationLatitude: Double? = null
         private var locationLongitude: Double? = null
         private var searchZoneLocale: String? = null
@@ -1697,10 +1699,12 @@ class LocationPickerActivity :
         private var unnamedRoadVisible = true
         private var isLegacyLayoutEnabled = false
         private var isSearchBarHidden = false
-        private var currentLocationBitmapMaker: BitmapDescriptor =
-            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
-        private var otherLocationBitmapMaker: BitmapDescriptor =
-            BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)
+        private var currentLocationBitmapMaker: BitmapDescriptor? = null
+        private var otherLocationBitmapMaker: BitmapDescriptor? = null
+
+        init {
+            MapsInitializer.initialize(context)
+        }
 
         fun setCurrentLocation(currentLocation: BitmapDescriptor): Builder {
             this.currentLocationBitmapMaker = currentLocation
@@ -1828,7 +1832,7 @@ class LocationPickerActivity :
             return this
         }
 
-        fun build(context: Context): Intent {
+        fun build(): Intent {
             val intent = Intent(context, LocationPickerActivity::class.java)
 
             locationLatitude?.let {

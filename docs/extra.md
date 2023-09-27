@@ -101,9 +101,9 @@ Leku now supports Google Places queries using the search box. If you want to ena
 3. Enable it when instantiating LocationPickerActivity by adding `.withGooglePlacesEnabled()`:
 
 ```kotlin
-val locationPickerIntent = LocationPickerActivity.Builder()
+val locationPickerIntent = LocationPickerActivity.Builder(context)
     **.withGooglePlacesEnabled()**
-    .build(applicationContext)
+    .build()
 ```
 
 And you are good to go. :)
