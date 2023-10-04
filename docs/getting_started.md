@@ -18,14 +18,14 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.adevinta.android:leku:11.1.0'
+    implementation 'com.adevinta.android:leku:11.1.1'
 }
 ```
 
 Alternatively, if you are using a different version of Google Play Services and AndroidX use this instead:
 
 ```groovy
-implementation ('com.adevinta.android:leku:11.1.0') {
+implementation ('com.adevinta.android:leku:11.1.1') {
     exclude group: 'com.google.android.gms'
     exclude group: 'androidx.appcompat'
 }
