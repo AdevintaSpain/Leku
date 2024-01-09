@@ -29,12 +29,12 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
-import android.widget.LinearLayout
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RawRes
@@ -43,33 +43,18 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.adevinta.leku.geocoder.AndroidGeocoderDataSource
 import com.adevinta.leku.geocoder.GeocoderDataSourceInterface
 import com.adevinta.leku.geocoder.GeocoderPresenter
+import com.adevinta.leku.geocoder.GeocoderRepository
 import com.adevinta.leku.geocoder.GeocoderViewInterface
 import com.adevinta.leku.geocoder.GoogleGeocoderDataSource
-import com.adevinta.leku.geocoder.GeocoderRepository
-import com.adevinta.leku.geocoder.AndroidGeocoderDataSource
-import com.adevinta.leku.geocoder.adapters.DefaultSuggestionAdapter
 import com.adevinta.leku.geocoder.PlaceSuggestion
 import com.adevinta.leku.geocoder.adapters.DefaultAddressAdapter
+import com.adevinta.leku.geocoder.adapters.DefaultSuggestionAdapter
 import com.adevinta.leku.geocoder.adapters.SearchViewHolder
 import com.adevinta.leku.geocoder.adapters.SuggestionViewHolder
 import com.adevinta.leku.geocoder.adapters.base.LekuSearchAdapter
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.location.LocationListener
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
-import com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.libraries.places.api.Places
-import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.maps.GeoApiContext
 import com.adevinta.leku.geocoder.api.AddressBuilder
 import com.adevinta.leku.geocoder.api.NetworkClient
 import com.adevinta.leku.geocoder.api.SuggestionBuilder
@@ -80,14 +65,29 @@ import com.adevinta.leku.locale.SearchZoneRect
 import com.adevinta.leku.permissions.PermissionUtils
 import com.adevinta.leku.tracker.TrackEvents
 import com.adevinta.leku.utils.ReactiveLocationProvider
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.common.api.GoogleApiClient
+import com.google.android.gms.location.LocationListener
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL
+import com.google.android.gms.maps.GoogleMap.MAP_TYPE_SATELLITE
 import com.google.android.gms.maps.MapsInitializer
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.libraries.places.api.Places
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.maps.GeoApiContext
 import java.util.Locale
 import java.util.TimeZone
 import kotlin.collections.set
@@ -1110,6 +1110,8 @@ class LocationPickerActivity :
             transitionBundle.keySet().contains(LONGITUDE)
         ) {
             setLocationFromBundle(transitionBundle)
+        } else {
+            setDefaultLocation()
         }
         if (transitionBundle.keySet().contains(LAYOUTS_TO_HIDE)) {
             setLayoutVisibilityFromBundle(transitionBundle)
@@ -1206,6 +1208,14 @@ class LocationPickerActivity :
         }
         currentLocation?.latitude = transitionBundle.getDouble(LATITUDE)
         currentLocation?.longitude = transitionBundle.getDouble(LONGITUDE)
+        setCurrentPositionLocation()
+        isLocationInformedFromBundle = true
+    }
+
+    private fun setDefaultLocation() {
+        currentLocation = Location(getString(R.string.leku_network_resource))
+        currentLocation?.latitude = 0.0
+        currentLocation?.longitude = 0.0
         setCurrentPositionLocation()
         isLocationInformedFromBundle = true
     }
