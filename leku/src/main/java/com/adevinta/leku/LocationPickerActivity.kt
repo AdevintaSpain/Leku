@@ -1,11 +1,13 @@
 package com.adevinta.leku
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.PorterDuff
 import android.location.Address
@@ -39,6 +41,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RawRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -1213,11 +1216,13 @@ class LocationPickerActivity :
     }
 
     private fun setDefaultLocation() {
-        currentLocation = Location(getString(R.string.leku_network_resource))
-        currentLocation?.latitude = 0.0
-        currentLocation?.longitude = 0.0
-        setCurrentPositionLocation()
-        isLocationInformedFromBundle = true
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            currentLocation = Location(getString(R.string.leku_network_resource))
+            currentLocation?.latitude = 0.0
+            currentLocation?.longitude = 0.0
+            setCurrentPositionLocation()
+            isLocationInformedFromBundle = true
+        }
     }
 
     private fun startVoiceRecognitionActivity() {
