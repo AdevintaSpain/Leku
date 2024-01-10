@@ -1213,11 +1213,13 @@ class LocationPickerActivity :
     }
 
     private fun setDefaultLocation() {
-        currentLocation = Location(getString(R.string.leku_network_resource))
-        currentLocation?.latitude = 0.0
-        currentLocation?.longitude = 0.0
-        setCurrentPositionLocation()
-        isLocationInformedFromBundle = true
+        if (PermissionUtils.isLocationPermissionGranted(applicationContext)) {
+            currentLocation = Location(getString(R.string.leku_network_resource))
+            currentLocation?.latitude = 0.0
+            currentLocation?.longitude = 0.0
+            setCurrentPositionLocation()
+            isLocationInformedFromBundle = true
+        }
     }
 
     private fun startVoiceRecognitionActivity() {
