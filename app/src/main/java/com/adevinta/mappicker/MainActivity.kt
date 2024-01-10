@@ -143,7 +143,6 @@ class MainActivity : AppCompatActivity() {
 private fun onLaunchMapPickerClicked(context: Context) {
     val activity = context as MainActivity
     val locationPickerIntent = LocationPickerActivity.Builder(activity)
-        .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
         // .withGeolocApiKey("<PUT API KEY HERE>")
         // .withGooglePlacesApiKey("<PUT API KEY HERE>")
         .withSearchZone("es_ES")
