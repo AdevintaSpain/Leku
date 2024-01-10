@@ -1213,7 +1213,7 @@ class LocationPickerActivity :
     }
 
     private fun setDefaultLocation() {
-        if (PermissionUtils.isLocationPermissionGranted(applicationContext)) {
+        if (!PermissionUtils.isLocationPermissionGranted(applicationContext)) {
             currentLocation = Location(getString(R.string.leku_network_resource))
             currentLocation?.latitude = 0.0
             currentLocation?.longitude = 0.0
