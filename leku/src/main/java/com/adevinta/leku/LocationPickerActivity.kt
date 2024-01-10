@@ -1,13 +1,11 @@
 package com.adevinta.leku
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
-import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.PorterDuff
 import android.location.Address
@@ -41,7 +39,6 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RawRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -1216,7 +1213,7 @@ class LocationPickerActivity :
     }
 
     private fun setDefaultLocation() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (PermissionUtils.isLocationPermissionGranted(applicationContext)) {
             currentLocation = Location(getString(R.string.leku_network_resource))
             currentLocation?.latitude = 0.0
             currentLocation?.longitude = 0.0
