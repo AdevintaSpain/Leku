@@ -63,8 +63,8 @@ Component library for Android that uses Google Maps and returns a latitude, long
 
 ### Prerequisites
 
-minSdkVersion >= 21<br/>
-Google Play Services = 18.1.0<br/>
+minSdkVersion >= 23<br/>
+Google Play Services = 19.0.0<br/>
 AndroidX
 
 ### Download
@@ -81,14 +81,14 @@ Include the dependency in your app `build.gradle`:
 
 ```groovy
 dependencies {
-    implementation 'com.adevinta.android:leku:11.1.4'
+    implementation 'com.adevinta.android:leku:12.0.0'
 }
 ```
 
 Alternatively, if you are using a different version of Google Play Services and AndroidX use this instead:
 
 ```groovy
-implementation ('com.adevinta.android:leku:11.1.4') {
+implementation ('com.adevinta.android:leku:12.0.0') {
     exclude group: 'com.google.android.gms'
     exclude group: 'androidx.appcompat'
 }
@@ -107,7 +107,7 @@ If you find this issue:
 The workaround for this is:
 
 ```groovy
-// Add this to your app build.gradle file
+// Add this to your app build.gradle.kts file
 configurations.all {
 	// this is a workaround for the issue:
 	// https://stackoverflow.com/questions/52521302/how-to-solve-program-type-already-present-com-google-common-util-concurrent-lis
@@ -667,7 +667,7 @@ For bugs, questions and discussions please use the [Github Issues](https://githu
 License
 -------
 
-Copyright 2016-2023 Adevinta Spain S.L.
+Copyright 2016-2024 Adevinta Spain S.L.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
