@@ -5,6 +5,7 @@ plugins {
   id("kotlin-android")
   id("org.jlleitschuh.gradle.ktlint")
   id("io.gitlab.arturbosch.detekt")
+  id("org.jetbrains.kotlin.plugin.compose") version "2.0.20"
 }
 
 android {

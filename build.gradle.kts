@@ -1,5 +1,5 @@
 buildscript {
-  val kotlinVersion = "1.9.25"
+  val kotlinVersion = "2.0.20"
   repositories {
     maven {
       url = uri("https://maven.google.com/")
