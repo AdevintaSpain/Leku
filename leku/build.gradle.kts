@@ -47,11 +47,6 @@ android {
     lint {
         disable.add("ObsoleteLintCustomCheck")
     }
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-        }
-    }
     namespace = "com.adevinta.leku"
 }
 
