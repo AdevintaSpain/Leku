@@ -41,12 +41,6 @@ android {
     lint {
         disable.add("ObsoleteLintCustomCheck")
     }
-    publishing {
-        singleVariant("release") {
-            withJavadocJar()
-            withSourcesJar()
-        }
-    }
     namespace = "com.adevinta.mappicker"
 }
 
