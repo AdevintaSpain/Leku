@@ -38,9 +38,6 @@ afterEvaluate {
           artifact("$buildDir/libs/${project.getName()}-${version}.jar")
         }
 
-        artifact androidSourcesJar
-        artifact javadocJar
-
         pom {
           name = project.project.getName()
           description = 'Map location picker component for Android. Based on Google Maps. An alternative to Google Place Picker.'

@@ -24,7 +24,7 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
 
-    flavorDimensions("tier")
+    flavorDimensions.add("tier")
 
     buildTypes {
         getByName("release") {
@@ -46,6 +46,12 @@ android {
     }
     lint {
         disable.add("ObsoleteLintCustomCheck")
+    }
+    publishing {
+        singleVariant("release") {
+            withJavadocJar()
+            withSourcesJar()
+        }
     }
     namespace = "com.adevinta.leku"
 }
