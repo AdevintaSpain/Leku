@@ -39,7 +39,6 @@ afterEvaluate {
         }
 
         generateMetadataFileForReleasePublication.dependsOn androidSourcesJar
-        artifact androidSourcesJar
 
         pom {
           name = project.project.getName()
