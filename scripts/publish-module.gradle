@@ -38,8 +38,10 @@ afterEvaluate {
           artifact("$buildDir/libs/${project.getName()}-${version}.jar")
         }
 
+        generateMetadataFileForReleasePublication.dependsOn androidSourcesJar
         artifact androidSourcesJar
         artifact javadocJar
+
 
         pom {
           name = project.project.getName()
