@@ -44,7 +44,7 @@ If you find this issue:
 The workaround for this is:
 
 ```groovy
-// Add this to your app build.gradle file
+// Add this to your app build.gradle.kts file
 configurations.all {
 	// this is a workaround for the issue:
 	// https://stackoverflow.com/questions/52521302/how-to-solve-program-type-already-present-com-google-common-util-concurrent-lis
