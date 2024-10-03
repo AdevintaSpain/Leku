@@ -24,12 +24,17 @@ android {
     sourceCompatibility JavaVersion.VERSION_17
     targetCompatibility JavaVersion.VERSION_17
   }
-
+  kotlinOptions {
+    jvmTarget = JavaVersion.VERSION_17.toString()
+  }
+  kotlin {
+    jvmToolchain {JavaVersion.VERSION_17 }
+  }
   buildFeatures {
     compose true
   }
   composeOptions {
-    kotlinCompilerExtensionVersion '1.4.2'
+    kotlinCompilerExtensionVersion '1.5.15'
   }
   lint {
     disable 'ObsoleteLintCustomCheck'

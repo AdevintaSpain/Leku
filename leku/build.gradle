@@ -36,6 +36,9 @@ android {
   kotlinOptions {
     jvmTarget = JavaVersion.VERSION_17.toString()
   }
+  kotlin {
+    jvmToolchain {JavaVersion.VERSION_17 }
+  }
   packagingOptions {
     resources {
       excludes += ['protobuf.meta']
