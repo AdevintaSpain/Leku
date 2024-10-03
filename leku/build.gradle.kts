@@ -91,13 +91,13 @@ dependencies {
 
     implementation("com.google.maps:google-maps-services:0.2.9")
 
-    val espressoVersion = "3.6.1"
-    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
-    androidTestImplementation("androidx.test.espresso:espresso-intents:$espressoVersion")
-
-    val supportTestVersion = "1.6.2"
+    val supportTestVersion = "1.6.1"
     androidTestImplementation("androidx.test:runner:$supportTestVersion")
     androidTestImplementation("androidx.test:rules:$supportTestVersion")
     androidTestImplementation("androidx.test.uiautomator:uiautomator:2.3.0")
     androidTestImplementation("org.mockito:mockito-core:5.14.1")
+
+    val espressoVersion = "3.6.1"
+    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:$espressoVersion")
 }
