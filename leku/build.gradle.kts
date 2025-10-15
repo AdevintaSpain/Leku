@@ -8,6 +8,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
 }
 
+@Suppress("PropertyName")
 val PUBLISH_ARTIFACT_ID by extra("leku")
 
 apply(from = "${rootProject.projectDir}/scripts/publish-module.gradle")
