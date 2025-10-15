@@ -9,17 +9,17 @@ import androidx.test.espresso.ViewAction
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import org.hamcrest.Matcher
 
-class OrientationChangeAction private constructor(private val orientation: Int) : ViewAction {
+class OrientationChangeAction private constructor(
+    private val orientation: Int,
+) : ViewAction {
+    override fun getConstraints(): Matcher<View> = isRoot()
 
-    override fun getConstraints(): Matcher<View> {
-        return isRoot()
-    }
+    override fun getDescription(): String = "Changes orientation to $orientation"
 
-    override fun getDescription(): String {
-        return "Changes orientation to $orientation"
-    }
-
-    override fun perform(uiController: UiController, view: View) {
+    override fun perform(
+        uiController: UiController,
+        view: View,
+    ) {
         try {
             Thread.sleep(500)
         } catch (e: InterruptedException) {
@@ -32,13 +32,8 @@ class OrientationChangeAction private constructor(private val orientation: Int) 
     }
 
     companion object {
+        fun orientationLandscape(): ViewAction = OrientationChangeAction(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
 
-        fun orientationLandscape(): ViewAction {
-            return OrientationChangeAction(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
-        }
-
-        fun orientationPortrait(): ViewAction {
-            return OrientationChangeAction(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-        }
+        fun orientationPortrait(): ViewAction = OrientationChangeAction(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
     }
 }

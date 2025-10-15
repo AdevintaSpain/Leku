@@ -15,8 +15,10 @@ private const val GRANT_BUTTON_INDEX = 1
 private const val DENY_BUTTON_INDEX = 0
 
 class PermissionGranter {
-
-    fun allowPermissionsIfNeeded(activity: Activity, permissionNeeded: String) {
+    fun allowPermissionsIfNeeded(
+        activity: Activity,
+        permissionNeeded: String,
+    ) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !hasNeededPermission(activity, permissionNeeded)) {
                 waitInMillis(PERMISSIONS_DIALOG_DELAY.toLong())
@@ -31,7 +33,10 @@ class PermissionGranter {
         }
     }
 
-    fun denyPermissionsIfNeeded(activity: Activity, permissionNeeded: String) {
+    fun denyPermissionsIfNeeded(
+        activity: Activity,
+        permissionNeeded: String,
+    ) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !hasNeededPermission(activity, permissionNeeded)) {
                 waitInMillis(PERMISSIONS_DIALOG_DELAY.toLong())
@@ -46,7 +51,10 @@ class PermissionGranter {
         }
     }
 
-    private fun hasNeededPermission(activity: Activity, permissionNeeded: String): Boolean {
+    private fun hasNeededPermission(
+        activity: Activity,
+        permissionNeeded: String,
+    ): Boolean {
         val permissionStatus = ContextCompat.checkSelfPermission(activity, permissionNeeded)
         return permissionStatus == PackageManager.PERMISSION_GRANTED
     }
