@@ -224,6 +224,7 @@ val locationPickerIntent = LocationPickerActivity.Builder(applicationContext)
     .withGoogleTimeZoneEnabled()
     .withVoiceSearchHidden()
     .withUnnamedRoadHidden()
+    .withSolidBottomColor()
     .withSearchBarHidden()
     .build()
 

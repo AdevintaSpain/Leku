@@ -104,6 +104,7 @@ const val ENABLE_SATELLITE_VIEW = "enable_satellite_view"
 const val ENABLE_LOCATION_PERMISSION_REQUEST = "enable_location_permission_request"
 const val ENABLE_GOOGLE_PLACES = "enable_google_places"
 const val ENABLE_GOOGLE_TIME_ZONE = "enable_google_time_zone"
+const val ENABLE_BOTTOM_SOLID_COLOR = "enable_bottom_solid_color"
 const val POIS_LIST = "pois_list"
 const val LEKU_POI = "leku_poi"
 const val ENABLE_VOICE_SEARCH = "enable_voice_search"
@@ -173,6 +174,8 @@ class LocationPickerActivity :
     private var searchFrameLayout: FrameLayout? = null
     private var suggestionsToast: Toast? = null
     private var locationsToast: Toast? = null
+    private var bottomGradient: ImageView? = null
+    private var bottomSolidColor: View? = null
 
     private val locationList = ArrayList<Address>()
     private val suggestionList = ArrayList<PlaceSuggestion>()
@@ -206,6 +209,7 @@ class LocationPickerActivity :
     private var isSearchLayoutShown = false
     private var isSearchBarHidden = false
     private var placeResolution = false
+    private var enableBottomSolidColor = false
 
     private lateinit var toolbar: MaterialToolbar
     private lateinit var timeZone: TimeZone
@@ -362,6 +366,8 @@ class LocationPickerActivity :
         }
         searchEditLayout = findViewById(R.id.leku_search_touch_zone)
         searchFrameLayout = findViewById(R.id.search_frame_layout)
+        bottomGradient = findViewById(R.id.leku_bottom_gradient)
+        bottomSolidColor = findViewById(R.id.leku_bottom_solid_color)
 
         currentLocationBitmapMaker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)
         otherLocationBitmapMaker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
@@ -703,6 +709,13 @@ class LocationPickerActivity :
         }
     }
 
+    private fun setBottomColor() {
+        if (enableBottomSolidColor) {
+            bottomGradient?.visibility = View.GONE
+            bottomSolidColor?.visibility = View.VISIBLE
+        }
+    }
+
     override fun onConnected(savedBundle: Bundle?) {
         if (currentLocation == null) {
             geocoderPresenter?.getLastKnownLocation()
@@ -752,6 +765,7 @@ class LocationPickerActivity :
             ENABLE_GOOGLE_PLACES,
             placeResolution
         )
+        savedInstanceState.putBoolean(ENABLE_BOTTOM_SOLID_COLOR, enableBottomSolidColor)
         super.onSaveInstanceState(savedInstanceState)
     }
 
@@ -781,6 +795,9 @@ class LocationPickerActivity :
         if (savedInstanceState.containsKey(ENABLE_GOOGLE_PLACES)) {
             placeResolution =
                 savedInstanceState.getBoolean(ENABLE_GOOGLE_PLACES)
+        }
+        if (savedInstanceState.containsKey(ENABLE_BOTTOM_SOLID_COLOR)) {
+            enableBottomSolidColor = savedInstanceState.getBoolean(ENABLE_BOTTOM_SOLID_COLOR)
         }
     }
 
@@ -1095,6 +1112,9 @@ class LocationPickerActivity :
         if (savedInstanceState.keySet().contains(ENABLE_GOOGLE_PLACES)) {
             placeResolution = savedInstanceState.getBoolean(ENABLE_GOOGLE_PLACES, false)
         }
+        if (savedInstanceState.keySet().contains(ENABLE_BOTTOM_SOLID_COLOR)) {
+            enableBottomSolidColor = savedInstanceState.getBoolean(ENABLE_BOTTOM_SOLID_COLOR)
+        }
     }
 
     private fun getTransitionBundleParams(transitionBundle: Bundle) {
@@ -1179,6 +1199,9 @@ class LocationPickerActivity :
         }
         if (transitionBundle.keySet().contains(ENABLE_GOOGLE_PLACES)) {
             placeResolution = transitionBundle.getBoolean(ENABLE_GOOGLE_PLACES, false)
+        }
+        if (transitionBundle.keySet().contains(ENABLE_BOTTOM_SOLID_COLOR)) {
+            enableBottomSolidColor = transitionBundle.getBoolean(ENABLE_BOTTOM_SOLID_COLOR)
         }
     }
 
@@ -1275,6 +1298,7 @@ class LocationPickerActivity :
         city?.text = if (isStreetEqualsCity(address)) "" else address.locality
         zipCode?.text = address.postalCode
         showAddressLayout()
+        setBottomColor()
     }
 
     private fun getFormattedAddress(address: Address): String {
@@ -1707,6 +1731,7 @@ class LocationPickerActivity :
         private var isSearchBarHidden = false
         private var currentLocationBitmapMaker: BitmapDescriptor? = null
         private var otherLocationBitmapMaker: BitmapDescriptor? = null
+        private var enableSolidBottomColor = false
 
         init {
             MapsInitializer.initialize(context)
@@ -1823,6 +1848,11 @@ class LocationPickerActivity :
             return this
         }
 
+        fun withSolidBottomColor(): Builder {
+            this.enableSolidBottomColor = true
+            return this
+        }
+
         fun withMapStyle(@RawRes mapStyle: Int): Builder {
             this.mapStyle = mapStyle
             return this
@@ -1877,6 +1907,7 @@ class LocationPickerActivity :
             intent.putExtra(WITH_LEGACY_LAYOUT, isLegacyLayoutEnabled)
             intent.putExtra(SEARCH_BAR_HIDDEN, isSearchBarHidden)
             intent.putExtra(ENABLE_GOOGLE_PLACES, googlePlaceEnabled)
+            intent.putExtra(ENABLE_BOTTOM_SOLID_COLOR, enableSolidBottomColor)
 
             LocationPickerActivity.customDataSource = customDataSource
             LocationPickerActivity.customAdapter = customAdapter

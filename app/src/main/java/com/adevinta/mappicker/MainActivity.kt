@@ -174,6 +174,7 @@ private fun onLaunchMapPickerClicked(context: Context) {
             .withGoogleTimeZoneEnabled()
             // .withVoiceSearchHidden()
             .withUnnamedRoadHidden()
+            .withSolidBottomColor()
             // .withSearchBarHidden()
             .build()
 
