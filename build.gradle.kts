@@ -1,5 +1,4 @@
 buildscript {
-    val kotlinVersion = "2.0.20"
     repositories {
         maven {
             url = uri("https://maven.google.com/")
@@ -8,16 +7,17 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:8.7.0")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-        classpath("io.github.gradle-nexus:publish-plugin:1.1.0")
-        classpath("io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.22.0")
+        classpath(libs.gradle)
+        classpath(libs.kotlin.gradle.plugin)
+        classpath(libs.publish.plugin)
+        classpath(libs.gradle.nexus.staging.plugin)
     }
 }
 
 plugins {
-    id("io.gitlab.arturbosch.detekt") version "1.18.0"
-    id("org.jlleitschuh.gradle.ktlint") version "10.3.0"
+    id("io.gitlab.arturbosch.detekt") version "1.23.8"
+    id("org.jlleitschuh.gradle.ktlint") version "13.1.0"
+    alias(libs.plugins.compose.compiler) apply false
 }
 
 allprojects {

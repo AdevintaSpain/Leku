@@ -5,15 +5,15 @@ plugins {
     id("kotlin-android")
     id("org.jlleitschuh.gradle.ktlint")
     id("io.gitlab.arturbosch.detekt")
-    id("org.jetbrains.kotlin.plugin.compose") version "2.0.20"
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
     defaultConfig {
         applicationId = "com.schibsted.mappicker"
         minSdk = 23
-        compileSdk = 34
-        targetSdk = 34
+        compileSdk = 36
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
         vectorDrawables.useSupportLibrary = true
@@ -22,21 +22,18 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+        jvmTarget = JavaVersion.VERSION_21.toString()
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.15"
     }
     lint {
         disable.add("ObsoleteLintCustomCheck")
@@ -70,15 +67,15 @@ ktlint {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation("androidx.multidex:multidex:2.0.1")
-    implementation("com.google.android.material:material:1.12.0")
-    implementation("com.google.android.gms:play-services-maps:19.0.0")
+    implementation(libs.androidx.multidex)
+    implementation(libs.material)
+    implementation(libs.play.services.maps)
 
-    implementation("androidx.activity:activity-compose:1.9.2")
-    implementation("androidx.compose.material:material:1.7.3")
-    implementation("androidx.compose.animation:animation:1.7.3")
-    implementation("androidx.compose.ui:ui-tooling:1.7.3")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.material)
+    implementation(libs.androidx.animation)
+    implementation(libs.androidx.ui.tooling)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     implementation(project(":leku"))
 }
