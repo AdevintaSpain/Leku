@@ -1,4 +1,1 @@
 root = true
-
-[*]
-disabled_rules = import-ordering
