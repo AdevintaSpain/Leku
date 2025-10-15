@@ -152,11 +152,22 @@
       </LinearLayout>
 
       <ImageView
+          android:id="@+id/leku_bottom_gradient"
           android:layout_width="match_parent"
           android:layout_height="48dp"
           android:layout_gravity="bottom|end"
           android:src="@drawable/leku_bottom_screen_gradient_background"
           android:importantForAccessibility="no"
+          />
+
+      <View
+          android:id="@+id/leku_bottom_solid_color"
+          android:layout_width="match_parent"
+          android:layout_height="48dp"
+          android:layout_gravity="bottom|end"
+          android:background="@color/leku_white_alpha"
+          android:importantForAccessibility="no"
+          android:visibility="gone"
           />
     </FrameLayout>
   </LinearLayout>

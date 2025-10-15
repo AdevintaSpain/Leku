@@ -6,9 +6,8 @@ import com.google.android.gms.maps.model.LatLng
 class GeocoderRepository(
     private val customGeocoder: GeocoderDataSourceInterface?,
     private val androidGeocoder: GeocoderDataSourceInterface,
-    private val googleGeocoder: GeocoderDataSourceInterface
+    private val googleGeocoder: GeocoderDataSourceInterface,
 ) {
-
     private val dataSources get() = listOf(customGeocoder, androidGeocoder, googleGeocoder)
 
     suspend fun autoCompleteFromLocationName(query: String): List<PlaceSuggestion> {
@@ -44,7 +43,7 @@ class GeocoderRepository(
     suspend fun getFromLocationName(
         query: String,
         lowerLeft: LatLng,
-        upperRight: LatLng
+        upperRight: LatLng,
     ): List<Address> {
         dataSources.forEach {
             val data = it?.getFromLocationName(query, lowerLeft, upperRight) ?: emptyList()

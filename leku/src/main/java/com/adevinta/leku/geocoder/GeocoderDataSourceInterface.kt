@@ -10,7 +10,14 @@ interface GeocoderDataSourceInterface {
 
     suspend fun getFromLocationName(query: String): List<Address>?
 
-    suspend fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): List<Address>?
+    suspend fun getFromLocationName(
+        query: String,
+        lowerLeft: LatLng,
+        upperRight: LatLng,
+    ): List<Address>?
 
-    suspend fun getFromLocation(latitude: Double, longitude: Double): List<Address>?
+    suspend fun getFromLocation(
+        latitude: Double,
+        longitude: Double,
+    ): List<Address>?
 }

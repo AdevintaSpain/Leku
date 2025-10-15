@@ -9,13 +9,13 @@ import org.junit.Test
 import org.mockito.junit.MockitoJUnit.rule
 
 class AddressBuilderShould {
-
     @Rule
     @JvmField
     var mockitoRule = rule()!!
 
     private var addressBuilder: AddressBuilder? = null
 
+    @Suppress("ktlint:standard:max-line-length")
     private val json: String
         get() = (
             "{\"results\": [{\"address_components\": [{\"long_name\": \"102\",\"short_name\": \"102\",\"types\": " +
@@ -31,7 +31,7 @@ class AddressBuilderShould {
                 "{ \"lat\": 41.3851524302915, \"lng\": 2.158210680291502},\"southwest\": { \"lat\": 41.3824544697085, " +
                 "\"lng\": 2.155512719708498}}},\"partial_match\": true,\"place_id\": \"ChIJdehx-YiipBIR8hitzOckUuo\",\"types\": [\"premise\"] } " +
                 "], \"status\": \"OK\"}"
-            )
+        )
 
     private val jsonForOnlyCity: String
         get() = (
@@ -44,7 +44,7 @@ class AddressBuilderShould {
                 " {\"lat\": 41.3850639,\"lng\": 2.1734035},\"location_type\": \"APPROXIMATE\",\"viewport\": {\"northeast\": " +
                 "{\"lat\": 41.4695761,\"lng\": 2.2280099},\"southwest\": {\"lat\": 41.320004,\"lng\": 2.0695258}}},\"place_id\": " +
                 "\"ChIJ5TCOcRaYpBIRCmZHTz37sEQ\",\"types\": [\"locality\",\"political\"]}],\"status\": \"OK\"}"
-            )
+        )
 
     @Before
     fun setUp() {

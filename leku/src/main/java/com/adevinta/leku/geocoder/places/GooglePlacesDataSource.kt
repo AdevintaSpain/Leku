@@ -18,18 +18,24 @@ import java.util.concurrent.TimeoutException
 private const val PREDICTIONS_WAITING_TIME: Long = 6
 private const val PLACE_BY_ID_WAITING_TIME: Long = 3
 
-class GooglePlacesDataSource(private val geoDataClient: PlacesClient) {
-
-    fun getFromLocationName(query: String, latLngBounds: LatLngBounds): List<Address> {
-        val locationBias = RectangularBounds.newInstance(
-            latLngBounds.southwest,
-            latLngBounds.northeast
-        )
-        val findAutocompletePredictionsRequest = FindAutocompletePredictionsRequest
-            .builder()
-            .setQuery(query)
-            .setLocationBias(locationBias)
-            .build()
+class GooglePlacesDataSource(
+    private val geoDataClient: PlacesClient,
+) {
+    fun getFromLocationName(
+        query: String,
+        latLngBounds: LatLngBounds,
+    ): List<Address> {
+        val locationBias =
+            RectangularBounds.newInstance(
+                latLngBounds.southwest,
+                latLngBounds.northeast,
+            )
+        val findAutocompletePredictionsRequest =
+            FindAutocompletePredictionsRequest
+                .builder()
+                .setQuery(query)
+                .setLocationBias(locationBias)
+                .build()
         val results = geoDataClient.findAutocompletePredictions(findAutocompletePredictionsRequest)
         try {
             Tasks.await(results, PREDICTIONS_WAITING_TIME, TimeUnit.SECONDS)

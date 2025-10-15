@@ -5,7 +5,6 @@ import org.json.JSONException
 import org.json.JSONObject
 
 class SuggestionBuilder {
-
     @Throws(JSONException::class)
     fun parseResult(json: String): List<PlaceSuggestion> {
         val suggestions = ArrayList<PlaceSuggestion>()

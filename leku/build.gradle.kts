@@ -8,6 +8,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
 }
 
+@Suppress("PropertyName")
 val PUBLISH_ARTIFACT_ID by extra("leku")
 
 apply(from = "${rootProject.projectDir}/scripts/publish-module.gradle")
@@ -17,7 +18,7 @@ android {
 
     defaultConfig {
         minSdk = 23
-        compileSdk = 34
+        compileSdk = 36
         multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("lib-proguard-rules.txt")
@@ -33,11 +34,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+        jvmTarget = JavaVersion.VERSION_21.toString()
     }
     packaging {
         resources {
@@ -46,6 +47,9 @@ android {
     }
     lint {
         disable.add("ObsoleteLintCustomCheck")
+    }
+    publishing {
+        singleVariant("release") {}
     }
     namespace = "com.adevinta.leku"
 }
@@ -73,9 +77,9 @@ ktlint {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
-    implementation("com.google.android.material:material:1.12.0")
-    implementation("androidx.fragment:fragment-ktx:1.8.4")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.9.0")
+    implementation(libs.material)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.kotlinx.coroutines.guava)
 
     val playServicesVersion = "19.0.0"
     implementation("com.google.android.gms:play-services-maps:$playServicesVersion") {
@@ -89,15 +93,13 @@ dependencies {
         exclude(group = "com.android.support")
     }
 
-    implementation("com.google.maps:google-maps-services:0.2.9")
+    implementation(libs.google.maps.services)
 
-    val supportTestVersion = "1.6.1"
-    androidTestImplementation("androidx.test:runner:$supportTestVersion")
-    androidTestImplementation("androidx.test:rules:$supportTestVersion")
-    androidTestImplementation("androidx.test.uiautomator:uiautomator:2.3.0")
-    androidTestImplementation("org.mockito:mockito-core:5.14.1")
+    androidTestImplementation(libs.androidx.runner)
+    androidTestImplementation(libs.androidx.rules)
+    androidTestImplementation(libs.androidx.uiautomator)
+    androidTestImplementation(libs.mockito.core)
 
-    val espressoVersion = "3.6.1"
-    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
-    androidTestImplementation("androidx.test.espresso:espresso-intents:$espressoVersion")
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.espresso.intents)
 }

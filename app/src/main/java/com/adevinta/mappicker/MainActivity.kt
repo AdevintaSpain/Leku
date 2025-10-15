@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -80,9 +81,19 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         StrictMode.setThreadPolicy(
-            StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().build()
+            StrictMode.ThreadPolicy
+                .Builder()
+                .detectAll()
+                .penaltyLog()
+                .build(),
         )
-        StrictMode.setVmPolicy(StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build())
+        StrictMode.setVmPolicy(
+            StrictMode.VmPolicy
+                .Builder()
+                .detectAll()
+                .penaltyLog()
+                .build(),
+        )
 
         setContent {
             MainView()
@@ -133,7 +144,9 @@ class MainActivity : AppCompatActivity() {
         LocationPicker.setTracker(MyPickerTracker(this))
     }
 
-    private class MyPickerTracker(private val context: Context) : LocationPickerTracker {
+    private class MyPickerTracker(
+        private val context: Context,
+    ) : LocationPickerTracker {
         override fun onEventTracked(event: TrackEvents) {
             Toast.makeText(context, "Event: " + event.eventName, Toast.LENGTH_SHORT).show()
         }
@@ -142,25 +155,28 @@ class MainActivity : AppCompatActivity() {
 
 private fun onLaunchMapPickerClicked(context: Context) {
     val activity = context as MainActivity
-    val locationPickerIntent = LocationPickerActivity.Builder(activity)
-        .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
-        // .withGeolocApiKey("<PUT API KEY HERE>")
-        // .withGooglePlacesApiKey("<PUT API KEY HERE>")
-        .withSearchZone("es_ES")
-        // .withSearchZone(SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
-        .withDefaultLocaleSearchZone()
-        // .setCurrentLocation(BitmapDescriptorFactory.fromResource(R.drawable.common_full_open_on_phone))
-        .setOtherLocation(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-        // .shouldReturnOkOnBackPressed()
-        // .withStreetHidden()
-        // .withCityHidden()
-        // .withZipCodeHidden()
-        // .withSatelliteViewHidden()
-        .withGoogleTimeZoneEnabled()
-        // .withVoiceSearchHidden()
-        .withUnnamedRoadHidden()
-        // .withSearchBarHidden()
-        .build()
+    val locationPickerIntent =
+        LocationPickerActivity
+            .Builder(activity)
+            .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
+            // .withGeolocApiKey("<PUT API KEY HERE>")
+            // .withGooglePlacesApiKey("<PUT API KEY HERE>")
+            .withSearchZone("es_ES")
+            // .withSearchZone(SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
+            .withDefaultLocaleSearchZone()
+            // .setCurrentLocation(BitmapDescriptorFactory.fromResource(R.drawable.common_full_open_on_phone))
+            .setOtherLocation(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+            // .shouldReturnOkOnBackPressed()
+            // .withStreetHidden()
+            // .withCityHidden()
+            // .withZipCodeHidden()
+            // .withSatelliteViewHidden()
+            .withGoogleTimeZoneEnabled()
+            // .withVoiceSearchHidden()
+            .withUnnamedRoadHidden()
+            .withSolidBottomColor()
+            // .withSearchBarHidden()
+            .build()
 
     // this is optional if you want to return RESULT_OK if you don't set the
     // latitude/longitude and click back button
@@ -171,11 +187,13 @@ private fun onLaunchMapPickerClicked(context: Context) {
 
 private fun onLegacyMapClicked(context: Context) {
     val activity = context as MainActivity
-    val locationPickerIntent = LocationPickerActivity.Builder(activity)
-        .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
-        .withUnnamedRoadHidden()
-        .withLegacyLayout()
-        .build()
+    val locationPickerIntent =
+        LocationPickerActivity
+            .Builder(activity)
+            .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
+            .withUnnamedRoadHidden()
+            .withLegacyLayout()
+            .build()
     activity.lekuActivityResultLauncher.launch(locationPickerIntent)
 }
 
@@ -201,20 +219,24 @@ private val lekuPois: List<LekuPoi>
 
 private fun onMapPoisClicked(context: Context) {
     val activity = context as MainActivity
-    val locationPickerIntent = LocationPickerActivity.Builder(activity)
-        .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
-        .withPois(lekuPois)
-        .build()
+    val locationPickerIntent =
+        LocationPickerActivity
+            .Builder(activity)
+            .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
+            .withPois(lekuPois)
+            .build()
 
     activity.mapPoisActivityResultLauncher.launch(locationPickerIntent)
 }
 
 private fun onMapWithStylesClicked(context: Context) {
     val activity = context as MainActivity
-    val locationPickerIntent = LocationPickerActivity.Builder(activity)
-        .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
-        .withMapStyle(R.raw.map_style_retro)
-        .build()
+    val locationPickerIntent =
+        LocationPickerActivity
+            .Builder(activity)
+            .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
+            .withMapStyle(R.raw.map_style_retro)
+            .build()
     activity.mapPoisActivityResultLauncher.launch(locationPickerIntent)
 }
 
@@ -222,95 +244,102 @@ private fun onMapWithStylesClicked(context: Context) {
 @Preview(showBackground = true)
 fun MainView() {
     val context = LocalContext.current
+    val buttonColor = Color(LocalResources.current.getColor(R.color.leku_app_blue, LocalResources.current.newTheme()))
 
     Column(
         Modifier
             .padding(16.dp, 40.dp, 16.dp, 0.dp)
             .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
         Image(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
             painter = painterResource(id = R.mipmap.leku_img_logo),
-            contentDescription = null
+            contentDescription = null,
         )
         Button(
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(context.resources.getColor(R.color.leku_app_blue)),
-                contentColor = Color.White
-            ),
+            colors =
+                ButtonDefaults.buttonColors(
+                    backgroundColor = buttonColor,
+                    contentColor = Color.White,
+                ),
             onClick = {
                 onLaunchMapPickerClicked(context)
-            }
+            },
         ) {
             Text(
                 stringResource(id = R.string.launch_map_picker),
                 Modifier
                     .padding(8.dp)
                     .fillMaxWidth(),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
         Button(
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(context.resources.getColor(R.color.leku_app_blue)),
-                contentColor = Color.White
-            ),
+            colors =
+                ButtonDefaults.buttonColors(
+                    backgroundColor = buttonColor,
+                    contentColor = Color.White,
+                ),
             onClick = {
                 onLegacyMapClicked(context)
-            }
+            },
         ) {
             Text(
                 stringResource(id = R.string.launch_legacy_map_picker),
                 Modifier
                     .padding(8.dp)
                     .fillMaxWidth(),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
         Button(
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(context.resources.getColor(R.color.leku_app_blue)),
-                contentColor = Color.White
-            ),
+            colors =
+                ButtonDefaults.buttonColors(
+                    backgroundColor = buttonColor,
+                    contentColor = Color.White,
+                ),
             onClick = {
                 onMapWithStylesClicked(context)
-            }
+            },
         ) {
             Text(
                 stringResource(id = R.string.launch_map_picker_with_style),
                 Modifier
                     .padding(8.dp)
                     .fillMaxWidth(),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
         Button(
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(context.resources.getColor(R.color.leku_app_blue)),
-                contentColor = Color.White
-            ),
+            colors =
+                ButtonDefaults.buttonColors(
+                    backgroundColor = buttonColor,
+                    contentColor = Color.White,
+                ),
             onClick = {
                 onMapPoisClicked(context)
-            }
+            },
         ) {
             Text(
                 stringResource(id = R.string.launch_map_picker_with_pois),
                 Modifier
                     .padding(8.dp)
                     .fillMaxWidth(),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
         Box(modifier = Modifier.fillMaxSize()) {
             Text(
                 stringResource(id = R.string.leku_lib_version),
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(0.dp, 0.dp, 0.dp, 8.dp),
-                textAlign = TextAlign.Center
+                modifier =
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(0.dp, 0.dp, 0.dp, 8.dp),
+                textAlign = TextAlign.Center,
             )
         }
     }

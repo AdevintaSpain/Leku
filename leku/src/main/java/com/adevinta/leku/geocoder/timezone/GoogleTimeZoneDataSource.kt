@@ -10,15 +10,17 @@ import java.io.IOException
 import java.lang.IllegalStateException
 import java.util.TimeZone
 
-class GoogleTimeZoneDataSource(private val geoApiContext: GeoApiContext) {
-
+class GoogleTimeZoneDataSource(
+    private val geoApiContext: GeoApiContext,
+) {
     companion object {
         fun getGeoApiKey(context: Context): String? {
             try {
-                val appInfo = context.packageManager.getApplicationInfo(
-                    context.packageName,
-                    PackageManager.GET_META_DATA
-                )
+                val appInfo =
+                    context.packageManager.getApplicationInfo(
+                        context.packageName,
+                        PackageManager.GET_META_DATA,
+                    )
                 if (appInfo.metaData != null) {
                     return appInfo.metaData.getString("com.google.android.geo.API_KEY")
                 }
@@ -29,7 +31,10 @@ class GoogleTimeZoneDataSource(private val geoApiContext: GeoApiContext) {
         }
     }
 
-    fun getTimeZone(latitude: Double, longitude: Double): TimeZone? {
+    fun getTimeZone(
+        latitude: Double,
+        longitude: Double,
+    ): TimeZone? {
         try {
             return TimeZoneApi.getTimeZone(geoApiContext, LatLng(latitude, longitude)).await()
         } catch (ignored: ApiException) {

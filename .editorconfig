@@ -1,4 +1,4 @@
 root = true
 
 [*]
-disabled_rules = import-ordering
+ktlint_function_naming_ignore_when_annotated_with = Composable

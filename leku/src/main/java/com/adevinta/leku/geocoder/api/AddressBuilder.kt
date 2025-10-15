@@ -8,7 +8,6 @@ import java.util.Locale
 import kotlin.collections.ArrayList
 
 class AddressBuilder {
-
     @Throws(JSONException::class)
     fun parseArrayResult(json: String): List<Address> {
         val addresses = ArrayList<Address>()
@@ -85,7 +84,10 @@ class AddressBuilder {
         return components
     }
 
-    private fun getFullAddress(street: String?, number: String?): StringBuilder {
+    private fun getFullAddress(
+        street: String?,
+        number: String?,
+    ): StringBuilder {
         val fullAddress = StringBuilder()
         fullAddress.append(street)
         if (!street.isNullOrEmpty() && !number.isNullOrEmpty()) {

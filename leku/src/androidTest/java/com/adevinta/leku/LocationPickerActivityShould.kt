@@ -38,17 +38,18 @@ class LocationPickerActivityShould {
 
     @Rule
     @JvmField
-    var runtimePermissionRule = GrantPermissionRule.grant(
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.WRITE_SECURE_SETTINGS
-    )!!
+    var runtimePermissionRule =
+        GrantPermissionRule.grant(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.WRITE_SECURE_SETTINGS,
+        )!!
 
     @Before
     fun setup() {
         permissionGranter = PermissionGranter()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getInstrumentation().uiAutomation.executeShellCommand(
-                "pm grant " + getTargetContext().packageName + " android.permission.WRITE_SECURE_SETTINGS"
+                "pm grant " + getTargetContext().packageName + " android.permission.WRITE_SECURE_SETTINGS",
             )
         }
     }
@@ -59,7 +60,7 @@ class LocationPickerActivityShould {
             activity.window.addFlags(
                 WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
                     or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                    or WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                    or WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
             )
         }
     }
@@ -68,7 +69,8 @@ class LocationPickerActivityShould {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Settings.Global.putFloat(
                 activityRule.activity.contentResolver,
-                Settings.Global.ANIMATOR_DURATION_SCALE, 0f
+                Settings.Global.ANIMATOR_DURATION_SCALE,
+                0f,
             )
         }
     }
@@ -216,7 +218,7 @@ class LocationPickerActivityShould {
 
         permissionGranter!!.allowPermissionsIfNeeded(
             activityRule.activity,
-            android.Manifest.permission.ACCESS_FINE_LOCATION
+            android.Manifest.permission.ACCESS_FINE_LOCATION,
         )
     }
 
@@ -225,7 +227,7 @@ class LocationPickerActivityShould {
 
         permissionGranter!!.denyPermissionsIfNeeded(
             activityRule.activity,
-            android.Manifest.permission.ACCESS_FINE_LOCATION
+            android.Manifest.permission.ACCESS_FINE_LOCATION,
         )
     }
 

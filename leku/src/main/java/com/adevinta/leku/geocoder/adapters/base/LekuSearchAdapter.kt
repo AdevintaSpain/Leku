@@ -9,7 +9,10 @@ abstract class LekuSearchAdapter<T : LekuViewHolder, I> : RecyclerView.Adapter<T
 
     override fun getItemCount(): Int = items.size
 
-    override fun onBindViewHolder(holder: T, position: Int) {
+    override fun onBindViewHolder(
+        holder: T,
+        position: Int,
+    ) {
         holder.itemView.setOnClickListener { onClick(position) }
     }
 }
