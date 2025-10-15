@@ -1,6 +1,5 @@
 package com.adevinta.leku
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -11,7 +10,6 @@ import android.graphics.PorterDuff
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.text.Editable
@@ -32,7 +30,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.ProgressBar
-import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
@@ -275,37 +272,26 @@ class LocationPickerActivity :
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
             )
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                var flags: Int = window.decorView.systemUiVisibility
-                flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
-                window.decorView.systemUiVisibility = flags
-            }
+            var flags: Int = window.decorView.systemUiVisibility
+            flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+            window.decorView.systemUiVisibility = flags
 
             setContentView(R.layout.leku_activity_location_picker)
-            moveGoogleLogoToTopRight()
         }
     }
 
-    @SuppressLint("InlinedApi")
-    private fun moveGoogleLogoToTopRight() {
-        val contentView: View = findViewById(android.R.id.content)
-        val googleLogo: View? = contentView.findViewWithTag("GoogleWatermark")
-        googleLogo?.let {
-            val glLayoutParams: RelativeLayout.LayoutParams =
-                it.layoutParams as RelativeLayout.LayoutParams
-            glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0)
-            glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0)
-            glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_START, 0)
-            glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE)
-            glLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_END, RelativeLayout.TRUE)
-            val paddingTopInPixels =
-                TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_DIP,
-                    PADDING_GOOGLE_LOGO_TOP_RIGHT,
-                    resources.displayMetrics
-                ).toInt()
-            it.setPadding(0, paddingTopInPixels, 0, 0)
-            it.layoutParams = glLayoutParams
+    private fun dp(value: Int): Int =
+        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value.toFloat(), resources.displayMetrics).toInt()
+
+    private fun placeGoogleLogoBottomLeft() {
+        map?.setPadding(dp(4), 0, 0, dp(4))
+    }
+
+    private fun placeGoogleLogoAboveLocationInfo() {
+        val locationView: View = findViewById(R.id.location_info)
+        locationView.post {
+            val bottomInset = locationView.height + dp(8)
+            map?.setPadding(dp(4), 0, 0, bottomInset)
         }
     }
 
@@ -372,6 +358,7 @@ class LocationPickerActivity :
             currentLekuPoi = null
             currentMarker?.remove()
             changeLocationInfoLayoutVisibility(View.GONE)
+            placeGoogleLogoBottomLeft()
         }
         searchEditLayout = findViewById(R.id.leku_search_touch_zone)
         searchFrameLayout = findViewById(R.id.search_frame_layout)
@@ -694,6 +681,7 @@ class LocationPickerActivity :
         super.onDestroy()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
         if (!shouldReturnOkOnBackPressed || isLocationInformedFromBundle) {
@@ -900,7 +888,7 @@ class LocationPickerActivity :
 
         changeListResultVisibility(
             when {
-                locationList.size >= 1 || suggestionList.size >= 1 -> View.VISIBLE
+                locationList.isNotEmpty() || suggestionList.isNotEmpty() -> View.VISIBLE
                 else -> View.GONE
             }
         )
@@ -923,6 +911,11 @@ class LocationPickerActivity :
 
     private fun changeLocationInfoLayoutVisibility(visibility: Int) {
         locationInfoLayout?.visibility = visibility
+        if (visibility == View.VISIBLE) {
+            placeGoogleLogoAboveLocationInfo()
+        } else {
+            placeGoogleLogoBottomLeft()
+        }
     }
 
     private fun showCoordinatesLayout() {
@@ -1537,6 +1530,7 @@ class LocationPickerActivity :
             it.uiSettings.isCompassEnabled = false
             it.uiSettings.isMyLocationButtonEnabled = true
             it.uiSettings.isMapToolbarEnabled = false
+            placeGoogleLogoAboveLocationInfo()
         }
     }
 
