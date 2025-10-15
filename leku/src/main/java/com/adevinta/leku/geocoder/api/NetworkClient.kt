@@ -12,7 +12,6 @@ private const val READ_TIMEOUT = 3000
 private const val CONNECT_TIMEOUT = 3000
 
 class NetworkClient {
-
     fun requestFromLocationName(request: String): String? {
         var result: String? = null
         var stream: InputStream? = null
@@ -50,7 +49,10 @@ class NetworkClient {
     }
 
     @Throws(IOException::class)
-    private fun readStream(stream: InputStream, maxLength: Int): String {
+    private fun readStream(
+        stream: InputStream,
+        maxLength: Int,
+    ): String {
         val result = ByteArrayOutputStream()
         val buffer = ByteArray(maxLength)
         var length = stream.read(buffer)

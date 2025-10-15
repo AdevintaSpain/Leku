@@ -4,5 +4,5 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
 abstract class LekuViewHolder(
-    view: View
+    view: View,
 ) : RecyclerView.ViewHolder(view)

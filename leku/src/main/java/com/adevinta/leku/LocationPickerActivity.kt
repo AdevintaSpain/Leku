@@ -139,7 +139,6 @@ class LocationPickerActivity :
     GoogleMap.OnMapLongClickListener,
     GeocoderViewInterface,
     GoogleMap.OnMapClickListener {
-
     companion object {
         var customDataSource: GeocoderDataSourceInterface? = null
         var customAdapter: LekuSearchAdapter<*, *>? = null
@@ -235,11 +234,12 @@ class LocationPickerActivity :
             var locationAddress = ""
             street?.let {
                 if (it.text.toString().isNotEmpty()) {
-                    locationAddress = if (isUnnamedRoadVisible) {
-                        it.text.toString()
-                    } else {
-                        removeUnnamedRoad(it.text.toString())
-                    }
+                    locationAddress =
+                        if (isUnnamedRoadVisible) {
+                            it.text.toString()
+                        } else {
+                            removeUnnamedRoad(it.text.toString())
+                        }
                 }
             }
             city?.let {
@@ -274,7 +274,7 @@ class LocationPickerActivity :
         } else {
             window.setFlags(
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             )
             var flags: Int = window.decorView.systemUiVisibility
             flags = flags and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
@@ -321,26 +321,33 @@ class LocationPickerActivity :
         }
         val geocoder = Geocoder(this, Locale.getDefault())
         if (googleGeocoderDataSource == null) {
-            googleGeocoderDataSource = GoogleGeocoderDataSource(
-                NetworkClient(),
-                AddressBuilder(),
-                SuggestionBuilder()
-            )
+            googleGeocoderDataSource =
+                GoogleGeocoderDataSource(
+                    NetworkClient(),
+                    AddressBuilder(),
+                    SuggestionBuilder(),
+                )
         }
-        val geocoderRepository = GeocoderRepository(
-            customDataSource,
-            AndroidGeocoderDataSource(geocoder),
-            googleGeocoderDataSource!!
-        )
-        val timeZoneDataSource = GoogleTimeZoneDataSource(
-            GeoApiContext.Builder().apiKey(GoogleTimeZoneDataSource.getGeoApiKey(this)).build()
-        )
-        geocoderPresenter = GeocoderPresenter(
-            ReactiveLocationProvider(applicationContext),
-            geocoderRepository,
-            placesDataSource,
-            timeZoneDataSource
-        )
+        val geocoderRepository =
+            GeocoderRepository(
+                customDataSource,
+                AndroidGeocoderDataSource(geocoder),
+                googleGeocoderDataSource!!,
+            )
+        val timeZoneDataSource =
+            GoogleTimeZoneDataSource(
+                GeoApiContext
+                    .Builder()
+                    .apiKey(GoogleTimeZoneDataSource.getGeoApiKey(this))
+                    .build(),
+            )
+        geocoderPresenter =
+            GeocoderPresenter(
+                ReactiveLocationProvider(applicationContext),
+                geocoderRepository,
+                placesDataSource,
+                timeZoneDataSource,
+            )
         geocoderPresenter?.setUI(this)
         progressBar = findViewById(R.id.loading_progress_bar)
         progressBar?.visibility = View.GONE
@@ -406,6 +413,7 @@ class LocationPickerActivity :
                         }
                     }
                 }
+
                 else -> {
                     searchAdapter = customAdapter ?: DefaultAddressAdapter(
                         this,
@@ -420,12 +428,13 @@ class LocationPickerActivity :
                     }
                 }
             }
-            searchResultsList = findViewById<RecyclerView>(R.id.search_result_list).apply {
-                setHasFixedSize(true)
-                layoutManager = linearLayoutManager
-                adapter = searchAdapter
-                addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-            }
+            searchResultsList =
+                findViewById<RecyclerView>(R.id.search_result_list).apply {
+                    setHasFixedSize(true)
+                    layoutManager = linearLayoutManager
+                    adapter = searchAdapter
+                    addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+                }
         }
     }
 
@@ -472,13 +481,28 @@ class LocationPickerActivity :
     }
 
     private fun createSearchTextChangeObserver() {
-        searchView?.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {}
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                onSearchTextChanged(s.toString())
-            }
-        })
+        searchView?.addTextChangedListener(
+            object : TextWatcher {
+                override fun afterTextChanged(s: Editable) {}
+
+                override fun beforeTextChanged(
+                    s: CharSequence,
+                    start: Int,
+                    count: Int,
+                    after: Int,
+                ) {
+                }
+
+                override fun onTextChanged(
+                    s: CharSequence,
+                    start: Int,
+                    before: Int,
+                    count: Int,
+                ) {
+                    onSearchTextChanged(s.toString())
+                }
+            },
+        )
     }
 
     private fun onSearchTextChanged(term: String) {
@@ -528,11 +552,12 @@ class LocationPickerActivity :
             track(TrackEvents.ON_LOCALIZED_ME)
         }
 
-        val btnAcceptLocation = if (isLegacyLayoutEnabled) {
-            findViewById<FloatingActionButton>(R.id.btnAccept)
-        } else {
-            findViewById<Button>(R.id.btnAccept)
-        }
+        val btnAcceptLocation =
+            if (isLegacyLayoutEnabled) {
+                findViewById<FloatingActionButton>(R.id.btnAccept)
+            } else {
+                findViewById<Button>(R.id.btnAccept)
+            }
         btnAcceptLocation.setOnClickListener { returnCurrentPosition() }
 
         val btnSatellite = findViewById<FloatingActionButton>(R.id.btnSatellite)
@@ -542,10 +567,11 @@ class LocationPickerActivity :
                     if (it.mapType == MAP_TYPE_SATELLITE) MAP_TYPE_NORMAL else MAP_TYPE_SATELLITE
                 if (isLegacyLayoutEnabled) {
                     btnSatellite.setImageResource(
-                        if (it.mapType == MAP_TYPE_SATELLITE)
+                        if (it.mapType == MAP_TYPE_SATELLITE) {
                             R.drawable.leku_ic_satellite_off_legacy
-                        else
+                        } else {
                             R.drawable.leku_ic_satellite_on_legacy
+                        },
                     )
                 } else {
                     var image = 0
@@ -558,11 +584,12 @@ class LocationPickerActivity :
                         color = R.color.leku_ic_satellite
                     }
 
-                    val colorRes = try {
-                        ContextCompat.getColor(btnSatellite.context, color)
-                    } catch (ex: Resources.NotFoundException) {
-                        0
-                    }
+                    val colorRes =
+                        try {
+                            ContextCompat.getColor(btnSatellite.context, color)
+                        } catch (ex: Resources.NotFoundException) {
+                            0
+                        }
 
                     btnSatellite.setImageResource(image)
                     btnSatellite.setColorFilter(colorRes, PorterDuff.Mode.SRC_ATOP)
@@ -591,7 +618,7 @@ class LocationPickerActivity :
     private fun setUpMapIfNeeded() {
         if (map == null) {
             (supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment).getMapAsync(
-                this
+                this,
             )
         }
     }
@@ -606,8 +633,8 @@ class LocationPickerActivity :
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        when (item.itemId) {
             android.R.id.home -> {
                 if (!isLegacyLayoutEnabled && isSearchLayoutShown) {
                     hideSearchLayout()
@@ -616,6 +643,7 @@ class LocationPickerActivity :
                 }
                 true
             }
+
             R.id.action_voice -> {
                 searchView?.let {
                     if (it.text.toString().isEmpty()) {
@@ -627,16 +655,16 @@ class LocationPickerActivity :
                 }
                 true
             }
+
             else -> {
                 super.onOptionsItemSelected(item)
             }
         }
-    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
@@ -731,7 +759,7 @@ class LocationPickerActivity :
             try {
                 connectionResult.startResolutionForResult(
                     this,
-                    CONNECTION_FAILURE_RESOLUTION_REQUEST
+                    CONNECTION_FAILURE_RESOLUTION_REQUEST,
                 )
             } catch (e: IntentSender.SendIntentException) {
                 track(TrackEvents.GOOGLE_API_CONNECTION_FAILED)
@@ -759,11 +787,11 @@ class LocationPickerActivity :
         savedInstanceState.putBoolean(ENABLE_SATELLITE_VIEW, enableSatelliteView)
         savedInstanceState.putBoolean(
             ENABLE_LOCATION_PERMISSION_REQUEST,
-            enableLocationPermissionRequest
+            enableLocationPermissionRequest,
         )
         savedInstanceState.putBoolean(
             ENABLE_GOOGLE_PLACES,
-            placeResolution
+            placeResolution,
         )
         savedInstanceState.putBoolean(ENABLE_BOTTOM_SOLID_COLOR, enableBottomSolidColor)
         super.onSaveInstanceState(savedInstanceState)
@@ -827,8 +855,7 @@ class LocationPickerActivity :
         changeListResultVisibility(View.GONE)
     }
 
-    private fun makeEmptyResultsToast(): Toast =
-        Toast.makeText(applicationContext, R.string.leku_no_search_results, Toast.LENGTH_LONG)
+    private fun makeEmptyResultsToast(): Toast = Toast.makeText(applicationContext, R.string.leku_no_search_results, Toast.LENGTH_LONG)
 
     override fun showLocations(addresses: List<Address>) {
         fillLocationList(addresses)
@@ -907,7 +934,7 @@ class LocationPickerActivity :
             when {
                 locationList.isNotEmpty() || suggestionList.isNotEmpty() -> View.VISIBLE
                 else -> View.GONE
-            }
+            },
         )
 
         if (locationList.size == 1) {
@@ -1045,27 +1072,30 @@ class LocationPickerActivity :
             setLayoutVisibilityFromBundle(savedInstanceState)
         }
 
-        googleGeocoderDataSource = GoogleGeocoderDataSource(
-            NetworkClient(),
-            AddressBuilder(),
-            SuggestionBuilder()
-        )
+        googleGeocoderDataSource =
+            GoogleGeocoderDataSource(
+                NetworkClient(),
+                AddressBuilder(),
+                SuggestionBuilder(),
+            )
 
-        geoApiKey = if (savedInstanceState.keySet().contains(GEOLOC_API_KEY)) {
-            savedInstanceState.getString(GEOLOC_API_KEY, "")
-        } else {
-            GoogleTimeZoneDataSource.getGeoApiKey(this)
-        }
+        geoApiKey =
+            if (savedInstanceState.keySet().contains(GEOLOC_API_KEY)) {
+                savedInstanceState.getString(GEOLOC_API_KEY, "")
+            } else {
+                GoogleTimeZoneDataSource.getGeoApiKey(this)
+            }
 
         if (geoApiKey.isNullOrEmpty().not()) {
             googleGeocoderDataSource?.setGeolocationApiKey(geoApiKey!!)
         }
 
-        googlePlacesApiKey = if (savedInstanceState.keySet().contains(PLACES_API_KEY)) {
-            savedInstanceState.getString(PLACES_API_KEY, "")
-        } else {
-            GoogleTimeZoneDataSource.getGeoApiKey(this)
-        }
+        googlePlacesApiKey =
+            if (savedInstanceState.keySet().contains(PLACES_API_KEY)) {
+                savedInstanceState.getString(PLACES_API_KEY, "")
+            } else {
+                GoogleTimeZoneDataSource.getGeoApiKey(this)
+            }
 
         if (googlePlacesApiKey.isNullOrEmpty().not()) {
             googleGeocoderDataSource?.setPlaceApiKey(googlePlacesApiKey!!)
@@ -1153,27 +1183,30 @@ class LocationPickerActivity :
             poisList = transitionBundle.getParcelableArrayList(POIS_LIST)
         }
 
-        googleGeocoderDataSource = GoogleGeocoderDataSource(
-            NetworkClient(),
-            AddressBuilder(),
-            SuggestionBuilder()
-        )
+        googleGeocoderDataSource =
+            GoogleGeocoderDataSource(
+                NetworkClient(),
+                AddressBuilder(),
+                SuggestionBuilder(),
+            )
 
-        geoApiKey = if (transitionBundle.keySet().contains(GEOLOC_API_KEY)) {
-            transitionBundle.getString(GEOLOC_API_KEY, "")
-        } else {
-            GoogleTimeZoneDataSource.getGeoApiKey(this)
-        }
+        geoApiKey =
+            if (transitionBundle.keySet().contains(GEOLOC_API_KEY)) {
+                transitionBundle.getString(GEOLOC_API_KEY, "")
+            } else {
+                GoogleTimeZoneDataSource.getGeoApiKey(this)
+            }
 
         if (geoApiKey.isNullOrEmpty().not()) {
             googleGeocoderDataSource?.setGeolocationApiKey(geoApiKey!!)
         }
 
-        googlePlacesApiKey = if (transitionBundle.keySet().contains(PLACES_API_KEY)) {
-            transitionBundle.getString(PLACES_API_KEY, "")
-        } else {
-            GoogleTimeZoneDataSource.getGeoApiKey(this)
-        }
+        googlePlacesApiKey =
+            if (transitionBundle.keySet().contains(PLACES_API_KEY)) {
+                transitionBundle.getString(PLACES_API_KEY, "")
+            } else {
+                GoogleTimeZoneDataSource.getGeoApiKey(this)
+            }
 
         if (googlePlacesApiKey.isNullOrEmpty().not()) {
             googleGeocoderDataSource?.setPlaceApiKey(googlePlacesApiKey!!)
@@ -1242,12 +1275,12 @@ class LocationPickerActivity :
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         intent.putExtra(
             RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM,
         )
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.leku_voice_search_promp))
         intent.putExtra(
             RecognizerIntent.EXTRA_LANGUAGE,
-            getString(R.string.leku_voice_search_extra_language)
+            getString(R.string.leku_voice_search_extra_language),
         )
 
         if (isPlayServicesAvailable()) {
@@ -1264,7 +1297,8 @@ class LocationPickerActivity :
         val result = googleAPI.isGooglePlayServicesAvailable(applicationContext)
         if (result != ConnectionResult.SUCCESS) {
             if (googleAPI.isUserResolvableError(result)) {
-                googleAPI.getErrorDialog(this, result, CONNECTION_FAILURE_RESOLUTION_REQUEST)
+                googleAPI
+                    .getErrorDialog(this, result, CONNECTION_FAILURE_RESOLUTION_REQUEST)
                     ?.show()
             }
             return false
@@ -1301,12 +1335,12 @@ class LocationPickerActivity :
         setBottomColor()
     }
 
-    private fun getFormattedAddress(address: Address): String {
-        return if (!address.thoroughfare.isNullOrEmpty() && !address.subThoroughfare.isNullOrEmpty()) {
+    private fun getFormattedAddress(address: Address): String =
+        if (!address.thoroughfare.isNullOrEmpty() && !address.subThoroughfare.isNullOrEmpty()) {
             getString(
                 R.string.leku_formatted_address,
                 address.thoroughfare,
-                address.subThoroughfare
+                address.subThoroughfare,
             )
         } else {
             if (address.subThoroughfare.isNullOrEmpty() && !address.thoroughfare.isNullOrEmpty()) {
@@ -1317,7 +1351,6 @@ class LocationPickerActivity :
                 address.getAddressLine(0)
             }
         }
-    }
 
     private fun setLocationInfo(poi: LekuPoi) {
         this.currentLekuPoi = poi
@@ -1327,35 +1360,38 @@ class LocationPickerActivity :
         showAddressLayout()
     }
 
-    private fun isStreetEqualsCity(address: Address): Boolean {
-        return address.getAddressLine(0) == address.locality
-    }
+    private fun isStreetEqualsCity(address: Address): Boolean = address.getAddressLine(0) == address.locality
 
     private fun setNewMapMarker(latLng: LatLng) {
         if (map != null) {
             currentMarker?.remove()
-            val cameraPosition = CameraPosition.Builder().target(latLng)
-                .zoom(defaultZoom.toFloat())
-                .build()
+            val cameraPosition =
+                CameraPosition
+                    .Builder()
+                    .target(latLng)
+                    .zoom(defaultZoom.toFloat())
+                    .build()
             hasWiderZoom = false
             map?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
             currentMarker = addMarker(latLng)
-            map?.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
-                override fun onMarkerDragStart(marker: Marker) {
-                }
-
-                override fun onMarkerDrag(marker: Marker) {}
-
-                override fun onMarkerDragEnd(marker: Marker) {
-                    if (currentLocation == null) {
-                        currentLocation = Location(getString(R.string.leku_network_resource))
+            map?.setOnMarkerDragListener(
+                object : GoogleMap.OnMarkerDragListener {
+                    override fun onMarkerDragStart(marker: Marker) {
                     }
-                    currentLekuPoi = null
-                    currentLocation?.longitude = marker.position.longitude
-                    currentLocation?.latitude = marker.position.latitude
-                    setCurrentPositionLocation()
-                }
-            })
+
+                    override fun onMarkerDrag(marker: Marker) {}
+
+                    override fun onMarkerDragEnd(marker: Marker) {
+                        if (currentLocation == null) {
+                            currentLocation = Location(getString(R.string.leku_network_resource))
+                        }
+                        currentLekuPoi = null
+                        currentLocation?.longitude = marker.position.longitude
+                        currentLocation?.latitude = marker.position.latitude
+                        setCurrentPositionLocation()
+                    }
+                },
+            )
         }
     }
 
@@ -1365,12 +1401,15 @@ class LocationPickerActivity :
             searchZone != null && searchZone!!.isNotEmpty() -> {
                 retrieveLocationFromZone(query, searchZone!!)
             }
+
             searchZoneRect != null -> {
                 retrieveLocationFromZone(query, searchZoneRect!!)
             }
+
             isSearchZoneWithDefaultLocale -> {
                 retrieveLocationFromDefaultZone(query)
             }
+
             else -> {
                 geocoderPresenter?.getFromLocationName(query)
             }
@@ -1383,12 +1422,15 @@ class LocationPickerActivity :
             searchZone != null && searchZone!!.isNotEmpty() -> {
                 retrieveDebouncedLocationFromZone(query, searchZone!!, DEBOUNCE_TIME)
             }
+
             searchZoneRect != null -> {
                 retrieveDebouncedLocationFromZone(query, searchZoneRect!!, DEBOUNCE_TIME)
             }
+
             isSearchZoneWithDefaultLocale -> {
                 retrieveDebouncedLocationFromDefaultZone(query, DEBOUNCE_TIME)
             }
+
             else -> {
                 geocoderPresenter?.getDebouncedFromLocationName(query, DEBOUNCE_TIME)
             }
@@ -1399,8 +1441,9 @@ class LocationPickerActivity :
         geocoderPresenter?.let {
             if (DefaultCountryLocaleRect.defaultLowerLeft != null) {
                 it.getFromLocationName(
-                    query, DefaultCountryLocaleRect.defaultLowerLeft!!,
-                    DefaultCountryLocaleRect.defaultUpperRight!!
+                    query,
+                    DefaultCountryLocaleRect.defaultLowerLeft!!,
+                    DefaultCountryLocaleRect.defaultUpperRight!!,
                 )
             } else {
                 it.getFromLocationName(query)
@@ -1408,13 +1451,17 @@ class LocationPickerActivity :
         }
     }
 
-    private fun retrieveLocationFromZone(query: String, zoneKey: String) {
+    private fun retrieveLocationFromZone(
+        query: String,
+        zoneKey: String,
+    ) {
         geocoderPresenter?.let {
             val locale = Locale(zoneKey)
             if (DefaultCountryLocaleRect.getLowerLeftFromZone(locale) != null) {
                 it.getFromLocationName(
-                    query, DefaultCountryLocaleRect.getLowerLeftFromZone(locale)!!,
-                    DefaultCountryLocaleRect.getUpperRightFromZone(locale)!!
+                    query,
+                    DefaultCountryLocaleRect.getLowerLeftFromZone(locale)!!,
+                    DefaultCountryLocaleRect.getUpperRightFromZone(locale)!!,
                 )
             } else {
                 it.getFromLocationName(query)
@@ -1422,20 +1469,28 @@ class LocationPickerActivity :
         }
     }
 
-    private fun retrieveLocationFromZone(query: String, zoneRect: SearchZoneRect) {
+    private fun retrieveLocationFromZone(
+        query: String,
+        zoneRect: SearchZoneRect,
+    ) {
         geocoderPresenter?.getFromLocationName(
             query,
             zoneRect.lowerLeft,
-            zoneRect.upperRight
+            zoneRect.upperRight,
         )
     }
 
-    private fun retrieveDebouncedLocationFromDefaultZone(query: String, debounceTime: Int) {
+    private fun retrieveDebouncedLocationFromDefaultZone(
+        query: String,
+        debounceTime: Int,
+    ) {
         geocoderPresenter?.let {
             if (DefaultCountryLocaleRect.defaultLowerLeft != null) {
                 it.getDebouncedFromLocationName(
-                    query, DefaultCountryLocaleRect.defaultLowerLeft!!,
-                    DefaultCountryLocaleRect.defaultUpperRight!!, debounceTime
+                    query,
+                    DefaultCountryLocaleRect.defaultLowerLeft!!,
+                    DefaultCountryLocaleRect.defaultUpperRight!!,
+                    debounceTime,
                 )
             } else {
                 it.getDebouncedFromLocationName(query, debounceTime)
@@ -1446,14 +1501,16 @@ class LocationPickerActivity :
     private fun retrieveDebouncedLocationFromZone(
         query: String,
         zoneKey: String,
-        debounceTime: Int
+        debounceTime: Int,
     ) {
         geocoderPresenter?.let {
             val locale = Locale(zoneKey)
             if (DefaultCountryLocaleRect.getLowerLeftFromZone(locale) != null) {
                 it.getDebouncedFromLocationName(
-                    query, DefaultCountryLocaleRect.getLowerLeftFromZone(locale)!!,
-                    DefaultCountryLocaleRect.getUpperRightFromZone(locale)!!, debounceTime
+                    query,
+                    DefaultCountryLocaleRect.getLowerLeftFromZone(locale)!!,
+                    DefaultCountryLocaleRect.getUpperRightFromZone(locale)!!,
+                    debounceTime,
                 )
             } else {
                 it.getDebouncedFromLocationName(query, debounceTime)
@@ -1464,13 +1521,13 @@ class LocationPickerActivity :
     private fun retrieveDebouncedLocationFromZone(
         query: String,
         zoneRect: SearchZoneRect,
-        debounceTime: Int
+        debounceTime: Int,
     ) {
         geocoderPresenter?.getDebouncedFromLocationName(
             query,
             zoneRect.lowerLeft,
             zoneRect.upperRight,
-            debounceTime
+            debounceTime,
         )
     }
 
@@ -1490,6 +1547,7 @@ class LocationPickerActivity :
                     track(TrackEvents.RESULT_OK)
                 }
             }
+
             currentLocation != null -> {
                 val returnIntent = Intent()
                 currentLocation?.let {
@@ -1511,6 +1569,7 @@ class LocationPickerActivity :
                 setResult(Activity.RESULT_OK, returnIntent)
                 track(TrackEvents.RESULT_OK)
             }
+
             else -> {
                 setResult(Activity.RESULT_CANCELED)
                 track(TrackEvents.CANCEL)
@@ -1574,8 +1633,8 @@ class LocationPickerActivity :
             geocoderPresenter?.getInfoFromLocation(
                 LatLng(
                     it.latitude,
-                    it.longitude
-                )
+                    it.longitude,
+                ),
             )
         }
     }
@@ -1586,10 +1645,15 @@ class LocationPickerActivity :
                 lekuPoisMarkersMap = HashMap()
                 for (lekuPoi in pois) {
                     val location = lekuPoi.location
-                    val marker = addPoiMarker(
-                        LatLng(location.latitude, location.longitude),
-                        lekuPoi.title, lekuPoi.address
-                    )
+                    val marker =
+                        addPoiMarker(
+                            LatLng(
+                                location.latitude,
+                                location.longitude,
+                            ),
+                            lekuPoi.title,
+                            lekuPoi.address,
+                        )
                     lekuPoisMarkersMap?.let {
                         marker?.let { marker ->
                             it[marker.id] = lekuPoi
@@ -1615,13 +1679,16 @@ class LocationPickerActivity :
     private fun centerToPoi(lekuPoi: LekuPoi) {
         map?.let {
             val location = lekuPoi.location
-            val cameraPosition = CameraPosition.Builder()
-                .target(
-                    LatLng(
-                        location.latitude,
-                        location.longitude
-                    )
-                ).zoom(defaultZoom.toFloat()).build()
+            val cameraPosition =
+                CameraPosition
+                    .Builder()
+                    .target(
+                        LatLng(
+                            location.latitude,
+                            location.longitude,
+                        ),
+                    ).zoom(defaultZoom.toFloat())
+                    .build()
             hasWiderZoom = false
             it.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
         }
@@ -1629,9 +1696,12 @@ class LocationPickerActivity :
 
     @Synchronized
     private fun buildGoogleApiClient() {
-        val googleApiClientBuilder = GoogleApiClient.Builder(this).addConnectionCallbacks(this)
-            .addOnConnectionFailedListener(this)
-            .addApi(LocationServices.API)
+        val googleApiClientBuilder =
+            GoogleApiClient
+                .Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
 
         googleApiClient = googleApiClientBuilder.build()
         googleApiClient?.connect()
@@ -1640,21 +1710,27 @@ class LocationPickerActivity :
     private fun addMarker(latLng: LatLng): Marker? {
         map?.let {
             return it.addMarker(
-                MarkerOptions().position(latLng)
+                MarkerOptions()
+                    .position(latLng)
                     .icon(currentLocationBitmapMaker)
-                    .draggable(true)
+                    .draggable(true),
             )
         }
         return null
     }
 
-    private fun addPoiMarker(latLng: LatLng, title: String, address: String): Marker? {
+    private fun addPoiMarker(
+        latLng: LatLng,
+        title: String,
+        address: String,
+    ): Marker? {
         map?.let {
             return it.addMarker(
-                MarkerOptions().position(latLng)
+                MarkerOptions()
+                    .position(latLng)
                     .icon(otherLocationBitmapMaker)
                     .title(title)
-                    .snippet(address)
+                    .snippet(address),
             )
         }
         return null
@@ -1703,12 +1779,14 @@ class LocationPickerActivity :
         }
     }
 
-    private fun removeUnnamedRoad(str: String): String {
-        return str.replace(UNNAMED_ROAD_WITH_COMMA, "")
+    private fun removeUnnamedRoad(str: String): String =
+        str
+            .replace(UNNAMED_ROAD_WITH_COMMA, "")
             .replace(UNNAMED_ROAD_WITH_HYPHEN, "")
-    }
 
-    class Builder(val context: Context) {
+    class Builder(
+        val context: Context,
+    ) {
         private var locationLatitude: Double? = null
         private var locationLongitude: Double? = null
         private var searchZoneLocale: String? = null
@@ -1747,7 +1825,10 @@ class LocationPickerActivity :
             return this
         }
 
-        fun withLocation(latitude: Double, longitude: Double): Builder {
+        fun withLocation(
+            latitude: Double,
+            longitude: Double,
+        ): Builder {
             this.locationLatitude = latitude
             this.locationLongitude = longitude
             return this
@@ -1853,7 +1934,9 @@ class LocationPickerActivity :
             return this
         }
 
-        fun withMapStyle(@RawRes mapStyle: Int): Builder {
+        fun withMapStyle(
+            @RawRes mapStyle: Int,
+        ): Builder {
             this.mapStyle = mapStyle
             return this
         }

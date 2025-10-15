@@ -16,11 +16,12 @@ class LekuPoi : Parcelable {
         this.title = title
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
 
-    override fun writeToParcel(dest: Parcel, flags: Int) {
+    override fun writeToParcel(
+        dest: Parcel,
+        flags: Int,
+    ) {
         dest.writeString(this.id)
         dest.writeParcelable(this.location, flags)
         dest.writeString(this.title)
@@ -34,22 +35,17 @@ class LekuPoi : Parcelable {
         this.address = `in`.readString()!!
     }
 
-    override fun toString(): String {
-        return "LekuPoi{" + "id='" + id + '\''.toString() + ", location=" + location + ", title='" +
+    override fun toString(): String =
+        "LekuPoi{" + "id='" + id + '\''.toString() + ", location=" + location + ", title='" +
             title + '\''.toString() + ", address='" + address + '\''.toString() + '}'.toString()
-    }
 
     companion object {
-
         @JvmField
-        val CREATOR: Parcelable.Creator<LekuPoi> = object : Parcelable.Creator<LekuPoi> {
-            override fun createFromParcel(source: Parcel): LekuPoi {
-                return LekuPoi(source)
-            }
+        val CREATOR: Parcelable.Creator<LekuPoi> =
+            object : Parcelable.Creator<LekuPoi> {
+                override fun createFromParcel(source: Parcel): LekuPoi = LekuPoi(source)
 
-            override fun newArray(size: Int): Array<LekuPoi?> {
-                return arrayOfNulls(size)
+                override fun newArray(size: Int): Array<LekuPoi?> = arrayOfNulls(size)
             }
-        }
     }
 }

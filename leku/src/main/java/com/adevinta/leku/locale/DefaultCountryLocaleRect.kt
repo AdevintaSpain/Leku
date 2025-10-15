@@ -61,8 +61,8 @@ internal object DefaultCountryLocaleRect {
     val defaultUpperRight: LatLng?
         get() = getUpperRightFromZone(Locale.getDefault())
 
-    fun getLowerLeftFromZone(locale: Locale): LatLng? {
-        return when {
+    fun getLowerLeftFromZone(locale: Locale): LatLng? =
+        when {
             Locale.US == locale -> US_LOWER_LEFT
             Locale.UK == locale -> UK_LOWER_LEFT
             Locale.FRANCE == locale -> FRANCE_LOWER_LEFT
@@ -79,10 +79,9 @@ internal object DefaultCountryLocaleRect {
             locale.toString().equals(IRELAND_COUNTRY_CODE, ignoreCase = true) -> IRELAND_LOWER_LEFT
             else -> null
         }
-    }
 
-    fun getUpperRightFromZone(locale: Locale): LatLng? {
-        return when {
+    fun getUpperRightFromZone(locale: Locale): LatLng? =
+        when {
             Locale.US == locale -> US_UPPER_RIGHT
             Locale.UK == locale -> UK_UPPER_RIGHT
             Locale.FRANCE == locale -> FRANCE_UPPER_RIGHT
@@ -99,5 +98,4 @@ internal object DefaultCountryLocaleRect {
             locale.toString().equals(IRELAND_COUNTRY_CODE, ignoreCase = true) -> IRELAND_UPPER_RIGHT
             else -> null
         }
-    }
 }

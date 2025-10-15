@@ -1,13 +1,13 @@
 package com.adevinta.leku.geocoder
 
 import android.location.Address
-import com.google.android.gms.maps.model.LatLng
 import com.adevinta.leku.geocoder.api.AddressBuilder
 import com.adevinta.leku.geocoder.api.NetworkClient
 import com.adevinta.leku.geocoder.api.NetworkException
 import com.adevinta.leku.geocoder.api.SuggestionBuilder
-import java.util.Locale
+import com.google.android.gms.maps.model.LatLng
 import org.json.JSONException
+import java.util.Locale
 
 private const val QUERY_REQUEST =
     "https://maps.googleapis.com/maps/api/geocode/json?address=%1\$s&key=%2\$s"
@@ -23,9 +23,8 @@ private const val QUERY_PLACE_ID =
 class GoogleGeocoderDataSource(
     private val networkClient: NetworkClient,
     private val addressBuilder: AddressBuilder,
-    private val suggestionBuilder: SuggestionBuilder
+    private val suggestionBuilder: SuggestionBuilder,
 ) : GeocoderDataSourceInterface {
-
     private var geolocationApiKey: String? = null
 
     fun setGeolocationApiKey(apiKey: String) {
@@ -33,6 +32,7 @@ class GoogleGeocoderDataSource(
     }
 
     private var placesApiKey: String? = null
+
     fun setPlaceApiKey(apiKey: String) {
         this.placesApiKey = apiKey
     }
@@ -43,9 +43,10 @@ class GoogleGeocoderDataSource(
             return suggestions
         }
         return try {
-            val result = networkClient.requestFromLocationName(
-                String.format(Locale.ENGLISH, QUERY_AUTOCOMPLETE, query, placesApiKey)
-            )
+            val result =
+                networkClient.requestFromLocationName(
+                    String.format(Locale.ENGLISH, QUERY_AUTOCOMPLETE, query, placesApiKey),
+                )
             if (result != null) {
                 suggestions.addAll(suggestionBuilder.parseResult(result))
             }
@@ -62,9 +63,10 @@ class GoogleGeocoderDataSource(
             return null
         }
         return try {
-            val result = networkClient.requestFromLocationName(
-                String.format(Locale.ENGLISH, QUERY_PLACE_ID, placeId, placesApiKey)
-            )
+            val result =
+                networkClient.requestFromLocationName(
+                    String.format(Locale.ENGLISH, QUERY_PLACE_ID, placeId, placesApiKey),
+                )
             when {
                 result != null -> addressBuilder.parseResult(result)
                 else -> null
@@ -82,38 +84,10 @@ class GoogleGeocoderDataSource(
             return addresses
         }
         return try {
-            val result = networkClient.requestFromLocationName(
-                String.format(Locale.ENGLISH, QUERY_REQUEST, query.trim { it <= ' ' }, geolocationApiKey)
-            )
-            if (result != null) {
-                addresses.addAll(addressBuilder.parseArrayResult(result))
-            }
-            addresses
-        } catch (e: JSONException) {
-            addresses
-        } catch (e: NetworkException) {
-            addresses
-        }
-    }
-
-    override suspend fun getFromLocationName(query: String, lowerLeft: LatLng, upperRight: LatLng): List<Address> {
-        val addresses = mutableListOf<Address>()
-        if (geolocationApiKey == null) {
-            return addresses
-        }
-        return try {
-            val result = networkClient.requestFromLocationName(
-                String.format(
-                    Locale.ENGLISH,
-                    QUERY_REQUEST_WITH_RECTANGLE,
-                    query.trim { it <= ' ' },
-                    geolocationApiKey,
-                    lowerLeft.latitude,
-                    lowerLeft.longitude,
-                    upperRight.latitude,
-                    upperRight.longitude
+            val result =
+                networkClient.requestFromLocationName(
+                    String.format(Locale.ENGLISH, QUERY_REQUEST, query.trim { it <= ' ' }, geolocationApiKey),
                 )
-            )
             if (result != null) {
                 addresses.addAll(addressBuilder.parseArrayResult(result))
             }
@@ -125,15 +99,53 @@ class GoogleGeocoderDataSource(
         }
     }
 
-    override suspend fun getFromLocation(latitude: Double, longitude: Double): List<Address> {
+    override suspend fun getFromLocationName(
+        query: String,
+        lowerLeft: LatLng,
+        upperRight: LatLng,
+    ): List<Address> {
         val addresses = mutableListOf<Address>()
         if (geolocationApiKey == null) {
             return addresses
         }
         return try {
-            val result = networkClient.requestFromLocationName(
-                String.format(Locale.ENGLISH, QUERY_LAT_LONG, latitude, longitude, geolocationApiKey)
-            )
+            val result =
+                networkClient.requestFromLocationName(
+                    String.format(
+                        Locale.ENGLISH,
+                        QUERY_REQUEST_WITH_RECTANGLE,
+                        query.trim { it <= ' ' },
+                        geolocationApiKey,
+                        lowerLeft.latitude,
+                        lowerLeft.longitude,
+                        upperRight.latitude,
+                        upperRight.longitude,
+                    ),
+                )
+            if (result != null) {
+                addresses.addAll(addressBuilder.parseArrayResult(result))
+            }
+            addresses
+        } catch (e: JSONException) {
+            addresses
+        } catch (e: NetworkException) {
+            addresses
+        }
+    }
+
+    override suspend fun getFromLocation(
+        latitude: Double,
+        longitude: Double,
+    ): List<Address> {
+        val addresses = mutableListOf<Address>()
+        if (geolocationApiKey == null) {
+            return addresses
+        }
+        return try {
+            val result =
+                networkClient.requestFromLocationName(
+                    String.format(Locale.ENGLISH, QUERY_LAT_LONG, latitude, longitude, geolocationApiKey),
+                )
             if (result != null) {
                 addresses.addAll(addressBuilder.parseArrayResult(result))
             }

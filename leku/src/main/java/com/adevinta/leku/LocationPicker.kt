@@ -4,7 +4,6 @@ import com.adevinta.leku.tracker.LocationPickerTracker
 import com.adevinta.leku.tracker.TrackEvents
 
 object LocationPicker {
-
     private val EMPTY_TRACKER = EmptyLocationPickerTracker()
 
     private var tracker: LocationPickerTracker = EMPTY_TRACKER
@@ -16,9 +15,7 @@ object LocationPicker {
         LocationPicker.tracker = tracker
     }
 
-    fun getTracker(): LocationPickerTracker {
-        return tracker
-    }
+    fun getTracker(): LocationPickerTracker = tracker
 
     fun reset() {
         tracker = EMPTY_TRACKER

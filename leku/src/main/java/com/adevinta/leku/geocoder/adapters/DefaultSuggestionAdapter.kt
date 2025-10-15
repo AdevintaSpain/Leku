@@ -17,20 +17,24 @@ class DefaultSuggestionAdapter(
 ) : SuggestSearchAdapter<SuggestionViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
-        viewType: Int
+        viewType: Int,
     ): SuggestionViewHolder {
-        val view = LayoutInflater
-            .from(parent.context)
-            .inflate(
-                R.layout.leku_search_list_item,
-                parent,
-                false
-            ) as TextView
+        val view =
+            LayoutInflater
+                .from(parent.context)
+                .inflate(
+                    R.layout.leku_search_list_item,
+                    parent,
+                    false,
+                ) as TextView
 
         return SuggestionViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: SuggestionViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: SuggestionViewHolder,
+        position: Int,
+    ) {
         super.onBindViewHolder(holder, position)
         if (items.isNotEmpty()) {
             holder.textView.text = items[position].description
