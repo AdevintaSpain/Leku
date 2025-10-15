@@ -16,6 +16,7 @@ jobs:
         uses: actions/setup-java@v5.0.0
         with:
           java-version: 21
+          distribution: 'adopt'
 
         # Base64 decodes and pipes the GPG key content into the secret file
       - name: Prepare environment
