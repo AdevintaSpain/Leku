@@ -13,6 +13,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -153,9 +154,32 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
+/**
+ * Toggles between Light and Dark mode for the sample app.
+ */
+private fun toggleNightMode(context: Context) {
+    val currentNightMode =
+        context.resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
+
+    val newMode =
+        when (currentNightMode) {
+            android.content.res.Configuration.UI_MODE_NIGHT_YES -> AppCompatDelegate.MODE_NIGHT_NO
+            else -> AppCompatDelegate.MODE_NIGHT_YES
+        }
+
+    AppCompatDelegate.setDefaultNightMode(newMode)
+}
+
+private fun isNightMode(context: Context): Boolean {
+    val currentNightMode =
+        context.resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
+    return currentNightMode == android.content.res.Configuration.UI_MODE_NIGHT_YES
+}
+
 private fun onLaunchMapPickerClicked(context: Context) {
     val activity = context as MainActivity
-    val locationPickerIntent =
+
+    val builder =
         LocationPickerActivity
             .Builder(activity)
             .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
@@ -175,8 +199,15 @@ private fun onLaunchMapPickerClicked(context: Context) {
             // .withVoiceSearchHidden()
             .withUnnamedRoadHidden()
             .withSolidBottomColor()
-            // .withSearchBarHidden()
-            .build()
+    // .withSearchBarHidden()
+
+    // Optional: use a dark Google Maps style when night mode is enabled
+    // (requires you to add app/src/main/res/raw/map_style_night.json)
+    if (isNightMode(context)) {
+        builder.withMapStyle(R.raw.map_style_night)
+    }
+
+    val locationPickerIntent = builder.build()
 
     // this is optional if you want to return RESULT_OK if you don't set the
     // latitude/longitude and click back button
@@ -231,12 +262,19 @@ private fun onMapPoisClicked(context: Context) {
 
 private fun onMapWithStylesClicked(context: Context) {
     val activity = context as MainActivity
-    val locationPickerIntent =
+
+    val builder =
         LocationPickerActivity
             .Builder(activity)
             .withLocation(DEMO_LATITUDE, DEMO_LONGITUDE)
-            .withMapStyle(R.raw.map_style_retro)
-            .build()
+
+    if (isNightMode(context)) {
+        builder.withMapStyle(R.raw.map_style_night)
+    } else {
+        builder.withMapStyle(R.raw.map_style_retro)
+    }
+
+    val locationPickerIntent = builder.build()
     activity.mapPoisActivityResultLauncher.launch(locationPickerIntent)
 }
 
@@ -260,6 +298,24 @@ fun MainView() {
             painter = painterResource(id = R.mipmap.leku_img_logo),
             contentDescription = null,
         )
+
+        Button(
+            colors =
+                ButtonDefaults.buttonColors(
+                    backgroundColor = buttonColor,
+                    contentColor = Color.White,
+                ),
+            onClick = { toggleNightMode(context) },
+        ) {
+            Text(
+                "Toggle Dark / Light",
+                Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center,
+            )
+        }
+
         Button(
             colors =
                 ButtonDefaults.buttonColors(
