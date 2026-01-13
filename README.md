@@ -307,6 +307,36 @@ This library uses material components, so should use Theme.MaterialComponents or
 
 > `colorControlActivated` is used to colorize Street title, if not set, it uses colorAccent by default
 
+##### Dark Theme (Day/Night) support ✅
+
+Leku supports Android Day/Night resources and can automatically adapt to Dark Mode, **as long as the picker activity is using a DayNight theme**.
+
+**Recommended (easiest):** apply `leku_Theme` to `LocationPickerActivity` in your app manifest:
+
+```xml
+<activity
+    android:name="com.adevinta.leku.LocationPickerActivity"
+    android:label="@string/leku_title_activity_location_picker"
+    android:theme="@style/leku_Theme"
+    android:windowSoftInputMode="adjustPan"
+    android:parentActivityName=".MainActivity">
+    <intent-filter>
+        <action android:name="android.intent.action.SEARCH" />
+    </intent-filter>
+    <meta-data
+        android:name="android.app.searchable"
+        android:resource="@xml/leku_searchable" />
+    <meta-data
+        android:name="android.support.PARENT_ACTIVITY"
+        android:value=".MainActivity" />
+</activity>
+```
+
+If your app already uses a DayNight theme (AppCompat or MaterialComponents), you can also rely on your app theme instead of `leku_Theme`.
+
+> Note: the picker UI will follow the **system** or **app** night mode.  
+> The Google Map tiles themselves can be styled independently via `.withMapStyle(...)` (see below).
+
 ##### New activity images and button color customization
 
 If you need to change theme colors for new activity map, you can do it with the below keys:
@@ -326,6 +356,23 @@ To customize map, use:
 ```
 
 > Theme creator here: https://mapstyle.withgoogle.com/
+
+**Tip for Dark Mode maps:** you can provide a different style JSON for night mode, e.g.:
+
+```kotlin
+val builder = LocationPickerActivity.Builder(context)
+    .withLocation(41.4036299, 2.1743558)
+
+if ((context.resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK)
+    == android.content.res.Configuration.UI_MODE_NIGHT_YES
+) {
+    builder.withMapStyle(R.raw.map_style_night)
+} else {
+    builder.withMapStyle(R.raw.map_style_retro)
+}
+
+val intent = builder.build()
+```
 
 ##### Layout
 
