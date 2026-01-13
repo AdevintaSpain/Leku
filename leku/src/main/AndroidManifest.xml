@@ -14,6 +14,7 @@
         android:name="com.adevinta.leku.LocationPickerActivity"
         android:label="@string/leku_title_activity_location_picker"
         android:windowSoftInputMode="adjustPan"
+        android:theme="@style/leku_Theme"
         android:parentActivityName=".MainActivity">
         <intent-filter>
             <action android:name="android.intent.action.SEARCH" />

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <!--
+    Apply this theme to LocationPickerActivity in your app's AndroidManifest.xml:
+      android:theme="@style/leku_Theme"
+    It inherits from a DayNight parent so it will automatically follow the system/app night mode.
+  -->
+  <style name="leku_Theme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <!-- Keep colors coming from the host app/theme (primary, secondary, etc.) -->
+  </style>
+
+</resources>
